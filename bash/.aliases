@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+alias v=vim
+alias hs="history | grep "
+alias gcam="git commit -a -m"
+alias glg="git lg"
+
+# Detect which `ls` flavor is in use
+if ls --color > /dev/null 2>&1; then # GNU `ls`
+	colorflag="--color"
+else # macOS `ls`
+	colorflag="-G"
+fi
+
+# List all files colorized in long format
+alias l="ls -lF ${colorflag}"
+alias ll="ls -F ${colorflag}"
+
+# List all files colorized in long format, including dot files
+alias la="ls -laF ${colorflag}"
+
+# List only directories
+alias ld="ls -lF ${colorflag} | grep --color=never '^d'"
+
+# Always use color output for `ls`
+alias ls="command ls ${colorflag}"
+
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec $SHELL -l"
