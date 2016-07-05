@@ -9,3 +9,7 @@
 [user]
 	email = paulchiu@gmail.com
 	name = Paul Chiu
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+	tool = prompt
