@@ -83,5 +83,6 @@ let g:airline_symbols.paste = 'p'
 let g:airline_symbols.spell = 's'
 let g:airline_symbols.notexists = '∄'
 let g:airline_symbols.whitespace = 'Ξ'
+let g:solarized_diffmode="high"
 set laststatus=2
 set expandtab
