@@ -13,3 +13,4 @@ brew install tmux  \
 && brew install homebrew/versions/bash-completion2 \
 && brew tap homebrew/completions \
 && brew install z
+&& brew install ag
