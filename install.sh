@@ -1,8 +1,12 @@
 #!/bin/sh
 
-# Install software
-echo "Installing brew ..."
-source scripts/brew.sh
+PLATFORM=$(uname)
+
+# Install platform specific software
+if [[ ${PLATFORM} == "Darwin" ]]; then
+    echo "Installing brew ..."
+    source scripts/brew.sh
+fi
 
 # Copy config files
 echo "Copying config files ..."
@@ -13,5 +17,10 @@ echo "Setting up vim, Vundle, and plugins ..."
 source scripts/vim.sh
 source scripts/vundle.sh
 
+# Show what needs to be manually set up
 echo "Manual set up"
-echo "    nvm (need to start new bash instance)";
+
+if [[ ${PLATFORM} == "Darwin" ]]; then
+    echo "    nvm (need to start new bash instance)";
+    echo "    osxfuse (need to restart computer)";
+fi

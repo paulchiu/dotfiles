@@ -12,5 +12,7 @@ brew install tmux  \
 && brew install lnav \
 && brew install homebrew/versions/bash-completion2 \
 && brew tap homebrew/completions \
-&& brew install z
-&& brew install ag
+&& brew install z \
+&& brew install ag \
+&& brew install Caskroom/cask/osxfuse \
+&& brew install homebrew/fuse/sshfs
