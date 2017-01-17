@@ -1,11 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 PLATFORM=$(uname)
 
 # Install platform specific software
 if [[ ${PLATFORM} == "Darwin" ]]; then
-    echo "Installing brew ..."
+    echo "Installing brew and packages ..."
     source scripts/brew.sh
+elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/apt ]]; then
+    echo "Installing apt packages ..."
+    source scripts/apt.sh
 fi
 
 # Copy config files

@@ -3,12 +3,17 @@ HISTSIZE=9999
 
 # Set paths
 export NVM_DIR="$HOME/.nvm"
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:~/bin:$PATH"
 
 # Load brew specific start-up scripts
 if [[ -e /usr/local/bin/brew ]]; then
     source "$(brew --prefix nvm)/nvm.sh"
-    source `brew --prefix`/etc/profile.d/z.sh
+    . `brew --prefix`/etc/profile.d/z.sh
+fi
+
+## Load z if installed
+if [[ -e ~/bin/z.sh ]]; then
+    . ~/bin/z.sh
 fi
 
 # Load start-up files
