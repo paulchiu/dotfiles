@@ -16,4 +16,5 @@ brew install tmux  \
 && brew install ag \
 && brew install Caskroom/cask/osxfuse \
 && brew install homebrew/fuse/sshfs \
-&& brew install yarn
+&& brew install yarn \
+&& brew install editorconfig

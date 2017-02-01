@@ -14,7 +14,8 @@ sudo apt-get update \
   htop \
   bash-completion \
   silversearcher-ag \
-  yarn
+  yarn \
+  editorconfig
 
 # Install rupa/z manually
 mkdir -p ~/bin
