@@ -4,6 +4,7 @@ alias v=vim
 alias hs="history | grep "
 alias gcam="git commit -a -m"
 alias glg="git lg"
+alias mvimdiff="mvim -f -d"
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -27,3 +28,4 @@ alias ls="command ls ${colorflag}"
 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
+
