@@ -15,4 +15,5 @@ brew install tmux  \
 && brew install z \
 && brew install ag \
 && brew install Caskroom/cask/osxfuse \
-&& brew install homebrew/fuse/sshfs
+&& brew install homebrew/fuse/sshfs \
+&& brew install yarn

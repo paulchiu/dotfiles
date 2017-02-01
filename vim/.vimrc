@@ -9,6 +9,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'posva/vim-vue'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -64,7 +65,8 @@ if has('gui_running')
     colo solarized
     set bg=dark
     set mouse=a
-    set guifont=Hack:h10
+    set macligatures
+    set guifont=Fira\ Code:h12
 endif
 
 " Plugins
