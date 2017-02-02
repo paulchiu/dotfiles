@@ -17,5 +17,6 @@ brew install \
     Caskroom/cask/osxfuse \
     homebrew/fuse/sshfs \
     yarn \
-    editorconfig
+    editorconfig \
+    p7zip
 && brew tap homebrew/completions
