@@ -18,5 +18,6 @@ brew install \
     homebrew/fuse/sshfs \
     yarn \
     editorconfig \
-    p7zip
+    p7zip \
+    ranger
 && brew tap homebrew/completions
