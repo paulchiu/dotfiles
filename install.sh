@@ -26,4 +26,6 @@ echo "Manual set up"
 if [[ ${PLATFORM} == "Darwin" ]]; then
     echo "    nvm (need to start new bash instance)";
     echo "    osxfuse (need to restart computer)";
+elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/apt ]]; then
+    echo "    install-gui.sh (manually run if in windowed env)"
 fi
