@@ -15,7 +15,8 @@ sudo apt-get update \
   bash-completion \
   silversearcher-ag \
   yarn \
-  editorconfig
+  editorconfig \
+  ranger
 
 # Install rupa/z manually
 mkdir -p ~/bin
