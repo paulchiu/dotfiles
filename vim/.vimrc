@@ -66,15 +66,15 @@ if has('gui_running')
     colo solarized
     set bg=dark
     set mouse=a
-    set guifont=Fira\ Code:h12
 endif
 
 if has('gui_macvim')
     set macligatures
+    set guifont=Fira\ Code:h12
 endif
 
 if has('gui_gtk')
-    set guifont=Fira\ Code\ 10
+    set guifont=Fira\ Mono\ for\ Powerline\ 10
 endif
 
 " Plugins
