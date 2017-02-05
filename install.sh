@@ -11,6 +11,18 @@ elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/apt ]]; then
     source scripts/apt.sh
 fi
 
+# Install common GUI software
+if [[ -e /usr/bin/startx ]]; then
+    echo "Installing fonts ..."
+    source install-fonts.sh
+fi
+
+# Install platform specific GUI software
+if [[ -e /usr/bin/startx && -e /usr/bin/apt ]]; then
+    echo "Installing GUI apt packages ..."
+    source scripts/apt-gui.sh
+fi
+
 # Copy config files
 echo "Copying config files ..."
 source scripts/config-copy.sh
@@ -26,6 +38,4 @@ echo "Manual set up"
 if [[ ${PLATFORM} == "Darwin" ]]; then
     echo "    nvm (need to start new bash instance)";
     echo "    osxfuse (need to restart computer)";
-elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/apt ]]; then
-    echo "    install-gui.sh (manually run if in windowed env)"
 fi
