@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+PLATFORM=$(uname)
+
 alias v=vim
 alias hs="history | grep "
 alias gcam="git commit -a -m"
@@ -29,3 +31,8 @@ alias ls="command ls ${colorflag}"
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
 
+# Clipboard copy
+if [[ ${PLATFORM} == "Linux" ]]; then
+    alias copy='xclip -sel clip'
+    alias pbcopy=copy
+fi
