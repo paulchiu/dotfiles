@@ -10,7 +10,6 @@ sudo apt-get update \
   tmux \
   tree \
   wget \
-  lnav \
   htop \
   bash-completion \
   silversearcher-ag \
