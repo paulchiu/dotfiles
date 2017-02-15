@@ -1,0 +1,46 @@
+! ------------------------------------------------------------------------------
+!
+! ROFI
+!
+! ------------------------------------------------------------------------------
+
+rofi.modi: drun,window
+
+!! Border width (Following the one in i3)
+rofi.bw: 4
+rofi.columns: 1
+! rofi.fake-transparency: true
+rofi.font: Roboto Mono Light for Powerline 12
+! rofi.fullscreen: true
+! rofi.fuzzy: true
+rofi.hide-scrollbar: true
+rofi.line-margin: 10
+rofi.lines: 6
+rofi.location: 0
+rofi.opacity: 90
+! rofi.padding: 250
+!! Style: none, dash, solid
+rofi.separator-style: none
+rofi.sidebar-mode: false
+
+! -----------
+! Keybindings
+! -----------
+
+rofi.key-run: Alt+space
+rofi.kb-mode-next: Tab
+rofi.kb-mode-previous: Shift+Tab
+rofi.kb-accept-entry: Return,KP_Enter
+rofi.kb-cancel: Escape,Alt+space,Control+c
+
+! ------------------------------------------------------------------------------
+! ROFI Color theme
+! ------------------------------------------------------------------------------
+
+rofi.color-enabled: true
+!                  'background', 'border', 'separator'
+rofi.color-window: #273238, #273238, #1e2529
+! State:           'bg',     'fg',     'bgalt',  'hlbg',   'hlfg'
+rofi.color-normal: #273238, #c1c1c1, #273238, #394249, #ffffff
+rofi.color-active: #273238, #80cbc4, #273238, #394249, #80cbc4
+rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
