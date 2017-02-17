@@ -57,9 +57,9 @@ mode "$mode_split" {
     # split in vertical orientation
     bindsym b split v; mode "default"
 
-	bindsym $mod+v mode "default"
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
+    bindsym $mod+v mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
 }
 
 # enter fullscreen mode for the focused container
@@ -109,24 +109,24 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # Resize window
-set $mode_resize resize  [h] |  [j] |  [k] |  [l]
+set $mode_resize   [s]hrink [g]row |    [S]hrink [G]row
 bindsym $mod+r mode "$mode_resize"
 mode "$mode_resize" {
-	bindsym h resize shrink width 10 px or 10 ppt
-	bindsym j resize grow width 10 px or 10 ppt
-	bindsym k resize shrink height 10 px or 10 ppt
-	bindsym l resize grow height 10 px or 10 ppt
+    bindsym s resize shrink width 10 px or 10 ppt
+    bindsym g resize grow width 10 px or 10 ppt
+    bindsym Shift+s resize shrink height 10 px or 10 ppt
+    bindsym Shift+g resize grow height 10 px or 10 ppt
 
-	bindsym $mod+r mode "default"
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
 }
 
 #######
 # I3BAR
 #######
 
-# Refresh polybar
+# Refresh polybar; aka restart in place
 bindsym $mod+shift+p exec "killall polybar; polybar top"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
@@ -156,24 +156,53 @@ set $border 2
 set $mode_layout  [s]tacking |  [t]abbed |   s[p]lit
 bindsym $mod+e mode "$mode_layout"
 mode "$mode_layout" {
-	bindsym s layout stacking; mode "default"
-	bindsym t layout tabbed; mode "default"
-	bindsym p layout toggle split; mode "default"
+    bindsym s layout stacking; mode "default"
+    bindsym t layout tabbed; mode "default"
+    bindsym p layout toggle split; mode "default"
 
-	bindsym $mod+e mode "default"
-	bindsym Escape mode "default"
-	bindsym Return mode "default"
+    bindsym $mod+e mode "default"
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
 }
 
-set $mode_gaps Gaps: [t]rue, [f]alse
+set $mode_gaps Gaps: [d]efault | o[f]f | [o] outer | [i]inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
 bindsym $mod+g mode "$mode_gaps"
-mode "$mode_gaps" {
-	bindsym t mode "default", gaps inner all set $gaps_inner, gaps outer all set $gaps_outer
-	bindsym f mode "default", gaps inner all set 1, gaps outer all set 1
 
-	bindsym $mod+g mode "default"
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
+mode "$mode_gaps" {
+    bindsym d mode "default", gaps inner all set $gaps_inner, gaps outer all set $gaps_outer
+    bindsym f mode "default", gaps inner all set 0, gaps outer all set 0
+    bindsym o      mode "$mode_gaps_outer"
+    bindsym i      mode "$mode_gaps_inner"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+    bindsym plus  gaps inner current plus 5
+    bindsym minus gaps inner current minus 5
+    bindsym 0     gaps inner current set 0
+
+    bindsym Shift+plus  gaps inner all plus 5
+    bindsym Shift+minus gaps inner all minus 5
+    bindsym Shift+0     gaps inner all set 0
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_outer" {
+    bindsym plus  gaps outer current plus 5
+    bindsym minus gaps outer current minus 5
+    bindsym 0     gaps outer current set 0
+
+    bindsym Shift+plus  gaps outer all plus 5
+    bindsym Shift+minus gaps outer all minus 5
+    bindsym Shift+0     gaps outer all set 0
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
 }
 
 # Make the currently focused window a scratchpad
@@ -186,22 +215,22 @@ bindsym $mod+x scratchpad show
 #########
 
 # Colors
-set $bg #383c4a
-set $bg_light #444752
-set $sl #d3dae3
-set $blue #5294e2
-set $blue_light #78a0cf
-set $red #ce3a3a
 set $focused_txt #f6f6f6
 set $inactive_txt #9d9d9d
+set $numix_red #d64937
+set $numix_white #f9f9f9
+set $numix_grey #dedede
+set $numix_dark #333333
+set $numix_darker #2d2d2d
 
 # Theme
-client.focused          $blue $blue $sl           $focused_txt $blue
-client.focused_inactive $bg   $bg   $inactive_txt $focused_txt $bg
-client.unfocused        $bg   $bg   $inactive_txt $focused_txt $bg
-client.urgent           $red  $red  $sl           $focused_txt $red
-client.placeholder      $blue_light $blue_light   $sl          $focused_txt $sl
-client.background       $blue
+# class                 border        backgr.       text        indicator     child_border
+client.focused          $numix_grey   $numix_grey   $numix_red  $numix_grey   $numix_red
+client.focused_inactive $numix_darker $numix_darker $numix_grey $numix_darker $numix_darker
+client.unfocused        $numix_darker $numix_darker $numix_grey $numix_darker $numix_darker
+client.urgent           $numix_darker $numix_red    $numix_grey $numix_darker $numix_darker
+client.placeholder      $numix_darker $numix_darker $numix_grey $numix_darker $numix_darker
+client.background       $numix_darker
 
 hide_edge_borders both
 
@@ -239,17 +268,17 @@ gaps outer $gaps_outer
 # STARTUP
 #########
 
-# Compositor
-exec --no-startup-id compton -bf -D2
-
 # Applications
+exec --no-startup-id compton --config=/home/paul/.config/compton/config
 exec --no-startup-id polybar top
 exec --no-startup-id clipit
 exec --no-startup-id nm-applet
 exec --no-startup-id xscreensaver -no-splash
-exec --no-startup-id feh --bg-scale /home/paul/Pictures/sierra-2.jpg
+exec --no-startup-id feh --bg-scale /home/paul/Pictures/retrowave_80_s_bg_by_rafael_de_jongh.jpg
 exec --no-startup-id synclient HorizTwoFingerScroll=1
 exec --no-startup-id gnome-settings-daemon
+exec --no-startup-id volumeicon
+exec --no-startup-id xset r rate 300 35 # Set initial delay 300ms, repeat 35ms
 # exec_always numlockx
 
 #######################################
