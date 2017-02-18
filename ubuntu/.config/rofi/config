@@ -39,8 +39,8 @@ rofi.kb-cancel: Escape,Alt+space,Control+c
 
 rofi.color-enabled: true
 !                  'background', 'border', 'separator'
-rofi.color-window: #273238, #273238, #1e2529
-! State:           'bg',     'fg',     'bgalt',  'hlbg',   'hlfg'
-rofi.color-normal: #273238, #c1c1c1, #273238, #394249, #ffffff
-rofi.color-active: #273238, #80cbc4, #273238, #394249, #80cbc4
-rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
+rofi.color-window: #2d2d2d,      #2d2d2d,  #dedede
+! State:           'bg',    'fg',    'bgalt', 'hlbg',  'hlfg'
+rofi.color-normal: #2d2d2d, #dedede, #2d2d2d, #dedede, #d64937
+rofi.color-active: #2d2d2d, #dedede, #2d2d2d, #dedede, #d64937
+rofi.color-urgent: #2d2d2d, #d64937, #2d2d2d, #d64937, #f9f9f9
