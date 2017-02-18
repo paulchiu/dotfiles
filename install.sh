@@ -32,6 +32,10 @@ echo "Setting up vim, Vundle, and plugins ..."
 source scripts/vim.sh
 source scripts/vundle.sh
 
+echo "Setting up tmux and plugins ..."
+source scripts/tmux.sh
+source scripts/tpm.sh
+
 # Show what needs to be manually set up
 echo "Manual set up"
 
