@@ -75,6 +75,7 @@ endif
 
 if has('gui_gtk')
     set guifont=Fira\ Mono\ for\ Powerline\ 10
+    set clipboard=unnamedplus
 endif
 
 " Plugins
