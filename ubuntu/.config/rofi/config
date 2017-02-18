@@ -10,7 +10,7 @@ rofi.modi: drun,window
 rofi.bw: 4
 rofi.columns: 1
 ! rofi.fake-transparency: true
-rofi.font: Roboto Mono Light for Powerline 12
+rofi.font: Roboto Mono Medium for Powerline 12
 ! rofi.fullscreen: true
 ! rofi.fuzzy: true
 rofi.hide-scrollbar: true
