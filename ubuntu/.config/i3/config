@@ -285,9 +285,6 @@ exec --no-startup-id xset r rate 300 35 # Set initial delay 300ms, repeat 35ms
 
 # Rofi for windows
 bindsym $mod+space exec rofi -show drun
-bindsym XF86LaunchA exec rofi -show drun
-bindsym XF86Explorer exec rofi -show window
-bindsym XF86Tools exec "gvim ~/.config/i3/config"
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5% # increase sound volume
@@ -300,3 +297,12 @@ bindsym XF86AudioMicMute exec amixer sset Capture toggle
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+# Other X260 media keys
+bindsym XF86LaunchA exec rofi -show drun
+bindsym XF86Explorer exec rofi -show window
+bindsym XF86Tools exec "gvim ~/.config/i3/config"
+bindsym XF86Search exec google-chrome
+
+# Screen shot
+bindsym $mod+Print exec scrot -e 'mv $f ~/Pictures/screenshots/'
