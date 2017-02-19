@@ -35,4 +35,6 @@ alias reload="exec $SHELL -l"
 if [[ ${PLATFORM} == "Linux" ]]; then
     alias copy='xclip -sel clip'
     alias pbcopy=copy
+    alias open=xdg-open
+    alias sc="scrot -d 3 -e 'mv \$f ~/Pictures/screenshots/'"
 fi
