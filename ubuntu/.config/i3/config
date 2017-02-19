@@ -271,7 +271,6 @@ exec --no-startup-id compton --config=/home/paul/.config/compton/config
 exec --no-startup-id polybar top
 exec --no-startup-id clipit
 exec --no-startup-id nm-applet
-exec --no-startup-id xscreensaver -no-splash
 exec --no-startup-id feh --bg-scale /home/paul/Pictures/retrowave_80_s_bg_by_rafael_de_jongh.jpg
 exec --no-startup-id synclient HorizTwoFingerScroll=1
 exec --no-startup-id gnome-settings-daemon
@@ -285,10 +284,10 @@ exec --no-startup-id xset r rate 300 35 # Set initial delay 300ms, repeat 35ms
 #######################################
 
 # Rofi for windows
-# bindsym --release $mod+space exec rofi -show drun
 bindsym $mod+space exec rofi -show drun
 bindsym XF86LaunchA exec rofi -show drun
 bindsym XF86Explorer exec rofi -show window
+bindsym XF86Tools exec "gvim ~/.config/i3/config"
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5% # increase sound volume
