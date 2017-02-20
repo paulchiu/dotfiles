@@ -4,7 +4,7 @@
 !
 ! ------------------------------------------------------------------------------
 
-rofi.modi: drun,window
+rofi.modi: drun,window,run
 
 !! Border width (Following the one in i3)
 rofi.bw: 4
@@ -21,7 +21,7 @@ rofi.opacity: 90
 ! rofi.padding: 250
 !! Style: none, dash, solid
 rofi.separator-style: none
-rofi.sidebar-mode: false
+rofi.sidebar-mode: true
 
 ! -----------
 ! Keybindings
