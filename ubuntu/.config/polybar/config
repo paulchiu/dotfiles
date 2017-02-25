@@ -301,9 +301,9 @@ ramp-headphones-1 = 
 
 [module/battery]
 type = internal/battery
-battery = BAT1
+battery = BAT0
 adapter = AC
-full-at = 98
+full-at = 94
 
 format-charging = <animation-charging>
 format-discharging = <ramp-capacity>
@@ -324,7 +324,7 @@ animation-charging-framerate = 750
 
 [module/battery2]
 inherit = module/battery
-battery = BAT0
+battery = BAT1
 
 [module/temperature]
 type = internal/temperature
