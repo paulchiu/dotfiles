@@ -24,7 +24,7 @@ numix-dark=#333333
 numix-darker=#2d2d2d
 
 [bar/top]
-monitor = eDP1
+; monitor = 
 monitor-strict = false
 width = 100%
 height = 27

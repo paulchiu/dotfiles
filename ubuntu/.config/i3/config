@@ -152,7 +152,20 @@ set $gaps_outer 0
 # Border
 set $border 2
 
-# A custom mode for layouts
+# Custom mode for monitor settings
+set $mode_monitor monitors: [l]aptop | [e]xternal | [b]oth
+bindsym $mod+m mode "$mode_monitor"
+mode "$mode_monitor" {
+    bindsym l exec /home/paul/.screenlayout/internal.sh; mode "default"
+    bindsym e exec /home/paul/.screenlayout/external.sh; mode "default"
+    bindsym b exec /home/paul/.screenlayout/both.sh; mode "default"
+
+    bindsym $mod+m mode "default"
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+
+# Custom mode for layouts
 set $mode_layout  [s]tacking |  [t]abbed |   s[p]lit
 bindsym $mod+e mode "$mode_layout"
 mode "$mode_layout" {
@@ -165,6 +178,7 @@ mode "$mode_layout" {
     bindsym Return mode "default"
 }
 
+# Custom model for gap configuration
 set $mode_gaps Gaps: [d]efault | o[f]f | [o] outer | [i]inner
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
