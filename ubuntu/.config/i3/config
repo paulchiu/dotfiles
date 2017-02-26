@@ -152,9 +152,24 @@ set $gaps_outer 0
 # Border
 set $border 2
 
+# Custom model for power settings
+set $mode_shutdown  [l]ock | [s]leep | [p]owersave | [r]estart | s[h]utdown
+bindsym $mod+Shift+q mode "$mode_shutdown"
+mode "$mode_shutdown" {
+    bindsym l exec gnome-screensaver-command -l; mode "default"
+    bindsym s exec sudo pm-suspend; mode "default"
+    bindsym p exec sudo pm-powersave; mode "default"
+    bindsym r exec sudo 'shutdown -r now'; mode "default"
+    bindsym h exec sudo 'shutdown -h now'; mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
 # Custom mode for monitor settings
 set $mode_monitor monitors: [l]aptop | [e]xternal | [b]oth
 bindsym $mod+m mode "$mode_monitor"
+bindsym XF86Display mode "$mode_monitor"
 mode "$mode_monitor" {
     bindsym l exec /home/paul/.screenlayout/internal.sh; mode "default"
     bindsym e exec /home/paul/.screenlayout/external.sh; mode "default"
@@ -281,16 +296,18 @@ gaps outer $gaps_outer
 #########
 
 # Applications
+exec --no-startup-id /home/paul/.screenlayout/external.sh
+exec --no-startup-id gnome-settings-daemon
 exec --no-startup-id compton --config=/home/paul/.config/compton/config
 exec --no-startup-id polybar top
 exec --no-startup-id clipit
 exec --no-startup-id nm-applet
 exec --no-startup-id feh --bg-scale /home/paul/Pictures/wallpapers/retrowave_80_s_bg_by_rafael_de_jongh.jpg
 exec --no-startup-id synclient HorizTwoFingerScroll=1
-exec --no-startup-id gnome-settings-daemon
 exec --no-startup-id pactl set-sink-volume 0 75% # If volume > 100% on startup, volumeicon will crash on click
 exec --no-startup-id volumeicon
 exec --no-startup-id xset r rate 300 35 # Set initial delay 300ms, repeat 35ms
+exec --no-startup-id xautolock -time 10 -locker "gnome-screensaver-command -l"
 # exec_always numlockx
 
 #######################################
