@@ -302,7 +302,7 @@ exec --no-startup-id compton --config=/home/paul/.config/compton/config
 exec --no-startup-id polybar top
 exec --no-startup-id clipit
 exec --no-startup-id nm-applet
-exec --no-startup-id feh --bg-scale /home/paul/Pictures/wallpapers/retrowave_80_s_bg_by_rafael_de_jongh.jpg
+exec --no-startup-id feh --bg-scale /home/paul/Pictures/wallpapers/japanese-wave.jpg
 exec --no-startup-id synclient HorizTwoFingerScroll=1
 exec --no-startup-id pactl set-sink-volume 0 75% # If volume > 100% on startup, volumeicon will crash on click
 exec --no-startup-id volumeicon
