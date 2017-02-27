@@ -308,6 +308,7 @@ exec --no-startup-id pactl set-sink-volume 0 75% # If volume > 100% on startup, 
 exec --no-startup-id volumeicon
 exec --no-startup-id xset r rate 300 35 # Set initial delay 300ms, repeat 35ms
 exec --no-startup-id xautolock -time 10 -locker "gnome-screensaver-command -l"
+exec --no-startup-id /home/paul/.dropbox-dist/dropboxd
 # exec_always numlockx
 
 #######################################
