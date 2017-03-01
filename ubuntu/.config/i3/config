@@ -337,4 +337,4 @@ bindsym XF86Tools exec "gvim ~/.config/i3/config"
 bindsym XF86Search exec google-chrome
 
 # Screen shot
-bindsym Print exec scrot -e 'mv $f ~/Pictures/screenshots/'
+bindsym Print exec shutter
