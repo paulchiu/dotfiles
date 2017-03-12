@@ -309,6 +309,7 @@ exec --no-startup-id volumeicon
 exec --no-startup-id xset r rate 300 35 # Set initial delay 300ms, repeat 35ms
 exec --no-startup-id xautolock -time 10 -locker "gnome-screensaver-command -l"
 exec --no-startup-id /home/paul/.dropbox-dist/dropboxd
+exec --no-startup-id xset dpms 0 0 1200
 # exec_always numlockx
 
 #######################################
