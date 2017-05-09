@@ -36,6 +36,11 @@ echo "Setting up tmux and plugins ..."
 source scripts/tmux.sh
 source scripts/tpm.sh
 
+if [[ ${PLATFORM} == "Darwin" ]]; then
+    echo "Setting up nvm for homebrew install ..."
+    source scripts/nvm.sh
+fi
+
 # Show what needs to be manually set up
 echo "Manual set up"
 
