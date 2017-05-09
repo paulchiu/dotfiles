@@ -20,4 +20,5 @@ brew install \
     editorconfig \
     p7zip \
     ranger
-&& brew tap homebrew/completions
+
+brew tap homebrew/completions
