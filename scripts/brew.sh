@@ -19,6 +19,5 @@ brew install \
     yarn \
     editorconfig \
     p7zip \
-    ranger
-
-brew tap homebrew/completions
+    ranger \
+&& brew tap homebrew/completions
