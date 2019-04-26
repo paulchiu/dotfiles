@@ -48,5 +48,5 @@ echo "Manual set up"
 if [[ ${PLATFORM} == "Darwin" ]]; then
     echo "    osxfuse (need to restart computer)";
 elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/dnf ]]; then
-    echo "    need to add .bash_profile to .bash_rc";
+    echo "    need to add .bash_profile to .bash_rc; also need to install config and do same for root";
 fi
