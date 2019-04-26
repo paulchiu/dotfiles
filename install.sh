@@ -9,6 +9,9 @@ if [[ ${PLATFORM} == "Darwin" ]]; then
 elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/apt ]]; then
     echo "Installing apt packages ..."
     source scripts/apt.sh
+elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/dnf ]]; then
+    echo "Installing dnf packages ..."
+    source scripts/dnf.sh
 fi
 
 # Install common GUI software
