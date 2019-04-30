@@ -9,6 +9,9 @@ if [[ ${PLATFORM} == "Darwin" ]]; then
 elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/apt ]]; then
     echo "Installing apt packages ..."
     source scripts/apt.sh
+elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/dnf ]]; then
+    echo "Installing dnf packages ..."
+    source scripts/dnf.sh
 fi
 
 # Install common GUI software
@@ -21,6 +24,9 @@ fi
 if [[ -e /usr/bin/startx && -e /usr/bin/apt ]]; then
     echo "Installing GUI apt packages ..."
     source scripts/apt-gui.sh
+elif [[ -e /usr/bin/startx && -e /usr/bin/dnf ]]; then
+    echo "Installing GUI dnf packages ..."
+    source scripts/apt-dnf.sh
 fi
 
 # Copy config files
@@ -36,15 +42,11 @@ echo "Setting up tmux and plugins ..."
 source scripts/tmux.sh
 source scripts/tpm.sh
 
-if [[ ${PLATFORM} == "Darwin" ]]; then
-    echo "Setting up nvm for homebrew install ..."
-    source scripts/nvm.sh
-fi
-
 # Show what needs to be manually set up
 echo "Manual set up"
 
 if [[ ${PLATFORM} == "Darwin" ]]; then
-    echo "    nvm (need to start new bash instance)";
     echo "    osxfuse (need to restart computer)";
+elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/dnf ]]; then
+    echo "    need to add .bash_profile to .bash_rc; also need to install config and do same for root";
 fi
