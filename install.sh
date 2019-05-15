@@ -26,7 +26,7 @@ if [[ -e /usr/bin/startx && -e /usr/bin/apt ]]; then
     source scripts/apt-gui.sh
 elif [[ -e /usr/bin/startx && -e /usr/bin/dnf ]]; then
     echo "Installing GUI dnf packages ..."
-    source scripts/apt-dnf.sh
+    source scripts/dnf-gui.sh
 fi
 
 # Copy config files
