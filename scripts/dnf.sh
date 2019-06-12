@@ -11,7 +11,8 @@ sudo dnf update \
   the_silver_searcher \
   editorconfig \
   ranger \
-  neofetch
+  neofetch \
+  bat
 
 # Install rupa/z manually
 mkdir -p ~/bin
