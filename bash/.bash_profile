@@ -7,7 +7,7 @@ export PATH="/usr/local/bin:/usr/local/sbin:~/bin:$PATH"
 
 # Load brew specific start-up scripts
 if [[ -e /usr/local/bin/brew ]]; then
-    source "$(brew --prefix nvm)/nvm.sh"
+    s. "/usr/local/opt/nvm/nvm.sh"
     . `brew --prefix`/etc/profile.d/z.sh
 fi
 
