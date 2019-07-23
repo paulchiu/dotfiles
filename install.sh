@@ -18,6 +18,8 @@ fi
 if [[ -e /usr/bin/startx ]]; then
     echo "Installing fonts ..."
     source install-fonts.sh
+    echo "Setting up Gnome ..."
+    source scripts/gnome.sh
 fi
 
 # Install platform specific GUI software
