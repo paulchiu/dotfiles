@@ -81,6 +81,7 @@ endif
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
 map <C-n> :NERDTreeToggle<CR>
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
