@@ -11,13 +11,9 @@ brew install \
     nvm \
     wget \
     lnav \
-    homebrew/versions/bash-completion2 \
     z \
     ag \
-    Caskroom/cask/osxfuse \
-    homebrew/fuse/sshfs \
     yarn \
     editorconfig \
     p7zip \
-    ranger \
-&& brew tap homebrew/completions
+    ranger
