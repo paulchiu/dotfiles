@@ -6,6 +6,7 @@ PLATFORM=$(uname)
 if [[ ${PLATFORM} == "Darwin" ]]; then
     echo "Installing brew and packages ..."
     source scripts/brew.sh
+    source scripts/ohmyzsh.sh
 elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/apt ]]; then
     echo "Installing apt packages ..."
     source scripts/apt.sh
@@ -49,6 +50,7 @@ echo "Manual set up"
 
 if [[ ${PLATFORM} == "Darwin" ]]; then
     echo "    osxfuse (need to restart computer)";
+    echo "    iterm2 preferred theme is Dracula; 💾 @ https://iterm2colorschemes.com/";
 elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/dnf ]]; then
     echo "    need to add .bash_profile to .bash_rc; also need to install config and do same for root";
 fi

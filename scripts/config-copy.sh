@@ -7,6 +7,7 @@ PLATFORM=$(uname)
 cp bash/.bash_profile ${DEST}
 cp bash/.bash_prompt ${DEST}
 cp bash/.aliases ${DEST}
+cp zsh/.zshrc ${DEST}
 cp git/.gitconfig ${DEST}
 cp git/.gitignore_global ${DEST}
 cp tmux/.tmux.conf ${DEST}
