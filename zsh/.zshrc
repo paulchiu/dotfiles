@@ -93,7 +93,7 @@ fi
 HISTFILESIZE=1000000000
 HISTSIZE=9999
 export NVM_DIR="$HOME/.nvm"
-export PATH="/usr/local/bin:/usr/local/sbin:~/bin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:~/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
