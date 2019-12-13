@@ -68,7 +68,7 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git nvm-auto)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -114,3 +114,4 @@ export PATH="/usr/local/bin:/usr/local/sbin:~/bin:/Applications/Visual Studio Co
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/.aliases
+nvm_auto_switch
