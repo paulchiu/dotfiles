@@ -8,6 +8,7 @@
     cb = checkout -b
     cm = commit -m
     ds = diff --compact-summary
+    s = status
 [core]
 	editor = /usr/bin/vim
 	excludesfile = ~/.gitignore_global
