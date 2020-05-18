@@ -4,8 +4,10 @@
 	default = current
 [alias]
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    ds = diff --compact-summary
+    ac = commit -am
+    cb = checkout -b
     cm = commit -m
+    ds = diff --compact-summary
 [core]
 	editor = /usr/bin/vim
 	excludesfile = ~/.gitignore_global
