@@ -16,7 +16,8 @@ sudo apt-get update \
   yarn \
   editorconfig \
   ranger \
-  tig
+  tig \
+  zsh
 
 # Install rupa/z manually
 mkdir -p ~/bin
