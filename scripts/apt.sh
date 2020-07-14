@@ -17,7 +17,8 @@ sudo apt-get update \
   editorconfig \
   ranger \
   tig \
-  zsh
+  zsh \
+  fd-find
 
 # Install NVM manually
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
