@@ -19,6 +19,9 @@ sudo apt-get update \
   tig \
   zsh
 
+# Install NVM manually
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
 # Install rupa/z manually
 mkdir -p ~/bin
 wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O ~/bin/z.sh
