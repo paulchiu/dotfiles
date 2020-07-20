@@ -16,7 +16,12 @@ sudo apt-get update \
   yarn \
   editorconfig \
   ranger \
-  tig
+  tig \
+  zsh \
+  fd-find
+
+# Install NVM manually
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
 # Install rupa/z manually
 mkdir -p ~/bin

@@ -10,6 +10,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'editorconfig/editorconfig-vim'
+Plugin 'dracula/vim', { 'name': 'dracula' }
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -22,7 +23,7 @@ imap <C-v> <ESC>"+pa
 " Other settings
 syntax on
 behave xterm
-colo default
+colo dracula
 set ts=4
 set nu
 set tw=120
@@ -62,7 +63,7 @@ autocmd BufEnter * silent! lcd %:p:h
 au FileType javascript setl sw=2 sts=2 ts=2
 
 if has('gui_running')
-    colo solarized
+    colo dracula
     set bg=dark
     set mouse=a
 endif
