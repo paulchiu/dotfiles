@@ -16,4 +16,6 @@ brew install \
     yarn \
     editorconfig \
     p7zip \
-    ranger
+    ranger \
+    fd \
+    bat

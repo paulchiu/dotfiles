@@ -16,9 +16,9 @@ sudo apt-get update \
   yarn \
   editorconfig \
   ranger \
-  tig \
   zsh \
-  fd-find
+  fd-find \
+  bat
 
 # Install NVM manually
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash

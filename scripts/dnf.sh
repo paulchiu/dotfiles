@@ -12,7 +12,8 @@ sudo dnf update \
   editorconfig \
   ranger \
   neofetch \
-  bat
+  bat \
+  fd-find
 
 # Install rupa/z manually
 mkdir -p ~/bin
