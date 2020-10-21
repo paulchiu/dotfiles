@@ -61,6 +61,8 @@ nnoremap Y y$
 " Change Working Directory to that of the current file
 autocmd BufEnter * silent! lcd %:p:h
 au FileType javascript setl sw=2 sts=2 ts=2
+au BufWinLeave *.* mkview
+au BufWinEnter *.* silent loadview
 
 if has('gui_running')
     colo dracula
