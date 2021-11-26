@@ -18,4 +18,11 @@ brew install \
     p7zip \
     ranger \
     fd \
-    bat
+    bat \
+    gitui \
+    keycastr \
+    stats \
+    raycast \
+    ngrok \
+    hidenbar
+
