@@ -50,6 +50,9 @@ set splitbelow                  " Puts new split windows to the bottom of the cu
 set encoding=utf8
 set ffs=unix,dos
 set formatoptions=l
+set laststatus=2
+set expandtab
+set backspace=2
 map <C-J> <C-W>j
 map <C-K> <C-W>k
 map <C-L> <C-W>l
@@ -98,5 +101,3 @@ let g:airline_symbols.spell = 's'
 let g:airline_symbols.notexists = '∄'
 let g:airline_symbols.whitespace = 'Ξ'
 let g:solarized_diffmode="high"
-set laststatus=2
-set expandtab
