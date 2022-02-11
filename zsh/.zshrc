@@ -68,14 +68,13 @@ export ZSH="/Users/paul/.oh-my-zsh"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git nvm-auto zsh-nvm)
+plugins=(git zsh-nvm)
 
 source $ZSH/oh-my-zsh.sh
 
 # Load brew specific start-up scripts
-if [[ -e /usr/local/bin/brew ]]; then
-    . "/usr/local/opt/nvm/nvm.sh"
-    . /usr/local/etc/profile.d/z.sh
+if [[ -e /opt/homebrew/bin/brew ]]; then
+    . $(brew --prefix)/etc/profile.d/z.sh
 fi
 
 ## Load z if installed
@@ -114,5 +113,4 @@ export PATH="/usr/local/bin:/usr/local/sbin:~/bin:/Applications/Visual Studio Co
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/.aliases
-nvm_auto_switch
 eval "$(starship init zsh)"

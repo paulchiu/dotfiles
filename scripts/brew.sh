@@ -21,11 +21,12 @@ brew install \
     iterm2 \
     karabiner-elements \
     keycastr \
+    lazygit \
+    lazydocker \
     lnav \
     ngrok \
     nvm \
     maccy \
-    macvim \
     messenger \
     p7zip \
     postman \
@@ -33,6 +34,7 @@ brew install \
     raycast \
     rectangle \
     slack \
+    starship \
     stats \
     tmux \
     tree \
@@ -42,3 +44,6 @@ brew install \
     z \
     zappy \
     zoom
+
+brew install --cask \
+    macvim

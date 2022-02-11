@@ -11,6 +11,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'dracula/vim', { 'name': 'dracula' }
+Plugin 'easymotion/vim-easymotion'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -83,6 +84,10 @@ if has('gui_gtk')
     set clipboard=unnamedplus
 endif
 
+" EasyMotion
+let mapleader = ","
+map <Leader> <Plug>(easymotion-prefix)
+
 " Plugins
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
@@ -100,4 +105,4 @@ let g:airline_symbols.paste = 'p'
 let g:airline_symbols.spell = 's'
 let g:airline_symbols.notexists = '∄'
 let g:airline_symbols.whitespace = 'Ξ'
-let g:solarized_diffmode="high"
+let g:solarized_diffmode = "high"
