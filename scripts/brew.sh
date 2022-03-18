@@ -24,6 +24,7 @@ brew install \
     lazygit \
     lazydocker \
     lnav \
+    neofetch \
     ngrok \
     nvm \
     maccy \
