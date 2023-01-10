@@ -47,4 +47,7 @@ brew install \
     zoom
 
 brew install --cask \
-    macvim
+    macvim \
+    qlmarkdown
+
+brew install --cask --no-quarantine syntax-highlight

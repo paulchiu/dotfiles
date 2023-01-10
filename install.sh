@@ -51,6 +51,7 @@ echo "Manual set up"
 if [[ ${PLATFORM} == "Darwin" ]]; then
     echo "    osxfuse (need to restart computer)";
     echo "    iterm2 preferred theme is Dracula; 💾 @ https://iterm2colorschemes.com/";
+    echo "    Syntax Highlight and QL Markdown need to be launched manually then configured as Quicklook extensions";
 elif [[ ${PLATFORM} == "Linux" && -e /usr/bin/dnf ]]; then
     echo "    need to add .bash_profile to .bash_rc; also need to install config and do same for root";
 fi
