@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+PLATFORM=$(uname)
+
+alias v=nvim
+alias vim=nvim
+alias hs="history | grep "
+alias mvimdiff="mvim -f -d"
+alias g="git"
+alias ghc="gh copilot suggest"
+alias d="docker"
+alias dc="docker-compose"
+alias y="yarn"
+alias yag='ag -G ".*\\.(tsx?|gql)"'
+
+# Detect which `ls` flavor is in use
+if ls --color > /dev/null 2>&1; then # GNU `ls`
+	colorflag="--color"
+else # macOS `ls`
+	colorflag="-G"
+fi
+
+# List all files colorized in long format
+alias l="ls -lhF ${colorflag}"
+alias ll="ls -hF ${colorflag}"
+
+# List all files colorized in long format, including dot files
+alias la="ls -lahF ${colorflag}"
+
+# List only directories
+alias ld="ls -lhF ${colorflag} | grep --color=never '^d'"
+
+# Always use color output for `ls`
+alias ls="command ls ${colorflag}"
+
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec $SHELL -l"
+
+# Clipboard copy
+if [[ ${PLATFORM} == "Linux" ]]; then
+    alias copy='xclip -sel clip'
+    alias pbcopy=copy
+    alias open=xdg-open
+    alias sc="scrot -d 3 -e 'mv \$f ~/Pictures/screenshots/'"
+fi
