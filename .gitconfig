@@ -1,0 +1,44 @@
+[push]
+	default = current
+[pull]
+	default = current
+[alias]
+	a = add .
+	x = !git add -A && git commit --amend --no-edit
+	xx = !git add -A && git commit --amend --no-edit --no-verify
+	wip = !git add -A && git commit -m "WIP" --no-verify
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    cb = checkout -b
+    cm = commit -m
+    co = checkout
+    ds = diff --compact-summary
+    s = status
+	pf = push -f
+	p = push
+	rs = reset --hard HEAD
+	search-logs = "!f() { \\\n search_string=\"$1\"; \\\n file_name=\"${2:-.}\"; \\\n git --no-pager log --pretty=oneline -S\"$search_string\" -- \"$file_name\"; \\\n}; f"
+[core]
+	editor = /usr/bin/vim
+	excludesfile = ~/.gitignore_global
+[user]
+	email = paulchiu@gmail.com
+	name = Paul Chiu
+[merge]
+	tool = Kaleidoscope
+	conflictstyle = diff3
+[mergetool]
+	prompt = false
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+[url "ssh://git@github.com/mr-yum/tilt-extensions"]
+	insteadOf = https://github.com/mr-yum/tilt-extensions
+[diff]
+	tool = Kaleidoscope
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
+	trustExitCode = true
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
