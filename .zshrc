@@ -73,16 +73,6 @@ autoload -U add-zsh-hook
 
 source $ZSH/oh-my-zsh.sh
 
-# Load brew specific start-up scripts
-if [[ -e /opt/homebrew/bin/brew ]]; then
-    . $(brew --prefix)/etc/profile.d/z.sh
-fi
-
-## Load z if installed
-if [[ -e ~/bin/z.sh ]]; then
-    . ~/bin/z.sh
-fi
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -149,8 +139,6 @@ function ya() {
 source ~/.aliases
 eval "$(starship init zsh)"
 eval "$(rbenv init - zsh)"
+eval "$(zoxide init zsh)"
 export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
-
-export PATH=$PATH:/Users/paul/.spicetify
-
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
