@@ -4,14 +4,11 @@ PLATFORM=$(uname)
 
 alias v=nvim
 alias vim=nvim
-alias hs="history | grep "
-alias mvimdiff="mvim -f -d"
+alias hs="history | fzf "
 alias g="git"
-alias ghc="gh copilot suggest"
 alias d="docker"
 alias dc="docker-compose"
-alias y="yarn"
-alias yag='ag -G ".*\\.(tsx?|gql)"'
+alias ya="yadm"
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
