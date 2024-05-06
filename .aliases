@@ -2,33 +2,49 @@
 
 PLATFORM=$(uname)
 
-alias v=nvim
-alias vim=nvim
-alias hs="history | fzf "
-alias g="git"
 alias d="docker"
 alias dc="docker-compose"
+alias g="git"
+alias hs="history | fzf"
+alias v="nvim"
+alias vim="nvim"
+
+# Rust alternatives
+# Partial source: https://zaiste.net/posts/shell-commands-rust/
+alias du="dust"
+alias l="eza -l"
+alias la="eza -a"
+alias ls="eza"
+alias ll="eza"
+alias ranger="yazi"
+alias sed="sd"
 alias ya="yadm"
 
-# Detect which `ls` flavor is in use
-if ls --color > /dev/null 2>&1; then # GNU `ls`
-	colorflag="--color"
-else # macOS `ls`
-	colorflag="-G"
-fi
+# --------------
+# Old ls aliases
+# --------------
 
-# List all files colorized in long format
-alias l="ls -lhF ${colorflag}"
-alias ll="ls -hF ${colorflag}"
+# # Detect which `ls` flavor is in use
+# if ls --color > /dev/null 2>&1; then # GNU `ls`
+# 	colorflag="--color"
+# else # macOS `ls`
+# 	colorflag="-G"
+# fi
 
-# List all files colorized in long format, including dot files
-alias la="ls -lahF ${colorflag}"
+# # List all files colorized in long format
+# alias l="ls -lhF ${colorflag}"
+# alias ll="ls -hF ${colorflag}"
 
-# List only directories
-alias ld="ls -lhF ${colorflag} | grep --color=never '^d'"
+# # List all files colorized in long format, including dot files
+# alias la="ls -lahF ${colorflag}"
 
-# Always use color output for `ls`
-alias ls="command ls ${colorflag}"
+# # List only directories
+# alias ld="ls -lhF ${colorflag} | grep --color=never '^d'"
+
+# # Always use color output for `ls`
+# alias ls="command ls ${colorflag}"
+
+# --------------
 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
