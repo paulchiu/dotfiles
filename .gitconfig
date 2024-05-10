@@ -4,6 +4,7 @@
 	default = current
 [alias]
 	a = add .
+    au = add -u
 	x = !git add -A && git commit --amend --no-edit
 	xx = !git add -A && git commit --amend --no-edit --no-verify
 	wip = !git add -A && git commit -m "WIP" --no-verify
