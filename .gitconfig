@@ -3,6 +3,7 @@
 [pull]
 	default = current
 [alias]
+    fa = fetch --all -p
 	a = add .
     au = add -u
 	x = !git add -A && git commit --amend --no-edit
