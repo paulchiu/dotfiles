@@ -23,7 +23,7 @@ imap <C-v> <ESC>"+pa
 "
 " Other settings
 syntax on
-behave xterm
+" behave xterm
 colo dracula
 set ts=4
 set nu
