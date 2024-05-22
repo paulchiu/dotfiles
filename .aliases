@@ -22,6 +22,7 @@ alias mlsr="mryum login && mryum shell && ~/bin/reset.sh"
 alias ms="mryum shell"
 alias ranger="yazi"
 alias rs="~/bin/reset.sh"
+alias s="~/dev/search.sh"
 alias sed="sd"
 alias ya="yadm"
 
