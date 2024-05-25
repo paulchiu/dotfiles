@@ -79,6 +79,10 @@ if has('gui_macvim')
     set guifont=Fira\ Code:h12
 endif
 
+if exists("g:neovide")
+    set guifont=Fira\ Code:h12
+endif
+
 if has('gui_gtk')
     set guifont=Fira\ Mono\ for\ Powerline\ 10
     set clipboard=unnamedplus
