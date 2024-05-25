@@ -23,6 +23,8 @@ alias ranger="yazi"
 alias rs="~/bin/reset.sh"
 alias s="~/dev/search.sh"
 alias sed="sd"
+alias tmux="zellij"
+alias zc="zellij --layout compact"
 alias ya="yadm"
 
 # --------------
