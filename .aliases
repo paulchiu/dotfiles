@@ -11,6 +11,9 @@ alias vim="nvim"
 
 # Rust alternatives
 # Partial source: https://zaiste.net/posts/shell-commands-rust/
+alias cma="z manage-api"
+alias cmf="z manage-frontend"
+alias csf="z serve-frontend"
 alias du="dust"
 alias l="eza -l --icons"
 alias la="eza -a --icons"
