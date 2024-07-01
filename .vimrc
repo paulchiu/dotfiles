@@ -18,12 +18,12 @@ filetype plugin indent on    " required
 " copy and paste
 vmap <C-c> "+yi
 vmap <C-x> "+c
-vmap <C-v> c<ESC>"+p
+vmap <C-v> <ESC>"+p
 imap <C-v> <ESC>"+pa
 " MacOS copy ans paste
 map <D-c> y
 map <D-v> p
-map! <D-v> c<ESC>"+p
+map! <D-v> <ESC>"+p
 map <D-x> x
 " quick save
 map <D-s> :w<CR>
