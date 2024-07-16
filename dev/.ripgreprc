@@ -1,0 +1,84 @@
+# .ripgreprc
+
+# Ignore node_modules
+--glob
+!node_modules/*
+
+# Ignore __stories__
+--glob
+!__stories__/*
+
+# Ignore ios
+--glob
+!ios/*
+
+# Ignore crew-bff/src/generated
+--glob
+!crew-bff/src/generated/*
+
+# Ignore *.snap files
+--glob
+!*.snap
+
+# Ignore *.svg files
+--glob
+!*.svg
+
+# Ignore *.json files
+--glob
+!*.json
+
+# Ignore *.gql files
+--glob
+!*.gql
+
+# Ignore *.js files
+--glob
+!*.js
+
+# Ignore gql.tsx files
+--glob
+!gql.tsx
+
+# Ignore graphql.ts files
+--glob
+!graphql.ts
+
+# Ignore gql.ts files
+--glob
+!gql.ts
+
+# Ignore *.graphql files
+--glob
+!*.graphql
+
+# Ignore *.factory.ts files
+--glob
+!*.factory.ts
+
+# Ignore *.har* files
+--glob
+!*.har*
+
+# Ignore schema.prisma files
+--glob
+!schema.prisma
+
+# Ignore yarn.lock files
+--glob
+!yarn.lock
+
+--glob
+!qmk_firmware
+
+--glob
+!bb-laravel-sync
+
+--glob
+!serve-fe-ref
+
+--glob
+!bcms
+
+--glob
+!*.tsbuildinfo

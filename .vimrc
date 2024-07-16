@@ -33,7 +33,8 @@ syntax on
 colo dracula
 set ts=4
 set nu
-set tw=120
+set tw=0
+set wrapmargin=0
 set mouse=h
 set mousehide
 set clipboard=unnamed
