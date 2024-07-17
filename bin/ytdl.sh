@@ -8,4 +8,4 @@ if [ -z "$1" ]; then
 fi
 
 # Run the yt-dlp command with the provided URL
-yt-dlp --extract-audio --audio-format mp3 --audio-quality 192K "$1"
+yt-dlp --cookies-from-browser firefox --extract-audio --audio-format mp3 --audio-quality 192K "$1"
