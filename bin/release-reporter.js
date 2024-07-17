@@ -6,6 +6,7 @@
 // Config
 // ------------------------------------------------------------
 
+// @ts-ignore
 const API_TOKEN = process.env.BUILDKITE_API_TOKEN;
 const API_URL = "https://api.buildkite.com/v2/organizations/mryum/pipelines";
 const PAGE_PARAMS = "page=1&per_page=20";
