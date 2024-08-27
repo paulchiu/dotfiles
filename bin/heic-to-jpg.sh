@@ -38,9 +38,9 @@ for heic_file in "$input_dir"/*.HEIC; do
     # Define the output JPEG file path
     jpg_file="$output_dir/$base_name.jpg"
 
-    # Convert HEIC to JPEG and resize to 720p
+    # Convert HEIC to JPEG and resize to 1080p
     sips -s format jpeg "$heic_file" --out "$jpg_file"
-    sips -Z 720 "$jpg_file"
+    sips -Z 1080 "$jpg_file"
 
     echo "Converted and resized: $heic_file -> $jpg_file"
 done
