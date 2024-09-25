@@ -3,6 +3,7 @@
 # Define the list of directories and branches
 REPO_BRANCH=(
   "bill-api:main"
+  "bill-db-schema:main"
   "bill-worker:main"
   "cloudflare-workers:main"
   "crew-api:main"
@@ -17,6 +18,9 @@ REPO_BRANCH=(
   "integration-config:main"
   "loyalty-api:main"
   "loyalty-contract:main"
+  "loyalty-db-schema:main"
+  "loyalty-infra:main"
+  "loyalty-worker:main"
   "manage-api:main"
   "manage-frontend:main"
   "menu-api:main"

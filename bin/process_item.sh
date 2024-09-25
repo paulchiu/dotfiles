@@ -18,6 +18,7 @@ git fetch --all -p
 # Wipe changes if not monorepo; need to preserve local Yarn version settings
 if [[ "$directory" != "mr-yum" ]]; then
     git reset --hard HEAD
+    git clean -df
 fi
 
 # Update branch

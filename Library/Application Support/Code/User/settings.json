@@ -39,5 +39,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "editor.formatOnSave": true,
-  "prisma.showPrismaDataPlatformNotification": false
+  "prisma.showPrismaDataPlatformNotification": false,
+  "supermaven.enable": {
+    "*": false
+  },
+  "window.newWindowProfile": "Default"
 }
