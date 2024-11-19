@@ -43,5 +43,6 @@
   "supermaven.enable": {
     "*": false
   },
-  "window.newWindowProfile": "Default"
+  "window.newWindowProfile": "Default",
+  "chat.commandCenter.enabled": false
 }
