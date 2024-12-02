@@ -20,6 +20,7 @@ Dropbox.app
 DuckDuckGo.app
 'Easy Move+Resize.app'
 Firefox.app
+FocuSee.app
 ForkLift.app
 'Garmin Express.app'
 'Google Chrome.app'
