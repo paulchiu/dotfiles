@@ -10,6 +10,7 @@
 	xx = !git add -A && git commit --amend --no-edit --no-verify
 	wip = !git add -A && git commit -m "WIP" --no-verify
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    ca = commit --amend --no-edit
     cb = checkout -b
     cm = commit -m
     co = checkout
