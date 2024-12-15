@@ -11,8 +11,10 @@ alias vim="nvim"
 
 # Rust alternatives
 # Partial source: https://zaiste.net/posts/shell-commands-rust/
+alias cdb="z mr-yum-db-schema"
 alias cma="z manage-api"
 alias cmf="z manage-frontend"
+alias cms="z smoke"
 alias csa="z serve-api"
 alias csf="z serve-frontend"
 alias du="dust"

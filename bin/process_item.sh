@@ -12,7 +12,6 @@ cd "$DEV_HOME/$directory" || { echo "Failed to change to directory $directory"; 
 
 # Run the git commands
 echo "In $directory"
-nvm use
 git fetch --all -p
 
 # Wipe changes if not monorepo; need to preserve local Yarn version settings
@@ -26,6 +25,7 @@ git checkout "$branch"
 git pull origin "$branch"
 
 # Check for lock files and install dependencies
+nvm use
 if [[ -f "yarn.lock" ]]; then
     yarn install
 elif [[ -f "package-lock.json" ]]; then

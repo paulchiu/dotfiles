@@ -53,7 +53,6 @@ Messenger.app
 'Modern CSV.app'
 Monodraw.app
 Neovide.app
-'Nimble Commander.app'
 NordVPN.app
 Obsidian.app
 OrbStack.app
@@ -67,6 +66,7 @@ Postman.app
 Presentify.app
 qbittorrent.app
 'QMK Toolbox.app'
+'QSpace Pro.app'
 RapidAPI.app
 'Raspberry Pi Imager.app'
 Raycast.app
