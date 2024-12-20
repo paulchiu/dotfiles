@@ -32,7 +32,7 @@ after-login-command = []
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-    'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=3',
+    'exec-and-forget borders active_color=0xff04d9ff inactive_color=0xff494d64 width=3',
 ]
 
 # Start AeroSpace at login
@@ -228,6 +228,36 @@ h = 'move left'
 j = 'move down'
 k = 'move up'
 l = 'move right'
+shift-1 = 'workspace 1'
+shift-2 = 'workspace 2'
+shift-3 = 'workspace 3'
+shift-4 = 'workspace 4'
+shift-5 = 'workspace 5'
+shift-6 = 'workspace 6'
+shift-7 = 'workspace 7'
+shift-8 = 'workspace 8'
+shift-9 = 'workspace 9'
+shift-a = 'workspace A'
+shift-b = 'workspace B'
+shift-c = 'workspace C'
+shift-d = 'workspace D'
+shift-e = 'workspace E'
+shift-g = 'workspace G'
+shift-i = 'workspace I'
+shift-m = 'workspace M'
+shift-n = 'workspace N'
+shift-o = 'workspace O'
+shift-p = 'workspace P'
+shift-q = 'workspace Q'
+shift-r = 'workspace R'
+shift-s = 'workspace S'
+shift-t = 'workspace T'
+shift-u = 'workspace U'
+shift-v = 'workspace V'
+shift-w = 'workspace W'
+shift-x = 'workspace X'
+shift-y = 'workspace Y'
+shift-z = 'workspace Z'
 shift-f = ['layout floating tiling'] # Toggle between floating and tiling layout
 shift-h = 'join-with left'
 shift-j = 'join-with down'
