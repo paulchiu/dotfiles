@@ -1,56 +1,56 @@
-'8BitDo Ultimate Software.app'
+8BitDo Ultimate Software.app
+AeroSpace.app
 Alacritty.app
 Almighty.app
 Anki.app
 AppCleaner.app
 Audacity.app
-'Audiobook Builder.app'
+Audiobook Builder.app
 BetterDisplay.app
-'Bing Wallpaper.app'
+Bing Wallpaper.app
 Caffeine.app
 Cap.app
 Cemu.app
 Clop.app
 Cyberduck.app
-DaisyDisk.app
 DBeaver.app
+DaisyDisk.app
 DeskPad.app
 Discord.app
 Dropbox.app
 DuckDuckGo.app
-'Easy Move+Resize.app'
+Easy Move+Resize.app
 Firefox.app
 FocuSee.app
 ForkLift.app
-'Garmin Express.app'
-'Google Chrome.app'
-'Google Docs.app'
-'Google Drive.app'
-'Google Sheets.app'
-'Google Slides.app'
+Garmin Express.app
+Google Chrome.app
+Google Docs.app
+Google Drive.app
+Google Sheets.app
+Google Slides.app
 HandBrake.app
 Ice.app
 ImageOptim.app
 Infuse.app
-'IntelliJ IDEA CE.app'
-'JDownloader 2.0'
-JDownloader2.app -> '/Applications/JDownloader 2.0'/JDownloader2.app
-'Kandji Self Service.app'
+IntelliJ IDEA CE.app
+JDownloader 2.0
+JDownloader2.app
+Kandji Self Service.app
 Karabiner-Elements.app
 Karabiner-EventViewer.app
 KeyCastr.app
-lghub.app
-'Logi Options.app'
+Logi Options.app
 Logseq.app
 Loom.app
-Maccy.app
 MacWhisper.app
+Maccy.app
 Medis.app
 MeetingBar.app
 Messenger.app
-'Microsoft Excel.app'
-'Microsoft Word.app'
-'Modern CSV.app'
+Microsoft Excel.app
+Microsoft Word.app
+Modern CSV.app
 Monodraw.app
 Neovide.app
 NordVPN.app
@@ -59,37 +59,38 @@ OrbStack.app
 Pages.app
 PastePal.app
 PhpStorm.app
-'Pixelmator Pro.app'
+Pixelmator Pro.app
 PolyCapture.app
 Pop.app
 Postman.app
 Presentify.app
-qbittorrent.app
-'QMK Toolbox.app'
-'QSpace Pro.app'
+QMK Toolbox.app
+QSpace Pro.app
 RapidAPI.app
-'Raspberry Pi Imager.app'
+Raspberry Pi Imager.app
 Raycast.app
 Reactotron.app
 Rectangle.app
 RemotePCSuite.app
 RustDesk.app
-Safari.app -> ../System/Cryptexes/App/System/Applications/Safari.app
+Safari.app
 Shottr.app
 Slack.app
-'Soulver 3.app'
+Soulver 3.app
 Spotify.app
-'Syntax Highlight.app'
+Syntax Highlight.app
 Tailscale.app
 TeamViewer.app
-'The Unarchiver.app'
+The Unarchiver.app
 Utilities
 VIA.app
 Vial.app
 Vimac.app
-'Visual Studio Code.app'
+Visual Studio Code.app
 WebStorm.app
-'Windows App.app'
+Windows App.app
 Xcode.app
 Zappy.app
+lghub.app
+qbittorrent.app
 zoom.us.app
