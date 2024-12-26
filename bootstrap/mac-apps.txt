@@ -1,6 +1,5 @@
 8BitDo Ultimate Software.app
 AeroSpace.app
-Alacritty.app
 Almighty.app
 Anki.app
 AppCleaner.app
