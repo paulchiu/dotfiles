@@ -24,6 +24,7 @@ Firefox.app
 FocuSee.app
 ForkLift.app
 Garmin Express.app
+Ghostty.app
 Google Chrome.app
 Google Docs.app
 Google Drive.app
