@@ -21,7 +21,6 @@ DuckDuckGo.app
 Easy Move+Resize.app
 Firefox.app
 FocuSee.app
-ForkLift.app
 Garmin Express.app
 Ghostty.app
 Google Chrome.app
@@ -44,7 +43,6 @@ Logi Options.app
 Logseq.app
 Loom.app
 MacWhisper.app
-Maccy.app
 Medis.app
 MeetingBar.app
 Messenger.app
@@ -72,15 +70,14 @@ Raycast.app
 Reactotron.app
 Rectangle.app
 RemotePCSuite.app
-RustDesk.app
 Safari.app
 Shottr.app
 Slack.app
 Soulver 3.app
+SpaceWalker.app
 Spotify.app
 Syntax Highlight.app
 Tailscale.app
-TeamViewer.app
 The Unarchiver.app
 Utilities
 VIA.app

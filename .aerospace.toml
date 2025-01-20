@@ -84,6 +84,9 @@ U = 'built-in'
 I = 'built-in'
 O = 'built-in'
 P = 'built-in'
+7 = 'viture'
+8 = 'viture'
+9 = 'viture'
 
 [gaps]
 inner.horizontal = [{ monitor."SE790C" = 12 }, 5]

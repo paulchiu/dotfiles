@@ -1,11 +1,16 @@
 #!/bin/zsh
 
 set -e
-source ~/.nvm/nvm.sh
 
 # Extract the directory and branch from the current item
 directory=${1%%:*}
 branch=${1#*:}
+
+# Prefix all script output; source: https://unix.stackexchange.com/a/440439
+exec > >(trap "" INT TERM; sed "s/^/$directory | /")
+
+# Match node version
+source ~/.nvm/nvm.sh
 
 # Change to the directory
 cd "$DEV_HOME/$directory" || { echo "Failed to change to directory $directory"; exit 1; }

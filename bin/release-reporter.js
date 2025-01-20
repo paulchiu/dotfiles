@@ -222,7 +222,7 @@ function getNextClosest(minutesInFuture, minutesToRoundTo) {
   const releaseTimeMelbourne = new Date(releaseTimeLocal.getTime());
   releaseTimeMelbourne.setHours(releaseTimeMelbourne.getHours() + 1);
 
-  const dayLightSavings = false;
+  const dayLightSavings = true;
 
   if (dayLightSavings) {
     return `${getReadableTime(releaseTimeLocal)} AEST / ${getReadableTime(
@@ -238,7 +238,7 @@ function getNextClosest(minutesInFuture, minutesToRoundTo) {
  */
 async function logReleaseNotes(pipelines) {
   const pipelinesBuilds = await getPipelinesBuilds(pipelines);
-  console.log(`### Serve releases for ${getReleaseDate()}`);
+  console.log(`### ctrl-alt-delight releases for ${getReleaseDate()}`);
   console.log("");
   console.log(convertToMarkdownList(pipelinesBuilds));
   console.log(
