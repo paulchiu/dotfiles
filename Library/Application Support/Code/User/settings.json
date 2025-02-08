@@ -44,5 +44,8 @@
     "*": false
   },
   "window.newWindowProfile": "Default",
-  "chat.commandCenter.enabled": false
+  "chat.commandCenter.enabled": false,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
