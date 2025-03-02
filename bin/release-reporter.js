@@ -115,6 +115,11 @@ async function getPipelinesBuilds(pipelineTuples) {
     pipelineTuples.map(async (pipelineTuple) => {
       const [pipeline, branch] = pipelineTuple;
       const builds = await fetchBuilds(pipeline, branch);
+
+      if (builds.length === 0) {
+        return undefined;
+      }
+
       const releaseBuild = builds[0];
       const { number, web_url: url } = releaseBuild;
 
@@ -127,7 +132,7 @@ async function getPipelinesBuilds(pipelineTuples) {
     })
   );
 
-  return pipelineBuilds;
+  return pipelineBuilds.filter((b) => !!b);
 }
 
 /**
