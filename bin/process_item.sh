@@ -7,10 +7,16 @@ directory=${1%%:*}
 branch=${1#*:}
 
 # Prefix all script output; source: https://unix.stackexchange.com/a/440439
-exec > >(trap "" INT TERM; sed "s/^/$directory | /")
+exec > >(trap "" INT TERM ERR; sed "s/^/$directory | /")
 
 # Match node version
 source ~/.nvm/nvm.sh
+
+# Check if directory exists, if not clone it
+if [ ! -d "$directory" ]; then
+  echo "$directory not found, cloning"
+  git clone "git@github.com:mr-yum/$directory.git"
+fi
 
 # Change to the directory
 cd "$DEV_HOME/$directory" || { echo "Failed to change to directory $directory"; exit 1; }
