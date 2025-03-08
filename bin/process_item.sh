@@ -13,9 +13,9 @@ exec > >(trap "" INT TERM ERR; sed "s/^/$directory | /")
 source ~/.nvm/nvm.sh
 
 # Check if directory exists, if not clone it
-if [ ! -d "$directory" ]; then
+if [ ! -d "$DEV_HOME/$directory" ]; then
   echo "$directory not found, cloning"
-  git clone "git@github.com:mr-yum/$directory.git"
+  git clone "git@github.com:mr-yum/$directory.git" "$DEV_HOME/$directory"
 fi
 
 # Change to the directory
