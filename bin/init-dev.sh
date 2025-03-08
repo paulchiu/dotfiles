@@ -2,7 +2,6 @@
 
 # Define the list of directories and branches
 REPO_BRANCH=(
-  "cloudflare-workers:main"
   "bill-api:main"
   "bill-db-schema:main"
   "bill-worker:main"
