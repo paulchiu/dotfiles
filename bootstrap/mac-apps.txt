@@ -1,23 +1,21 @@
 8BitDo Ultimate Software.app
-AeroSpace.app
-Almighty.app
-Anki.app
+AltTab.app
 AppCleaner.app
-Audacity.app
 Audiobook Builder.app
+Azure Data Studio.app
+Bananotate.app
 BetterDisplay.app
 Bing Wallpaper.app
 Caffeine.app
-Cap.app
-Cemu.app
 Clop.app
+Cursor.app
 Cyberduck.app
 DBeaver.app
+DaVinci Resolve.app
 DaisyDisk.app
+Default Browser.app
 DeskPad.app
-Discord.app
 Dropbox.app
-DuckDuckGo.app
 Easy Move+Resize.app
 Firefox.app
 FocuSee.app
@@ -29,12 +27,9 @@ Google Drive.app
 Google Sheets.app
 Google Slides.app
 HandBrake.app
+Haystack Editor.app
 Ice.app
 ImageOptim.app
-Infuse.app
-IntelliJ IDEA CE.app
-JDownloader 2.0
-JDownloader2.app
 Kandji Self Service.app
 Karabiner-Elements.app
 Karabiner-EventViewer.app
@@ -46,13 +41,12 @@ MacWhisper.app
 Medis.app
 MeetingBar.app
 Messenger.app
+Microsoft Azure Storage Explorer.app
 Microsoft Excel.app
-Microsoft Word.app
 Modern CSV.app
-Monodraw.app
+MongoDB Compass.app
 Neovide.app
 NordVPN.app
-Obsidian.app
 OrbStack.app
 Pages.app
 PastePal.app
@@ -64,17 +58,16 @@ Postman.app
 Presentify.app
 QMK Toolbox.app
 QSpace Pro.app
-RapidAPI.app
 Raspberry Pi Imager.app
 Raycast.app
 Reactotron.app
 Rectangle.app
 RemotePCSuite.app
+SF Symbols.app
 Safari.app
+Shadow.app
 Shottr.app
 Slack.app
-Soulver 3.app
-SpaceWalker.app
 Spotify.app
 Syntax Highlight.app
 Tailscale.app
