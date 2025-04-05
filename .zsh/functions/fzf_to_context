@@ -2,7 +2,15 @@
 # Press TAB to select multiple files
 # Press Enter when done
 fzf_to_context() {
-  selected_files=$(find . -type f -not -path "*/\.*" | fzf --multi --preview 'bat --color=always --style=numbers --line-range=:500 {}')
+  selected_files=$(
+    if [ -f .gitignore ]; then
+      # Use git ls-files for repositories with .gitignore
+      git ls-files --cached --others --exclude-standard
+    else
+      # Fallback to find for non-git repositories
+      find . -type f -not -path "*/\.*"
+    fi | fzf --multi --preview 'bat --color=always --style=numbers --line-range=:500 {}'
+  )
 
   # Exit if no files selected
   [ -z "$selected_files" ] && return
@@ -12,11 +20,11 @@ fzf_to_context() {
 
   # Process each selected file
   echo "$selected_files" | while read -r file; do
-    echo "## File: $file" >> "$temp_file"
+    echo "<file path='$file'>" >> "$temp_file"
     echo "" >> "$temp_file"
     cat "$file" >> "$temp_file"
     echo "" >> "$temp_file"
-    echo "---" >> "$temp_file"
+    echo "</file>" >> "$temp_file"
     echo "" >> "$temp_file"
   done
 
@@ -34,7 +42,7 @@ fzf_to_context() {
     echo "No clipboard command found"
   fi
 
-  echo "Selected files copied to clipboard for AI chat context"
+  echo "✨ Files copied to clipboard for AI chat context"
   rm "$temp_file"
 }
 

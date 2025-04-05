@@ -1,0 +1,42 @@
+# Function: ttz
+# Description: Converts timezone shortcodes to full timezone commands and copies results to clipboard
+#
+# Usage: ttz <shortcode> [time]
+#   where <shortcode> is one of the supported timezone codes (pst, aedt, etc.)
+#   where [time] is an optional time
+#
+# Examples:
+#   ttz pst    # Shows time in Australia/Melbourne, Australia/Brisbane, Asia/Manila
+#   ttz aedt   # Shows time in Australia/Melbourne, Australia/Brisbane
+#   ttz pst 1400  # Shows 2:00 PM in specified timezones
+function ttz() {
+  local timezone="$1"
+  local time="$2"
+  local tz_string=""
+  local result=""
+
+  # Define timezone mappings
+  case "$timezone" in
+    pst)
+      tz_string="Australia/Melbourne,Australia/Brisbane,Asia/Manila"
+      ;;
+    aedt)
+      tz_string="Australia/Melbourne,Australia/Brisbane"
+      ;;
+    *)
+      echo "Unknown timezone shortcode: $timezone"
+      echo "Available shortcodes: pst, aedt"
+      return 1
+      ;;
+  esac
+
+  # Execute the command with or without time parameter
+  if [ -z "$time" ]; then
+    result=$(tz at "$tz_string")
+  else
+    result=$(tz at "$tz_string" "$time")
+  fi
+
+  echo "$result" | pbcopy
+  echo "$result"
+}

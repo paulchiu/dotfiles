@@ -36,8 +36,8 @@ alias sed="sd"
 alias tmux="zellij"
 alias zc="zellij --layout compact"
 alias ya="yadm"
-alias pst="tz at Australia/Melbourne,Australia/Brisbane,Asia/Manila"
-alias aedt="tz at Australia/Melbourne,Australia/Brisbane"
+alias pst="echo 'Use ttz instead'"
+alias aedt="echo 'Use ttz instead'"
 
 # --------------
 # Old ls aliases
