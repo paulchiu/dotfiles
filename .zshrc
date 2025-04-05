@@ -154,6 +154,12 @@ esac
 # Created by `pipx` on 2025-01-27 08:40:10
 export PATH="$PATH:/Users/paul/.local/bin"
 
+# Custom functions
+fpath=($HOME/.zsh/functions $fpath)
+autoload -Uz fzf_to_context
+alias ftx=fzf_to_context
+
+# pip autocompletions
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
 zstyle ':completion:*' menu select

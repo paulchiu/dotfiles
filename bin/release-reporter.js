@@ -268,5 +268,5 @@ logReleaseNotes([
   ["mr-yum-deploy", "staging"],
   ["serve-api", "main"],
   ["serve-frontend", "main"],
-  // ['db-tasks', 'main'],
+  ["stable-api", "main"],
 ]);

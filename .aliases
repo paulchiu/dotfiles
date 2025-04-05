@@ -9,6 +9,7 @@ alias hs="history | fzf"
 alias v="nvim"
 alias vim="nvim"
 alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
+alias tf="terraform"
 
 # Rust alternatives
 # Partial source: https://zaiste.net/posts/shell-commands-rust/
