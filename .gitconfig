@@ -12,6 +12,7 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     ca = commit --amend --no-edit
     cb = checkout -b
+    cf = clean -df
     cm = commit -m
     co = checkout
     ds = diff --compact-summary

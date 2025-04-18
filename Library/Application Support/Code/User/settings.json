@@ -20,9 +20,10 @@
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "github.copilot.enable": {
-    "*": true,
-    "markdown": true,
+    "*": false,
     "plaintext": true,
+    "markdown": true,
+    "scminput": false,
     "yaml": false
   },
   "redhat.telemetry.enabled": true,
@@ -32,6 +33,44 @@
   "vim.hlsearch": true,
   "vim.leader": ",",
   "vim.useSystemClipboard": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<leader>", "s"],
+      "after": ["<leader>", "<leader>", "s"]
+    },
+    {
+      "before": ["<leader>", "f"],
+      "after": ["<leader>", "<leader>", "f"]
+    },
+    {
+      "before": ["<leader>", "F"],
+      "after": ["<leader>", "<leader>", "F"]
+    },
+    {
+      "before": ["<leader>", "t"],
+      "after": ["<leader>", "<leader>", "t"]
+    },
+    {
+      "before": ["<leader>", "T"],
+      "after": ["<leader>", "<leader>", "T"]
+    },
+    {
+      "before": ["<leader>", "w"],
+      "after": ["<leader>", "<leader>", "w"]
+    },
+    {
+      "before": ["<leader>", "b"],
+      "after": ["<leader>", "<leader>", "b"]
+    },
+    {
+      "before": ["<leader>", "j"],
+      "after": ["<leader>", "<leader>", "j"]
+    },
+    {
+      "before": ["<leader>", "k"],
+      "after": ["<leader>", "<leader>", "k"]
+    }
+  ],
   "workbench.colorTheme": "Dracula",
   "workbench.iconTheme": "vscode-icons",
   "editor.wordWrap": "on",
@@ -44,8 +83,14 @@
     "*": false
   },
   "window.newWindowProfile": "Default",
-  "chat.commandCenter.enabled": false,
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "openInGitHub.alwaysUseDefaultBranch": true,
+  "openInGitHub.defaultBranch": "main",
+  "github.copilot.advanced": {},
+  "typescriptCopyReference.includeRelativePath": false,
+  "gitlens.advanced.messages": {
+    "suppressIntegrationRequestTimedOutWarning": true
   }
 }

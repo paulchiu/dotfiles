@@ -1,0 +1,11 @@
+// Place your key bindings in this file to override the defaults
+[
+  {
+    "key": "ctrl+shift+alt+cmd+r",
+    "command": "copyReference.copyPath"
+  },
+  {
+    "key": "shift+alt+cmd+c",
+    "command": "-copyReference.copyPath"
+  }
+]

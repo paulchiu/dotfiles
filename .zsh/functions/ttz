@@ -18,7 +18,7 @@ function ttz() {
   # Define timezone mappings
   case "$timezone" in
     pst)
-      tz_string="Australia/Melbourne,Australia/Brisbane,Asia/Manila"
+      tz_string="Australia/Melbourne,Asia/Manila"
       ;;
     aedt)
       tz_string="Australia/Melbourne,Australia/Brisbane"
@@ -38,5 +38,5 @@ function ttz() {
   fi
 
   echo "$result" | pbcopy
-  echo "$result"
+  echo "📋 $result"
 }
