@@ -10,6 +10,7 @@ alias v="nvim"
 alias vim="nvim"
 alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
 alias tf="terraform"
+alias cf='cd "$(fd --type d --hidden --follow --exclude .git | fzf --height=40% --border --prompt="Select folder> ")"'
 
 # Rust alternatives
 # Partial source: https://zaiste.net/posts/shell-commands-rust/
