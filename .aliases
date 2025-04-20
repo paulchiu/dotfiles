@@ -2,43 +2,52 @@
 
 PLATFORM=$(uname)
 
+# Git and GitHub
+alias g="git"
+alias pr="gh pr create --web"
+alias prv="gh pr view --web"
+alias ya="yadm"
+alias cya="cd ~/.local/share/yadm/repo.git"
 alias ac='aicommits --type conventional'
-alias cf='cd "$(fd --type d --hidden --follow --exclude .git | fzf --height=40% --border --prompt="Select folder> ")"'
+
+# Docker
 alias d="docker"
 alias dc="docker-compose"
-alias ftx=fzf_to_context
-alias g="git"
-alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
-alias hs="history | fzf"
-alias tf="terraform"
-alias v="nvim"
-alias vim="nvim"
 
-# Rust alternatives
-# Partial source: https://zaiste.net/posts/shell-commands-rust/
+# Navigation and Directory Management
+alias cf='cd "$(fd --type d --hidden --follow --exclude .git | fzf --height=40% --border --prompt="Select folder> ")"'
 alias cdb="z mr-yum-db-schema"
 alias cma="z manage-api"
 alias cmf="z manage-frontend"
 alias cms="z smoke"
 alias csa="z serve-api"
 alias csf="z serve-frontend"
+
+# Editors and Shell Utilities
+alias v="nvim"
+alias vim="nvim"
+alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
+alias hs="history | fzf"
+alias ftx=fzf_to_context
+alias tf="terraform"
 alias du="dust"
 alias l="eza -l --icons"
 alias la="eza -a --icons"
 alias lg="lazygit"
 alias ll="eza"
 alias ls="eza --icons"
-alias mls="mryum login && mryum shell"
-alias ms="mryum shell"
-alias pr="gh pr create --web"
-alias prv="gh pr view --web"
 alias ranger="yazi"
 alias rs="~/bin/reset.sh"
 alias s="~/dev/search.sh"
-alias sed="echo 'Use sd instead'"
 alias tmux="zellij"
 alias zc="zellij --layout compact"
-alias ya="yadm"
+
+# Work
+alias mls="mryum login && mryum shell"
+alias ms="mryum shell"
+
+# Deprecated or redirected commands
+alias sed="echo 'Use sd instead'"
 alias pst="echo 'Use ttz instead'"
 alias aedt="echo 'Use ttz instead'"
 
