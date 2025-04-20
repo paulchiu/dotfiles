@@ -1,5 +1,4 @@
 8BitDo Ultimate Software.app
-AltTab.app
 AppCleaner.app
 Audiobook Builder.app
 Azure Data Studio.app
@@ -48,6 +47,8 @@ MongoDB Compass.app
 Neovide.app
 NordVPN.app
 OrbStack.app
+Orion.app
+PICO-8.app
 Pages.app
 PastePal.app
 PhpStorm.app

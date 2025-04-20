@@ -157,7 +157,7 @@ export PATH="$PATH:/Users/paul/.local/bin"
 # Custom functions
 fpath=($HOME/.zsh/functions $fpath)
 autoload -Uz fzf_to_context ttz
-alias ftx=fzf_to_context
+source <(fzf --zsh)
 
 # pip autocompletions
 fpath+=~/.zfunc; autoload -Uz compinit; compinit

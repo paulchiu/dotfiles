@@ -2,15 +2,17 @@
 
 PLATFORM=$(uname)
 
+alias ac='aicommits --type conventional'
+alias cf='cd "$(fd --type d --hidden --follow --exclude .git | fzf --height=40% --border --prompt="Select folder> ")"'
 alias d="docker"
 alias dc="docker-compose"
+alias ftx=fzf_to_context
 alias g="git"
+alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
 alias hs="history | fzf"
+alias tf="terraform"
 alias v="nvim"
 alias vim="nvim"
-alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
-alias tf="terraform"
-alias cf='cd "$(fd --type d --hidden --follow --exclude .git | fzf --height=40% --border --prompt="Select folder> ")"'
 
 # Rust alternatives
 # Partial source: https://zaiste.net/posts/shell-commands-rust/
