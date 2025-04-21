@@ -8,7 +8,7 @@ alias pr="gh pr create --web"
 alias prv="gh pr view --web"
 alias ya="yadm"
 alias cya="cd ~/.local/share/yadm/repo.git"
-alias ac='aicommits --type conventional'
+alias oc="oco"
 
 # Docker
 alias d="docker"
@@ -50,6 +50,7 @@ alias ms="mryum shell"
 alias sed="echo 'Use sd instead'"
 alias pst="echo 'Use ttz instead'"
 alias aedt="echo 'Use ttz instead'"
+alias ac="echo 'Use oc instead'"
 
 # --------------
 # Old ls aliases
