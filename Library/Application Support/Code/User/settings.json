@@ -92,5 +92,9 @@
   "typescriptCopyReference.includeRelativePath": false,
   "gitlens.advanced.messages": {
     "suppressIntegrationRequestTimedOutWarning": true
-  }
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always"
 }

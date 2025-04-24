@@ -1,4 +1,5 @@
 8BitDo Ultimate Software.app
+Alter.app
 AppCleaner.app
 Audiobook Builder.app
 Azure Data Studio.app
@@ -15,6 +16,7 @@ DaisyDisk.app
 Default Browser.app
 DeskPad.app
 Dropbox.app
+DuckDuckGo.app
 Easy Move+Resize.app
 Firefox.app
 FocuSee.app
@@ -64,8 +66,10 @@ Raycast.app
 Reactotron.app
 Rectangle.app
 RemotePCSuite.app
+ResponsivelyApp.app
 SF Symbols.app
 Safari.app
+Scoot.app
 Shadow.app
 Shottr.app
 Slack.app

@@ -5,11 +5,15 @@
     "command": "-copyReference.copyPath"
   },
   {
+    "key": "shift+alt+c",
+    "command": "-typescriptCopyReference.copy"
+  },
+  {
     "key": "ctrl+shift+alt+cmd+r",
-    "command": "typescriptCopyReference.copy"
+    "command": "saucer.copy"
   },
   {
     "key": "shift+alt+c",
-    "command": "-typescriptCopyReference.copy"
+    "command": "-saucer.copy"
   }
 ]
