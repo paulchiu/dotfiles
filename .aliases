@@ -3,12 +3,15 @@
 PLATFORM=$(uname)
 
 # Git and GitHub
+alias ce="gh copilot explain"
+alias co="gh copilot"
+alias cs="gh copilot suggest"
+alias cya="cd ~/.local/share/yadm/repo.git"
 alias g="git"
+alias oc="oco"
 alias pr="gh pr create --web"
 alias prv="gh pr view --web"
 alias ya="yadm"
-alias cya="cd ~/.local/share/yadm/repo.git"
-alias oc="oco"
 
 # Docker
 alias d="docker"

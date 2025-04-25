@@ -16,6 +16,7 @@
     cm = commit -m
     co = checkout
     ds = diff --compact-summary
+    dc = diff --cached
     s = status
 	pf = push -f
 	p = push

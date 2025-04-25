@@ -10,9 +10,9 @@ Caffeine.app
 Clop.app
 Cursor.app
 Cyberduck.app
-DBeaver.app
-DaVinci Resolve.app
 DaisyDisk.app
+DaVinci Resolve.app
+DBeaver.app
 Default Browser.app
 DeskPad.app
 Dropbox.app
@@ -35,9 +35,11 @@ Kandji Self Service.app
 Karabiner-Elements.app
 Karabiner-EventViewer.app
 KeyCastr.app
+lghub.app
 Logi Options.app
 Logseq.app
 Loom.app
+MacImgAI.app
 MacWhisper.app
 Medis.app
 MeetingBar.app
@@ -48,17 +50,19 @@ Modern CSV.app
 MongoDB Compass.app
 Neovide.app
 NordVPN.app
+Obsidian.app
 OrbStack.app
 Orion.app
-PICO-8.app
 Pages.app
 PastePal.app
 PhpStorm.app
+PICO-8.app
 Pixelmator Pro.app
 PolyCapture.app
 Pop.app
 Postman.app
 Presentify.app
+qbittorrent.app
 QMK Toolbox.app
 QSpace Pro.app
 Raspberry Pi Imager.app
@@ -67,9 +71,9 @@ Reactotron.app
 Rectangle.app
 RemotePCSuite.app
 ResponsivelyApp.app
-SF Symbols.app
 Safari.app
 Scoot.app
+SF Symbols.app
 Shadow.app
 Shottr.app
 Slack.app
@@ -86,6 +90,4 @@ WebStorm.app
 Windows App.app
 Xcode.app
 Zappy.app
-lghub.app
-qbittorrent.app
 zoom.us.app
