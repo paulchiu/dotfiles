@@ -8,4 +8,4 @@ format = "git"
 [aliases]
 s = ["status"]
 cu = ["config", "edit", "--user"]
-
+ab = ["abandon"]
