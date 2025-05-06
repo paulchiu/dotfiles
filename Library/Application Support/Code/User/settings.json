@@ -96,5 +96,7 @@
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "typescript.updateImportsOnFileMove.enabled": "always"
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "jest.runMode": "on-demand",
+  "git.blame.editorDecoration.enabled": true
 }

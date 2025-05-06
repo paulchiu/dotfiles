@@ -1,0 +1,11 @@
+[user]
+name = "Paul Chiu"
+email = "paulchiu@gmail.com"
+[ui]
+pager = "delta"
+[ui.diff]
+format = "git"
+[aliases]
+s = ["status"]
+cu = ["config", "edit", "--user"]
+
