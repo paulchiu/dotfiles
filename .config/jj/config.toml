@@ -1,0 +1,24 @@
+[user]
+name = "Paul Chiu"
+email = "paulchiu@gmail.com"
+
+[ui]
+pager = "delta"
+
+[ui.diff]
+format = "git"
+
+[aliases]
+s = ["status"]
+cu = ["config", "edit", "--user"]
+ab = ["abandon"]
+gi = ["git", "init", "--colocate"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+push = ["git", "push"]
+p = ["git", "push"]
+l = ["log"]
+ll = ["log", "-r", "all()"]
+
+[revset-aliases]
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'

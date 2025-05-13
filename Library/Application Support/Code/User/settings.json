@@ -98,5 +98,6 @@
   },
   "typescript.updateImportsOnFileMove.enabled": "always",
   "jest.runMode": "on-demand",
-  "git.blame.editorDecoration.enabled": true
+  "git.blame.editorDecoration.enabled": true,
+  "git.replaceTagsWhenPull": true
 }
