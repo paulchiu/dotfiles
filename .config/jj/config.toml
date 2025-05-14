@@ -11,6 +11,7 @@ format = "git"
 [aliases]
 s = ["status"]
 cu = ["config", "edit", "--user"]
+cm = ["commit", "-m"]
 ab = ["abandon"]
 gi = ["git", "init", "--colocate"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]

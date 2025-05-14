@@ -15,6 +15,7 @@ DaVinci Resolve.app
 DBeaver.app
 Default Browser.app
 DeskPad.app
+DockDoor.app
 Dropbox.app
 DuckDuckGo.app
 Easy Move+Resize.app
@@ -36,7 +37,6 @@ Karabiner-Elements.app
 Karabiner-EventViewer.app
 KeyCastr.app
 lghub.app
-Logi Options.app
 Logseq.app
 Loom.app
 MacImgAI.app
@@ -71,6 +71,7 @@ Reactotron.app
 Rectangle.app
 RemotePCSuite.app
 ResponsivelyApp.app
+RetroArch.app
 Safari.app
 Scoot.app
 SF Symbols.app
@@ -90,4 +91,5 @@ WebStorm.app
 Windows App.app
 Xcode.app
 Zappy.app
+Zed.app
 zoom.us.app
