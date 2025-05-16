@@ -51,6 +51,7 @@ MongoDB Compass.app
 Neovide.app
 NordVPN.app
 Obsidian.app
+OpenEmu.app
 OrbStack.app
 Orion.app
 Pages.app

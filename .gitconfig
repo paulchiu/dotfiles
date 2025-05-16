@@ -22,6 +22,7 @@
 	p = push
 	rs = reset --hard HEAD
 	search = "!f() { \\\n search_string=\"$1\"; \\\n file_name=\"${2:-.}\"; \\\n git --no-pager log --pretty=oneline -S\"$search_string\" -- \"$file_name\"; \\\n}; f"
+	ff = merge --ff-only
 [core]
 	editor = /usr/bin/vim
 	excludesfile = ~/.gitignore_global

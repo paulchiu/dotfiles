@@ -35,6 +35,7 @@ alias hs="history | fzf"
 alias ftx=fzf_to_context
 alias tf="terraform"
 alias du="dust"
+alias df="duf"
 alias l="eza -l --icons"
 alias la="eza -a --icons"
 alias lg="lazygit"
