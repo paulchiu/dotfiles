@@ -28,34 +28,44 @@ alias csf="z serve-frontend"
 alias zt="zellij action go-to-tab-name"
 
 # Editors and Shell Utilities
-alias v="nvim"
-alias vim="nvim"
-alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
-alias hs="history | fzf"
-alias ftx=fzf_to_context
-alias tf="terraform"
-alias du="dust"
-alias df="duf"
+## File Navigation and Listing
 alias l="eza -l --icons"
 alias la="eza -a --icons"
-alias lg="lazygit"
 alias ll="eza"
 alias ls="eza --icons"
 alias ranger="yazi"
-alias rs="~/bin/reset.sh"
-alias s="~/dev/search.sh"
+alias yi="yazi"
+## Disk Usage
+alias df="duf"
+alias du="dust"
+## Text Editors
+alias v="nvim"
+alias vim="nvim"
+alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
+## Terminal Multiplexers
 alias tmux="zellij"
 alias zc="zellij --layout compact"
+## Git and Version Control
+alias lg="lazygit"
+## Search and Navigation
+alias ftx=fzf_to_context
+alias hs="history | fzf"
+alias s="~/dev/search.sh"
+## Development Tools
+alias sf="swift-format --recursive -i ."
+alias tf="terraform"
+## System/Utility
+alias rs="~/bin/reset.sh"
 
 # Work
 alias mls="mryum login && mryum shell"
 alias ms="mryum shell"
 
 # Deprecated or redirected commands
-alias sed="echo 'Use sd instead'"
-alias pst="echo 'Use ttz instead'"
-alias aedt="echo 'Use ttz instead'"
 alias ac="echo 'Use oc instead'"
+alias aedt="echo 'Use ttz instead'"
+alias pst="echo 'Use ttz instead'"
+alias sed="echo 'Use sd instead'"
 
 # --------------
 # Old ls aliases

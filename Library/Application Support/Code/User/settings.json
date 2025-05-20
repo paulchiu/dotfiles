@@ -99,5 +99,14 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "jest.runMode": "on-demand",
   "git.blame.editorDecoration.enabled": true,
-  "git.replaceTagsWhenPull": true
+  "git.replaceTagsWhenPull": true,
+  "vsicons.dontShowNewVersionMessage": true,
+  "roo-cline.allowedCommands": [
+    "npm test",
+    "npm install",
+    "tsc",
+    "git log",
+    "git diff",
+    "git show"
+  ]
 }

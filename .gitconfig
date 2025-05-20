@@ -25,7 +25,7 @@
 	ff = merge --ff-only
 [core]
 	editor = /usr/bin/vim
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/paul/.gitignore_global
     pager = delta
 [user]
 	email = paulchiu@gmail.com
