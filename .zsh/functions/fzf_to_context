@@ -9,7 +9,7 @@ fzf_to_context() {
     else
       # Fallback to find for non-git repositories
       find . -type f -not -path "*/\.*"
-    fi | fzf --multi --preview 'bat --color=always --style=numbers --line-range=:500 {}'
+    fi | fzf --multi --bind='alt-a:select-all' --preview 'bat --color=always --style=numbers --line-range=:500 {}'
   )
 
   # Exit if no files selected
