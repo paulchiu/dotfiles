@@ -1,5 +1,6 @@
 8BitDo Ultimate Software.app
 Alter.app
+Amazon Q.app
 AppCleaner.app
 Audiobook Builder.app
 Azure Data Studio.app
@@ -7,6 +8,7 @@ Bananotate.app
 BetterDisplay.app
 Bing Wallpaper.app
 Caffeine.app
+Claude.app
 Clop.app
 Cursor.app
 Cyberduck.app
@@ -39,7 +41,6 @@ KeyCastr.app
 lghub.app
 Logseq.app
 Loom.app
-MacImgAI.app
 MacWhisper.app
 Medis.app
 MeetingBar.app
@@ -88,6 +89,7 @@ VIA.app
 Vial.app
 Vimac.app
 Visual Studio Code.app
+Void.app
 WebStorm.app
 Windows App.app
 Xcode.app
