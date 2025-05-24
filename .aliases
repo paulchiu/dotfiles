@@ -26,6 +26,7 @@ alias cms="z smoke"
 alias csa="z serve-api"
 alias csf="z serve-frontend"
 alias zt="zellij action go-to-tab-name"
+alias yz="yazi"
 
 # Editors and Shell Utilities
 ## File Navigation and Listing

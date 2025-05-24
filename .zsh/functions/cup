@@ -1,0 +1,13 @@
+cup() {
+    local -a dirs
+    local current=$PWD
+
+    while [[ $current != "/" ]]; do
+        current=${current:h}
+        dirs+=($current)
+    done
+
+    local selected=${(f)"$(printf '%s\n' $dirs | fzf --height=40% --border --prompt='Select parent> ')"}
+    [[ -n $selected ]] && cd $selected
+}
+

@@ -171,5 +171,8 @@
   "vsicons.dontShowNewVersionMessage": true,
   "window.newWindowProfile": "Default",
   "workbench.colorTheme": "Dracula",
-  "workbench.iconTheme": "vscode-icons"
+  "workbench.iconTheme": "vscode-icons",
+  "terminal.integrated.env.osx": {
+    "Q_NEW_SESSION": "1"
+  }
 }
