@@ -57,6 +57,8 @@ alias sf="swift-format --recursive -i ."
 alias tf="terraform"
 ## System/Utility
 alias rs="~/bin/reset.sh"
+## Battery
+alias batt="pmset -g batt"
 
 # Work
 alias mls="mryum login && mryum shell"
