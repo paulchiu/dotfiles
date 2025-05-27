@@ -42,6 +42,7 @@ alias du="dust"
 ## Text Editors
 alias v="nvim"
 alias vim="nvim"
+alias j="jj"
 alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
 ## Terminal Multiplexers
 alias tmux="zellij"
