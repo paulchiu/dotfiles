@@ -62,7 +62,6 @@ alias rs="~/bin/reset.sh"
 ## Battery
 alias batt="pmset -g batt"
 ## AI
-alias wpr='aichat --role pr-writer -f .github/pull_request_template.md'
 alias wcm='aichat --role committer'
 
 # Work
