@@ -14,6 +14,7 @@
     cb = checkout -b
     cf = clean -df
     cm = commit -m
+    ci = commit -F -
     co = checkout
     ds = diff --compact-summary
     dc = diff --cached
