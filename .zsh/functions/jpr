@@ -1,0 +1,39 @@
+jpr() {
+  # Check if required dependencies are installed
+  if ! command -v jq >/dev/null 2>&1; then
+    echo "Error: jq is not installed. Please install it first." >&2
+    echo "Install with: brew install jq (macOS) or apt install jq (Ubuntu)" >&2
+    return 1
+  fi
+
+  if ! command -v gh >/dev/null 2>&1; then
+    echo "Error: GitHub CLI (gh) is not installed. Please install it first." >&2
+    echo "Install with: brew install gh (macOS) or visit https://cli.github.com/" >&2
+    return 1
+  fi
+
+  local json_input=$(cat)
+
+  # Validate JSON input
+  if ! echo "$json_input" | jq empty 2>/dev/null; then
+    echo "Error: Invalid JSON input" >&2
+    echo "Input: $json_input" >&2
+    return 1
+  fi
+
+  local title=$(echo "$json_input" | jq -r ".title // empty")
+  local description=$(echo "$json_input" | jq -r ".description // empty")
+
+  # Check if required fields exist
+  if [ -z "$title" ]; then
+    echo "Error: Missing title in JSON input" >&2
+    return 1
+  fi
+
+  if [ -z "$description" ]; then
+    echo "Error: Missing description in JSON input" >&2
+    return 1
+  fi
+
+  gh pr create --web --title "$title" --body "$description" "$@"
+}
