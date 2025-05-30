@@ -18,8 +18,10 @@
     co = checkout
     ds = diff --compact-summary
     dc = diff --cached
+    dcm = "!git dm --cached"
     dm = "!f() { git diff \"$@\" ':!package-lock.json' ':!**/*graphql.ts' ':!**/*gql.ts'; }; f"
     s = status
+    sh = show HEAD
 	pf = push -f
 	p = push
 	rs = reset --hard HEAD
