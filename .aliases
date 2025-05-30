@@ -36,6 +36,7 @@ alias ll="eza"
 alias ls="eza --icons"
 alias ranger="yazi"
 alias yi="yazi"
+alias eject="diskutil eject"
 ## Disk Usage
 alias df="duf"
 alias du="dust"
@@ -60,6 +61,9 @@ alias tf="terraform"
 alias rs="~/bin/reset.sh"
 ## Battery
 alias batt="pmset -g batt"
+## AI
+alias wpr='aichat --role pr-writer -f .github/pull_request_template.md'
+alias wcm='aichat --role committer'
 
 # Work
 alias mls="mryum login && mryum shell"
