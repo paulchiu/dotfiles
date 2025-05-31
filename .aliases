@@ -65,6 +65,7 @@ alias rs="~/bin/reset.sh"
 alias batt="pmset -g batt"
 ## AI
 alias wcm='aichat --role committer'
+alias jci="j cm \"$(j diff | wcm)\""
 
 # Work
 alias mls="mryum login && mryum shell"
