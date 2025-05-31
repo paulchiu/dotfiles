@@ -1,4 +1,4 @@
-wpr() {
+write_pull_request() {
     local template_file=".github/pull_request_template.md"
     if [[ -f "$template_file" ]]; then
         aichat --role pr-writer -f "$template_file" "$@"

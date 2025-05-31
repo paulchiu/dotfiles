@@ -1,15 +1,15 @@
-# Function: ttz
+# Function: to_timezone
 # Description: Converts timezone shortcodes to full timezone commands and copies results to clipboard
 #
-# Usage: ttz <shortcode> [time]
+# Usage: to_timezone <shortcode> [time]
 #   where <shortcode> is one of the supported timezone codes (pst, aedt, etc.)
 #   where [time] is an optional time
 #
 # Examples:
-#   ttz pst    # Shows time in Australia/Melbourne, Australia/Brisbane, Asia/Manila
-#   ttz aedt   # Shows time in Australia/Melbourne, Australia/Brisbane
-#   ttz pst 1400  # Shows 2:00 PM in specified timezones
-function ttz() {
+#   to_timezone pst    # Shows time in Australia/Melbourne, Australia/Brisbane, Asia/Manila
+#   to_timezone aedt   # Shows time in Australia/Melbourne, Australia/Brisbane
+#   to_timezone pst 1400  # Shows 2:00 PM in specified timezones
+function to_timezone() {
   local timezone="$1"
   local time="$2"
   local tz_string=""

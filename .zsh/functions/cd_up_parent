@@ -1,4 +1,4 @@
-cup() {
+cd_up_parent() {
     local -a dirs
     local current=$PWD
 

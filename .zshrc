@@ -161,7 +161,7 @@ export PATH="$PATH:/Users/paul/.local/bin"
 
 # Custom functions
 fpath=($HOME/.zsh/functions $fpath)
-autoload -Uz fzf_to_context ttz cup wpr jpr
+autoload -Uz fzf_to_context to_timezone cd_up_parent write_pull_request create_pull_request jj_rewrite_revision
 source <(fzf --zsh)
 source <(jj util completion zsh)
 

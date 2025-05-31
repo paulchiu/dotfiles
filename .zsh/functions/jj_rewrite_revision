@@ -1,0 +1,3 @@
+jj_rewrite_revision() {
+    jj describe -r $1 -m "$(jj show $1 | aichat --role committer)"
+}
