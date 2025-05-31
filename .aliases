@@ -25,6 +25,7 @@ alias cmf="z manage-frontend"
 alias cms="z smoke"
 alias csa="z serve-api"
 alias csf="z serve-frontend"
+alias pd="pushd"
 alias zt="zellij action go-to-tab-name"
 alias yz="yazi"
 
