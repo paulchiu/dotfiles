@@ -12,6 +12,7 @@ alias oc="oco"
 alias pr="gh pr create --web"
 alias prv="gh pr view --web"
 alias ya="yadm"
+alias yup="ya au && ya dc | wcm | ya ci && ya p"
 
 # Docker
 alias d="docker"
