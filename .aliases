@@ -26,6 +26,7 @@ alias csf="z serve-frontend"
 alias cup="cd_up_parent"
 alias pd="pushd"
 alias zt="zellij action go-to-tab-name"
+alias zmt="zellij action move-tab"
 alias yz="yazi"
 
 # Editors and Shell Utilities
@@ -81,30 +82,6 @@ alias ac="echo 'Use oc instead'"
 alias aedt="echo 'Use to_timezone instead'"
 alias pst="echo 'Use to_timezone instead'"
 alias sed="echo 'Use sd instead'"
-
-# --------------
-# Old ls aliases
-# --------------
-
-# # Detect which `ls` flavor is in use
-# if ls --color > /dev/null 2>&1; then # GNU `ls`
-# 	colorflag="--color"
-# else # macOS `ls`
-# 	colorflag="-G"
-# fi
-
-# # List all files colorized in long format
-# alias l="ls -lhF ${colorflag}"
-# alias ll="ls -hF ${colorflag}"
-
-# # List all files colorized in long format, including dot files
-# alias la="ls -lahF ${colorflag}"
-
-# # List only directories
-# alias ld="ls -lhF ${colorflag} | grep --color=never '^d'"
-
-# # Always use color output for `ls`
-# alias ls="command ls ${colorflag}"
 
 # --------------
 
