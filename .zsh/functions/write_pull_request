@@ -6,4 +6,3 @@ write_pull_request() {
         aichat --role pr-writer "$@"
     fi
 }
-

@@ -16,72 +16,36 @@ create_pull_request() {
     esac
   done
 
-  # Check if required dependencies are installed (skip if debug mode)
-  if [ "$debug" = false ]; then
-    local missing_deps=()
-    
-    # Check for GitHub CLI
-    if ! command -v gh >/dev/null 2>&1; then
-      missing_deps+=("gh")
-    fi
-    
-    # Check for standard shell utilities
-    for cmd in cat grep awk tr; do
-      if ! command -v "$cmd" >/dev/null 2>&1; then
-        missing_deps+=("$cmd")
-      fi
-    done
-    
-    # Check for system sed (not aliased version)
-    if ! [ -x "/usr/bin/sed" ]; then
-      missing_deps+=("sed")
-    fi
-    
-    if [ ${#missing_deps[@]} -gt 0 ]; then
-      echo "Error: Missing required dependencies: ${missing_deps[*]}" >&2
-      if [[ " ${missing_deps[*]} " =~ " gh " ]]; then
-        echo "Install GitHub CLI with: brew install gh (macOS) or visit https://cli.github.com/" >&2
-      fi
-      echo "Standard shell utilities (cat, grep, awk, sed, tr) should be available by default." >&2
-      return 1
-    fi
-  fi
-
-  local input=$(cat)
-
-  # Parse the input format: [TITLE]\n----\n[DESCRIPTION]
-  if ! echo "$input" | grep -q "^----$"; then
-    echo "Error: Invalid input format. Expected format:" >&2
-    echo "[TITLE]" >&2
-    echo "----" >&2
-    echo "[DESCRIPTION]" >&2
+  # Quick check for GitHub CLI
+  if [ "$debug" = false ] && ! \command -v gh >/dev/null 2>&1; then
+    echo "Error: GitHub CLI not found. Install with: brew install gh" >&2
     return 1
   fi
 
-  local title=$(echo "$input" | awk '/^----$/{exit} {print}' | /usr/bin/sed '/^$/d' | tr '\n' ' ' | /usr/bin/sed 's/[[:space:]]*$//')
-  local description=$(echo "$input" | awk 'BEGIN{found=0} /^----$/{found=1; next} found{print}' | /usr/bin/sed '1{/^$/d;}')
+  local input=$(\cat)
 
-  # Check if required fields exist
-  if [ -z "$title" ]; then
-    echo "Error: Missing title in input" >&2
+  # Parse input: [TITLE]\n----\n[DESCRIPTION]
+  if ! echo "$input" | \grep -q "^----$"; then
+    echo "Error: Invalid format. Expected: [TITLE]\\n----\\n[DESCRIPTION]" >&2
     return 1
   fi
 
-  if [ -z "$description" ]; then
-    echo "Error: Missing description in input" >&2
+  # Extract title and description using simpler parsing
+  local title=$(echo "$input" | \sed '/^----$/,$d' | \tr -d '\n' | \sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  local description=$(echo "$input" | \sed -n '/^----$/,$p' | \sed '1d;/^$/d')
+
+  # Validate required fields
+  if [[ -z "$title" || -z "$description" ]]; then
+    echo "Error: Both title and description are required" >&2
     return 1
   fi
 
-  # Build the command
-  local cmd="gh pr create --web --title \"$title\" --body \"$description\""
-  if [ ${#args[@]} -gt 0 ]; then
-    cmd="$cmd ${args[*]}"
-  fi
-
+  # Execute or debug
   if [ "$debug" = true ]; then
-    echo "Debug: Would execute the following command:"
-    echo "$cmd"
+    echo "Title: $title"
+    echo "Description: $description"
+    echo "Args: ${args[*]}"
   else
-    gh pr create --web --title "$title" --body "$description" "${args[@]}"
+    \gh pr create --web --title "$title" --body "$description" "${args[@]}"
   fi
 }

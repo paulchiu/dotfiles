@@ -10,4 +10,3 @@ cd_up_parent() {
     local selected=${(f)"$(printf '%s\n' $dirs | fzf --height=40% --border --prompt='Select parent> ')"}
     [[ -n $selected ]] && cd $selected
 }
-
