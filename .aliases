@@ -10,6 +10,7 @@ alias g="git"
 alias pr="gh pr create --web"
 alias prv="gh pr view --web"
 alias ya="yadm"
+alias lg="lazygit"
 
 # Docker
 alias d="docker"
@@ -23,6 +24,7 @@ alias cmf="z manage-frontend"
 alias cms="z smoke"
 alias csa="z serve-api"
 alias csf="z serve-frontend"
+alias cdl="cd ~/Downloads"
 alias cup="cd_up_parent"
 alias pd="pushd"
 alias zt="zellij action go-to-tab-name"
@@ -49,8 +51,6 @@ alias hay="/Applications/Haystack\ Editor.app/Contents/MacOS/Electron"
 ## Terminal Multiplexers
 alias tmux="zellij"
 alias zc="zellij --layout compact"
-## Git and Version Control
-alias lg="lazygit"
 ## Search and Navigation
 alias ftx="fzf_to_context"
 alias hs="history | fzf"

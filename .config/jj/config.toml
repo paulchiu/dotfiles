@@ -6,7 +6,7 @@ email = "paulchiu@gmail.com"
 pager = "delta"
 
 [ui.diff]
-format = "git"
+formatter = "git"
 
 [aliases]
 s = ["status"]

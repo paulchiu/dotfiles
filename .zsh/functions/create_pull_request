@@ -1,39 +1,87 @@
-jpr() {
-  # Check if required dependencies are installed
-  if ! command -v jq >/dev/null 2>&1; then
-    echo "Error: jq is not installed. Please install it first." >&2
-    echo "Install with: brew install jq (macOS) or apt install jq (Ubuntu)" >&2
+create_pull_request() {
+  # Parse command line options
+  local debug=false
+  local args=()
+  
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --debug)
+        debug=true
+        shift
+        ;;
+      *)
+        args+=("$1")
+        shift
+        ;;
+    esac
+  done
+
+  # Check if required dependencies are installed (skip if debug mode)
+  if [ "$debug" = false ]; then
+    local missing_deps=()
+    
+    # Check for GitHub CLI
+    if ! command -v gh >/dev/null 2>&1; then
+      missing_deps+=("gh")
+    fi
+    
+    # Check for standard shell utilities
+    for cmd in cat grep awk tr; do
+      if ! command -v "$cmd" >/dev/null 2>&1; then
+        missing_deps+=("$cmd")
+      fi
+    done
+    
+    # Check for system sed (not aliased version)
+    if ! [ -x "/usr/bin/sed" ]; then
+      missing_deps+=("sed")
+    fi
+    
+    if [ ${#missing_deps[@]} -gt 0 ]; then
+      echo "Error: Missing required dependencies: ${missing_deps[*]}" >&2
+      if [[ " ${missing_deps[*]} " =~ " gh " ]]; then
+        echo "Install GitHub CLI with: brew install gh (macOS) or visit https://cli.github.com/" >&2
+      fi
+      echo "Standard shell utilities (cat, grep, awk, sed, tr) should be available by default." >&2
+      return 1
+    fi
+  fi
+
+  local input=$(cat)
+
+  # Parse the input format: [TITLE]\n----\n[DESCRIPTION]
+  if ! echo "$input" | grep -q "^----$"; then
+    echo "Error: Invalid input format. Expected format:" >&2
+    echo "[TITLE]" >&2
+    echo "----" >&2
+    echo "[DESCRIPTION]" >&2
     return 1
   fi
 
-  if ! command -v gh >/dev/null 2>&1; then
-    echo "Error: GitHub CLI (gh) is not installed. Please install it first." >&2
-    echo "Install with: brew install gh (macOS) or visit https://cli.github.com/" >&2
-    return 1
-  fi
-
-  local json_input=$(cat)
-
-  # Validate JSON input
-  if ! echo "$json_input" | jq empty 2>/dev/null; then
-    echo "Error: Invalid JSON input" >&2
-    echo "Input: $json_input" >&2
-    return 1
-  fi
-
-  local title=$(echo "$json_input" | jq -r ".title // empty")
-  local description=$(echo "$json_input" | jq -r ".description // empty")
+  local title=$(echo "$input" | awk '/^----$/{exit} {print}' | /usr/bin/sed '/^$/d' | tr '\n' ' ' | /usr/bin/sed 's/[[:space:]]*$//')
+  local description=$(echo "$input" | awk 'BEGIN{found=0} /^----$/{found=1; next} found{print}' | /usr/bin/sed '1{/^$/d;}')
 
   # Check if required fields exist
   if [ -z "$title" ]; then
-    echo "Error: Missing title in JSON input" >&2
+    echo "Error: Missing title in input" >&2
     return 1
   fi
 
   if [ -z "$description" ]; then
-    echo "Error: Missing description in JSON input" >&2
+    echo "Error: Missing description in input" >&2
     return 1
   fi
 
-  gh pr create --web --title "$title" --body "$description" "$@"
+  # Build the command
+  local cmd="gh pr create --web --title \"$title\" --body \"$description\""
+  if [ ${#args[@]} -gt 0 ]; then
+    cmd="$cmd ${args[*]}"
+  fi
+
+  if [ "$debug" = true ]; then
+    echo "Debug: Would execute the following command:"
+    echo "$cmd"
+  else
+    gh pr create --web --title "$title" --body "$description" "${args[@]}"
+  fi
 }

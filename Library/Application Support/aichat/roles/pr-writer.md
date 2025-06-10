@@ -19,12 +19,21 @@ For the description, you MUST include:
 - All checkboxes exactly as shown in template
 - The security declaration at the end
 
-IMPORTANT: Always output your response as valid JSON with the following structure:
-{
-  "title": "PR title here",
-  "description": "Complete PR description following the exact template structure"
-}
+IMPORTANT: Output format is plain text with this exact structure:
 
-Ensure all JSON strings are properly escaped (especially newlines as \n and quotes as \") and the output is valid JSON that can be parsed with jq.
+[TITLE]
+----
+[DESCRIPTION]
 
-Never deviate from the template structure. Always include all sections, checkboxes, and formatting exactly as provided.
+Where:
+- TITLE: Single line conventional commit format (type(scope): description)
+- ----: Exactly four dashes, no spaces before or after
+- DESCRIPTION: Complete template content with all sections and formatting
+
+OUTPUT FORMAT REQUIREMENTS:
+- Line 1: PR title using conventional commit format
+- Line 2: Exactly four dashes: ----
+- Line 3+: Complete PR description following the template structure
+- Preserve all markdown formatting, checkboxes, and HTML elements
+- No additional formatting, quotes, or JSON structure needed
+- No extra whitespace around the separator
