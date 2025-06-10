@@ -35,8 +35,8 @@
   "github.copilot.advanced": {},
   "github.copilot.enable": {
     "*": false,
-    "markdown": true,
     "plaintext": true,
+    "markdown": false,
     "scminput": false,
     "yaml": false
   },
