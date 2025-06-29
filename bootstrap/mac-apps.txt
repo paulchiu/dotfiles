@@ -13,7 +13,6 @@ Clop.app
 Cursor.app
 Cyberduck.app
 DaisyDisk.app
-DaVinci Resolve.app
 DBeaver.app
 Default Browser.app
 DeskPad.app
@@ -24,6 +23,7 @@ Easy Move+Resize.app
 Firefox.app
 FocuSee.app
 Garmin Express.app
+GeForceNOW.app
 Ghostty.app
 Google Chrome.app
 Google Docs.app
@@ -31,7 +31,6 @@ Google Drive.app
 Google Sheets.app
 Google Slides.app
 HandBrake.app
-Haystack Editor.app
 Ice.app
 ImageOptim.app
 Kandji Self Service.app
@@ -51,6 +50,7 @@ Modern CSV.app
 MongoDB Compass.app
 Neovide.app
 NordVPN.app
+Nxtscape.app
 Obsidian.app
 OpenEmu.app
 OrbStack.app
@@ -80,7 +80,9 @@ SF Symbols.app
 Shadow.app
 Shottr.app
 Slack.app
+SoundAnchor.app
 Spotify.app
+Syncthing.app
 Syntax Highlight.app
 Tailscale.app
 The Unarchiver.app

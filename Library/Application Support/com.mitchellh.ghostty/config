@@ -9,3 +9,4 @@ macos-option-as-alt = left
 keybind = alt+left=unbind
 keybind = alt+right=unbind
 keybind = alt+f=unbind
+keybind = shift+enter=text:\n
