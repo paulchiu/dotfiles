@@ -144,6 +144,8 @@ eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
 export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+# https://github.com/anthropics/claude-code/issues/40#issuecomment-2688171192
+export NODE_EXTRA_CA_CERTS=/etc/ssl/cert.pem
 
 # Secret keys
 [ -f "$HOME/.env.secret" ] && source "$HOME/.env.secret"
