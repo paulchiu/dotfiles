@@ -1,0 +1,6 @@
+{
+  "permissions": {
+    "allow": ["rg", "bat", "tree", "cat", "grep", "gh"],
+    "deny": []
+  }
+}
