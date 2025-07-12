@@ -1,22 +1,16 @@
-8BitDo Ultimate Software.app
-Alter.app
 Amazon Q.app
 AppCleaner.app
 Audiobook Builder.app
 Azure Data Studio.app
 Bananotate.app
-BetterDisplay.app
 Bing Wallpaper.app
 Caffeine.app
 Claude.app
-Clop.app
-Cursor.app
 Cyberduck.app
 DaisyDisk.app
 DBeaver.app
 Default Browser.app
 DeskPad.app
-DockDoor.app
 Dropbox.app
 DuckDuckGo.app
 Easy Move+Resize.app
@@ -49,8 +43,6 @@ Microsoft Excel.app
 Modern CSV.app
 MongoDB Compass.app
 Neovide.app
-NordVPN.app
-Nxtscape.app
 Obsidian.app
 OpenEmu.app
 OrbStack.app
@@ -60,7 +52,6 @@ PastePal.app
 PhpStorm.app
 PICO-8.app
 Pixelmator Pro.app
-PolyCapture.app
 Pop.app
 Postman.app
 Presentify.app
@@ -73,7 +64,6 @@ Reactotron.app
 Rectangle.app
 RemotePCSuite.app
 ResponsivelyApp.app
-RetroArch.app
 Safari.app
 Scoot.app
 SF Symbols.app
@@ -91,10 +81,8 @@ VIA.app
 Vial.app
 Vimac.app
 Visual Studio Code.app
-Void.app
 WebStorm.app
 Windows App.app
 Xcode.app
 Zappy.app
-Zed.app
 zoom.us.app
