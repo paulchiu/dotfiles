@@ -72,108 +72,46 @@
   "vim.leader": ",",
   "vim.normalModeKeyBindingsNonRecursive": [
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "s"
-      ],
-      "before": [
-        "<leader>",
-        "s"
-      ]
+      "after": ["<leader>", "<leader>", "s"],
+      "before": ["<leader>", "s"]
     },
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "f"
-      ],
-      "before": [
-        "<leader>",
-        "f"
-      ]
+      "after": ["<leader>", "<leader>", "f"],
+      "before": ["<leader>", "f"]
     },
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "F"
-      ],
-      "before": [
-        "<leader>",
-        "F"
-      ]
+      "after": ["<leader>", "<leader>", "F"],
+      "before": ["<leader>", "F"]
     },
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "t"
-      ],
-      "before": [
-        "<leader>",
-        "t"
-      ]
+      "after": ["<leader>", "<leader>", "t"],
+      "before": ["<leader>", "t"]
     },
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "T"
-      ],
-      "before": [
-        "<leader>",
-        "T"
-      ]
+      "after": ["<leader>", "<leader>", "T"],
+      "before": ["<leader>", "T"]
     },
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "w"
-      ],
-      "before": [
-        "<leader>",
-        "w"
-      ]
+      "after": ["<leader>", "<leader>", "w"],
+      "before": ["<leader>", "w"]
     },
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "b"
-      ],
-      "before": [
-        "<leader>",
-        "b"
-      ]
+      "after": ["<leader>", "<leader>", "b"],
+      "before": ["<leader>", "b"]
     },
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "j"
-      ],
-      "before": [
-        "<leader>",
-        "j"
-      ]
+      "after": ["<leader>", "<leader>", "j"],
+      "before": ["<leader>", "j"]
     },
     {
-      "after": [
-        "<leader>",
-        "<leader>",
-        "k"
-      ],
-      "before": [
-        "<leader>",
-        "k"
-      ]
+      "after": ["<leader>", "<leader>", "k"],
+      "before": ["<leader>", "k"]
     }
   ],
   "vim.useSystemClipboard": true,
   "vsicons.dontShowNewVersionMessage": true,
   "window.newWindowProfile": "Default",
   "workbench.colorTheme": "Dracula",
-  "workbench.iconTheme": "vscode-icons"
+  "workbench.iconTheme": "vscode-icons",
+  "docker.extension.enableComposeLanguageServer": false
 }
