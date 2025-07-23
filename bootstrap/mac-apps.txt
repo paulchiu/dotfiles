@@ -43,6 +43,7 @@ Microsoft Excel.app
 Modern CSV.app
 MongoDB Compass.app
 Neovide.app
+NordVPN.app
 Obsidian.app
 OpenEmu.app
 OrbStack.app
