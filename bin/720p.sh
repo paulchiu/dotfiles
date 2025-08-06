@@ -15,4 +15,4 @@ else
   output="$2"
 fi
 
-ffmpeg -i "$input" -c:v libx264 -preset slow -crf 22 -c:a aac -b:a 128k -ar 44100 -filter:v "scale='min(1280,iw)':min'(720,ih)':force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2" "$output"
+ffmpeg -i "$input" -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2" -c:v libx264 -preset slow -crf 22 -profile:v main -level 3.1 -maxrate 10000k -bufsize 10000k -r 30 -c:a aac -b:a 128k -movflags +faststart "$output"

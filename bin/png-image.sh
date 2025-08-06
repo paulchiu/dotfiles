@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # png-image.sh - Convert images to PNG format with specified resolution
-# Usage: png-image.sh [options] <input_file>
+# Usage: png-image.sh [options] <input_files...>
 
 # Default resolution
 RESOLUTION="720p"
@@ -9,9 +9,9 @@ RESOLUTION="720p"
 # Function to display help
 show_help() {
     cat << EOF
-Usage: png-image.sh [options] <input_file>
+Usage: png-image.sh [options] <input_files...>
 
-Convert any image file to PNG format with specified resolution.
+Convert any image files to PNG format with specified resolution.
 
 OPTIONS:
     -r, --resolution RESOLUTION   Set output resolution (720p or 1080p)
@@ -19,9 +19,10 @@ OPTIONS:
     -h, --help                    Show this help message
 
 EXAMPLES:
-    png-image.sh image.jpg                    # Convert to 720p PNG
+    png-image.sh image.jpg                    # Convert single image to 720p PNG
     png-image.sh -r 1080p image.jpg          # Convert to 1080p PNG
-    png-image.sh --resolution 720p image.jpg # Convert to 720p PNG
+    png-image.sh *.jpg                        # Convert all JPEG files to 720p PNG
+    png-image.sh -r 1080p *.png *.jpg        # Convert all PNG and JPEG files to 1080p PNG
 
 SUPPORTED FORMATS:
     Input: JPEG, TIFF, BMP, GIF, and other formats supported by sips
@@ -75,8 +76,8 @@ convert_image() {
         echo -n "Overwrite? (y/N): "
         read -r response
         if [[ ! "$response" =~ ^[Yy]$ ]]; then
-            echo "Operation cancelled."
-            exit 0
+            echo "Skipping '$input_file'."
+            return 0
         fi
     fi
     
@@ -86,10 +87,13 @@ convert_image() {
     if sips -s format png -Z "$height" "$input_file" --out "$output_file" > /dev/null 2>&1; then
         echo "Successfully converted to: $output_file"
     else
-        echo "Error: Failed to convert image. Make sure the input file is a valid image format." >&2
-        exit 1
+        echo "Error: Failed to convert '$input_file'. Make sure the input file is a valid image format." >&2
+        return 1
     fi
 }
+
+# Initialize array to store input files
+INPUT_FILES=()
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -113,25 +117,20 @@ while [[ $# -gt 0 ]]; do
             exit 1
             ;;
         *)
-            # This is the input file
-            INPUT_FILE="$1"
+            # This is an input file
+            INPUT_FILES+=("$1")
             shift
             ;;
     esac
 done
 
 # If no parameters given, show help
-if [[ $# -eq 0 && -z "$INPUT_FILE" ]]; then
+if [[ ${#INPUT_FILES[@]} -eq 0 ]]; then
     show_help
     exit 0
 fi
 
-# Check if input file was provided
-if [[ -z "$INPUT_FILE" ]]; then
-    echo "Error: No input file specified." >&2
-    echo "Use -h or --help for usage information." >&2
-    exit 1
-fi
-
-# Convert the image
-convert_image "$INPUT_FILE" "$RESOLUTION"
+# Convert all input files
+for input_file in "${INPUT_FILES[@]}"; do
+    convert_image "$input_file" "$RESOLUTION"
+done
