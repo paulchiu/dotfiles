@@ -21,6 +21,7 @@ fetch = ["git", "fetch"]
 f = ["git", "fetch"]
 l = ["log"]
 ll = ["log", "-r", "all()"]
+init = ["git", "init"]
 
 [revset-aliases]
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
