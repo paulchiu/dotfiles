@@ -21,6 +21,7 @@ yyyy-mm-dd [short description].md
 
 **Guidelines:**
 - Use ISO date format yyyy-mm-dd
+- Do not put square brackets around the date
 - Keep descriptions concise
 - Use sentence case for descriptions
 - Include file extension `.md`
