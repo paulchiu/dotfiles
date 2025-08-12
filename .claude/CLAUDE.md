@@ -23,7 +23,7 @@ yyyy-mm-dd [short description].md
 - Use ISO date format yyyy-mm-dd
 - Do not put square brackets around the date
 - Keep descriptions concise
-- Use sentence case for descriptions
+- Use sentence case for descriptions, headings, and filenames
 - Include file extension `.md`
 - Use spaces for multi-word descriptions
 
