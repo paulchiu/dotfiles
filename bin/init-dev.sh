@@ -15,6 +15,7 @@ REPO_BRANCH=(
   "db-tasks:main"
   "guest-gateway:main"
   "integration-config:main"
+  "loyalty:main"
   "loyalty-api:main"
   "loyalty-contract:main"
   "loyalty-db-schema:main"
