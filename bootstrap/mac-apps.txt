@@ -2,15 +2,17 @@ Amazon Q.app
 AppCleaner.app
 Audiobook Builder.app
 Azure Data Studio.app
-Bananotate.app
 Bing Wallpaper.app
+Brilliant.Design.app
 Caffeine.app
+calibre.app
 Claude.app
 Cyberduck.app
 DaisyDisk.app
 DBeaver.app
 Default Browser.app
 DeskPad.app
+Discord.app
 Dropbox.app
 DuckDuckGo.app
 Easy Move+Resize.app
@@ -65,6 +67,7 @@ Reactotron.app
 Rectangle.app
 RemotePCSuite.app
 ResponsivelyApp.app
+RustDesk.app
 Safari.app
 Scoot.app
 SF Symbols.app
@@ -82,6 +85,7 @@ VIA.app
 Vial.app
 Vimac.app
 Visual Studio Code.app
+VLC.app
 WebStorm.app
 Windows App.app
 Xcode.app
