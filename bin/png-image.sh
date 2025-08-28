@@ -5,6 +5,7 @@
 
 # Default resolution
 RESOLUTION="720p"
+FORCE_OVERWRITE=false
 
 # Function to display help
 show_help() {
@@ -16,13 +17,14 @@ Convert any image files to PNG format with specified resolution.
 OPTIONS:
     -r, --resolution RESOLUTION   Set output resolution (720p or 1080p)
                                   Default: 720p
+    -y, --yes                     Automatically overwrite existing files
     -h, --help                    Show this help message
 
 EXAMPLES:
     png-image.sh image.jpg                    # Convert single image to 720p PNG
     png-image.sh -r 1080p image.jpg          # Convert to 1080p PNG
-    png-image.sh *.jpg                        # Convert all JPEG files to 720p PNG
-    png-image.sh -r 1080p *.png *.jpg        # Convert all PNG and JPEG files to 1080p PNG
+    png-image.sh -y *.jpg                    # Convert all JPEG files to 720p PNG, overwrite existing
+    png-image.sh -r 1080p -y *.png *.jpg    # Convert all PNG and JPEG files to 1080p PNG, overwrite existing
 
 SUPPORTED FORMATS:
     Input: JPEG, TIFF, BMP, GIF, and other formats supported by sips
@@ -50,6 +52,22 @@ get_dimensions() {
     esac
 }
 
+# Function to get constraint dimension (smaller of width/height)
+get_constraint() {
+    case "$1" in
+        "720p")
+            echo "720"
+            ;;
+        "1080p")
+            echo "1080"
+            ;;
+        *)
+            echo "Error: Unsupported resolution '$1'. Use 720p or 1080p." >&2
+            exit 1
+            ;;
+    esac
+}
+
 # Function to convert image
 convert_image() {
     local input_file="$1"
@@ -61,17 +79,15 @@ convert_image() {
         exit 1
     fi
     
-    # Get dimensions
-    local dimensions=($(get_dimensions "$resolution"))
-    local width="${dimensions[1]}"
-    local height="${dimensions[2]}"
+    # Get constraint dimension
+    local constraint=$(get_constraint "$resolution")
     
     # Generate output filename
     local base_name="${input_file%.*}"
     local output_file="${base_name}_${resolution}.png"
     
     # Check if output file already exists
-    if [[ -f "$output_file" ]]; then
+    if [[ -f "$output_file" && "$FORCE_OVERWRITE" != true ]]; then
         echo "Warning: Output file '$output_file' already exists."
         echo -n "Overwrite? (y/N): "
         read -r response
@@ -84,7 +100,7 @@ convert_image() {
     echo "Converting '$input_file' to PNG ($resolution)..."
     
     # Use sips to convert and resize
-    if sips -s format png -Z "$height" "$input_file" --out "$output_file" > /dev/null 2>&1; then
+    if sips -Z "$constraint" -s format png "$input_file" --out "$output_file"; then
         echo "Successfully converted to: $output_file"
     else
         echo "Error: Failed to convert '$input_file'. Make sure the input file is a valid image format." >&2
@@ -101,6 +117,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        -y|--yes)
+            FORCE_OVERWRITE=true
+            shift
             ;;
         -r|--resolution)
             if [[ -n "$2" ]]; then
