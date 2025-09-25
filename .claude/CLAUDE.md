@@ -51,7 +51,7 @@ Always use the exact header: `## Implementation guidance`
 
 ### Style Guidelines
 - Use bullet points for clear, actionable steps
-- Include GitHub links in this format: `([GitHub](https://github.com/repo/path/file.ext#L123))`
+- Include GitHub links in this format: `([GitHub](https://github.com/[repo/path/file.ext]#L123))`
 - Reference specific functions, classes, and variables with backticks: `FunctionName.methodName`
 - When showing code, use proper TypeScript syntax highlighting
 - Be specific about file locations and line numbers

@@ -174,6 +174,7 @@ local autoload_functions=(
 autoload -Uz $autoload_functions
 source <(fzf --zsh)
 source <(jj util completion zsh)
+source <(codex completion zsh)
 
 # pip autocompletions
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
@@ -184,4 +185,4 @@ zstyle ':completion:*' menu select
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
 
 # Meandu session vars
-$(mryum export)
+mryum_output=$(mryum export 2>/dev/null) && eval "$mryum_output"
