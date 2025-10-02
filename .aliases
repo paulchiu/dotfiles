@@ -74,6 +74,7 @@ alias cpr="create_pull_request"
 alias jrr="jj_rewrite_revision"
 alias jci='jj commit --message "$(jj diff | write_commit_message)"'
 alias yup="ya au && ya dc | write_commit_message | ya ci && ya p"
+alias gai='git dc | wcm | git ci'
 
 # Work
 alias mls="mryum login && mryum shell"
