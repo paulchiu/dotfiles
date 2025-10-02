@@ -1,13 +1,16 @@
 #!/bin/bash
 
+#!/bin/bash
+
 # Script to convert images to WebP format
- # Usage:
- #   ./webp.sh <input_image ...> [quality]
- # Examples:
- #   ./webp.sh image.jpg
- #   ./webp.sh image1.png image2.jpg 90
- #   ./webp.sh *.png 80
- # Default quality is 80
+# Usage:
+#   ./webp.sh <input_image ...> [quality]
+# Examples:
+#   ./webp.sh image.jpg
+#   ./webp.sh image1.png image2.jpg 90
+#   ./webp.sh *.png 80
+# Default quality is 80
+# This script preserves metadata and color profile (EXIF/XMP/ICC) in output WebP.
 
 # Check if cwebp is installed
 if ! command -v cwebp &> /dev/null; then
@@ -55,8 +58,8 @@ for INPUT_FILE in "$@"; do
   FILENAME="${FILENAME%.*}"
   OUTPUT_FILE="${FILENAME}.webp"
 
-  echo "Converting $INPUT_FILE -> $OUTPUT_FILE (q=$QUALITY)"
-  if cwebp -quiet -q "$QUALITY" "$INPUT_FILE" -o "$OUTPUT_FILE"; then
+  echo "Converting $INPUT_FILE -> $OUTPUT_FILE (q=$QUALITY, metadata=all)"
+  if cwebp -quiet -metadata all -q "$QUALITY" "$INPUT_FILE" -o "$OUTPUT_FILE"; then
     ORIGINAL_SIZE=$(du -h "$INPUT_FILE" | cut -f1)
     NEW_SIZE=$(du -h "$OUTPUT_FILE" | cut -f1)
     echo "  ✓ Success: $OUTPUT_FILE (was $ORIGINAL_SIZE, now $NEW_SIZE)"
