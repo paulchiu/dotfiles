@@ -11,6 +11,8 @@ alias pr="gh pr create --web"
 alias prv="gh pr view --web"
 alias ya="yadm"
 alias lg="lazygit"
+alias grs="git cf && git rs"
+alias gff="git fa && git ff"
 
 # Docker
 alias d="docker"

@@ -145,7 +145,7 @@ eval "$(zoxide init zsh)"
 export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 # https://github.com/anthropics/claude-code/issues/40#issuecomment-2688171192
-export NODE_EXTRA_CA_CERTS=/etc/ssl/cert.pem
+# export NODE_EXTRA_CA_CERTS=/etc/ssl/cert.pem
 
 # Secret keys
 [ -f "$HOME/.env.secret" ] && source "$HOME/.env.secret"
@@ -187,3 +187,4 @@ zstyle ':completion:*' menu select
 # Meandu session vars
 mryum_output=$(mryum export 2>/dev/null) && eval "$mryum_output"
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
+

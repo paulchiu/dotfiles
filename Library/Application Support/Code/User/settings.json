@@ -1,4 +1,18 @@
 {
+  "[dockercompose]": {
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.insertSpaces": true,
+    "editor.quickSuggestions": {
+      "comments": false,
+      "other": true,
+      "strings": true
+    },
+    "editor.tabSize": 2
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -20,6 +34,9 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "cSpell.userWords": [
+    "paulchiu"
+  ],
   "docker.extension.enableComposeLanguageServer": false,
   "editor.accessibilitySupport": "off",
   "editor.fontFamily": "'FiraCode Nerd Font'",
@@ -177,19 +194,5 @@
   "window.newWindowProfile": "Default",
   "window.restoreWindows": "none",
   "workbench.colorTheme": "Dracula",
-  "workbench.iconTheme": "vscode-icons",
-  "[dockercompose]": {
-    "editor.insertSpaces": true,
-    "editor.tabSize": 2,
-    "editor.autoIndent": "advanced",
-    "editor.quickSuggestions": {
-      "other": true,
-      "comments": false,
-      "strings": true
-    },
-    "editor.defaultFormatter": "redhat.vscode-yaml"
-  },
-  "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
-  }
+  "workbench.iconTheme": "vscode-icons"
 }

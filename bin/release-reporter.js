@@ -269,4 +269,5 @@ logReleaseNotes([
   ["serve-api", "main"],
   ["serve-frontend", "main"],
   ["stable-api", "main"],
+  ["pos-integrations", "main"],
 ]);
