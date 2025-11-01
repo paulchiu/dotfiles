@@ -187,4 +187,4 @@ zstyle ':completion:*' menu select
 # Meandu session vars
 mryum_output=$(mryum export 2>/dev/null) && eval "$mryum_output"
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
-
+export GPG_TTY=$(tty)
