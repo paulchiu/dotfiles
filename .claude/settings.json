@@ -1,10 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
-    "allow": ["Rg", "Bat", "Tree", "Cat", "Grep", "Gh", "Npm"],
+    "allow": [
+      "Rg",
+      "Bat",
+      "Tree",
+      "Cat",
+      "Grep",
+      "Gh",
+      "Npm"
+    ],
     "deny": []
   },
-  "alwaysThinkingEnabled": false,
+  "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
   }
