@@ -74,9 +74,11 @@ alias wcm="write_commit_message"
 alias wpr="write_pull_request"
 alias cpr="create_pull_request"
 alias jrr="jj_rewrite_revision"
-alias jci='jj commit --message "$(jj diff | write_commit_message)"'
-alias yup="ya au && ya dc | write_commit_message | ya ci && ya p"
+alias jci='jj commit --message "$(jj diff | wcm)"'
+alias yup="ya au && ya dc | wcm | ya ci && ya p"
 alias gai='git dc | wcm | git ci'
+alias gac="git show HEAD | wcm | pbcopy && git commit --amend"
+alias gpr='git diff main.. | wpr'
 
 # Work
 alias mls="mryum login && mryum shell"
@@ -92,6 +94,7 @@ alias sed="echo 'Use sd instead'"
 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
+alias ra='source ~/.aliases'
 
 # Clipboard copy
 if [[ ${PLATFORM} == "Linux" ]]; then

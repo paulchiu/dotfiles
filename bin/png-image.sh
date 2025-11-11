@@ -52,7 +52,7 @@ get_dimensions() {
     esac
 }
 
-# Function to get constraint dimension (smaller of width/height)
+# Function to get constraint dimension (height for vertical sizing)
 get_constraint() {
     case "$1" in
         "720p")
@@ -98,9 +98,17 @@ convert_image() {
     fi
     
     echo "Converting '$input_file' to PNG ($resolution)..."
-    
-    # Use sips to convert and resize
-    if sips -Z "$constraint" -s format png "$input_file" --out "$output_file"; then
+
+    # Get current dimensions to calculate new width maintaining aspect ratio
+    local current_height=$(sips -g pixelHeight "$input_file" | grep pixelHeight | awk '{print $2}')
+    local current_width=$(sips -g pixelWidth "$input_file" | grep pixelWidth | awk '{print $2}')
+
+    # Calculate new width based on aspect ratio
+    local new_height="$constraint"
+    local new_width=$(( current_width * new_height / current_height ))
+
+    # Use sips to convert and resize (constraining height, width scales with aspect ratio)
+    if sips -z "$new_height" "$new_width" -s format png "$input_file" --out "$output_file"; then
         echo "Successfully converted to: $output_file"
     else
         echo "Error: Failed to convert '$input_file'. Make sure the input file is a valid image format." >&2

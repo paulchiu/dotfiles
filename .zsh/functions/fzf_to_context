@@ -1,16 +1,21 @@
 # Use arrow keys to navigate
 # Press TAB to select multiple files
 # Press Enter when done
+# Or provide file paths directly: fzf_to_context file1 file2 ...
 fzf_to_context() {
-  selected_files=$(
-    if [ -f .gitignore ]; then
-      # Use git ls-files for repositories with .gitignore
-      git ls-files --cached --others --exclude-standard
-    else
-      # Fallback to find for non-git repositories
-      find . -type f -not -path "*/\.*"
-    fi | fzf --multi --bind='alt-a:select-all' --preview 'bat --color=always --style=numbers --line-range=:500 {}'
-  )
+  # If arguments provided, use them directly
+  if [ $# -gt 0 ]; then
+    selected_files=$(printf '%s\n' "$@")
+  else
+    # Interactive selection
+    selected_files=$(
+      if [ -f .gitignore ]; then
+        git ls-files --cached --others --exclude-standard
+      else
+        find . -type f -not -path "*/\.*"
+      fi | fzf --multi --bind='alt-a:select-all' --preview 'bat --color=always --style=numbers --line-range=:500 {}'
+    )
+  fi
 
   # Exit if no files selected
   [ -z "$selected_files" ] && return
@@ -30,13 +35,10 @@ fzf_to_context() {
 
   # Copy to clipboard
   if command -v pbcopy > /dev/null; then
-    # macOS
     cat "$temp_file" | pbcopy
   elif command -v xclip > /dev/null; then
-    # Linux with X11
     cat "$temp_file" | xclip -selection clipboard
   elif command -v wl-copy > /dev/null; then
-    # Linux with Wayland
     cat "$temp_file" | wl-copy
   else
     echo "No clipboard command found"
@@ -45,4 +47,3 @@ fzf_to_context() {
   echo "✨ Files copied to clipboard for AI chat context"
   rm "$temp_file"
 }
-

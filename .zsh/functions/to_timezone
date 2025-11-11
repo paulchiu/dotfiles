@@ -17,15 +17,15 @@ function to_timezone() {
 
   # Define timezone mappings
   case "$timezone" in
-    pst)
-      tz_string="Australia/Melbourne,Asia/Manila"
+    team)
+      tz_string="Australia/Melbourne,Australia/Brisbane,Asia/Manila"
       ;;
-    aedt)
+    au)
       tz_string="Australia/Melbourne,Australia/Brisbane"
       ;;
     *)
       echo "Unknown timezone shortcode: $timezone"
-      echo "Available shortcodes: pst, aedt"
+      echo "Available shortcodes: au, team"
       return 1
       ;;
   esac
