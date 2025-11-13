@@ -108,26 +108,28 @@ else
   export EDITOR='nvim'
 fi
 
-# OPTIMIZED: NVM autoloader - now uses lazy-loaded version
+# OPTIMIZED: NVM autoloader - triggers lazy loading when needed
 load-nvmrc() {
   [[ -a .nvmrc ]] || return
-  # Only load NVM if we actually need to switch versions
-  if command -v nvm >/dev/null 2>&1; then
-    local node_version="$(nvm version)"
-    local nvmrc_path="$(nvm_find_nvmrc)"
+  # Trigger lazy loading if NVM isn't actually loaded yet
+  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
+    _nvm_lazy_load
+  fi
 
-    if [ -n "$nvmrc_path" ]; then
-      local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
 
-      if [ "$nvmrc_node_version" = "N/A" ]; then
-        nvm install
-      elif [ "$nvmrc_node_version" != "$node_version" ]; then
-        nvm use
-      fi
-    elif [ "$node_version" != "$(nvm version default)" ]; then
-      echo "Reverting to nvm default version"
-      nvm use default
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
     fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
   fi
 }
 add-zsh-hook chpwd load-nvmrc
