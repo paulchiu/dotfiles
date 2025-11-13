@@ -222,6 +222,22 @@ zstyle ':completion:*' menu select
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
 
-mryum_output=$(mryum export 2>/dev/null) && eval "$mryum_output"
+# OPTIMIZED: Cache mryum export output (regenerate every 7 hours)
+_load_mryum() {
+  local cache_file="/tmp/mryum_cache_${USER}"
+  local cache_max_age=25200  # 7 hours in seconds
+
+  if [[ -f "$cache_file" ]]; then
+    local cache_age=$(($(date +%s) - $(stat -f %m "$cache_file" 2>/dev/null || echo 0)))
+    if [[ $cache_age -lt $cache_max_age ]]; then
+      source "$cache_file"
+    else
+      mryum export 2>/dev/null > "$cache_file" && source "$cache_file"
+    fi
+  else
+    mryum export 2>/dev/null > "$cache_file" && source "$cache_file"
+  fi
+}
+_load_mryum
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 export GPG_TTY=$(tty)
