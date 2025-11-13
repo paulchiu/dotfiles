@@ -70,7 +70,8 @@ export ZSH="/Users/paul/.oh-my-zsh"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-nvm)
+# OPTIMIZED: Removed zsh-nvm plugin for lazy loading
+plugins=(git)
 autoload -U add-zsh-hook
 
 source $ZSH/oh-my-zsh.sh
@@ -84,7 +85,19 @@ source $ZSH/oh-my-zsh.sh
 
 HISTFILESIZE=1000000000
 HISTSIZE=9999
+
+# OPTIMIZED: NVM lazy loading - only initialize when needed
 export NVM_DIR="$HOME/.nvm"
+_nvm_lazy_load() {
+  unset -f nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}
+nvm() { _nvm_lazy_load; nvm "$@"; }
+node() { _nvm_lazy_load; node "$@"; }
+npm() { _nvm_lazy_load; npm "$@"; }
+npx() { _nvm_lazy_load; npx "$@"; }
+
 export PATH="/usr/local/bin:/usr/local/sbin:~/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications/WebStorm.app/Contents/MacOS:~/.local/bin:$(go env GOPATH)/bin:$PATH"
 
 
@@ -95,28 +108,31 @@ else
   export EDITOR='nvim'
 fi
 
-# NVM autoloader
-# Source https://stackoverflow.com/a/39519460
+# OPTIMIZED: NVM autoloader - now uses lazy-loaded version
 load-nvmrc() {
-  [[ -a .nvmrc ]] || return 
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
+  [[ -a .nvmrc ]] || return
+  # Only load NVM if we actually need to switch versions
+  if command -v nvm >/dev/null 2>&1; then
+    local node_version="$(nvm version)"
+    local nvmrc_path="$(nvm_find_nvmrc)"
 
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+    if [ -n "$nvmrc_path" ]; then
+      local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
 
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
+      if [ "$nvmrc_node_version" = "N/A" ]; then
+        nvm install
+      elif [ "$nvmrc_node_version" != "$node_version" ]; then
+        nvm use
+      fi
+    elif [ "$node_version" != "$(nvm version default)" ]; then
+      echo "Reverting to nvm default version"
+      nvm use default
     fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
   fi
 }
 add-zsh-hook chpwd load-nvmrc
-load-nvmrc
+# OPTIMIZED: Don't run load-nvmrc on shell startup
+# load-nvmrc
 
 function ya() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
@@ -140,9 +156,26 @@ function ya() {
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/.aliases
 eval "$(starship init zsh)"
-eval "$(rbenv init - zsh)"
+
+# OPTIMIZED: rbenv lazy loading
+_rbenv_lazy_load() {
+  unset -f ruby gem bundle rake
+  eval "$(rbenv init - zsh)"
+}
+ruby() { _rbenv_lazy_load; ruby "$@"; }
+gem() { _rbenv_lazy_load; gem "$@"; }
+bundle() { _rbenv_lazy_load; bundle "$@"; }
+rake() { _rbenv_lazy_load; rake "$@"; }
+
 eval "$(zoxide init zsh)"
-export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
+
+# OPTIMIZED: Cached mkcert output - regenerate cache with: mkcert -CAROOT > ~/.zsh/.mkcert_caroot
+if [[ -f ~/.zsh/.mkcert_caroot ]]; then
+  export NODE_EXTRA_CA_CERTS="$(cat ~/.zsh/.mkcert_caroot)/rootCA.pem"
+else
+  export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
+fi
+
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 # https://github.com/anthropics/claude-code/issues/40#issuecomment-2688171192
 # export NODE_EXTRA_CA_CERTS=/etc/ssl/cert.pem
@@ -172,9 +205,14 @@ local autoload_functions=(
     jj_rewrite_revision
 )
 autoload -Uz $autoload_functions
-source <(fzf --zsh)
-source <(jj util completion zsh)
-source <(codex completion zsh)
+
+# OPTIMIZED: Use pre-generated completion files instead of command substitution
+# Regenerate with: fzf --zsh > ~/.zsh/completions/_fzf.zsh
+# Regenerate with: jj util completion zsh > ~/.zsh/completions/_jj.zsh
+# Regenerate with: codex completion zsh > ~/.zsh/completions/_codex.zsh
+[[ -f ~/.zsh/completions/_fzf.zsh ]] && source ~/.zsh/completions/_fzf.zsh || source <(fzf --zsh)
+[[ -f ~/.zsh/completions/_jj.zsh ]] && source ~/.zsh/completions/_jj.zsh || source <(jj util completion zsh)
+[[ -f ~/.zsh/completions/_codex.zsh ]] && source ~/.zsh/completions/_codex.zsh || source <(codex completion zsh)
 
 # pip autocompletions
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
@@ -184,7 +222,13 @@ zstyle ':completion:*' menu select
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
 
-# Meandu session vars
-mryum_output=$(mryum export 2>/dev/null) && eval "$mryum_output"
+# OPTIMIZED: mryum lazy loading - run in background to avoid blocking startup
+# Original: mryum_output=$(mryum export 2>/dev/null) && eval "$mryum_output"
+if command -v mryum >/dev/null 2>&1; then
+  (mryum export 2>/dev/null | while IFS= read -r line; do
+    eval "$line"
+  done &)
+fi
+
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 export GPG_TTY=$(tty)
