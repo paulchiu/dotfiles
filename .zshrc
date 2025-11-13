@@ -222,13 +222,6 @@ zstyle ':completion:*' menu select
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
 
-# OPTIMIZED: mryum lazy loading - run in background to avoid blocking startup
-# Original: mryum_output=$(mryum export 2>/dev/null) && eval "$mryum_output"
-if command -v mryum >/dev/null 2>&1; then
-  (mryum export 2>/dev/null | while IFS= read -r line; do
-    eval "$line"
-  done &)
-fi
-
+mryum_output=$(mryum export 2>/dev/null) && eval "$mryum_output"
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 export GPG_TTY=$(tty)
