@@ -18,7 +18,7 @@ function to_timezone() {
   # Define timezone mappings
   case "$timezone" in
     team)
-      tz_string="Australia/Melbourne,Australia/Brisbane,Asia/Manila"
+      tz_string="Australia/Melbourne,Australia/Brisbane,Asia/Manila,Africa/Johannesburg"
       ;;
     au)
       tz_string="Australia/Melbourne,Australia/Brisbane"
