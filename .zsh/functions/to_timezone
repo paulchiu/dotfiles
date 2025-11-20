@@ -1,19 +1,48 @@
 # Function: to_timezone
 # Description: Converts timezone shortcodes to full timezone commands and copies results to clipboard
 #
-# Usage: to_timezone <shortcode> [time]
-#   where <shortcode> is one of the supported timezone codes (pst, aedt, etc.)
-#   where [time] is an optional time
+# Usage: to_timezone [shortcode] [time]
+#   where [shortcode] is one of the supported timezone codes (defaults to 'team')
+#   where [time] is an optional time (e.g., 2pm, 1400, 14:00, etc.)
 #
 # Examples:
-#   to_timezone pst    # Shows time in Australia/Melbourne, Australia/Brisbane, Asia/Manila
-#   to_timezone aedt   # Shows time in Australia/Melbourne, Australia/Brisbane
-#   to_timezone pst 1400  # Shows 2:00 PM in specified timezones
+#   to_timezone           # Shows current time in team timezones
+#   to_timezone au        # Shows current time in AU timezones
+#   to_timezone 2pm       # Shows 2:00 PM in team timezones
+#   to_timezone au 1:30pm # Shows 1:30 PM in AU timezones
+#   to_timezone --help    # Shows available timezones and usage
 function to_timezone() {
-  local timezone="$1"
+  local timezone="${1:-team}"
   local time="$2"
   local tz_string=""
   local result=""
+
+  # Handle --help flag
+  if [[ "$timezone" == "--help" || "$timezone" == "-h" ]]; then
+    cat << 'EOF'
+to_timezone - Convert and display times across team timezones
+
+USAGE:
+  to_timezone [shortcode] [time]
+
+SHORTCODES:
+  team  - Australia/Melbourne, Australia/Brisbane, Asia/Manila, Africa/Johannesburg (DEFAULT)
+  au    - Australia/Melbourne, Australia/Brisbane
+
+TIME:
+  Optional time in any of these formats:
+    - 24-hour format: 1400, 14:00 (for 2:00 PM)
+    - 12-hour format: 2pm, 2:30pm, 2am, etc.
+
+EXAMPLES:
+  to_timezone           # Shows current time in team timezones
+  to_timezone au        # Shows current time in AU timezones
+  to_timezone 2pm       # Shows 2:00 PM in team timezones
+  to_timezone au 1:30pm # Shows 1:30 PM in AU timezones
+
+EOF
+    return 0
+  fi
 
   # Define timezone mappings
   case "$timezone" in
@@ -24,9 +53,17 @@ function to_timezone() {
       tz_string="Australia/Melbourne,Australia/Brisbane"
       ;;
     *)
-      echo "Unknown timezone shortcode: $timezone"
-      echo "Available shortcodes: au, team"
-      return 1
+      # Check if first argument looks like a time format (not a timezone shortcode)
+      if [[ "$timezone" =~ ^[0-9]{1,2}(am|pm|:[0-9]{2}(am|pm)?)?$ ]] || [[ "$timezone" =~ ^[0-9]{4}$ ]] || [[ "$timezone" =~ ^[0-9]{1,2}:[0-9]{2}$ ]]; then
+        # Treat as time, use default team timezone
+        time="$timezone"
+        tz_string="Australia/Melbourne,Australia/Brisbane,Asia/Manila,Africa/Johannesburg"
+      else
+        echo "Unknown timezone shortcode: $timezone"
+        echo "Available shortcodes: au, team"
+        echo "Run 'to_timezone --help' for more information"
+        return 1
+      fi
       ;;
   esac
 
