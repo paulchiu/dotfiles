@@ -9,7 +9,8 @@
       "Grep",
       "Gh",
       "Npm",
-      "Bash(gh pr:*)"
+      "Bash(gh pr:*)",
+      "mcp__chrome-devtools__*"
     ],
     "deny": []
   },
