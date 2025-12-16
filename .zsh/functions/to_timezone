@@ -15,6 +15,7 @@ function to_timezone() {
   # Define timezone constants
   local TZ_TEAM="Australia/Melbourne,Australia/Brisbane,Asia/Manila,Africa/Johannesburg"
   local TZ_AU="Australia/Melbourne,Australia/Brisbane"
+  local TZ_APPS="Australia/Melbourne,Europe/London,America/Chicago"
 
   local timezone="${1:-team}"
   local time="$2"
@@ -32,6 +33,7 @@ USAGE:
 SHORTCODES:
   team  - Australia/Melbourne, Australia/Brisbane, Asia/Manila, Africa/Johannesburg (DEFAULT)
   au    - Australia/Melbourne, Australia/Brisbane
+  apps  - Australia/Melbourne, Europe/London, America/Chicago
 
 TIME:
   Optional time in any of these formats:
@@ -56,6 +58,9 @@ EOF
     au)
       tz_string="$TZ_AU"
       ;;
+    apps)
+      tz_string="$TZ_APPS"
+      ;;
     *)
       # Check if first argument looks like a time format (not a timezone shortcode)
       if [[ "$timezone" =~ ^[0-9]{1,2}(am|pm|:[0-9]{2}(am|pm)?)?$ ]] || [[ "$timezone" =~ ^[0-9]{4}$ ]] || [[ "$timezone" =~ ^[0-9]{1,2}:[0-9]{2}$ ]]; then
@@ -64,7 +69,7 @@ EOF
         tz_string="$TZ_TEAM"
       else
         echo "Unknown timezone shortcode: $timezone"
-        echo "Available shortcodes: au, team"
+        echo "Available shortcodes: apps, au, team"
         echo "Run 'to_timezone --help' for more information"
         return 1
       fi

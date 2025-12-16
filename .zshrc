@@ -89,14 +89,46 @@ HISTSIZE=9999
 # OPTIMIZED: NVM lazy loading - only initialize when needed
 export NVM_DIR="$HOME/.nvm"
 _nvm_lazy_load() {
+  # Return if already loaded
+  if typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
+    return 0
+  fi
   unset -f nvm node npm npx
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 }
-nvm() { _nvm_lazy_load; nvm "$@"; }
-node() { _nvm_lazy_load; node "$@"; }
-npm() { _nvm_lazy_load; npm "$@"; }
-npx() { _nvm_lazy_load; npx "$@"; }
+nvm() {
+  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
+    unset -f nvm node npm npx
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  fi
+  nvm "$@"
+}
+node() {
+  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
+    unset -f nvm node npm npx
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  fi
+  node "$@"
+}
+npm() {
+  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
+    unset -f nvm node npm npx
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  fi
+  npm "$@"
+}
+npx() {
+  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
+    unset -f nvm node npm npx
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  fi
+  npx "$@"
+}
 
 export PATH="/usr/local/bin:/usr/local/sbin:~/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications/WebStorm.app/Contents/MacOS:~/.local/bin:$(go env GOPATH)/bin:$PATH"
 

@@ -1,5 +1,6 @@
-Amazon Q.app
+Antigravity.app
 AppCleaner.app
+Audacity.app
 Audiobook Builder.app
 Azure Data Studio.app
 Bing Wallpaper.app
@@ -7,6 +8,7 @@ Brilliant.Design.app
 Caffeine.app
 calibre.app
 Claude.app
+ColorSlurp.app
 Cyberduck.app
 DaisyDisk.app
 DBeaver.app
@@ -27,19 +29,23 @@ Google Drive.app
 Google Sheets.app
 Google Slides.app
 HandBrake.app
+Hookmark.app
 Ice.app
 ImageOptim.app
+Insta360 Link Controller.app
+JDownloader 2
+JDownloader2.app
 Kandji Self Service.app
 Karabiner-Elements.app
 Karabiner-EventViewer.app
 KeyCastr.app
+Kiro CLI.app
 lghub.app
 Logseq.app
 Loom.app
 MacWhisper.app
 Medis.app
 MeetingBar.app
-Messenger.app
 Microsoft Azure Storage Explorer.app
 Microsoft Excel.app
 Modern CSV.app
@@ -80,6 +86,7 @@ Syncthing.app
 Syntax Highlight.app
 Tailscale.app
 The Unarchiver.app
+Unshaky.app
 Utilities
 VIA.app
 Vial.app
