@@ -56,7 +56,7 @@ You are a Principal Engineer conducting a thorough code review. Compare the curr
 - `undefined` preferred over `null` for non-React code?
 - `null` preferred over `undefined` for React code?
 - Named types over anonymous types where appropriate?
-- No `!` casts?
+- No non-null assertion (!) casts?
 - When more than 2 arguments, use destructured arguments?
 
 ### 6. Team-Specific Implementation Rules
