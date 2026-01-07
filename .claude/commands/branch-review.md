@@ -57,12 +57,12 @@ You are a Principal Engineer conducting a thorough code review. Compare the curr
 - `null` preferred over `undefined` for React code?
 - Named types over anonymous types where appropriate?
 - No `!` casts?
-- When >2 arguments, use destructured arguments?
+- When more than 2 arguments, use destructured arguments?
 
 ### 6. Team-Specific Implementation Rules
 
 - **Logging**: No variables in logs or exceptions
-- **Feature flags**: Use verbs (`enableFoo` not `isFooEnabled`); check codebase for constant vs direct reference preference
+- **Feature flags**: Use verbs (e.g., `enableFoo` not `isFooEnabled`). Check codebase for constant vs direct reference preference
 - **Promises**: Prefer `allSettled` over `Promise.all`
 - **Math**: Avoid floating point math (use integer cents, not dollars)
 - **Variables**: Do not use `_` prefix for used variables
