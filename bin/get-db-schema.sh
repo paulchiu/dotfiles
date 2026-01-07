@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-SOURCE="/Users/paul/dev/manage-api/node_modules/@mr-yum/mr-yum-db-schema/schema.sql"
+SOURCE="/Users/paul/dev/manage/node_modules/@mr-yum/mr-yum-db-schema/schema.sql"
 
 usage() {
   echo "Usage: $0 <destination_dir> [output_filename]"

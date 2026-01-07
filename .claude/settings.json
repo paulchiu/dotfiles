@@ -14,11 +14,11 @@
     ],
     "deny": []
   },
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true
+  },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  },
-  "enabledPlugins": {
-    "code-review@claude-plugins-official": true
   }
 }

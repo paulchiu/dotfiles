@@ -21,7 +21,7 @@ alias dc="docker-compose"
 # Navigation and Directory Management
 alias cf='cd "$(fd --type d --hidden --follow --exclude .git | fzf --height=40% --border --prompt="Select folder> ")"'
 alias cdb="z mr-yum-db-schema"
-alias cma="z manage-api"
+alias cma="z manage"
 alias cmf="z manage-frontend"
 alias cms="z smoke"
 alias csa="z serve-api"

@@ -22,7 +22,7 @@ REPO_BRANCH=(
   "loyalty-infra:main"
   "loyalty-integrations:main"
   "loyalty-worker:main"
-  "manage-api:main"
+  "manage:main"
   "manage-frontend:main"
   "menu-api:main"
   "menu-sync:main"
