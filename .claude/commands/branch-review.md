@@ -61,7 +61,7 @@ You are a Principal Engineer conducting a thorough code review. Compare the curr
 
 ### 6. Team-Specific Implementation Rules
 
-- **Logging**: No variables in logs or exceptions
+- **Logging**: No variables in logs or exceptions message strings
 - **Feature flags**: Use verbs (e.g., `enableFoo` not `isFooEnabled`). Check codebase for constant vs direct reference preference
 - **Promises**: Prefer `allSettled` over `Promise.all`
 - **Math**: Avoid floating point math (use integer cents, not dollars)
