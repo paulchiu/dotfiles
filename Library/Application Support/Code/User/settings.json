@@ -130,5 +130,7 @@
   "window.restoreWindows": "none",
   "workbench.colorTheme": "Dracula",
   "workbench.iconTheme": "vscode-icons",
-  "claudeCode.preferredLocation": "panel"
+  "claudeCode.preferredLocation": "panel",
+  "kilo-code.allowedCommands": ["git log", "git diff", "git show"],
+  "kilo-code.deniedCommands": []
 }
