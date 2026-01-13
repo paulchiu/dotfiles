@@ -1,13 +1,16 @@
+Adguard.app
 Antigravity.app
 AppCleaner.app
 Audacity.app
 Audiobook Builder.app
 Azure Data Studio.app
 Bing Wallpaper.app
+Bitwarden.app
 Brilliant.Design.app
 Caffeine.app
 calibre.app
 Claude.app
+ClaudeBar.app
 ColorSlurp.app
 Cyberduck.app
 DaisyDisk.app
@@ -35,6 +38,7 @@ ImageOptim.app
 Insta360 Link Controller.app
 JDownloader 2
 JDownloader2.app
+Kagi for Safari.app
 Kandji Self Service.app
 Karabiner-Elements.app
 Karabiner-EventViewer.app
