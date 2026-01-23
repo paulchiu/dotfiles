@@ -14,9 +14,8 @@
     ],
     "deny": []
   },
-  "enabledPlugins": {
-    "code-review@claude-plugins-official": true
-  },
+  "model": "sonnet",
+  "enabledPlugins": {},
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
