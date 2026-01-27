@@ -79,6 +79,7 @@ alias yup="ya au && ya dc | wcm | ya ci && ya p"
 alias gai='git dc | wcm | git ci'
 alias gac="git show HEAD | wcm | pbcopy && git commit --amend"
 alias gpr='git diff main.. | wpr'
+alias oc='opencode'
 
 # Work
 alias mls="mryum login && mryum shell"
