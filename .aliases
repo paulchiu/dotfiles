@@ -62,6 +62,7 @@ alias s="~/dev/search.sh"
 ## Development Tools
 alias sf="swift-format --recursive -i ."
 alias tf="terraform"
+alias p="pnpm"
 ## System/Utility
 alias rs="~/bin/reset.sh"
 ## Battery
@@ -80,6 +81,7 @@ alias gai='git dc | wcm | git ci'
 alias gac="git show HEAD | wcm | pbcopy && git commit --amend"
 alias gpr='git diff main.. | wpr'
 alias oc='opencode'
+alias q='kiro-cli'
 
 # Work
 alias mls="mryum login && mryum shell"

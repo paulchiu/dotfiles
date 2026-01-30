@@ -6,33 +6,33 @@
     "editor.quickSuggestions": {
       "comments": false,
       "other": true,
-      "strings": true
+      "strings": true,
     },
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
   },
   "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.defaultFormatter": "vscode.json-language-features",
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[python]": {
-    "editor.formatOnType": true
+    "editor.formatOnType": true,
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "cSpell.userWords": ["Chiu", "paulchiu", "Wagyu"],
   "docker.extension.enableComposeLanguageServer": false,
@@ -55,10 +55,10 @@
     "markdown": false,
     "plaintext": true,
     "scminput": false,
-    "yaml": false
+    "yaml": false,
   },
   "gitlens.advanced.messages": {
-    "suppressIntegrationRequestTimedOutWarning": true
+    "suppressIntegrationRequestTimedOutWarning": true,
   },
   "jest.runMode": "on-demand",
   "openInGitHub.alwaysUseDefaultBranch": true,
@@ -71,14 +71,14 @@
     "tsc",
     "git log",
     "git diff",
-    "git show"
+    "git show",
   ],
   "security.workspace.trust.untrustedFiles": "open",
   "supermaven.enable": {
-    "*": false
+    "*": false,
   },
   "terminal.integrated.env.osx": {
-    "Q_NEW_SESSION": "1"
+    "Q_NEW_SESSION": "1",
   },
   "terminal.integrated.fontFamily": "'FiraCode Nerd Font'",
   "typescript.updateImportsOnFileMove.enabled": "always",
@@ -89,40 +89,40 @@
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "after": ["<leader>", "<leader>", "s"],
-      "before": ["<leader>", "s"]
+      "before": ["<leader>", "s"],
     },
     {
       "after": ["<leader>", "<leader>", "f"],
-      "before": ["<leader>", "f"]
+      "before": ["<leader>", "f"],
     },
     {
       "after": ["<leader>", "<leader>", "F"],
-      "before": ["<leader>", "F"]
+      "before": ["<leader>", "F"],
     },
     {
       "after": ["<leader>", "<leader>", "t"],
-      "before": ["<leader>", "t"]
+      "before": ["<leader>", "t"],
     },
     {
       "after": ["<leader>", "<leader>", "T"],
-      "before": ["<leader>", "T"]
+      "before": ["<leader>", "T"],
     },
     {
       "after": ["<leader>", "<leader>", "w"],
-      "before": ["<leader>", "w"]
+      "before": ["<leader>", "w"],
     },
     {
       "after": ["<leader>", "<leader>", "b"],
-      "before": ["<leader>", "b"]
+      "before": ["<leader>", "b"],
     },
     {
       "after": ["<leader>", "<leader>", "j"],
-      "before": ["<leader>", "j"]
+      "before": ["<leader>", "j"],
     },
     {
       "after": ["<leader>", "<leader>", "k"],
-      "before": ["<leader>", "k"]
-    }
+      "before": ["<leader>", "k"],
+    },
   ],
   "vim.useSystemClipboard": true,
   "vsicons.dontShowNewVersionMessage": true,
@@ -132,5 +132,5 @@
   "workbench.iconTheme": "vscode-icons",
   "claudeCode.preferredLocation": "panel",
   "kilo-code.allowedCommands": ["git log", "git diff", "git show"],
-  "kilo-code.deniedCommands": []
+  "kilo-code.deniedCommands": [],
 }
