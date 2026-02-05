@@ -28,6 +28,11 @@ Review the changes in this branch compared to main and verify they conform to th
    - The file and line number where the violation occurs
    - A clear explanation of what needs to be fixed
 
+6. After producing the compliance report, automatically proceed to fix all identified violations.
+   - Do NOT ask for confirmation before applying fixes.
+   - Modify the code, documentation, or configuration to resolve the violations.
+   - Verify that the changes resolve the issues.
+
 ## Output Format
 
 For each issue found, prefix with:
