@@ -70,6 +70,7 @@ alias batt="pmset -g batt"
 ## Date and time
 alias ttz="to_timezone"
 ## AI
+### To change role prompts, go to '/Users/.../Library/Application Support/aichat/roles'
 alias write_commit_message='aichat --role committer'
 alias wcm="write_commit_message"
 alias wpr="write_pull_request"
