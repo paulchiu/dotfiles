@@ -86,51 +86,10 @@ source $ZSH/oh-my-zsh.sh
 HISTFILESIZE=1000000000
 HISTSIZE=9999
 
-# OPTIMIZED: NVM lazy loading - only initialize when needed
-export NVM_DIR="$HOME/.nvm"
-_nvm_lazy_load() {
-  # Return if already loaded
-  if typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
-    return 0
-  fi
-  unset -f nvm node npm npx
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-}
-nvm() {
-  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
-    unset -f nvm node npm npx
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-  fi
-  nvm "$@"
-}
-node() {
-  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
-    unset -f nvm node npm npx
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-  fi
-  node "$@"
-}
-npm() {
-  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
-    unset -f nvm node npm npx
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-  fi
-  npm "$@"
-}
-npx() {
-  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
-    unset -f nvm node npm npx
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-  fi
-  npx "$@"
-}
+# mise - polyglot version manager (replaces nvm)
+eval "$(mise activate zsh)"
 
-export PATH="/usr/local/bin:/usr/local/sbin:~/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications/WebStorm.app/Contents/MacOS:~/.local/bin:$(go env GOPATH)/bin:$PATH"
+export PATH="$HOME/.local/share/mise/shims:/usr/local/bin:/usr/local/sbin:~/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications/WebStorm.app/Contents/MacOS:~/.local/bin:$(go env GOPATH)/bin:$PATH"
 
 
 # Preferred editor for local and remote sessions
@@ -140,33 +99,7 @@ else
   export EDITOR='nvim'
 fi
 
-# OPTIMIZED: NVM autoloader - triggers lazy loading when needed
-load-nvmrc() {
-  [[ -a .nvmrc ]] || return
-  # Trigger lazy loading if NVM isn't actually loaded yet
-  if ! typeset -f nvm_find_nvmrc >/dev/null 2>&1; then
-    _nvm_lazy_load
-  fi
 
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-# OPTIMIZED: Don't run load-nvmrc on shell startup
-# load-nvmrc
 
 function ya() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
@@ -210,7 +143,7 @@ else
   export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
 fi
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
 # https://github.com/anthropics/claude-code/issues/40#issuecomment-2688171192
 # export NODE_EXTRA_CA_CERTS=/etc/ssl/cert.pem
 
