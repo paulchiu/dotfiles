@@ -1,0 +1,3 @@
+# Starship configuration
+# Increase command timeout to prevent helm timeout warnings
+command_timeout = 5000
