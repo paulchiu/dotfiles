@@ -9,6 +9,7 @@ Bitwarden.app
 Brilliant.Design.app
 Caffeine.app
 calibre.app
+Chrome Remote Desktop Host Uninstaller.app
 Claude.app
 ClaudeBar.app
 ColorSlurp.app
