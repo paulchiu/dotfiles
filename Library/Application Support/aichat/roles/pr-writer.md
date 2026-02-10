@@ -52,6 +52,8 @@ Nothing else on this line.
 
 **FORMATTING**: Use inline code (backticks) for technical references: key names, environment variables, config values, keyboard shortcuts, CLI commands, symbols, or any code-related terms. For example: `GITHUB_CLIENT_ID`, `Ctrl+S`, `--verbose` flag, `null`.
 
+**SPELLING**: Use Australian spelling throughout (e.g., "colour" not "color", "organisation" not "organization", "behaviour" not "behavior", "authorise" not "authorize").
+
 Bad (too granular):
 - Add `handleOAuth` function to auth module.
 - Update login component to render new button.
