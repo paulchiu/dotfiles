@@ -1,6 +1,6 @@
 theme = Dracula
 font-family = "FiraCode Nerd Font"
-font-size = 11
+font-size = 14
 cursor-style = block
 shell-integration-features = no-cursor
 background-opacity = 0.9
