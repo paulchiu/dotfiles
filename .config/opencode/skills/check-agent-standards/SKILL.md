@@ -57,9 +57,13 @@ Check every changed file against all applicable rules from `AGENTS.md`. The audi
 - Recoverable errors return `null`
 - User feedback via callbacks or toasts, no silent swallowing
 
-### Step 3: Write Report
+### Step 3: Report Findings
 
-Write a markdown report to `CONFORMANCE_REPORT.md` in the project root with the following structure:
+Present the conformance report directly in the conversation as markdown. **Do not write a file unless the user explicitly asks for one.**
+
+If the user requests a written report, save it to the project root as `YYYY-MM-DD HHMM Conformance Report.md` (e.g., `2026-02-13 1430 Conformance Report.md`). Get the timestamp by running `date "+%Y-%m-%d %H%M"`.
+
+The report (whether inline or written) should follow this structure:
 
 ```markdown
 # Conformance Report
@@ -113,7 +117,7 @@ After fixes, re-run linting and tests to verify nothing is broken:
 
 ### Step 5: Update Report
 
-Update `CONFORMANCE_REPORT.md` to reflect which fixes were applied and which items remain.
+If a written report was requested, update it to reflect which fixes were applied and which items remain. Otherwise, present the updated status inline.
 
 ## Important Rules
 
@@ -121,4 +125,4 @@ Update `CONFORMANCE_REPORT.md` to reflect which fixes were applied and which ite
 - **Do not modify test expectations** to make tests pass — fix the source code instead.
 - **Do not touch files outside the branch diff** unless running project-wide formatters.
 - **Be conservative with type changes** — prefer flagging complex `any` replacements for manual review over introducing type errors.
-- Add `CONFORMANCE_REPORT.md` to `.gitignore` if it is not already there — it is a transient artifact.
+- If a report file is written, add `*Conformance Report.md` to `.gitignore` if not already covered — it is a transient artifact.
