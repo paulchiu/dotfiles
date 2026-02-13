@@ -111,11 +111,34 @@ Fix all violations that can be safely auto-fixed:
 8. **React namespace imports:** Convert to named imports.
 9. **Missing tests:** Create test file stubs for new utility functions.
 
-After fixes, re-run linting and tests to verify nothing is broken:
-- Run `npm run lint` (must pass with zero warnings)
-- Run `npm test` (must pass)
+### Step 5: Run All Checks and Fix Issues
 
-### Step 5: Update Report
+Run each check category in order below. After each run, if there are failures, fix the source code and re-run until the check passes (or flag as manual review if a fix is not safe). **Do not proceed to the next category until the current one passes.**
+
+1. **Formatting:** Run the project formatter and verify no files changed.
+   - Look in `package.json` scripts for a format command (e.g., `npm run format`, `npx prettier --write .`).
+   - If files were reformatted, that counts as a fix — note it in the report.
+
+2. **Linting:** Run the project linter and fix all errors and warnings.
+   - Look in `package.json` scripts for a lint command (e.g., `npm run lint`).
+   - First attempt auto-fix (e.g., `npm run lint -- --fix`), then manually fix any remaining issues.
+   - Must pass with **zero errors and zero warnings**.
+
+3. **Unit Tests:** Run the project unit test suite and fix all failures.
+   - Look in `package.json` scripts for a test command (e.g., `npm test`, `npm run test:unit`, `npx vitest run`, `npx jest`).
+   - Read failing test output carefully — fix the **source code**, not the test expectations.
+   - Re-run until all unit tests pass.
+
+4. **E2E Tests:** Run the project E2E test suite and fix all failures.
+   - Look in `package.json` scripts for an E2E command (e.g., `npm run test:e2e`, `npx playwright test`, `npx cypress run`).
+   - If no E2E script exists, check for a `playwright.config.*` or `cypress.config.*` and run the appropriate CLI command.
+   - If no E2E tests exist in the project, skip this step and note it in the report.
+   - Read failing test output carefully — fix the **source code**, not the test expectations.
+   - Re-run until all E2E tests pass.
+
+If any check cannot be made to pass after reasonable attempts, revert the offending changes and flag the issue for manual review in the report.
+
+### Step 6: Update Report
 
 If a written report was requested, update it to reflect which fixes were applied and which items remain. Otherwise, present the updated status inline.
 
