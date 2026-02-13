@@ -1,0 +1,51 @@
+name: paul
+version: 0.0.0
+description: "Personal opencode commands and skills for Claude Code sync"
+author: paul
+license: MIT
+source: local
+
+commands:
+  - name: archive-obsidian
+    path: commands/archive-obsidian.md
+    description: "Archive Obsidian vault files"
+  - name: branch-review
+    path: commands/branch-review.md
+    description: "Review code branches"
+  - name: implementation-guidance
+    path: commands/implementation-guidance.md
+    description: "Generate implementation guidance"
+  - name: linear-create
+    path: commands/linear-create.md
+    description: "Create Linear issues via CLI"
+
+skills:
+  - name: archive-obsidian-vault
+    path: skills/archive-obsidian-vault/
+    description: "Archive Obsidian vault monthly work items"
+  - name: gcalcli-calendar
+    path: skills/gcalcli-calendar/
+    description: "Manage Google Calendar events using gcalcli"
+  - name: implementation-guidance-generator
+    path: skills/implementation-guidance-generator/
+    description: "Generate structured implementation guidance documents"
+  - name: linear-create
+    path: skills/linear-create/
+    description: "Create Linear issues with team, title, description"
+  - name: openpackage-sync
+    path: skills/openpackage-sync/
+    description: "Sync opencode and claude commands/skills bidirectionally using opkg"
+  - name: reviewing-branch-changes
+    path: skills/reviewing-branch-changes/
+    description: "Principal engineer review of current branch changes against main"
+
+install-targets:
+  claude:
+    commands: .claude/commands/
+    skills: .claude/skills/
+  opencode:
+    commands: .opencode/command/
+    skills: .opencode/skill/
+  cursor:
+    commands: .cursor/commands/
+    skills: .cursor/skills/
