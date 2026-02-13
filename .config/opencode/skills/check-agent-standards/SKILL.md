@@ -1,9 +1,9 @@
 ---
-name: enforcing-branch-standards
+name: check-agent-standards
 description: "Checks current branch changes against local main for AGENTS.md conformance, writes a report, and auto-fixes violations. Use when asked to enforce standards, check conformance, or fix branch to match AGENTS.md."
 ---
 
-# Enforcing Branch Standards
+# Check Agent Standards
 
 Automatically audit the current branch's changes against `AGENTS.md` project standards, write a report, and fix all violations without intervention.
 
