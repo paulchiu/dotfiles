@@ -12,6 +12,7 @@ calibre.app
 Chrome Remote Desktop Host Uninstaller.app
 Claude.app
 ClaudeBar.app
+Codex.app
 ColorSlurp.app
 Cyberduck.app
 DaisyDisk.app
@@ -22,6 +23,7 @@ Discord.app
 Dropbox.app
 DuckDuckGo.app
 Easy Move+Resize.app
+features.cfg
 Firefox.app
 FocuSee.app
 Garmin Express.app
