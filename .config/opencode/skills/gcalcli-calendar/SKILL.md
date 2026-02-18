@@ -272,6 +272,8 @@ gcalcli --calendar "CAD Leave" add --title "Event Name" --when "YYYY-MM-DD" --du
 - `mm/dd` - Short format (assumes current year)
 - Relative: `today`, `tomorrow`, `next week`
 
+**Important:** When users provide dates with slashes (e.g., `04/03/2026`), assume Australian date format **dd/mm/yyyy** (day first, then month). For example, `04/03/2026` means **4th March 2026**, not April 3rd. Always use ISO format `YYYY-MM-DD` for gcalcli commands to avoid confusion.
+
 ### Duration Calculation
 
 When using `--allday`:
