@@ -34,6 +34,7 @@ alias pd="pushd"
 alias zt="zellij action go-to-tab-name"
 alias zmt="zellij action move-tab"
 alias yz="yazi"
+alias rp="realpath"
 
 # Editors and Shell Utilities
 ## File Navigation and Listing
