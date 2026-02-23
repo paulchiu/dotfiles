@@ -34,6 +34,7 @@ linear issue create --team <TEAM> -t "<TITLE>" -d "<DESCRIPTION>"
 | `--team <TEAM>` | Target team (e.g., CAD, ENG, PROD) |
 | `-t, --title <TITLE>` | Issue title (required) |
 | `-d, --description <DESCRIPTION>` | Issue description (supports markdown) |
+| `-p, --parent <ISSUE>` | Parent issue as team_number code (e.g., CUSM-42) |
 | `-a, --assignee <ASSIGNEE>` | Assign to 'self' or username/name |
 | `--priority <1-4>` | Priority (1=urgent, 4=low) |
 | `--estimate <POINTS>` | Story points estimate |
@@ -43,6 +44,19 @@ linear issue create --team <TEAM> -t "<TITLE>" -d "<DESCRIPTION>"
 | `--due-date <DATE>` | Due date |
 | `--start` | Start the issue immediately |
 | `--no-interactive` | Skip interactive prompts |
+
+## Issue Relationships
+
+When users mention "parent", "blocked by", or "sub-issue", these refer to actual Linear linked issues, not just description text. The CLI supports the following:
+
+| Relationship | CLI Support | How to Set |
+|--------------|-------------|------------|
+| **Parent** | ✅ Supported | Use `-p <ISSUE>` flag during creation or `linear issue update <ID> -p <ISSUE>` |
+| **Sub-issue** | ✅ Automatic | Create issue with `-p <PARENT>` to make it a sub-issue |
+| **Blocked by** | ❌ Not supported | Must use Linear web UI or API |
+| **Depends on** | ❌ Not supported | Must use Linear web UI or API |
+
+**Note**: Only parent relationships can be set via CLI. For "blocked by" or other dependencies, instruct the user to set these manually in the Linear web interface, or add them as reference links in the description.
 
 ## Examples
 
@@ -64,6 +78,14 @@ linear issue create --team ENG -t "Update dependencies" -d "Security patches nee
 linear issue create --team PROD -t "Feature X" -d "New feature description" -l "feature" -l "q1" --project "Roadmap 2024"
 ```
 
+### Creating a sub-issue (with parent)
+
+```bash
+linear issue create --team CUSM -t "Fix SMS bug" -d "Bug details here" -p CUSM-42
+```
+
+This creates CUSM-xxx as a sub-issue of CUSM-42.
+
 ## Workflow
 
 1. Check which teams exist: `linear team list`
@@ -76,4 +98,7 @@ linear issue create --team PROD -t "Feature X" -d "New feature description" -l "
 - Descriptions support full markdown formatting
 - Team identifiers are usually uppercase (CAD, ENG, PROD, etc.)
 - You can update an issue later with: `linear issue update <ID>`
-- **Escaping `@` mentions**: Linear parses `@` as a mention trigger. When writing package names like `@mr-yum/foo` in titles or descriptions, always wrap them in backtick code escapes (`` ` ``) AND add a space after the `@` symbol — e.g., write `` `@ mr-yum/foo` `` instead of `@mr-yum/foo`. This prevents Linear from swallowing the text as an unresolved mention.
+- **Escaping `@` mentions**: Linear parses `@` as a mention trigger and shells may interpret it as command substitution. When writing package names like `@mr-yum/foo`:
+  - In titles/descriptions: Wrap in backticks `` `@mr-yum/foo` `` or use single quotes around the entire argument
+  - In shell commands: Use single quotes around the entire title/description string to prevent shell interpretation (e.g., `-t 'Update @mr-yum/sms'`)
+  - Alternatively, use the `--description-file` flag to read from a file instead of passing markdown directly on the command line
