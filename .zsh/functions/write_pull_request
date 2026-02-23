@@ -1,7 +1,9 @@
 write_pull_request() {
-    local template_file=".github/pull_request_template.md"
+    local git_root=$(\git rev-parse --show-toplevel 2>/dev/null)
+    local template_file="${git_root:-.}/.github/pull_request_template.md"
     if [[ -f "$template_file" ]]; then
-        aichat --role pr-writer -f "$template_file" "$@"
+        local template=$(\cat "$template_file")
+        { echo "<template>"; echo "$template"; echo "</template>"; echo "<diff>"; \cat; echo "</diff>"; } | aichat --role pr-writer "$@"
     else
         aichat --role pr-writer "$@"
     fi
