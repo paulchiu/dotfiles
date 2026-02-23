@@ -40,12 +40,36 @@ create_pull_request() {
     return 1
   fi
 
+  # Look for PR template in the repo
+  local git_root
+  git_root=$(\git rev-parse --show-toplevel 2>/dev/null)
+  local template=""
+  if [[ -n "$git_root" ]]; then
+    for tmpl in "$git_root/.github/pull_request_template.md" \
+                "$git_root/.github/PULL_REQUEST_TEMPLATE.md" \
+                "$git_root/pull_request_template.md" \
+                "$git_root/PULL_REQUEST_TEMPLATE.md"; do
+      if [[ -f "$tmpl" ]]; then
+        template=$(\cat "$tmpl")
+        break
+      fi
+    done
+  fi
+
+  # Combine description with template if found
+  local body="$description"
+  if [[ -n "$template" ]]; then
+    body="${description}
+
+${template}"
+  fi
+
   # Execute or debug
   if [ "$debug" = true ]; then
     echo "Title: $title"
-    echo "Description: $description"
+    echo "Description: $body"
     echo "Args: ${args[*]}"
   else
-    \gh pr create --web --title "$title" --body "$description" "${args[@]}"
+    \gh pr create --web --title "$title" --body "$body" "${args[@]}"
   fi
 }

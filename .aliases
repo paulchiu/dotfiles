@@ -80,7 +80,7 @@ alias jai='jj commit --message "$(jj diff | wcm)"'
 alias yup="ya au && ya dc | wcm | ya ci && ya p"
 alias gai='git dc | wcm | git ci'
 alias gac="git show HEAD | wcm | pbcopy && git commit --amend"
-alias gpr='git diff main.. | wpr'
+alias gpr='git dm main.. | wpr'
 alias oc='opencode'
 alias q='kiro-cli'
 
