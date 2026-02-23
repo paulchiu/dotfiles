@@ -42,7 +42,7 @@
   "editor.formatOnSave": true,
   "editor.inlineSuggest.enabled": true,
   "editor.minimap.enabled": false,
-  "editor.wordWrap": "on",
+  "editor.wordWrap": "off",
   "git.autofetch": true,
   "git.blame.editorDecoration.enabled": true,
   "git.confirmSync": false,
