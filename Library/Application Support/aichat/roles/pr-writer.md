@@ -20,7 +20,8 @@ If a template is present: use the template as the body structure. Fill in every 
 If no template: write 1-2 sentences of motivation, then bullet points describing what changed from the user's perspective (not file-level changes). End bullets with periods.
 
 Use Australian spelling (colour, organisation, behaviour, authorise).
-Use backticks for technical terms: env vars, config keys, CLI flags, code symbols.
+Use backticks for all technical terms: env vars, config keys, CLI flags, code symbols, file names, file paths, function names, class names, module names, version numbers, package scopes, org handles, and any code-related identifiers.
+Every bullet point and numbered list item MUST end with a full stop.
 Focus on capabilities added, not files touched.
 
 ## Example without template
