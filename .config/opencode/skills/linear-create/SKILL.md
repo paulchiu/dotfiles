@@ -76,3 +76,4 @@ linear issue create --team PROD -t "Feature X" -d "New feature description" -l "
 - Descriptions support full markdown formatting
 - Team identifiers are usually uppercase (CAD, ENG, PROD, etc.)
 - You can update an issue later with: `linear issue update <ID>`
+- **Escaping `@` mentions**: Linear parses `@` as a mention trigger. When writing package names like `@mr-yum/foo` in titles or descriptions, always wrap them in backtick code escapes (`` ` ``) AND add a space after the `@` symbol — e.g., write `` `@ mr-yum/foo` `` instead of `@mr-yum/foo`. This prevents Linear from swallowing the text as an unresolved mention.
