@@ -1,162 +1,186 @@
 ---
 name: reviewing-branch-changes
-description: Principal engineer review of current branch changes against main. Use when asked to review branch, review changes, or do a code review of the current branch.
+description: Principal engineer review of current branch changes against main. Use when asked to review branch, review changes, review a PR, or do a code review of the current branch. Produce GitHub-ready, file-by-file review comments with exact line targets, severity, practical fix guidance, and high-signal reasoning.
 ---
 
 # Branch Review Skill
 
-Perform a strict principal-engineer review of changes in the current branch compared to `main`.
+Perform a strict principal-engineer review of the current branch versus `main`, with output shaped like real GitHub PR comments.
 
-Treat the guidance below as required PR review behavior, not optional suggestions.
+Treat this file as the execution contract. Use references for detailed policy.
 
-## Non-Negotiables
+## Load Guidance Sources
 
-- Lead with findings, ordered by severity.
-- Treat standards and convention violations as real findings even if runtime behavior still works.
-- Run a dedicated pass for team-specific rules, especially feature flag naming.
-- Do not waive findings because similar legacy patterns already exist.
-- Use concrete `file:line` references for every finding.
+Read in this order before reviewing:
 
-## Review Process
+1. `references/team-pr-references.md`
+2. `references/pull-request-review-guidelines.md`
+3. `references/other-team-pr-preferences.md`
 
-1. Identify change scope:
-   - Run `git diff main...HEAD`
-   - Run `git log main..HEAD --oneline`
-   - Run `git diff --name-only main...HEAD`
+Use bundled references only.
 
-2. Run focused static checks on changed files:
-   - Prefer `rg` for targeted scans (`useFlag`, `Promise.all`, `any`, non-null assertions, logging patterns, etc.)
-   - Run lint/type checks for changed files when available (for example `npm run check:linting -- <files...>`)
+## Core Behavior
 
-3. Review against the framework below.
+- Lead with actionable comments, not summary text.
+- Primary output is file-by-file.
+- Prefer fewer, high-confidence comments over noisy low-confidence comments.
+- Treat convention and standards violations as valid findings.
+- Do not waive findings because similar legacy patterns exist.
+- Include exact review targets (`file:line`) for each comment.
+- Use `blocking` only when merge should not proceed without the fix.
 
-4. Verify test coverage for behavioral changes:
-   - Confirm existing tests cover changed paths, or flag missing tests.
+## GPT-5.3 Reasoning
 
-5. Produce findings-first output in the required format.
+Use this internal loop for each potential finding:
 
-## Review Framework
+1. Evidence: exact changed lines and observed behavior.
+2. Rule: concrete team convention, policy, or official docs.
+3. Impact: realistic risk (correctness, security, reliability, maintainability).
+4. Fix: smallest practical correction.
 
-### 1. Description & Context
+False-positive gate:
 
-- Is the change purpose clear (the WHY)?
-- Is scope well-defined and complete?
-- Does the PR capture guest/user impact, not just API impact?
+- Is this in changed code or directly impacted code?
+- Is there a clear standard behind the comment?
+- Is severity aligned with impact and confidence?
+- Can the author act without guessing?
 
-### 2. Sizing
+If confidence is low, prefer `question` over `blocking` or `suggestion`.
 
-- Is change size reasonable?
-- Should coupled work be split into smaller PRs?
+## Severity
 
-### 3. Code Quality (KISS)
+- `blocking`: correctness, security, data integrity, payment safety, or must-fix standards issue.
+- `suggestion`: meaningful non-blocking improvement.
+- `question`: clarification request or low-confidence concern.
+- `nitpick`: minor polish with negligible impact.
 
-- Is logic straightforward and maintainable?
-- Are naming and abstractions clear?
-- Is unnecessary mutation avoided?
+Escalate only when both impact and confidence are high.
 
-### 4. YAGNI
+## Review Flow
 
-- Is any code speculative or unused?
-- Are existing utilities/libraries reused where appropriate?
+1. Scope changes:
+   - `git diff main...HEAD`
+   - `git log main..HEAD --oneline`
+   - `git diff --name-only main...HEAD`
+2. Run targeted scans on changed files:
+   - Prefer `rg` (`useFlag`, `Promise.all`, `any`, non-null assertions, logging patterns, etc.)
+   - Run lint/type checks when available for touched paths.
+3. Gather link context:
+   - `git rev-parse --abbrev-ref HEAD`
+   - `git rev-parse HEAD`
+   - `git remote get-url origin`
+4. Build a risk map:
+   - Mark security, payment, migration, infra, and user-visible behavior as high attention.
+   - Treat payment changes as high-risk and require very high confidence.
+5. Validate tests:
+   - Confirm tests cover behavioral changes.
+   - If tests are missing, require explicit justification.
+6. Produce output in the required format below.
 
-### 5. TypeScript Standards
+## What To Check (Condensed)
 
-- Use explicit types where team conventions require it.
-- Prefer `unknown` over `any`.
-- Prefer `undefined` over `null` for non-React code.
-- Prefer `null` over `undefined` for React code.
-- Avoid non-null assertions (`!`) unless clearly justified.
-- When more than 2 arguments are passed, prefer destructured arguments.
+Use references for full details. Always evaluate:
 
-### 6. Team-Specific Implementation Rules
-
-- Logging: do not interpolate variables in log/exception message strings.
-- Feature flags:
-  - Use verb-style variable names for flags in code (for example `enableOtpRateLimit`).
-  - Flag names like `FLAG_ENABLE_*` are fine for constants.
-  - Do not use `isFooEnabled` for newly introduced flag booleans.
-  - Always call this out when feature-flag code is touched.
-- Promises: prefer `Promise.allSettled` over `Promise.all`.
-- Math: avoid floating point money math; use integer cents.
-- Variables: do not use `_` prefix for used variables.
-- DAOs: keep DAOs wrapped in services; keep audit trails in DAOs.
-- DB cascades: avoid implicit cascade behavior.
-- Serve FE specifics:
-  - Use `menuAvailability` for ordering type checks.
-  - Use `applyUtmToUrl` for UTM application.
-  - Check whether touched component is legacy v1 before introducing new patterns.
-- Tailwind: use design tokens, not default Tailwind classes.
-
-### 7. Database & Migrations
-
-- Do not use `IF EXISTS` in migrations.
-- Use `CREATE INDEX CONCURRENTLY` for indexes.
-- Treat payment changes as high-risk and require high confidence.
-
-### 8. Terraform
-
-- For CRDB changes, require explicit target scoping.
-
-### 9. Testing
-
-- Prefer readable fixture values over overly realistic values.
-- Prefer descriptive assertions over broad snapshots/object dumps.
-- Keep snapshots short (max ~12 lines) if used.
-- Avoid `test-id` where better queries exist.
-- Keep mocking style consistent with nearby tests.
+- PR context: WHY, scope, stakeholder/user impact, sizing, and coupling clarity.
+- Code quality: KISS, maintainability, naming clarity, mutation minimization, YAGNI.
+- TypeScript: avoid `any`, null/undefined conventions, non-null assertions, argument structure.
+- Team conventions: logging strings, feature flag style, Promise handling, money math, DAO patterns, FE-specific conventions, Tailwind tokens.
+- Data and infra: migration safety (`IF EXISTS`, index strategy), CRDB/Terraform scoping.
+- Tests: coverage quality, readable fixtures, strong assertions, snapshot restraint, query quality.
 
 ## Required Output Format
 
-Output findings first, in this order:
+Output in this order:
 
-1. `blocking:`
-2. `suggestion:`
-3. `question:`
-4. `nitpick:`
-
-For every finding:
-
-- Start with `<severity>: <issue and impact>`
-- Add `References:` with concrete `path/to/file.ts:123`
-- Prefer line-specific GitHub links when available
-- Add a short snippet (3-12 lines) for key findings
-- Add a convention comparison snippet when arguing convention mismatch
-
-If there are no findings, explicitly say: `No findings.`
-
-Then include:
-
-1. **Open Questions / Assumptions**
-2. **Overview**
-3. **Risk Assessment**: Low / Medium / High with justification
-4. **Key Action Items**: prioritized
+1. **File-by-File Review Comments** (required, primary)
+2. **Cross-File Comments** (optional)
+3. **Open Questions / Assumptions**
+4. **Risk Assessment**: Low / Medium / High with justification
 5. **Verdict**: Approve / Request Changes / Needs Discussion
+
+### 1) File-by-File Review Comments
+
+Get changed files in diff order (`git diff --name-only main...HEAD`) and count them (`N`).
+
+- If `N < 20`: list every changed file.
+- If `N >= 20`: list only files with actionable comments.
+- For `N >= 20`, add: `Reviewed <N> changed files; comments on <M> files.`
+
+For each file:
+
+- Heading: `### path/to/file.ext`
+- If none: `No comments for this file.`
+- If comments exist, include for each:
+  - `Line <line-number>` or `Line <start>-<end>`
+  - severity (`blocking`, `suggestion`, `question`, `nitpick`)
+  - full comment body using template below.
+
+Within each file, order comments by:
+
+1. severity (`blocking`, `suggestion`, `question`, `nitpick`)
+2. line number ascending
+
+### 2) Cross-File Comments
+
+Only for inherently cross-cutting concerns (architecture, rollout safety, migration strategy, e2e risks).
+
+### 3) No-Issue Case
+
+If there are no actionable comments across all changed files, explicitly output:
+
+`No findings.`
+
+Still include:
+
+- Open Questions / Assumptions
+- Risk Assessment
+- Verdict
 
 ## PR Comment Template
 
 ````md
 <severity>: <clear issue statement and impact>
 
-<details>
-  <summary>References</summary>
-  
-- `path/to/changed-file.ts:123` ([GitHub](https://github.com/<org>/<repo>/blob/<branch>/path/to/changed-file.ts#L123))
-- `path/to/convention-file.ts:45` ([GitHub](https://github.com/<org>/<repo>/blob/<branch>/path/to/convention-file.ts#L45))
-</details>
+**Comment target:** `path/to/changed-file.ts:<line-number>`
 
-<details>
-  <summary>Sample snippets</summary>
-  
-Changed code snippet:
+**Why this matters**
+1-3 sentences on concrete impact.
+
+**Recommended change**
 ```ts
-// 3-12 lines from changed code
+// minimal fix sketch or exact replacement
 ```
 
-Convention comparison snippet:
+**References (optional)**
+- [Changed line link](https://github.com/<org>/<repo>/blob/<head-sha>/path/to/file.ts#L<line>)
+- [Comparison/convention link](https://github.com/<org>/<repo>/blob/<sha>/path/to/file.ts#L<line>)
+- [Official docs/spec link](https://...)
+
+**Current code (optional)**
 ```ts
-// 3-12 lines from existing codebase convention
+// 3-12 lines from changed code near the target line
 ```
-</details>
+
+**Preferred code (optional)**
+```ts
+// 3-12 lines showing the preferred pattern
+```
+
+**Patch-style diff (optional)**
+```diff
+- old line(s)
++ new line(s)
+```
 ````
 
-Be direct, concrete, and strict about standards compliance.
+## Comment Quality Rules
+
+- Keep comments self-contained and pasteable into GitHub.
+- Include exact line targets in every comment.
+- Use references when they increase clarity; do not force for trivial nits.
+- Include snippets for non-trivial issues; include current-vs-preferred for convention enforcement.
+- Use plain markdown only (no HTML `<details>` / `<summary>`).
+- Prefer concrete fix guidance over abstract advice.
+- Do not output generic praise comments.
+
+Be direct and practical. Enforce standards while calibrating severity to real impact.
