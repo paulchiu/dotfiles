@@ -139,34 +139,31 @@ Still include:
 ## PR Comment Template
 
 ````md
-<severity>: <clear issue statement and impact>
+<Severity>: <clear issue statement and impact>
 
-**Comment target:** `path/to/changed-file.ts:<line-number>`
+Why this matters: 1-3 sentences on concrete impact.
 
-**Why this matters**
-1-3 sentences on concrete impact.
-
-**Recommended change**
+Recommended change
 ```ts
 // minimal fix sketch or exact replacement
 ```
 
-**References (optional)**
+References (optional)
 - [Changed line link](https://github.com/<org>/<repo>/blob/<head-sha>/path/to/file.ts#L<line>)
 - [Comparison/convention link](https://github.com/<org>/<repo>/blob/<sha>/path/to/file.ts#L<line>)
 - [Official docs/spec link](https://...)
 
-**Current code (optional)**
+Current code (optional)
 ```ts
 // 3-12 lines from changed code near the target line
 ```
 
-**Preferred code (optional)**
+Preferred code (optional)
 ```ts
 // 3-12 lines showing the preferred pattern
 ```
 
-**Patch-style diff (optional)**
+Patch-style diff (optional)
 ```diff
 - old line(s)
 + new line(s)
@@ -176,7 +173,8 @@ Still include:
 ## Comment Quality Rules
 
 - Keep comments self-contained and pasteable into GitHub.
-- Include exact line targets in every comment.
+- Include exact line targets in every finding using the file section and `Line <n>` metadata; do not add a separate `Comment target` line inside the comment body.
+- Use label style `Suggestion:`, `Blocking:`, `Question:`, `Nitpick:` (capitalized, plain text, no bold formatting).
 - Use references when they increase clarity; do not force for trivial nits.
 - Include snippets for non-trivial issues; include current-vs-preferred for convention enforcement.
 - Use plain markdown only (no HTML `<details>` / `<summary>`).
