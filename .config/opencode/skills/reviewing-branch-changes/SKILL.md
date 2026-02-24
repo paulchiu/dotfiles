@@ -5,105 +5,158 @@ description: Principal engineer review of current branch changes against main. U
 
 # Branch Review Skill
 
-Act as a principal engineer conducting a thorough code review of changes in the current branch compared to main.
+Perform a strict principal-engineer review of changes in the current branch compared to `main`.
+
+Treat the guidance below as required PR review behavior, not optional suggestions.
+
+## Non-Negotiables
+
+- Lead with findings, ordered by severity.
+- Treat standards and convention violations as real findings even if runtime behavior still works.
+- Run a dedicated pass for team-specific rules, especially feature flag naming.
+- Do not waive findings because similar legacy patterns already exist.
+- Use concrete `file:line` references for every finding.
 
 ## Review Process
 
-1. First, identify the changes:
-   - Run `git diff main...HEAD` to see all changes
-   - Run `git log main..HEAD --oneline` to understand the commit history
-   - Identify the files changed and their scope
+1. Identify change scope:
+   - Run `git diff main...HEAD`
+   - Run `git log main..HEAD --oneline`
+   - Run `git diff --name-only main...HEAD`
 
-2. Analyse the changes against the framework below.
+2. Run focused static checks on changed files:
+   - Prefer `rg` for targeted scans (`useFlag`, `Promise.all`, `any`, non-null assertions, logging patterns, etc.)
+   - Run lint/type checks for changed files when available (for example `npm run check:linting -- <files...>`)
+
+3. Review against the framework below.
+
+4. Verify test coverage for behavioral changes:
+   - Confirm existing tests cover changed paths, or flag missing tests.
+
+5. Produce findings-first output in the required format.
 
 ## Review Framework
 
 ### 1. Description & Context
 
-- Does the change have clear purpose (the WHY)?
-- Is the scope appropriate and well-defined?
-- Are changes isolated and complete?
-- Context of how PR fits within a broader set of changes if applicable?
-- Acceptance criteria from guest/user perspective, not just API?
-- Loom recordings for E2E impact of APIs?
+- Is the change purpose clear (the WHY)?
+- Is scope well-defined and complete?
+- Does the PR capture guest/user impact, not just API impact?
 
 ### 2. Sizing
 
-- Are changes kept to a minimum?
-- Can large changes be broken into smaller, incremental PRs?
-- If tightly coupled, is that justified?
+- Is change size reasonable?
+- Should coupled work be split into smaller PRs?
 
 ### 3. Code Quality (KISS)
 
-- Is the logic straightforward without over-engineering?
-- Is code self-documenting with clear naming?
-- Is the code maintainable and readable?
-- Is mutation avoided where possible?
+- Is logic straightforward and maintainable?
+- Are naming and abstractions clear?
+- Is unnecessary mutation avoided?
 
-### 4. YAGNI Check
+### 4. YAGNI
 
-- Is there unused or "just-in-case" code?
-- Are existing implementations or libraries leveraged?
+- Is any code speculative or unused?
+- Are existing utilities/libraries reused where appropriate?
 
 ### 5. TypeScript Standards
 
-- Explicit type definitions for all functions?
-- Return types explicit (not inferred)?
-- `unknown` used instead of `any`?
-- `undefined` preferred over `null` for non-React code?
-- `null` preferred over `undefined` for React code?
-- Named types over anonymous types where appropriate?
-- No non-null assertion (!) casts?
-- When more than 2 arguments, use destructured arguments?
+- Use explicit types where team conventions require it.
+- Prefer `unknown` over `any`.
+- Prefer `undefined` over `null` for non-React code.
+- Prefer `null` over `undefined` for React code.
+- Avoid non-null assertions (`!`) unless clearly justified.
+- When more than 2 arguments are passed, prefer destructured arguments.
 
 ### 6. Team-Specific Implementation Rules
 
-- **Logging**: No variables in logs or exceptions message strings
-- **Feature flags**: Use verbs (e.g., `enableFoo` not `isFooEnabled`). Check codebase for constant vs direct reference preference
-- **Promises**: Prefer `allSettled` over `Promise.all`
-- **Math**: Avoid floating point math (use integer cents, not dollars)
-- **Variables**: Do not use `_` prefix for used variables
-- **DAOs**: Always wrapped in a service; audit trails in DAOs, not services
-- **DB cascades**: Considered magic — avoid
-- **Serve FE**: Use `menuAvailability` for ordering type checks; use `applyUtmToUrl` for UTM; check if component is v1 legacy
-- **Tailwind**: Use design tokens, not default Tailwind classes
+- Logging: do not interpolate variables in log/exception message strings.
+- Feature flags:
+  - Use verb-style variable names for flags in code (for example `enableOtpRateLimit`).
+  - Flag names like `FLAG_ENABLE_*` are fine for constants.
+  - Do not use `isFooEnabled` for newly introduced flag booleans.
+  - Always call this out when feature-flag code is touched.
+- Promises: prefer `Promise.allSettled` over `Promise.all`.
+- Math: avoid floating point money math; use integer cents.
+- Variables: do not use `_` prefix for used variables.
+- DAOs: keep DAOs wrapped in services; keep audit trails in DAOs.
+- DB cascades: avoid implicit cascade behavior.
+- Serve FE specifics:
+  - Use `menuAvailability` for ordering type checks.
+  - Use `applyUtmToUrl` for UTM application.
+  - Check whether touched component is legacy v1 before introducing new patterns.
+- Tailwind: use design tokens, not default Tailwind classes.
 
 ### 7. Database & Migrations
 
-- Migrations should NOT use `IF EXISTS` — fail fast
-- Indexes must use `CREATE INDEX CONCURRENTLY`
-- Payment changes must be 100% correct
+- Do not use `IF EXISTS` in migrations.
+- Use `CREATE INDEX CONCURRENTLY` for indexes.
+- Treat payment changes as high-risk and require high confidence.
 
 ### 8. Terraform
 
-- CRDB changes should specify target to limit unintentional changes
+- For CRDB changes, require explicit target scoping.
 
 ### 9. Testing
 
-- Readable test values over realistic (`uuid-1` not actual UUID, simple strings over realistic slugs)
-- Descriptive assertions over snapshots or object comparisons
-- Snapshots max 12 lines if used
-- Avoid test-id when other queries work
-- Consistent mocking patterns with existing tests
+- Prefer readable fixture values over overly realistic values.
+- Prefer descriptive assertions over broad snapshots/object dumps.
+- Keep snapshots short (max ~12 lines) if used.
+- Avoid `test-id` where better queries exist.
+- Keep mocking style consistent with nearby tests.
 
-## Output Format
+## Required Output Format
 
-For each issue found, prefix with:
+Output findings first, in this order:
 
-- `nitpick:` — minor/trivial, optional to address
-- `suggestion:` — alternative approach, optional
-- `question:` — seeking clarification
-- `blocking:` — must be addressed (security, quality, missing edge cases)
+1. `blocking:`
+2. `suggestion:`
+3. `question:`
+4. `nitpick:`
 
-Include file:line references where applicable.
+For every finding:
 
-### Final Summary
+- Start with `<severity>: <issue and impact>`
+- Add `References:` with concrete `path/to/file.ts:123`
+- Prefer line-specific GitHub links when available
+- Add a short snippet (3-12 lines) for key findings
+- Add a convention comparison snippet when arguing convention mismatch
 
-End with:
+If there are no findings, explicitly say: `No findings.`
 
-1. **Overview**: Brief description of what the changes accomplish
-2. **Risk Assessment**: Low/Medium/High with justification
-3. **Key Action Items**: Prioritised list of what must/should be addressed
-4. **Verdict**: Approve / Request Changes / Needs Discussion
+Then include:
 
-Be direct and constructive. Focus on what matters most.
+1. **Open Questions / Assumptions**
+2. **Overview**
+3. **Risk Assessment**: Low / Medium / High with justification
+4. **Key Action Items**: prioritized
+5. **Verdict**: Approve / Request Changes / Needs Discussion
+
+## PR Comment Template
+
+````md
+<severity>: <clear issue statement and impact>
+
+<details>
+  <summary>References</summary>
+  
+- `path/to/changed-file.ts:123` ([GitHub](https://github.com/<org>/<repo>/blob/<branch>/path/to/changed-file.ts#L123))
+- `path/to/convention-file.ts:45` ([GitHub](https://github.com/<org>/<repo>/blob/<branch>/path/to/convention-file.ts#L45))
+</details>
+
+<details>
+  <summary>Sample snippets</summary>
+  
+Changed code snippet:
+```ts
+// 3-12 lines from changed code
+```
+
+Convention comparison snippet:
+```ts
+// 3-12 lines from existing codebase convention
+```
+</details>
+````
+
+Be direct, concrete, and strict about standards compliance.
