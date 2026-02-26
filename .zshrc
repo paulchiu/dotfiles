@@ -184,6 +184,10 @@ autoload -Uz $autoload_functions
 # pip autocompletions
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
+# Override slow _yadm completion (scans entire home dir via __git_files)
+# See: https://github.com/yadm-dev/yadm/issues/355
+compdef _files yadm ya
+
 zstyle ':completion:*' menu select
 # OPTIMIZED: Cache mryum export output (regenerate every 7 hours)
 _load_mryum() {
