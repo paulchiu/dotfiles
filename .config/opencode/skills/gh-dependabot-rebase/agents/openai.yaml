@@ -1,0 +1,4 @@
+interface:
+  display_name: "GH Dependabot Rebase"
+  short_description: "Bulk comment @dependabot rebase on Dependabot PRs"
+  default_prompt: "Rebase all open Dependabot PRs in repo OWNER/REPO"
