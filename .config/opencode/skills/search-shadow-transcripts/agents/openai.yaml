@@ -1,0 +1,4 @@
+interface:
+  display_name: "Search Shadow Transcripts"
+  short_description: "Query Shadow.app transcripts from local SQLite database"
+  default_prompt: "Search Shadow transcripts for"
