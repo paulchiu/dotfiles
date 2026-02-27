@@ -58,7 +58,7 @@ alias tmux="zellij"
 alias zc="zellij --layout compact"
 ## Search and Navigation
 alias ftx="fzf_to_context"
-alias hs="history | fzf"
+alias hs="atuin search -i"
 alias s="~/dev/search.sh"
 ## Development Tools
 alias sf="swift-format --recursive -i ."

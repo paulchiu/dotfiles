@@ -178,6 +178,9 @@ autoload -Uz $autoload_functions
 # Regenerate with: jj util completion zsh > ~/.zsh/completions/_jj.zsh
 # Regenerate with: codex completion zsh > ~/.zsh/completions/_codex.zsh
 [[ -f ~/.zsh/completions/_fzf.zsh ]] && source ~/.zsh/completions/_fzf.zsh || source <(fzf --zsh)
+
+# Atuin - shell history (overrides fzf's Ctrl-R)
+eval "$(atuin init zsh --disable-up-arrow)"
 [[ -f ~/.zsh/completions/_jj.zsh ]] && source ~/.zsh/completions/_jj.zsh || source <(jj util completion zsh)
 [[ -f ~/.zsh/completions/_codex.zsh ]] && source ~/.zsh/completions/_codex.zsh || source <(codex completion zsh)
 
