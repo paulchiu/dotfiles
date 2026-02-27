@@ -38,6 +38,7 @@ HandBrake.app
 Hookmark.app
 Ice.app
 ImageOptim.app
+Inkscape.app
 Insta360 Link Controller.app
 JDownloader 2
 JDownloader2.app
