@@ -210,6 +210,7 @@ _load_mryum() {
 }
 _load_mryum
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
+export PATH="/opt/homebrew/opt/helm@3/bin:$PATH"
 export GPG_TTY=$(tty)
 
 # Kiro CLI post block. Keep at the bottom of this file.

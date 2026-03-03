@@ -17,8 +17,8 @@ fi
 
 echo "Finding open Dependabot PRs in $REPO..."
 
-# Get open Dependabot PRs
-PRS=$(gh pr list --repo "$REPO" --state open --author dependabot --json number --jq '.[].number')
+# Dependabot can appear under different bot account logins depending on repo/app setup.
+PRS=$(gh pr list --repo "$REPO" --state open --json number,author --jq '.[] | select(.author.login == "app/dependabot" or .author.login == "dependabot[bot]" or .author.login == "dependabot") | .number')
 
 if [ -z "$PRS" ]; then
 	echo "No open Dependabot PRs found."
