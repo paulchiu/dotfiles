@@ -1,0 +1,4 @@
+interface:
+  display_name: "Datadog (Pup CLI)"
+  short_description: "Query Datadog metrics, logs, monitors via pup CLI"
+  default_prompt: "Search Datadog logs for errors in the last hour"
