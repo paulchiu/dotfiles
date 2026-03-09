@@ -12,6 +12,7 @@ calibre.app
 Chrome Remote Desktop Host Uninstaller.app
 Claude.app
 ClaudeBar.app
+cmux.app
 Codex.app
 ColorSlurp.app
 Cyberduck.app
