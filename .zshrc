@@ -222,3 +222,33 @@ export GPG_TTY=$(tty)
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# cmux: auto-rename tab to current directory when cd-ing
+# Only applies when in a cmux terminal and at a shell prompt
+_cmux_auto_rename_tab() {
+    # Only proceed if we're in a cmux terminal
+    [[ -n "$CMUX_SOCKET_PATH" && -n "$CMUX_TAB_ID" ]] || return 0
+    
+    # Get relative path from homedir
+    local path_display
+    if [[ "$PWD" == "$HOME" ]]; then
+        path_display="~"
+    elif [[ "$PWD" == "$HOME"/* ]]; then
+        path_display="~${PWD#$HOME}"
+    else
+        path_display="$PWD"
+    fi
+    
+    # Get the actual current workspace from cmux (env var may be stale)
+    local current_workspace
+    current_workspace=$(cmux current-workspace 2>/dev/null) || return 0
+    [[ -z "$current_workspace" ]] && return 0
+    
+    # Rename the tab (runs asynchronously to avoid blocking, suppress output)
+    (
+        cmux tab-action --workspace "$current_workspace" --action rename --title "$path_display" > /dev/null 2>&1
+    ) &!
+}
+
+# Hook into directory changes
+add-zsh-hook chpwd _cmux_auto_rename_tab
