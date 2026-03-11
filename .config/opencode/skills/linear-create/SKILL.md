@@ -86,6 +86,50 @@ linear issue create --team CUSM -t "Fix SMS bug" -d "Bug details here" -p CUSM-4
 
 This creates CUSM-xxx as a sub-issue of CUSM-42.
 
+## Spike Issues
+
+When the user asks to create a spike issue, first ask how many days the spike should be. Spike titles should be prefixed with the duration in brackets:
+
+- Whole days: `[2 day spike]`
+- Half day: use the ½ emoji - `[½ day spike]`
+- Full days: `[1 day spike]`, `[3 day spike]`, etc.
+
+Format the title as: `[N day spike] Title of the spike`
+
+**Always apply the `spike` label** using the `-l "spike"` flag.
+
+Use the following structured format in the description:
+
+### Exploratory spikes
+
+```markdown
+# Spike Questions to Address
+- What is the size and scale of the problem? (How many users/records are affected?)
+- What is the root cause?
+- What are the potential solutions or fixes?
+- Is it worth fixing? (Consider effort vs impact)
+
+# Possible Outcomes
+1. Additional spike required; if further investigation is needed
+2. Close as won't do; if effort outweighs benefit or issue is not actionable
+3. Create resolution issue; if we decide to proceed with a fix
+4. Fix issue; if solution is simple and time allows
+```
+
+### Enumeration spikes
+
+```markdown
+# Action Items
+1. Review scope and identify specific items that need work
+2. Note any constraints or special considerations for each item
+3. Compile list of tasks needed and have team/PM review and prioritise
+4. Create Linear issues for approved work
+
+# Possible Outcomes
+1. Additional spike required; if scope is unclear or further investigation needed
+2. Create (sub)tasks for each item of work; descope certain items if effort outweighs value
+```
+
 ## Workflow
 
 1. Check which teams exist: `linear team list`

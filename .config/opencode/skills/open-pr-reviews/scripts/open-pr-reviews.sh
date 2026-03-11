@@ -43,7 +43,7 @@ if [[ -z "$WORKSPACE_REF" ]]; then
 else
 	echo "Found existing workspace: $WORKSPACE_NAME ($WORKSPACE_REF)"
 	cmux select-workspace --workspace "$WORKSPACE_REF" 2>/dev/null
-	FIRST_TAB="no"
+	FIRST_TAB="yes"
 fi
 
 # --- List existing tabs in workspace ---
@@ -59,12 +59,14 @@ parse_surface_ref() {
 
 find_tab_by_name() {
 	local tab_name="$1"
-	get_existing_tabs | while IFS= read -r line; do
+	local result=""
+	while IFS= read -r line; do
 		if echo "$line" | grep -qF "$tab_name"; then
-			parse_surface_ref "$line"
-			return
+			result=$(parse_surface_ref "$line")
+			break
 		fi
-	done
+	done <<<"$(get_existing_tabs)"
+	echo "$result"
 }
 
 # --- Send command to a surface and press enter ---
