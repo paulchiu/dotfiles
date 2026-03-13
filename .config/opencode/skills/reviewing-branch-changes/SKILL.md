@@ -1,6 +1,6 @@
 ---
 name: reviewing-branch-changes
-description: Principal engineer review of current branch changes against main. Use when asked to review branch, review changes, review a PR, or do a code review of the current branch. Produce GitHub-ready, file-by-file review comments with exact line targets, severity, practical fix guidance, and high-signal reasoning.
+description: Principal engineer review of current branch changes against main. Use when asked to review branch, review changes, review a PR, or do a code review of the current branch. Produce a checklist-first review with stable finding IDs plus GitHub-ready, file-by-file review comments with exact line targets, severity, practical fix guidance, and high-signal reasoning.
 ---
 
 # Branch Review Skill
@@ -22,12 +22,14 @@ Use bundled references only.
 ## Core Behavior
 
 - Lead with actionable comments, not summary text.
-- Primary output is file-by-file.
+- Primary output is checklist-first, followed by file-by-file review comments.
 - Prefer fewer, high-confidence comments over noisy low-confidence comments.
 - Treat convention and standards violations as valid findings.
 - Do not waive findings because similar legacy patterns exist.
 - Include exact review targets (`file:line`) for each comment.
 - Use `blocking` only when merge should not proceed without the fix.
+- Always present a checklist of actionable findings with stable finding IDs before detailed review comments.
+- When the user asks for selected findings to be rewritten for posting, preserve the substance of the finding but follow the requested wrapper format exactly.
 
 ## GPT-5.3 Reasoning
 
@@ -92,13 +94,119 @@ Use references for full details. Always evaluate:
 
 Output in this order:
 
-1. **File-by-File Review Comments** (required, primary)
-2. **Cross-File Comments** (optional)
-3. **Open Questions / Assumptions**
-4. **Risk Assessment**: Low / Medium / High with justification
-5. **Verdict**: Approve / Request Changes / Needs Discussion
+1. **Checklist** (required, primary)
+2. **File-by-File Review Comments** (required)
+3. **Cross-File Comments** (optional)
+4. **Open Questions / Assumptions**
+5. **Risk Assessment**: Low / Medium / High with justification
+6. **Verdict**: Approve / Request Changes / Needs Discussion
 
-### 1) File-by-File Review Comments
+## Required Checklist Mode
+
+Include this in every main review output:
+
+- Output a flat checklist before the full review comments.
+- Assign each actionable finding a stable short ID such as `DT-1`, `PAY-1`, `ORD-1`.
+- Prefer mnemonic prefixes derived from the file or domain.
+- Keep each checklist item to one line with:
+  - checkbox marker
+  - finding ID
+  - clickable file reference
+  - one-sentence issue summary
+- Do not include non-findings in the checklist.
+- Preserve finding order by severity, then file diff order, then line number.
+
+If there are no actionable findings, output `No findings.` in the checklist section.
+
+Template:
+
+```md
+- [ ] `DT-1` [path/to/file.ts](/abs/path/to/file.ts#L42): Short issue summary.
+```
+
+## Optional GitHub Draft Mode
+
+When the user names a subset of checklist IDs and asks for drafts to reply with or post:
+
+- Return only the requested findings.
+- If the user supplies their own note text, include it as `My note:` before the generated `LLM note:`.
+- If the user does not supply their own note text, omit the `My note:` line.
+- Use this exact wrapper:
+
+````md
+My note: <user-supplied note>
+
+LLM note: <short version>
+
+<details>
+  <summary>LLM reasoning</summary>
+
+<clear issue statement and impact, written as a plain opening paragraph with no severity label>
+
+Why this matters: 1-3 sentences on concrete impact.
+
+Recommended change
+```ts
+// minimal fix sketch or exact replacement
+```
+
+References (optional)
+- [Changed line link](https://github.com/<org>/<repo>/blob/<head-sha>/path/to/file.ts#L<line>)
+- [Comparison/convention link](https://github.com/<org>/<repo>/blob/<sha>/path/to/file.ts#L<line>)
+- [Official docs/spec link](https://...)
+
+Current code (optional)
+```ts
+// 3-12 lines from changed code near the target line
+```
+
+Preferred code (optional)
+```ts
+// 3-12 lines showing the preferred pattern
+```
+
+Patch-style diff (optional)
+```diff
+- old line(s)
++ new line(s)
+```
+</details>
+````
+
+Rules for this mode:
+
+- Do not use `Blocking:`, `Suggestion:`, `Question:`, or `Nitpick:` inside the `<details>` body unless the user explicitly asks for a labeled variant.
+- Start the reasoning body immediately after the summary with a plain paragraph that states the issue and expected fix direction.
+- Keep the short `LLM note:` line concise and non-redundant.
+- Preserve the wrapper order exactly: optional `My note:`, then `LLM note:`, then `<details>`.
+- Do not repeat the `LLM note:` wording verbatim in the first paragraph.
+- Preserve the original reasoning, impact, and fix guidance from the review.
+- Use the same wrapper and section ordering when drafting text for direct GitHub review comments unless the user explicitly asks for a different format.
+
+## Posting With `gh`
+
+When the user asks to leave selected feedback directly on GitHub, prefer an inline PR comment via `gh api`.
+
+1. Resolve PR context:
+   - `gh pr view --json number,url,headRefOid,headRefName,baseRefName`
+   - Use `headRefOid` as `commit_id`.
+2. Confirm the exact changed line in the file with `nl -ba` or `git diff --unified=...`.
+3. Post the comment with:
+   - `gh api repos/<org>/<repo>/pulls/<pr-number>/comments -X POST -f commit_id=<head-sha> -f path=<repo-path> -F line=<line> -f side=RIGHT -f body=$'...'`
+4. Use the GitHub draft wrapper above as the comment body unless the user explicitly asked for a different format.
+5. After posting, report the PR URL or discussion URL back to the user.
+
+Notes:
+
+- Prefer `pulls/<pr-number>/comments` for inline file comments, not general PR discussion comments.
+- The target line must exist in the PR diff hunk; use the changed-side line number.
+- Networked `gh` calls may require escalated permissions in Codex. When requesting escalation, set a `prefix_rule` scoped to the relevant `gh api repos/<org>/<repo>/pulls` path when possible.
+
+### 1) Checklist
+
+List every actionable finding once, in checklist form, before the detailed review comments.
+
+### 2) File-by-File Review Comments
 
 Get changed files in diff order (`git diff --name-only main...HEAD`) and count them (`N`).
 
@@ -120,11 +228,11 @@ Within each file, order comments by:
 1. severity (`blocking`, `suggestion`, `question`, `nitpick`)
 2. line number ascending
 
-### 2) Cross-File Comments
+### 3) Cross-File Comments
 
 Only for inherently cross-cutting concerns (architecture, rollout safety, migration strategy, e2e risks).
 
-### 3) No-Issue Case
+### 4) No-Issue Case
 
 If there are no actionable comments across all changed files, explicitly output:
 
@@ -132,6 +240,7 @@ If there are no actionable comments across all changed files, explicitly output:
 
 Still include:
 
+- Checklist
 - Open Questions / Assumptions
 - Risk Assessment
 - Verdict
@@ -180,5 +289,6 @@ Patch-style diff (optional)
 - Use plain markdown only (no HTML `<details>` / `<summary>`).
 - Prefer concrete fix guidance over abstract advice.
 - Do not output generic praise comments.
+- Exception: in GitHub Draft Mode, the requested `<details>` wrapper is allowed and should be used verbatim.
 
 Be direct and practical. Enforce standards while calibrating severity to real impact.
