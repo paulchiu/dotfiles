@@ -88,6 +88,7 @@ for arg in "$@"; do
 	PR_NUM=$(echo "$REPO_AND_NUM" | cut -d'#' -f2)
 
 	REPO_DIR="$DEV_DIR/$REPO"
+	WORKTREE_DIR="$DEV_DIR/$REPO-pr-$PR_NUM"
 	TAB_NAME="$REPO #$PR_NUM"
 	PR_URL="https://github.com/$ORG/$REPO/pull/$PR_NUM"
 
@@ -107,13 +108,27 @@ for arg in "$@"; do
 		gh repo clone "$ORG/$REPO" "$REPO_DIR" 2>/dev/null
 	fi
 
+	# Fetch the PR branch into the main clone
+	git -C "$REPO_DIR" fetch origin "$BRANCH" 2>/dev/null || true
+
+	# Create or update the worktree for this PR
+	if [[ -d "$WORKTREE_DIR" ]]; then
+		echo "  Worktree already exists at $WORKTREE_DIR, updating..."
+		git -C "$WORKTREE_DIR" fetch origin "$BRANCH" 2>/dev/null || true
+		git -C "$WORKTREE_DIR" reset --hard "origin/$BRANCH" 2>/dev/null || true
+	else
+		echo "  Creating worktree at $WORKTREE_DIR..."
+		git -C "$REPO_DIR" worktree add "$WORKTREE_DIR" "origin/$BRANCH" --detach 2>/dev/null || true
+		# Checkout the actual branch so gh pr commands work
+		git -C "$WORKTREE_DIR" checkout -B "$BRANCH" "origin/$BRANCH" 2>/dev/null || true
+	fi
+
 	# Find or create tab
 	SURFACE_REF=$(find_tab_by_name "$TAB_NAME")
 
 	if [[ -n "$SURFACE_REF" ]]; then
 		echo "  Reusing existing tab: $TAB_NAME ($SURFACE_REF)"
-		# Fast-forward: pull latest for the branch
-		send_cmd "$SURFACE_REF" "git fetch origin && git reset --hard origin/$BRANCH"
+		send_cmd "$SURFACE_REF" "git fetch origin $BRANCH && git reset --hard origin/$BRANCH"
 	else
 		if [[ "$FIRST_TAB" == "yes" && "$FIRST_ITERATION" == "yes" ]]; then
 			# Use the default tab that comes with the new workspace
@@ -127,13 +142,8 @@ for arg in "$@"; do
 			sleep 0.3
 		fi
 
-		# Navigate to repo directory
-		send_cmd "$SURFACE_REF" "cd $REPO_DIR"
-
-		# Reset current branch first (handles dirty worktree), then checkout PR branch
-		send_cmd "$SURFACE_REF" "git reset --hard && gh pr checkout $PR_NUM --force"
-		sleep 1
-		send_cmd "$SURFACE_REF" "git reset --hard origin/$BRANCH"
+		# Navigate to worktree directory
+		send_cmd "$SURFACE_REF" "cd $WORKTREE_DIR"
 
 		# Rename tab
 		cmux rename-tab --surface "$SURFACE_REF" --workspace "$WORKSPACE_REF" "$TAB_NAME" 2>/dev/null
