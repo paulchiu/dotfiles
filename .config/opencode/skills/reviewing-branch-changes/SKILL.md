@@ -191,10 +191,20 @@ When the user asks to leave selected feedback directly on GitHub, prefer an inli
    - `gh pr view --json number,url,headRefOid,headRefName,baseRefName`
    - Use `headRefOid` as `commit_id`.
 2. Confirm the exact changed line in the file with `nl -ba` or `git diff --unified=...`.
+   - If the issue is about behavior introduced by a refactor, extraction, or moved code, anchor the comment on a nearby changed line in the diff hunk that introduces that behavior. Do not target unchanged context lines that are outside the PR diff.
 3. Post the comment with:
-   - `gh api repos/<org>/<repo>/pulls/<pr-number>/comments -X POST -f commit_id=<head-sha> -f path=<repo-path> -F line=<line> -f side=RIGHT -f body=$'...'`
+   - Prefer a temp Markdown file plus JSON payload over inline shell strings when the body contains backticks, quotes, or fenced code blocks.
+   - Reliable pattern:
+     - write the wrapper body to `/tmp/<name>.md`
+     - serialize it with `node -e "const fs=require('fs'); const body=fs.readFileSync('/tmp/<name>.md','utf8'); fs.writeFileSync('/tmp/<name>.json', JSON.stringify({ body }));"`
+     - `gh api repos/<org>/<repo>/pulls/<pr-number>/comments -X POST -f commit_id=<head-sha> -f path=<repo-path> -F line=<line> -f side=RIGHT --input /tmp/<name>.json`
+   - Avoid inline `$'...'` bodies for Markdown-heavy comments; shell quoting can silently strip content such as backticks or `''` in code samples.
 4. Use the GitHub draft wrapper above as the comment body unless the user explicitly asked for a different format.
-5. After posting, report the PR URL or discussion URL back to the user.
+5. Inspect the API response after posting:
+   - capture `html_url` for reporting back
+   - sanity-check the returned `body` to make sure fenced code and quotes were preserved
+   - if GitHub received a mangled body, patch the existing comment with `gh api repos/<org>/<repo>/pulls/comments/<comment-id> -X PATCH --input /tmp/<name>.json`
+6. After posting, report the PR URL or discussion URL back to the user.
 
 Notes:
 
