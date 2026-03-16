@@ -200,9 +200,10 @@ When the user asks to leave selected feedback directly on GitHub, prefer an inli
    - Prefer a temp Markdown file plus JSON payload over inline shell strings when the body contains backticks, quotes, or fenced code blocks.
    - Reliable pattern:
      - write the wrapper body to `/tmp/<name>.md`
-     - serialize it with `node -e "const fs=require('fs'); const body=fs.readFileSync('/tmp/<name>.md','utf8'); fs.writeFileSync('/tmp/<name>.json', JSON.stringify({ body }));"`
-     - `gh api repos/<org>/<repo>/pulls/<pr-number>/comments -X POST -f commit_id=<head-sha> -f path=<repo-path> -F line=<line> -f side=RIGHT --input /tmp/<name>.json`
+     - serialize it into a single payload file with all required review-comment fields, for example `node -e "const fs=require('fs'); const body=fs.readFileSync('/tmp/<name>.md','utf8'); fs.writeFileSync('/tmp/<name>.json', JSON.stringify({ body, commit_id: '<head-sha>', path: '<repo-path>', line: <line>, side: 'RIGHT' }));"`
+     - `gh api repos/<org>/<repo>/pulls/<pr-number>/comments -X POST --input /tmp/<name>.json`
    - Avoid inline `$'...'` bodies for Markdown-heavy comments; shell quoting can silently strip content such as backticks or `''` in code samples.
+   - Avoid mixing review-comment fields passed via `-f`/`-F` with `--input` for the body payload. On some `gh` setups this can produce HTTP 422 errors where GitHub reports `commit_id`, `path`, or `line` as missing even though they were supplied on the command line.
 4. Use the GitHub draft wrapper above as the comment body unless the user explicitly asked for a different format.
 5. Inspect the API response after posting:
    - capture `html_url` for reporting back
