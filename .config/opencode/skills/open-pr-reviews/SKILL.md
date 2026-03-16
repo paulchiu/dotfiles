@@ -43,6 +43,23 @@ The script will:
    - `cd` into the worktree directory
    - Rename the tab to `{repo} #{number}`
 
+## Cleanup
+
+After finishing PR reviews, clean up worktrees to free disk space:
+
+```bash
+# Remove all PR worktrees (~/dev/*-pr-*)
+scripts/cleanup-pr-worktrees.sh
+
+# Force-remove even with uncommitted changes
+scripts/cleanup-pr-worktrees.sh --force
+
+# Remove worktrees matching a specific pattern
+scripts/cleanup-pr-worktrees.sh ~/dev/myrepo-pr-*
+```
+
+The script also prunes stale git worktree entries automatically. Do **not** use `rm -rf` on worktree directories — always use this script or `git worktree remove`.
+
 ## Parsing Rules
 
 - Extract URLs matching `https://github.com/{org}/{repo}/pull/{number}`
