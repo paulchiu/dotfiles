@@ -19,6 +19,10 @@ Read in this order before reviewing:
 
 Use bundled references only.
 
+If the repo is `manage-frontend` or the diff uses `@mr-yum/frontend-ui`, also read:
+
+4. `references/manage-frontend.md`
+
 ## Core Behavior
 
 - Lead with actionable comments, not summary text.
