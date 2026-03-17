@@ -34,6 +34,7 @@
 	editor = /usr/bin/vim
 	excludesfile = /Users/paul/.gitignore_global
     pager = delta
+	hooksPath = /Users/paul/.git-hooks
 [user]
 	email = paulchiu@gmail.com
 	name = Paul Chiu
@@ -81,3 +82,6 @@
     whitespace-error-style = "#280050" reverse
     zero-style = syntax
     syntax-theme = Nord
+[ai "cadence.keys"]
+	apiFingerprint = CBD2E0C80CCF7699AD84C885EE99E010A9AC9477
+	userFingerprint = 2e32b9cda02749ab5d095a8575a77fd353d5fb51
