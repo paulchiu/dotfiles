@@ -21,15 +21,16 @@ Converts raw/unstructured workout journal notes into the structured fitness trac
 Area/Fitness/
 ├── Workouts/          # One file per session: YYYY-MM-DD.md
 ├── Exercises/         # One file per exercise: Exercise Name.md
-├── Templates/         # Workout Template.md
-└── Fitness.md         # Dashboard with per-exercise reports, PB, volume, 1RM
+└── Fitness Dashboard.md         # Dashboard with per-exercise reports, PB, volume, 1RM
+
+Resource/Templates/Fitness/   # Workout Template.md, Exercise Template.md
 ```
 
 ### How It Works
 
 - **Workouts/** stores structured logs with Dataview inline fields in bracket syntax on list items
 - **Exercises/** stores one note per unique exercise, each containing a Dataview query that auto-pulls all sessions for that exercise from Workouts/
-- **Fitness.md** is the dashboard with a dedicated section per exercise (PB + recent sets table), plus volume and estimated 1RM reports
+- **Fitness Dashboard.md** is the dashboard with a dedicated section per exercise (PB + recent sets table), plus volume and estimated 1RM reports
 - All queries use `FLATTEN file.lists AS L` to access inline fields on list items (`L.exercise`, `L.weight`, `L.reps`, `L.set`)
 - Exercises are linked with `[[wiki links]]` everywhere — headings, inline fields, and file references
 
@@ -71,20 +72,11 @@ If unsure about a name, ask the user. Do not guess.
 
 ### Step 3: Create the Workout File
 
-Create `Area/Fitness/Workouts/YYYY-MM-DD.md` (infer date from filename, frontmatter, or ask user):
+Create `Area/Fitness/Workouts/YYYY-MM-DD.md` (infer date from filename, frontmatter, or ask user).
 
-```markdown
----
-type: workout
-date: YYYY-MM-DD
-area: fitness
----
-## [[Exercise Name]]
+Ask the user what to call this workout for the `name` field (e.g. "Push Day", "Upper Body", "Leg Day"). This appears in the dashboard's Recent Workouts table.
 
-- [exercise:: [[Exercise Name]]] [set:: 1] [weight:: 65] [reps:: 6]
-- [exercise:: [[Exercise Name]]] [set:: 2] [weight:: 65] [reps:: 6]
-- [exercise:: [[Exercise Name]]] [set:: 3] [weight:: 60] [reps:: 8]
-```
+Read `Resource/Templates/Fitness/Workout Template.md` for the file structure. Fill in the frontmatter (`name`, `date`) and repeat the exercise/set block for each exercise in the session.
 
 **Format rules:**
 - No H1 heading (filename is self-evident)
@@ -98,30 +90,7 @@ area: fitness
 
 For every unique exercise in the workout, check if `Area/Fitness/Exercises/<Exercise Name>.md` exists.
 
-**If it does not exist**, create it:
-
-```markdown
-## Recent Sessions
-
-` ` `dataview
-TABLE WITHOUT ID
-  file.link AS Workout,
-  L.set AS Set,
-  L.weight AS Weight,
-  L.reps AS Reps
-FROM "Area/Fitness/Workouts"
-FLATTEN file.lists AS L
-WHERE L.exercise = link("Exercise Name")
-SORT file.name DESC, L.set ASC
-LIMIT 10
-` ` `
-
-## Cues
-
-## Notes
-```
-
-(Remove spaces between backticks — shown here to avoid markdown nesting issues.)
+**If it does not exist**, create it using `Resource/Templates/Fitness/Exercise Template.md` as the base. Replace `this.file.link` references with `link("Exercise Name")` matching the actual exercise name.
 
 **Key:** The `WHERE` clause uses `link("Exercise Name")` to match the `[[Exercise Name]]` wiki links in workout files. The file has no H1 heading — the filename serves as the title.
 
@@ -129,7 +98,7 @@ LIMIT 10
 
 ### Step 5: Update the Dashboard
 
-Read `Area/Fitness/Fitness.md`. For each new exercise that doesn't already have a section in the dashboard, add a new section **before** the `## Volume Per Workout` line:
+Read `Area/Fitness/Fitness Dashboard.md`. For each new exercise that doesn't already have a section in the dashboard, add a new section **before** the `## Volume Per Workout` line:
 
 ```markdown
 ---

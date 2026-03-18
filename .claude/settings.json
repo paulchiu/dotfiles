@@ -9,14 +9,17 @@
       "Grep",
       "Gh",
       "Npm",
-      "Bash(gh pr:*)",
+      "Bash(gh:*)",
+      "Bash(git:*)",
+      "Bash(node:*)",
+      "Bash(cat:*)",
       "mcp__chrome-devtools__*"
     ],
     "deny": []
   },
-  "model": "sonnet",
   "enabledPlugins": {},
   "alwaysThinkingEnabled": true,
+  "voiceEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
   }

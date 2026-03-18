@@ -234,8 +234,7 @@ For each file:
 - Heading: `### path/to/file.ext`
 - If none: `No comments for this file.`
 - If comments exist, include for each:
-  - `Line <line-number>` or `Line <start>-<end>`
-  - severity (`blocking`, `suggestion`, `question`, `nitpick`)
+  - Finding ID, line target, and severity on one line: `` `AM-1` Line 42 — suggestion ``
   - full comment body using template below.
 
 Within each file, order comments by:
