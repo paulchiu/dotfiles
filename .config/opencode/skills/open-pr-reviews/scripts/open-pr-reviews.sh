@@ -129,6 +129,9 @@ for arg in "$@"; do
 	if [[ -n "$SURFACE_REF" ]]; then
 		echo "  Reusing existing tab: $TAB_NAME ($SURFACE_REF)"
 		send_cmd "$SURFACE_REF" "git fetch origin $BRANCH && git reset --hard origin/$BRANCH"
+		# Start branch review
+		send_cmd "$SURFACE_REF" "claude \"use branch review skill\""
+		echo "  Started branch review in: $TAB_NAME"
 	else
 		if [[ "$FIRST_TAB" == "yes" && "$FIRST_ITERATION" == "yes" ]]; then
 			# Use the default tab that comes with the new workspace
@@ -148,6 +151,10 @@ for arg in "$@"; do
 		# Rename tab
 		cmux rename-tab --surface "$SURFACE_REF" --workspace "$WORKSPACE_REF" "$TAB_NAME" 2>/dev/null
 		echo "  Tab renamed to: $TAB_NAME"
+
+		# Start branch review
+		send_cmd "$SURFACE_REF" "claude \"use branch review skill\""
+		echo "  Started branch review in: $TAB_NAME"
 	fi
 
 	FIRST_ITERATION="no"

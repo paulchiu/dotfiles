@@ -42,6 +42,7 @@ The script will:
    - Create a new tab (or reuse existing tab named `{repo} #{number}`)
    - `cd` into the worktree directory
    - Rename the tab to `{repo} #{number}`
+   - Run `claude "use branch review skill"` to automatically start a review
 
 ## Cleanup
 
