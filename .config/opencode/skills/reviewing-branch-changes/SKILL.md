@@ -196,6 +196,7 @@ When the user asks to leave selected feedback directly on GitHub, prefer an inli
    - Use `headRefOid` as `commit_id`.
 2. Confirm the exact changed line in the file with `nl -ba` or `git diff --unified=...`.
    - If the issue is about behavior introduced by a refactor, extraction, or moved code, anchor the comment on a nearby changed line in the diff hunk that introduces that behavior. Do not target unchanged context lines that are outside the PR diff.
+   - If no relevant changed line exists in the diff hunk (e.g., the finding is about an unchanged import or a pattern across the whole file), post as a **file-level comment** using `subject_type: "file"` (omit `line` and `side` from the payload). In this case, include a fenced code block in the comment body showing the relevant lines for context, so the reader knows exactly what the comment refers to.
 3. Post the comment with:
    - Prefer a temp Markdown file plus JSON payload over inline shell strings when the body contains backticks, quotes, or fenced code blocks.
    - Reliable pattern:
