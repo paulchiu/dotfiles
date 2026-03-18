@@ -94,6 +94,12 @@ For every unique exercise in the workout, check if `Area/Fitness/Exercises/<Exer
 
 **Key:** The `WHERE` clause uses `link("Exercise Name")` to match the `[[Exercise Name]]` wiki links in workout files. The file has no H1 heading — the filename serves as the title.
 
+**Important:** The exercise file must include **both** queries from the template:
+1. A `## Recent Sessions` table filtered by `AND L.set` (shows sets with weight/reps)
+2. A `## Notes` table filtered by `AND L.notes` (shows workout notes for that exercise)
+
+When replacing `this.file.link` with `link("Exercise Name")`, do so in **both** queries.
+
 **If it already exists**, do NOT overwrite it. The user may have added cues or notes.
 
 ### Step 5: Update the Dashboard
