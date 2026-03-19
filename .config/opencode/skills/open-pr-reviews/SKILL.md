@@ -23,7 +23,7 @@ Opens a set of GitHub pull request URLs as cmux workspace tabs, each in its own 
 Parse the PR URLs and pass them safely to the main script (the `#` in `org/repo#number` must be quoted to avoid being interpreted as a bash comment):
 
 ```bash
-readarray -t PARSED < <(scripts/parse-pr-urls.sh "text with PR urls here")
+PARSED=() && while IFS= read -r line; do PARSED+=("$line"); done < <(scripts/parse-pr-urls.sh "text with PR urls here")
 scripts/open-pr-reviews.sh "${PARSED[@]}"
 ```
 
