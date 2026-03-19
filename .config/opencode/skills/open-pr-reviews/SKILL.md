@@ -20,18 +20,11 @@ Opens a set of GitHub pull request URLs as cmux workspace tabs, each in its own 
 
 ## Running
 
-First, parse and deduplicate the PR URLs:
+Parse the PR URLs and pass them safely to the main script (the `#` in `org/repo#number` must be quoted to avoid being interpreted as a bash comment):
 
 ```bash
-# Parse from a string or stdin
-PARSED=$(scripts/parse-pr-urls.sh "text with PR urls here")
-# Or: echo "text with PR urls" | scripts/parse-pr-urls.sh
-```
-
-Then run the main script with the parsed arguments:
-
-```bash
-scripts/open-pr-reviews.sh $PARSED
+readarray -t PARSED < <(scripts/parse-pr-urls.sh "text with PR urls here")
+scripts/open-pr-reviews.sh "${PARSED[@]}"
 ```
 
 The script will:
