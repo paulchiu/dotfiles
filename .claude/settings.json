@@ -22,6 +22,10 @@
     "deny": []
   },
   "enabledPlugins": {},
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "alwaysThinkingEnabled": true,
   "voiceEnabled": true,
   "feedbackSurveyState": {
