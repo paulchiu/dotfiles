@@ -68,6 +68,10 @@ Normalize to canonical title-case names:
 | calve raise, calf raise | Calve Raise |
 | machine row, seated row | Machine Row |
 
+| split, splits, middle split | Middle Split |
+| front split left | Front Split Left |
+| front split right | Front Split Right |
+
 If unsure about a name, ask the user. Do not guess.
 
 ### Step 3: Create the Workout File
@@ -83,6 +87,7 @@ Read `Resource/Templates/Fitness/Workout Template.md` for the file structure. Fi
 - Each exercise gets an `## [[Exercise Name]]` heading
 - Each set is a plain list item (not a task `- [ ]`) with bracket inline fields
 - Fields per set: `exercise` (wiki link), `set` (number), `weight` (number), `reps` (number)
+- **Duration-based exercises** (stretches, holds): use `[duration:: seconds]` instead of set/weight/reps. No `set` field needed — always one hold per exercise per session. Example: `- [exercise:: [[Split]]] [duration:: 60]`
 - Optional: `[notes:: text]` appended to the line if extra context exists
 - One blank line between the heading and the first set, and between exercise sections
 
@@ -95,7 +100,7 @@ For every unique exercise in the workout, check if `Area/Fitness/Exercises/<Exer
 **Key:** The `WHERE` clause uses `link("Exercise Name")` to match the `[[Exercise Name]]` wiki links in workout files. The file has no H1 heading — the filename serves as the title.
 
 **Important:** The exercise file must include **both** queries from the template:
-1. A `## Recent Sessions` table filtered by `AND L.set` (shows sets with weight/reps)
+1. A `## Recent Sessions` table filtered by `AND L.set` (shows sets with weight/reps) — for duration-based exercises, filter by `AND L.duration` instead and show Duration column
 2. A `## Notes` table filtered by `AND L.notes` (shows workout notes for that exercise)
 
 When replacing `this.file.link` with `link("Exercise Name")`, do so in **both** queries.
@@ -107,8 +112,6 @@ When replacing `this.file.link` with `link("Exercise Name")`, do so in **both** 
 Read `Area/Fitness/Fitness Dashboard.md`. For each new exercise that doesn't already have a section in the dashboard, add a new section **before** the `## Volume Per Workout` line:
 
 ```markdown
----
-
 ## Exercise Name
 
 ` ` `dataview
@@ -134,6 +137,8 @@ LIMIT 10
 ```
 
 (Remove spaces between backticks.)
+
+For **duration-based exercises**, use `L.duration` instead of `L.weight`/`L.set` in queries, show "Duration (s)" column, and use `"s"` suffix instead of `"kg"` for PB.
 
 **Do NOT** duplicate sections for exercises that already appear in the dashboard.
 

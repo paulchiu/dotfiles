@@ -14,13 +14,11 @@
       "Bash(node:*)",
       "Bash(cat:*)",
       "mcp__chrome-devtools__*",
-      "Read(/tmp:*)",
-      "Edit(/tmp:*)",
-      "Write(/tmp:*)",
       "Skill"
     ],
     "deny": []
   },
+  "allowedDirectories": ["/tmp"],
   "enabledPlugins": {},
   "attribution": {
     "commit": "",

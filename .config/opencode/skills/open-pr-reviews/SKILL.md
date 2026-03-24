@@ -1,6 +1,6 @@
 ---
 name: open-pr-reviews
-description: "Opens GitHub PR URLs in cmux tabs for review. Creates a workspace named 'Reviews YYYY-MM-DD' with one tab per PR, using git worktrees so multiple PRs from the same repo can be reviewed simultaneously. Use when asked to open PRs for review, set up PR review tabs, or start morning PR review routine."
+description: "Opens GitHub PR URLs in cmux tabs for review, and cleans up review worktrees when done. Creates a workspace named 'Reviews YYYY-MM-DD' with one tab per PR, using git worktrees so multiple PRs from the same repo can be reviewed simultaneously. Use when asked to open PRs for review, set up PR review tabs, start morning PR review routine, clean review worktrees, clean up PR worktrees, or remove review worktrees."
 ---
 
 # Open PR Reviews
@@ -39,18 +39,15 @@ The script will:
 
 ## Cleanup
 
-After finishing PR reviews, clean up worktrees to free disk space:
+When asked to clean, clean up, or remove review worktrees, run the cleanup script:
 
 ```bash
-# Remove all PR worktrees (~/dev/*-pr-*)
 scripts/cleanup-pr-worktrees.sh
-
-# Force-remove even with uncommitted changes
-scripts/cleanup-pr-worktrees.sh --force
-
-# Remove worktrees matching a specific pattern
-scripts/cleanup-pr-worktrees.sh ~/dev/myrepo-pr-*
 ```
+
+Options:
+- `--force` — remove even with uncommitted changes
+- `~/dev/myrepo-pr-*` — remove worktrees matching a specific pattern
 
 The script also prunes stale git worktree entries automatically. Do **not** use `rm -rf` on worktree directories — always use this script or `git worktree remove`.
 
