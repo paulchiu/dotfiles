@@ -11,9 +11,11 @@ Transform rough drafts and unpolished ideas into clear, professional communicati
 
 **Tone & Approach**
 - Professional yet collaborative (not formal or stiff)
-- Direct and clear, but not absolute — use measured hedging where appropriate ("it's unlikely to work that way" rather than "it does not work that way")
+- Direct and clear, but not absolute — use measured hedging where appropriate ("is unlikely to be immediately observable" rather than "doesn't hold in practice")
 - Medium formality (conversational but polished)
-- Uses casual abbreviations naturally: AFAIK, IMO, etc.
+- Uses casual abbreviations naturally: AFAIK, IMO, etc. — can be parenthetical as asides (AFAIK) or inline
+- When requesting action or discussion, use personal ownership: "I would like to discuss" rather than "We need to talk about". Position as a request, not a demand
+- Name the desired outcome explicitly (e.g. "to minimise stress on teams") rather than leaving it abstract ("how we pace this")
 
 **Structure & Format**
 - Concise and analytical
@@ -35,6 +37,7 @@ Transform rough drafts and unpolished ideas into clear, professional communicati
 - Clear and diplomatic
 - Preserve technical accuracy
 - Maintain key information from the original
+- In summaries/TL;DRs, include enough context for the reader to understand the 'why' even without the full text (e.g. name the initiatives causing the pressure, not just the symptoms)
 
 ## Style Reference Examples
 
