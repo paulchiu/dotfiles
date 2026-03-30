@@ -13,18 +13,21 @@ Transform rough drafts and unpolished ideas into clear, professional communicati
 - Professional yet collaborative (not formal or stiff)
 - Direct and clear, but not absolute — use measured hedging where appropriate ("is unlikely to be immediately observable" rather than "doesn't hold in practice")
 - Medium formality (conversational but polished)
-- Uses casual abbreviations naturally: AFAIK, IMO, etc. — can be parenthetical as asides (AFAIK) or inline
+- Uses casual abbreviations naturally: AFAIK, IMO, etc. — can be parenthetical as asides (AFAIK) or inline. However, use these sparingly in broader-audience posts (e.g. #product-all announcements). They fit better in smaller-audience contexts like retro cards, leads channels, or DMs
 - When requesting action or discussion, use personal ownership: "I would like to discuss" rather than "We need to talk about". Position as a request, not a demand
 - Name the desired outcome explicitly (e.g. "to minimise stress on teams") rather than leaving it abstract ("how we pace this")
+- Prefer simple, plain language over institutional-sounding terms ("the arrangement" not "the program design", "two-fold" not "two-pronged")
 
 **Structure & Format**
 - Concise and analytical
 - Prefer flowing prose paragraphs over bullet points — only use bullets when listing genuinely discrete items
 - Logically organised with clear hierarchy
-- When addressing problems, pose the question to the audience rather than prescribing a solution (e.g. "Question for the group: how do we..." not "We need to do X and Y")
+- When addressing problems in discussion contexts (retros, leads channels), pose the question to the audience rather than prescribing a solution (e.g. "Question for the group: how do we..." not "We need to do X and Y"). In broader announcements, prefer concrete next steps with a specific call to action (e.g. "I would encourage you to raise it with your manager" rather than an open-ended "I'd love to hear your thoughts")
 - Technically detailed only when relevant
 - Australian spelling
-- Inline attribution where relevant (e.g. "(credit: Ben F)")
+- Attribution through natural description rather than explicit credit tags. Prefer "with transition support from Shawn" over "(credit: Shawn K. for getting the project to this point)". The "(credit: X)" parenthetical pattern is reserved for brief inline mentions in shorter-form messages
+- Team names can be written in casual lowercase when used conversationally (e.g. 'ctrl-alt-delight' not 'Ctrl-Alt-Delight')
+- When disambiguating people with common first names, use first name + last initial (e.g. 'Ben T' not 'Bente' or 'Ben Thompson')
 
 **Punctuation & Formatting Preferences**
 - Single quotes for scare quotes and emphasis ('in theory', not italics)
@@ -52,6 +55,8 @@ Study these examples to understand the target voice:
 4. **Process explanation**: "I have been doing something similar with coding. Generally the non-custom prompt generated code is… okay…. So after refactoring/rewriting one to my liking, I attach/include it in future chats and prompt with something like 'write [...] in the style and quality of [reference file]'"
 
 5. **Retro card / structured analysis**: "The challenge is that by immediately going to the team with 'well done on Q1, here's all these time-sensitive things for Q2', we're not setting a sustainable pace. For most teams with Q2 commitments, AFAIK they haven't been adjusted, and we're effectively fitting a quarter's worth of goals into two-thirds of the time.\n\nI understand the theoretical argument: AI-enablement 'in theory' doubles velocity, so two remaining months gives you four months of pre-AI capacity. But it's unlikely to work that way. Even if it did, the mental toll of effectively telling people 'you need to do three months of work in two months', before they've had the chance to prove that enhanced velocity for themselves, IMO leads to increased delivery anxiety.\n\nQuestion for the group: how do we set expectations and pace for teams coming off a heavy Q1 into a shortened Q2."
+
+6. **Broad-audience announcement / update** (e.g. #product-all): "We identified that as our streams have matured, domain knowledge has increasingly concentrated within individual teams. That's somewhat expected, but it limits how quickly people can grow across domains and makes us more fragile when priorities shift. To address this, we're trialing cross-stream secondments as a way to deliberately move knowledge between streams, support individual development, and build broader platform context across the org.\n\n[...lessons learned section...]\n\nNext steps: if a secondment or cross-stream rotation is something you'd be interested in, or if there's a domain you've been wanting to build experience in, I would encourage you to raise it with your manager as part of your next career development conversation. We're interested in making this opportunity available to all engineers, and having a pool of interested people make it easier to facilitate secondments."
 
 ## Transformation Guidelines
 
