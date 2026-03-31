@@ -22,15 +22,71 @@
     ],
     "deny": []
   },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nex event stop"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nex event notification"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nex event session-start"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nex event start"
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {},
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
+  "plugins": {
+    "marketplaces": [
+      "github:mr-yum/claude-plugins"
+    ]
+  },
   "allowedDirectories": [
     "/tmp"
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
   },
-  "effortLevel": "high"
+  "extraKnownMarketplaces": {
+    "meandu-plugins": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:mr-yum/claude-plugins.git"
+      }
+    }
+  }
 }
