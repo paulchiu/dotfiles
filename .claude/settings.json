@@ -70,11 +70,6 @@
   "effortLevel": "high",
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "plugins": {
-    "marketplaces": [
-      "github:mr-yum/claude-plugins"
-    ]
-  },
   "allowedDirectories": [
     "/tmp"
   ],
