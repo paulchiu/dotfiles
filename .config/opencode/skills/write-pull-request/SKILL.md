@@ -73,6 +73,16 @@ Good (feature-focused):
 - Users can now sign in with their GitHub account.
 - GitHub profile data is automatically linked to user profiles.
 
-### Step 3: Output
+### Step 3: Create the Draft PR
 
-Start the response directly with the type line. No "Here is", no "Sure", no explanations. Just the formatted output.
+1. Push the current branch to the remote if it hasn't been pushed yet: `git push -u origin HEAD`
+2. Create the PR using `gh`:
+
+```
+gh pr create --draft --title "<title from Step 2>" --body "$(cat <<'EOF'
+<body from Step 2>
+EOF
+)"
+```
+
+3. Output the PR URL returned by `gh`. No preamble, no commentary, just the URL.

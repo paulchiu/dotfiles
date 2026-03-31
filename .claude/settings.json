@@ -13,8 +13,21 @@
       "Grep",
       "Gh",
       "Npm",
-      "Bash(gh:*)",
-      "Bash(git:*)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list *)",
+      "Bash(gh repo view *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git status *)",
+      "Bash(git branch *)",
+      "Bash(git rev-parse *)",
+      "Bash(git remote *)",
+      "Bash(git stash list *)",
       "Bash(node:*)",
       "Bash(cat:*)",
       "mcp__chrome-devtools__*",
@@ -65,7 +78,17 @@
       }
     ]
   },
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "session-review@meandu-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "meandu-plugins": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:mr-yum/claude-plugins.git"
+      }
+    }
+  },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "voiceEnabled": true,
@@ -75,13 +98,5 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  },
-  "extraKnownMarketplaces": {
-    "meandu-plugins": {
-      "source": {
-        "source": "git",
-        "url": "git@github.com:mr-yum/claude-plugins.git"
-      }
-    }
   }
 }
