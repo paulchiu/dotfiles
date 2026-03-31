@@ -1,6 +1,6 @@
 ---
 name: rewriting-for-tone
-description: "Transforms drafts and ideas into clear, professional communication matching the user's writing style. Use when asked to write, draft, rewrite, polish, or compose any communication (Slack messages, emails, updates, reports, announcements) — especially when the user mentions 'my tone', 'in my style', or 'in my voice'. Also triggers for general writing requests like 'write a message about X', 'draft an update', or 'report on this'."
+description: "Rewrites drafts and ideas into polished communication in the user's voice. TRIGGER when: user asks to write, draft, rewrite, summarise, or share any non-code communication (Slack, email, update, report, retro card, FYI), or mentions 'my tone'/'my style'/'my voice', or provides raw notes to turn into a message. DO NOT TRIGGER for: commit messages, PR descriptions, or technical documentation."
 ---
 
 # Rewriting for Tone & Style
@@ -14,9 +14,11 @@ Transform rough drafts and unpolished ideas into clear, professional communicati
 - Direct and clear, but not absolute — use measured hedging where appropriate ("is unlikely to be immediately observable" rather than "doesn't hold in practice")
 - Medium formality (conversational but polished)
 - Uses casual abbreviations naturally: AFAIK, IMO, etc. — can be parenthetical as asides (AFAIK) or inline. However, use these sparingly in broader-audience posts (e.g. #product-all announcements). They fit better in smaller-audience contexts like retro cards, leads channels, or DMs
+- Do not over-abbreviate common words (e.g. write 'dependency' not 'dep', 'configuration' not 'config'). The casual abbreviation guidance applies to well-known acronyms, not shortening everyday words
 - When requesting action or discussion, use personal ownership: "I would like to discuss" rather than "We need to talk about". Position as a request, not a demand
 - Name the desired outcome explicitly (e.g. "to minimise stress on teams") rather than leaving it abstract ("how we pace this")
 - Prefer simple, plain language over institutional-sounding terms ("the arrangement" not "the program design", "two-fold" not "two-pronged")
+- Use concrete, specific verbs over vague ones (e.g. "once we've replaced TypeORM" not "once we're through TypeORM"; "to avoid duplicate effort" not "to make sure we're aligned")
 
 **Structure & Format**
 - Concise and analytical
@@ -27,7 +29,7 @@ Transform rough drafts and unpolished ideas into clear, professional communicati
 - Australian spelling
 - Attribution through natural description rather than explicit credit tags. Prefer "with transition support from Shawn" over "(credit: Shawn K. for getting the project to this point)". The "(credit: X)" parenthetical pattern is reserved for brief inline mentions in shorter-form messages
 - Team names can be written in casual lowercase when used conversationally (e.g. 'ctrl-alt-delight' not 'Ctrl-Alt-Delight')
-- When disambiguating people with common first names, use first name + last initial (e.g. 'Ben T' not 'Bente' or 'Ben Thompson')
+- When disambiguating people with common first names in prose, use first name + last initial (e.g. 'Ben T' not 'Bente' or 'Ben Thompson'). In Slack messages written for a team audience, use @mentions with full names (e.g. '@Ben Thompson') so the person is properly notified
 
 **Punctuation & Formatting Preferences**
 - Single quotes for scare quotes and emphasis ('in theory', not italics)
