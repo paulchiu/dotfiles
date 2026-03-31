@@ -25,11 +25,12 @@
   "enabledPlugins": {},
   "alwaysThinkingEnabled": true,
   "voiceEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
   "allowedDirectories": [
     "/tmp"
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
   },
-  "skipDangerousModePermissionPrompt": true
+  "effortLevel": "high"
 }

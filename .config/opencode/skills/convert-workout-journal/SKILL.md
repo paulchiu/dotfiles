@@ -1,171 +1,76 @@
 ---
 name: convert-workout-journal
-description: "Converts raw workout journal notes into structured Dataview-compatible fitness logs in the Obsidian vault. Use when asked to convert a workout, process a gym log, add a workout, or import fitness data."
+description: "Converts raw workout journal notes into structured Dataview-compatible fitness logs in the Obsidian vault. Use when asked to convert a workout, process a gym log, add a workout, import fitness data, or journal exercises."
 ---
 
 # Convert Workout Journal
 
-Converts raw/unstructured workout journal notes into the structured fitness tracking system at `Area/Fitness/` in the Obsidian vault.
+Converts raw workout journal notes into the structured fitness tracking system at `Area/Fitness/` in the Obsidian vault using deterministic Python scripts.
 
-## Vault Location
+## Important Context
 
-```
-/Users/paul/Library/Mobile Documents/iCloud~md~obsidian/Documents/Quartz
-```
+The user logs workouts manually in journal files (`Area/Journal/YYYY-MM-DD.md`) at the gym. When they ask to "journal exercises", "log workouts", or similar, they almost always mean **convert existing raw notes** from journal entries into the structured fitness system — not enter new data from scratch.
 
-## System Architecture
+## Scripts
 
-### Directory Structure
+All conversion logic lives in `scripts/` relative to this SKILL.md:
 
-```
-Area/Fitness/
-├── Workouts/          # One file per session: YYYY-MM-DD.md
-├── Exercises/         # One file per exercise: Exercise Name.md
-└── Fitness Dashboard.md         # Dashboard with per-exercise reports, PB, volume, 1RM
-
-Resource/Templates/Fitness/   # Workout Template.md, Exercise Template.md
-```
-
-### How It Works
-
-- **Workouts/** stores structured logs with Dataview inline fields in bracket syntax on list items
-- **Exercises/** stores one note per unique exercise, each containing a Dataview query that auto-pulls all sessions for that exercise from Workouts/
-- **Fitness Dashboard.md** is the dashboard with a dedicated section per exercise (PB + recent sets table), plus volume and estimated 1RM reports
-- All queries use `FLATTEN file.lists AS L` to access inline fields on list items (`L.exercise`, `L.weight`, `L.reps`, `L.set`)
-- Exercises are linked with `[[wiki links]]` everywhere — headings, inline fields, and file references
-
-### Critical Dataview Rule
-
-Inline fields inside list items **must** use bracket syntax: `[field:: value]`. Without brackets, Dataview treats them as page-level fields, not list-item-level fields. This is the single most important rule — bare `field:: value` will silently fail inside lists.
+| Script | Purpose |
+|--------|---------|
+| `parse_journal.py` | Parses raw journal text → structured JSON (stdout) |
+| `generate_workout.py` | Takes JSON (stdin) → creates vault files |
+| `exercises.json` | Canonical exercise registry (names, aliases, types) |
 
 ## Workflow
 
-### Step 1: Parse the Raw Journal
+### Step 1: Identify the Journal File
 
-The input may be in any format. Common patterns:
+Determine the date from the user's request (e.g. "yesterday's workout" → yesterday's date). The journal file is at `Area/Journal/YYYY-MM-DD.md`.
 
-- `Bench Press 65 x 6` or `65x6` or `65 kg x 6` or `65kg 6`
-- Grouped under exercise names as headings or bold text
-- May include notes like "last set tough" or "per hand"
+### Step 2: Parse the Journal
 
-**Extract from each entry:**
-- Exercise name (normalize to title case)
-- Weight (first number)
-- Reps (second number)
-- Set number (sequential per exercise block)
-- Notes (any extra text)
-
-### Step 2: Normalize Exercise Names
-
-Normalize to canonical title-case names:
-
-| Raw input | Canonical name |
-|---|---|
-| bench, bench press, bb bench | Bench Press |
-| lat pull, lat pulldown | Lat Pulldown |
-| squat, squats, back squat | Squat |
-| db shoulder press | Dumbbell Shoulder Press |
-| calve raise, calf raise | Calve Raise |
-| machine row, seated row | Machine Row |
-
-| split, splits, middle split | Middle Split |
-| front split left | Front Split Left |
-| front split right | Front Split Right |
-
-If unsure about a name, ask the user. Do not guess.
-
-### Step 3: Create the Workout File
-
-Create `Area/Fitness/Workouts/YYYY-MM-DD.md` (infer date from filename, frontmatter, or ask user).
-
-Ask the user what to call this workout for the `name` field (e.g. "Push Day", "Upper Body", "Leg Day"). This appears in the dashboard's Recent Workouts table.
-
-Read `Resource/Templates/Fitness/Workout Template.md` for the file structure. Fill in the frontmatter (`name`, `date`) and repeat the exercise/set block for each exercise in the session.
-
-**Format rules:**
-- No H1 heading (filename is self-evident)
-- Each exercise gets an `## [[Exercise Name]]` heading
-- Each set is a plain list item (not a task `- [ ]`) with bracket inline fields
-- Fields per set: `exercise` (wiki link), `set` (number), `weight` (number), `reps` (number)
-- **Duration-based exercises** (stretches, holds): use `[duration:: seconds]` instead of set/weight/reps. No `set` field needed — always one hold per exercise per session. Example: `- [exercise:: [[Split]]] [duration:: 60]`
-- Optional: `[notes:: text]` appended to the line if extra context exists
-- One blank line between the heading and the first set, and between exercise sections
-
-### Step 4: Create Missing Exercise Notes
-
-For every unique exercise in the workout, check if `Area/Fitness/Exercises/<Exercise Name>.md` exists.
-
-**If it does not exist**, create it using `Resource/Templates/Fitness/Exercise Template.md` as the base. Replace `this.file.link` references with `link("Exercise Name")` matching the actual exercise name.
-
-**Key:** The `WHERE` clause uses `link("Exercise Name")` to match the `[[Exercise Name]]` wiki links in workout files. The file has no H1 heading — the filename serves as the title.
-
-**Important:** The exercise file must include **both** queries from the template:
-1. A `## Recent Sessions` table filtered by `AND L.set` (shows sets with weight/reps) — for duration-based exercises, filter by `AND L.duration` instead and show Duration column
-2. A `## Notes` table filtered by `AND L.notes` (shows workout notes for that exercise)
-
-When replacing `this.file.link` with `link("Exercise Name")`, do so in **both** queries.
-
-**If it already exists**, do NOT overwrite it. The user may have added cues or notes.
-
-### Step 5: Update the Dashboard
-
-Read `Area/Fitness/Fitness Dashboard.md`. For each new exercise that doesn't already have a section in the dashboard, add a new section **before** the `## Volume Per Workout` line:
-
-```markdown
-## Exercise Name
-
-` ` `dataview
-LIST WITHOUT ID "**PB:** " + max(rows.L.weight) + "kg"
-FROM "Area/Fitness/Workouts"
-FLATTEN file.lists AS L
-WHERE L.exercise = link("Exercise Name")
-GROUP BY true
-` ` `
-
-` ` `dataview
-TABLE WITHOUT ID
-  file.link AS Workout,
-  L.set AS Set,
-  L.weight AS Weight,
-  L.reps AS Reps
-FROM "Area/Fitness/Workouts"
-FLATTEN file.lists AS L
-WHERE L.exercise = link("Exercise Name")
-SORT file.name DESC, L.set ASC
-LIMIT 10
-` ` `
+```bash
+python3 scripts/parse_journal.py --date YYYY-MM-DD
 ```
 
-(Remove spaces between backticks.)
+JSON output goes to stdout. Warnings and unparsed lines go to stderr.
 
-For **duration-based exercises**, use `L.duration` instead of `L.weight`/`L.set` in queries, show "Duration (s)" column, and use `"s"` suffix instead of `"kg"` for PB.
+### Step 3: Review Parse Output
 
-**Do NOT** duplicate sections for exercises that already appear in the dashboard.
+Check stderr output for:
+- **Warnings** — exercise name corrections, unknown exercises. Show to user only if an exercise is truly unknown (not just a case correction).
+- **Unparsed lines** — non-workout content from the journal. Ignore unless the user asks.
 
-### Step 6: Validate
+If there's a completely unknown exercise, ask the user to confirm the name and whether it's strength (sets/weight/reps) or duration. Then add it to `scripts/exercises.json`.
 
-After processing, verify:
-- Every set line has all four bracket fields: `exercise`, `set`, `weight`, `reps`
-- Every `[[Exercise Name]]` link resolves to a file in `Area/Fitness/Exercises/`
-- The dashboard has a section for every exercise that appears in any workout
-- No H1 headings in workout or exercise files
+### Step 4: Generate Vault Files
 
-### Step 7: Report Summary
+Pipe the JSON into the generator. The script auto-suggests a workout name from the parsed data, but you can override it:
 
-Output:
+```bash
+python3 scripts/parse_journal.py --date YYYY-MM-DD 2>/dev/null | python3 scripts/generate_workout.py --workout-name "Squat Day"
 ```
-Processed: YYYY-MM-DD
-- X exercises, Y total sets
-- New exercise notes created: [list] (or "none")
-- Dashboard sections added: [list] (or "none")
-- Skipped/ambiguous: [list] (or "none")
-```
+
+The generator creates:
+1. **Workout file** at `Area/Fitness/Workouts/YYYY-MM-DD.md`
+2. **Exercise files** at `Area/Fitness/Exercises/<Name>.md` (new exercises only)
+3. **Dashboard sections** appended to `Area/Fitness/Fitness Dashboard.md` (new exercises only)
+
+Use `--dry-run` to preview without writing.
+
+### Step 5: Report
+
+The generator prints a summary. Relay it to the user.
+
+## When You Still Need to Intervene
+
+- **Unknown exercise**: Parser emits a warning. Ask user for canonical name and type, update `exercises.json`.
+- **Parse failures**: If the parser can't handle a journal format, fall back to reading the journal manually and constructing the JSON by hand, then pipe it to `generate_workout.py`.
+- **Workout name**: The script suggests `"{First Exercise} Day"` or `"Nightly Stretch"`. Override via `--workout-name` if the user specifies something different.
 
 ## Do NOT
 
-- Delete or overwrite existing exercise notes that have user content
-- Infer weights or reps if ambiguous — ask the user
-- Use `exercise:: value` without brackets inside list items (Dataview won't see it)
-- Use task checkboxes (`- [ ]`) — use plain list items (`-`)
-- Use DataviewJS (`$= ...`) — it requires a separate setting to be enabled
+- Delete or overwrite existing exercise notes
+- Run `generate_workout.py` without `--dry-run` if warnings indicate ambiguity
+- Use DataviewJS (`$= ...`)
 - Add H1 headings to workout or exercise files
