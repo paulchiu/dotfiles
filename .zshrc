@@ -76,6 +76,12 @@ autoload -U add-zsh-hook
 
 source $ZSH/oh-my-zsh.sh
 
+# Nex/Ghostty shell integration (explicit source as fallback for auto-injection)
+if [[ -n $GHOSTTY_RESOURCES_DIR ]] && (( ! $+functions[_ghostty_report_pwd] )); then
+  builtin unset _ghostty_state 2>/dev/null
+  source "$GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration"
+fi
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"

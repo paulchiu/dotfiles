@@ -40,6 +40,7 @@ Valid types: `feat`, `fix`, `refactor`, `test`, `chore`, `docs`, `style`, `perf`
 - Use sentence case (capitalise first word only)
 - Use imperative mood ("Add feature" not "Added feature")
 - Keep under 72 characters
+- **Issue code prefix**: Extract the issue code from the current branch name (e.g., `feature/cad-1438-...` yields `CAD-1438`, `fix/PAY-3080-...` yields `PAY-3080`). Always prefix the PR title with it in brackets: `[CAD-1438] type(scope): Description`. PR titles should always have the issue code prefix.
 
 #### Line 2: Separator
 
@@ -58,6 +59,17 @@ Write exactly four dashes: `----`
 - Follow with bullet points describing **what the user/developer can now do**, not what code changed
 - End each bullet point with a full stop (period)
 - End with any relevant notes (breaking changes, migration steps, follow-up work, etc.)
+
+### Risk Classification
+
+When the template has a "Risks" section, classify using these levels:
+
+- **None**: Pure logging, documentation, or test-only changes with zero runtime impact.
+- **Low**: Removing dead code, removing feature-flagged code paths, config changes, or UI-only changes with no data/payment impact. Even if the code being removed is unused or superseded, if it *could* affect a user's experience (e.g., a venue still on an old flag), classify as Low, not None.
+- **Medium**: Changes to request handling, API behaviour, data queries, or performance-sensitive paths.
+- **High**: Changes to payment flows, order totals, financial calculations, or data integrity.
+
+When in doubt, round up. "None" should only be used when there is truly zero possibility of user-visible impact.
 
 ### Writing Rules
 
