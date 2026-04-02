@@ -67,15 +67,14 @@ Every rewritten issue MUST follow this structure:
 
 When rewriting an existing issue:
 
-- **Always** preserve the original description in a collapsed section at the bottom:
+- **Always** preserve the original description in a collapsed section at the bottom using Linear's `+++` collapsible syntax:
 
 ```markdown
-<details>
-<summary>Original description (pre-YYYY-MM-DD)</summary>
++++ # Original description (pre-YYYY-MM-DD)
 
 [original description verbatim]
 
-</details>
++++
 ```
 
 - **Always** add a Q&A section if the original had open questions or if clarifying questions were answered during the rewrite:

@@ -54,13 +54,16 @@ Write exactly four dashes: `----`
 - Replace all placeholder text — leave nothing unfilled
 - Be specific: reference actual file names, function names, and changes
 
-**If no template was found:**
-- Start with 1–2 sentences explaining the purpose/motivation
-- Follow with bullet points describing **what the user/developer can now do**, not what code changed
-- End each bullet point with a full stop (period)
-- End with any relevant notes (breaking changes, migration steps, follow-up work, etc.)
+**If no template was found (personal projects):**
+- Open with 1–2 sentences stating what the PR does (not the problem). Use footnotes to provide supplementary context such as root cause or technical detail.
+- Follow with bullet points describing **what the user/developer can now do**, not what code changed.
+- End each bullet point with a full stop (period).
+- End with any relevant notes (breaking changes, migration steps, follow-up work, etc.).
+- Do NOT add section headings (no `## Summary`, etc.) or a Risk section.
 
 ### Risk Classification
+
+Only include risk classification when the PR template has a "Risks" section. Do not add risk for personal projects or when no template exists.
 
 When the template has a "Risks" section, classify using these levels:
 
