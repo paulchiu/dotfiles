@@ -101,3 +101,12 @@ EOF
 ```
 
 3. Output the PR URL returned by `gh`. No preamble, no commentary, just the URL.
+
+### Step 4: Post-Creation (when user wants it merged)
+
+If the user indicates they want the PR merged (e.g., "merge it", "get it merged", "make sure it's merged"):
+
+1. **Apply a label**: List the available labels with `gh label list` and ask the user which label to apply. Apply with `gh pr edit <number> --add-label "<label>"`.
+2. **Enable auto-merge**: `gh pr merge <number> --auto --squash`
+3. **Check status**: run `gh pr checks <number>` to verify all checks are passing. If any checks are failing, investigate and fix the issues.
+4. **Monitor**: ask the user how often to check merge status (default 6 minutes). Set up a `/loop` at that interval to poll `gh pr view <number> --json state,mergedAt` until merged, then cancel the loop.
