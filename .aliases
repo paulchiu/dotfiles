@@ -88,6 +88,7 @@ alias cl='claude'
 alias cca='claude --allowedTools "Bash(danger_acknowledge:true)" --allowedTools Edit --allowedTools Write --allowedTools Read --allowedTools Glob --allowedTools Grep --allowedTools Agent --allowedTools Skill --allowedTools WebFetch --allowedTools WebSearch --allowedTools NotebookEdit --allowedTools "mcp__*"'
 alias ccd='claude --dangerously-skip-permissions'
 alias ccr='claude --resume'
+alias ccdr='claude --dangerously-skip-permissions --resume'
 
 # Work
 alias mls="mryum login && mryum shell"
