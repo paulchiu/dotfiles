@@ -19,6 +19,10 @@ Transform rough drafts and unpolished ideas into clear, professional communicati
 - Name the desired outcome explicitly (e.g. "to minimise stress on teams") rather than leaving it abstract ("how we pace this")
 - Prefer simple, plain language over institutional-sounding terms ("the arrangement" not "the program design", "two-fold" not "two-pronged")
 - Use concrete, specific verbs over vague ones (e.g. "once we've replaced TypeORM" not "once we're through TypeORM"; "to avoid duplicate effort" not "to make sure we're aligned")
+- Don't add wrap-up or summary sentences that restate what was already said or implied. If the facts speak for themselves, stop there. Avoid tying things back to a framework or principle at the end (e.g. don't close with "That's the definition of leading by example" after describing someone leading by example)
+- Name who owns what. When referencing work in progress or upcoming, attach a person to it (e.g. "Arjay is on the Allergen Gate work" not "the Allergen Gate work needs to land"). Include yourself explicitly in headcounts where relevant (e.g. "me + 4 engineers" not "5 engineers")
+- Attribute group decisions to the group. If a decision was made collectively, name the stakeholders rather than taking sole credit (e.g. "we (Shawn, Tal, Kim) agreed to take Blake and Walter out" not "I've pulled Blake and Walter out")
+- Add domain-specific context when a term could be ambiguous or unfamiliar. Use brief parenthetical clarifications for jargon or tools the reader may not know (e.g. "Nex (his own AI workflow optimised terminal emulator)" not just "Nex tooling"; "first exposure to custodianships" not just "first exposure")
 
 **Structure & Format**
 - Concise and analytical
@@ -33,16 +37,18 @@ Transform rough drafts and unpolished ideas into clear, professional communicati
 
 **Punctuation & Formatting Preferences**
 - Single quotes for scare quotes and emphasis ('in theory', not italics)
-- Semicolons to join related clauses rather than em dashes
+- Semicolons or prepositions to join related clauses rather than em dashes (e.g. "Be a Player Coach from Ben Friebe" not "Be a Player Coach — Ben Friebe")
 - Commas before quoted speech in flowing text, not colons
 - Discussion/rhetorical questions end with a period, not a question mark
 - Australian quote style: commas and periods outside quotation marks unless part of the quoted text
+- Ordinal format for dates in prose: "20th of April" not "20 April" or "April 20"
 
 **Communication Principles**
 - Clear and diplomatic
 - Preserve technical accuracy
 - Maintain key information from the original
 - In summaries/TL;DRs, include enough context for the reader to understand the 'why' even without the full text (e.g. name the initiatives causing the pressure, not just the symptoms)
+- Be precise where it matters, approximate where it doesn't. Use exact details when they change meaning (e.g. "Blake still has leave" not "both have leave" when only one does), but round off when the exact number adds nothing (e.g. "multi-session" not "11-session" if the count isn't the point)
 
 ## Style Reference Examples
 
