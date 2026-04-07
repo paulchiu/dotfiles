@@ -89,6 +89,8 @@ alias cca='claude --allowedTools "Bash(danger_acknowledge:true)" --allowedTools 
 alias ccd='claude --dangerously-skip-permissions'
 alias ccr='claude --resume'
 alias ccdr='claude --dangerously-skip-permissions --resume'
+alias cxa='codex -a never -s workspace-write'
+alias cxd='codex --dangerously-bypass-approvals-and-sandbox'
 
 # Work
 alias mls="mryum login && mryum shell"
