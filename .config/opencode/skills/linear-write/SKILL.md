@@ -27,6 +27,18 @@ When passing markdown to MCP tools, send real newlines, not literal `\n` escape 
 
 You are writing a contract, not a conversation starter. Every ambiguity is a coin flip the agent will make without telling you. A card that is good enough for an agent is excellent for a human.
 
+## Writing style
+
+Linear text is read by both agents and humans. These rules apply to issue bodies, comments, and spikes alike:
+
+- No em dashes; use semicolons, commas, or prepositions instead
+- Australian spelling
+- Backticks for code identifiers, filenames, config keys, and CLI commands; preserve on-disk casing (`CLAUDE.md` not `claude.md`, `package-lock.json`, `pnpm typecheck`)
+- Plain, concrete language over institutional terms ('the arrangement' not 'the program design'; "once we've replaced TypeORM" not "once we're through TypeORM")
+- Don't add wrap-up, summary, or evaluative closing sentences; stop when the facts are stated
+- Single quotes for scare quotes and emphasis ('in theory'), not italics
+- Lead with the finding or action, not validation or framing
+
 ## The Agent-Ready Card Template
 
 Every issue you create or rewrite MUST follow this structure:
@@ -48,8 +60,9 @@ Every issue you create or rewrite MUST follow this structure:
 - [Thing that might look related but must not be touched]
 
 ## Implementation guidance
-- Follow pattern in: `[specific file path]`
-- Use existing utility: `[specific import path]`
+- The relevant entry point is most likely [`ClassName.methodName`](https://github.com/org/repo/blob/main/src/path/file.ts#L42)
+- Alternative: follow the pattern in [`OtherService.method`](https://github.com/org/repo/blob/main/src/other.ts#L15), or use the existing utility at `src/utils/helper.ts`
+- Constraints: [any binding context the agent must respect, e.g. 'do not introduce a new dependency', 'must run inside the existing transaction']
 - When uncertain: stop and explain the ambiguity, or propose a short plan rather than guessing
 
 ## Verification
@@ -70,7 +83,7 @@ Every issue you create or rewrite MUST follow this structure:
 
 - **Acceptance criteria** must be programmatically verifiable. If "done" requires a human judgment call, the card is not agent-ready. Replace prose like "improve error handling" with "OAuth callback handler passes the three test cases in `tests/auth/oauth_callback.test.ts`".
 - **Out of scope** prevents agent wandering. Agents are eager to "improve" adjacent code. Name what must not be touched, even when it looks related.
-- **Implementation guidance** should link to a specific file showing the desired pattern. One real code snippet outperforms three paragraphs of prose. If you find yourself writing a paragraph, link to an example file instead.
+- **Implementation guidance** should link to a specific file showing the desired pattern. One real code snippet outperforms three paragraphs of prose. If you find yourself writing a paragraph, link to an example file instead. Use GitHub deep links with line numbers in the form `[ClassName.methodName](https://github.com/org/repo/blob/main/src/file.ts#L42)`, backtick code identifiers, and order the section as primary approach, then alternatives, then constraints. Show problematic patterns with fenced code blocks tagged by language.
 - **Verification** is the contract. The `git diff` scope check is one of the most effective guardrails: it catches wandering that tests alone would miss.
 - **Risk tier** sets review expectations. After tuning, 60-70% of cards typically fall in Low.
 
@@ -200,6 +213,32 @@ Use this structure when the spike is enumerating a known list of work items:
 1. Additional spike required; if scope is unclear or further investigation needed
 2. Create (sub)tasks for each item of work; descope certain items if effort outweighs value
 ```
+
+## Comments
+
+Linear comments follow the same writing-style rules as issue bodies. Investigation findings, audit results, and out-of-band updates belong in comments rather than the description; the description is the contract, the comment is the journal.
+
+### Investigation finding template
+
+Use this when a comment is documenting the result of an investigation (e.g. 'this CVE does not apply', 'this bug is not reproducible', 'this dependency is unused'):
+
+```markdown
+**[One-line finding in bold.]**
+
+[Short paragraph explaining the finding with the key file/line link.]
+
+Verified by:
+
+* [Specific check 1, with the exact command or URL]
+* [Specific check 2]
+* [Specific check 3]
+
+[Optional: short paragraph noting related-but-unaffected items, so the reader knows you considered them.]
+
+[Recommendation, e.g. 'Closing as cancelled' or 'Reopening as P2'.]
+```
+
+The verification list is the load-bearing part. Each bullet should be a check the reader can re-run themselves: a `git log -S` command, a GitHub code search URL with the raw query embedded so it is clickable, a specific file path with line numbers. Avoid vague prose like 'I checked the codebase'; show the command or link instead.
 
 ## Issue Relationships
 
