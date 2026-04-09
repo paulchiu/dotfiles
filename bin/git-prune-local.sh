@@ -1,5 +1,19 @@
 #!/bin/zsh
 
+# Remove all non-main worktrees forcefully, then prune stale entries
+for wt in $(git worktree list --porcelain | grep '^worktree ' | awk '{print $2}'); do
+    # Skip the main worktree (the root repo)
+    if git worktree list --porcelain | grep -A1 "^worktree $wt$" | grep -q '^bare$'; then
+        continue
+    fi
+    main_wt="$(git worktree list | head -1 | awk '{print $1}')"
+    if [[ "$wt" != "$main_wt" ]]; then
+        echo "Removing worktree: $wt"
+        git worktree remove --force "$wt" 2>/dev/null
+    fi
+done
+git worktree prune
+
 # Fetch the latest changes from the remote repository and prune deleted branches
 git fetch --prune
 
