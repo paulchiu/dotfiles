@@ -115,3 +115,4 @@ if [[ ${PLATFORM} == "Linux" ]]; then
     alias open=xdg-open
     alias sc="scrot -d 3 -e 'mv \$f ~/Pictures/screenshots/'"
 fi
+alias c="pbcopy"
