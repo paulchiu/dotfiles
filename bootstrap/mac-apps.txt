@@ -1,33 +1,32 @@
 Adguard.app
 Antigravity.app
 AppCleaner.app
-Audacity.app
 Audiobook Builder.app
 Azure Data Studio.app
 Bing Wallpaper.app
 Bitwarden.app
-Brilliant.Design.app
 Caffeine.app
-calibre.app
+ChatGPT.app
 Chrome Remote Desktop Host Uninstaller.app
+Claude Code History Viewer.app
 Claude.app
-ClaudeBar.app
 cmux.app
 Codex.app
 ColorSlurp.app
-Cyberduck.app
+Conductor.app
 DaisyDisk.app
 DBeaver.app
 Default Browser.app
-DeskPad.app
 Discord.app
+DockDoor.app
 Dropbox.app
-DuckDuckGo.app
 Easy Move+Resize.app
 features.cfg
 Firefox.app
+FluxMarkdown.app
 FocuSee.app
 Garmin Express.app
+GatherV2.app
 GeForceNOW.app
 Ghostty.app
 Google Chrome.app
@@ -36,15 +35,12 @@ Google Drive.app
 Google Sheets.app
 Google Slides.app
 HandBrake.app
-Hookmark.app
 Ice.app
-ImageOptim.app
-Inkscape.app
 Insta360 Link Controller.app
+Iru Self Service.app
 JDownloader 2
 JDownloader2.app
 Kagi for Safari.app
-Kandji Self Service.app
 Karabiner-Elements.app
 Karabiner-EventViewer.app
 KeyCastr.app
@@ -53,57 +49,41 @@ lghub.app
 Logseq.app
 Loom.app
 MacWhisper.app
-Medis.app
 MeetingBar.app
 Microsoft Azure Storage Explorer.app
 Microsoft Excel.app
-Modern CSV.app
 MongoDB Compass.app
 Neovide.app
+Nex.app
+Nexus.app
 NordVPN.app
 Obsidian.app
-OpenEmu.app
 OrbStack.app
-Orion.app
-Pages.app
 PastePal.app
-PhpStorm.app
 PICO-8.app
 Pixelmator Pro.app
 Pop.app
 Postman.app
-Presentify.app
 qbittorrent.app
-QMK Toolbox.app
 QSpace Pro.app
-Raspberry Pi Imager.app
 Raycast.app
-Reactotron.app
 Rectangle.app
 RemotePCSuite.app
-ResponsivelyApp.app
 RustDesk.app
 Safari.app
-Scoot.app
 SF Symbols.app
 Shadow.app
 Shottr.app
 Slack.app
 SoundAnchor.app
-Spotify.app
 Syncthing.app
-Syntax Highlight.app
 Tailscale.app
 The Unarchiver.app
 Unshaky.app
 Utilities
 VIA.app
 Vial.app
-Vimac.app
 Visual Studio Code.app
-VLC.app
-WebStorm.app
 Windows App.app
 Xcode.app
-Zappy.app
 zoom.us.app
