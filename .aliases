@@ -66,6 +66,7 @@ alias tf="terraform"
 alias p="pnpm"
 ## System/Utility
 alias rs="~/bin/reset.sh"
+alias 7='~/bin/720p.sh "$(fd --type f -e mp4 -e mkv -e mov -e avi -e webm -e m4v | fzf --prompt="Video> ")"'
 ## Battery
 alias batt="pmset -g batt"
 ## Date and time
