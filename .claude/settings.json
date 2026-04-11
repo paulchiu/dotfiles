@@ -79,7 +79,8 @@
     ]
   },
   "enabledPlugins": {
-    "session-review@meandu-plugins": true
+    "session-review@meandu-plugins": true,
+    "codebase-index@meandu-plugins": true
   },
   "extraKnownMarketplaces": {
     "meandu-plugins": {
