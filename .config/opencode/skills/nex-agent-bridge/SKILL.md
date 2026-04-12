@@ -37,7 +37,10 @@ Environment variables supported by `scripts/start_bridge.sh`:
 - `COORDINATOR_NAME`
 - `CODEX_NAME`
 - `CLAUDE_NAME`
+- `CODEX_FLAGS`
+- `CLAUDE_FLAGS`
 - `MAIL_DIR`
+- `POLL_INTERVAL`
 - `SPLIT_DELAY`
 - `LAYOUT`
 
@@ -49,6 +52,15 @@ By default the script preserves the explicit split tree and does not call `nex l
 - `main-horizontal`
 - `main-vertical`
 
+By default the bridge starts:
+
+- Codex with `--dangerously-bypass-approvals-and-sandbox`
+- Claude Code with `--dangerously-skip-permissions`
+
+Override either with `CODEX_FLAGS` or `CLAUDE_FLAGS` if you want a safer mode for a specific run.
+
+Each worker pane runs a polling loop from `scripts/agent_loop.sh`. The loop watches its inbox file, invokes the agent non-interactively for each new message, and writes a single reply into the peer outbox. `POLL_INTERVAL` defaults to `2` seconds.
+
 ## Mailbox Protocol
 
 Use these shared files:
@@ -56,19 +68,14 @@ Use these shared files:
 - Codex inbox: `.nex-mail/to-codex.md`
 - Claude inbox: `.nex-mail/to-claude.md`
 
-Each agent writes exactly one reply to the peer inbox, then stops. Wake the target agent with:
-
-```bash
-nex pane send --to codex CHECK_INBOX
-nex pane send --to claude CHECK_INBOX
-```
-
-Or use the bundled helper:
+Each worker loop writes exactly one reply to the peer inbox when its inbox file changes:
 
 ```bash
 printf '%s\n' 'Review the latest plan and answer the open question.' | ./scripts/post_message.sh claude -
 printf '%s\n' 'Claude replied in .nex-mail/to-codex.md. Resolve the blocking decision.' | ./scripts/post_message.sh codex -
 ```
+
+No explicit `CHECK_INBOX` wake-up message is required.
 
 ## Operating Rules
 

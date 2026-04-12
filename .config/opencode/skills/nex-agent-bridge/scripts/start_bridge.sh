@@ -20,12 +20,17 @@ send_line() {
   nex pane send --to "$pane" "$(printf '%s\r' "$text")"
 }
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 WORKDIR="${1:-$PWD}"
 WORKDIR="${WORKDIR%/}"
 MAIL_DIR="${MAIL_DIR:-.nex-mail}"
 COORDINATOR_NAME="${COORDINATOR_NAME:-coordinator}"
 CODEX_NAME="${CODEX_NAME:-codex}"
 CLAUDE_NAME="${CLAUDE_NAME:-claude}"
+CODEX_FLAGS="${CODEX_FLAGS:---dangerously-bypass-approvals-and-sandbox}"
+CLAUDE_FLAGS="${CLAUDE_FLAGS:---dangerously-skip-permissions}"
+POLL_INTERVAL="${POLL_INTERVAL:-2}"
 SPLIT_DELAY="${SPLIT_DELAY:-2}"
 LAYOUT="${LAYOUT:-}"
 
@@ -38,39 +43,10 @@ MAIL_PATH="$WORKDIR/$MAIL_DIR"
 mkdir -p "$MAIL_PATH"
 : >"$MAIL_PATH/to-codex.md"
 : >"$MAIL_PATH/to-claude.md"
-
-read -r -d '' CODEX_PROMPT <<EOF || true
-You are CODEX in a two-agent Nex bridge.
-Peer agent: CLAUDE.
-
-Protocol:
-- Your inbox is $MAIL_DIR/to-codex.md
-- Your outbox is $MAIL_DIR/to-claude.md
-- When you receive CHECK_INBOX, read your inbox, write exactly one reply to your outbox, then stop.
-- If the inbox is empty, reply with NO_MESSAGE.
-- Do not send raw text directly to the other pane.
-- Keep replies short and action-oriented.
-
-Reply with READY and wait for further messages.
-EOF
-
-read -r -d '' CLAUDE_PROMPT <<EOF || true
-You are CLAUDE in a two-agent Nex bridge.
-Peer agent: CODEX.
-
-Protocol:
-- Your inbox is $MAIL_DIR/to-claude.md
-- Your outbox is $MAIL_DIR/to-codex.md
-- When you receive CHECK_INBOX, read your inbox, write exactly one reply to your outbox, then stop.
-- If the inbox is empty, reply with NO_MESSAGE.
-- Do not send raw text directly to the other pane.
-- Keep replies short and action-oriented.
-
-Reply with READY and wait for further messages.
-EOF
-
-printf -v CODEX_CMD 'cd %q && codex --no-alt-screen -C %q %q' "$WORKDIR" "$WORKDIR" "$CODEX_PROMPT"
-printf -v CLAUDE_CMD 'cd %q && claude %q' "$WORKDIR" "$CLAUDE_PROMPT"
+printf -v CODEX_CMD 'cd %q && MAIL_DIR=%q POLL_INTERVAL=%q CODEX_FLAGS=%q CLAUDE_FLAGS=%q %q codex %q' \
+  "$WORKDIR" "$MAIL_DIR" "$POLL_INTERVAL" "$CODEX_FLAGS" "$CLAUDE_FLAGS" "$SCRIPT_DIR/agent_loop.sh" "$WORKDIR"
+printf -v CLAUDE_CMD 'cd %q && MAIL_DIR=%q POLL_INTERVAL=%q CODEX_FLAGS=%q CLAUDE_FLAGS=%q %q claude %q' \
+  "$WORKDIR" "$MAIL_DIR" "$POLL_INTERVAL" "$CODEX_FLAGS" "$CLAUDE_FLAGS" "$SCRIPT_DIR/agent_loop.sh" "$WORKDIR"
 printf -v CREATE_CLAUDE_PANE_CMD 'cd %q && nex pane split --name %q --direction vertical --path %q' "$WORKDIR" "$CLAUDE_NAME" "$WORKDIR"
 
 nex pane name "$COORDINATOR_NAME"
@@ -96,6 +72,9 @@ Bridge started in $WORKDIR
 - codex pane: $CODEX_NAME
 - claude pane: $CLAUDE_NAME
 - mail dir: $MAIL_DIR
+- codex flags: $CODEX_FLAGS
+- claude flags: $CLAUDE_FLAGS
+- poll interval: $POLL_INTERVAL
 EOF
 
 if [[ -n "$LAYOUT" ]]; then
