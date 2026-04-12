@@ -80,13 +80,20 @@
   },
   "enabledPlugins": {
     "session-review@meandu-plugins": true,
-    "codebase-index@meandu-plugins": true
+    "codebase-index@meandu-plugins": true,
+    "codex@openai-codex": true
   },
   "extraKnownMarketplaces": {
     "meandu-plugins": {
       "source": {
         "source": "git",
         "url": "git@github.com:mr-yum/claude-plugins.git"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
       }
     }
   },
