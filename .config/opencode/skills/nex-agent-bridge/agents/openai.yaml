@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nex Agent Bridge"
+  short_description: "Bridge Codex and Claude over Nex."
+  default_prompt: "Use this skill to set up or operate a two-agent Nex bridge where Codex and Claude Code exchange work through mailbox files and CHECK_INBOX wake-up messages."
