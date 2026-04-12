@@ -20,7 +20,7 @@ COORDINATOR_NAME="${COORDINATOR_NAME:-coordinator}"
 CODEX_NAME="${CODEX_NAME:-codex}"
 CLAUDE_NAME="${CLAUDE_NAME:-claude}"
 SPLIT_DELAY="${SPLIT_DELAY:-2}"
-LAYOUT="${LAYOUT:-tiled}"
+LAYOUT="${LAYOUT:-main-vertical}"
 
 if [[ ! -d "$WORKDIR" ]]; then
   echo "Workdir does not exist: $WORKDIR" >&2
@@ -64,11 +64,14 @@ EOF
 
 printf -v CODEX_CMD 'cd %q && codex --no-alt-screen -C %q %q' "$WORKDIR" "$WORKDIR" "$CODEX_PROMPT"
 printf -v CLAUDE_CMD 'cd %q && claude %q' "$WORKDIR" "$CLAUDE_PROMPT"
+printf -v CREATE_CLAUDE_PANE_CMD 'cd %q && nex pane split --name %q --direction horizontal --path %q' "$WORKDIR" "$CLAUDE_NAME" "$WORKDIR"
 
 nex pane name "$COORDINATOR_NAME"
 nex pane split --name "$CODEX_NAME" --direction vertical --path "$WORKDIR"
 sleep "$SPLIT_DELAY"
-nex pane split --name "$CLAUDE_NAME" --direction horizontal --path "$WORKDIR"
+
+# Build a nested layout: coordinator on the left, codex/claude stacked on the right.
+nex pane send --to "$CODEX_NAME" "$CREATE_CLAUDE_PANE_CMD"
 sleep "$SPLIT_DELAY"
 nex layout select "$LAYOUT"
 sleep 1
