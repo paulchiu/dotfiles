@@ -27,6 +27,7 @@ The script:
 
 - names the current pane `coordinator`
 - creates sibling panes named `codex` and `claude`
+- selects a visible multi-pane Nex layout
 - creates `.nex-mail/`
 - starts Codex and Claude Code in their panes
 - primes each agent with the mailbox protocol
@@ -38,6 +39,15 @@ Environment variables supported by `scripts/start_bridge.sh`:
 - `CLAUDE_NAME`
 - `MAIL_DIR`
 - `SPLIT_DELAY`
+- `LAYOUT`
+
+`LAYOUT` defaults to `tiled`. Valid layouts in the current Nex CLI are:
+
+- `tiled`
+- `even-horizontal`
+- `even-vertical`
+- `main-horizontal`
+- `main-vertical`
 
 ## Mailbox Protocol
 

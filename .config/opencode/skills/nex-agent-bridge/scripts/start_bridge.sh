@@ -20,6 +20,7 @@ COORDINATOR_NAME="${COORDINATOR_NAME:-coordinator}"
 CODEX_NAME="${CODEX_NAME:-codex}"
 CLAUDE_NAME="${CLAUDE_NAME:-claude}"
 SPLIT_DELAY="${SPLIT_DELAY:-2}"
+LAYOUT="${LAYOUT:-tiled}"
 
 if [[ ! -d "$WORKDIR" ]]; then
   echo "Workdir does not exist: $WORKDIR" >&2
@@ -69,6 +70,8 @@ nex pane split --name "$CODEX_NAME" --direction vertical --path "$WORKDIR"
 sleep "$SPLIT_DELAY"
 nex pane split --name "$CLAUDE_NAME" --direction horizontal --path "$WORKDIR"
 sleep "$SPLIT_DELAY"
+nex layout select "$LAYOUT"
+sleep 1
 
 nex pane send --to "$CODEX_NAME" "$CODEX_CMD"
 sleep 1
@@ -80,6 +83,7 @@ Bridge started in $WORKDIR
 - codex pane: $CODEX_NAME
 - claude pane: $CLAUDE_NAME
 - mail dir: $MAIL_DIR
+- layout: $LAYOUT
 
 Send work with:
   printf '%s\n' 'Your message' | ./scripts/post_message.sh codex -
