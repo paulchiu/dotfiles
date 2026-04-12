@@ -26,11 +26,10 @@ Use the bundled script:
 The script:
 
 - names the current pane `coordinator`
-- creates a right-hand worker column by splitting the coordinator pane once
-- creates the `claude` pane by splitting the `codex` pane before either agent starts
+- creates a worker subtree that mirrors either the default layout or a captured layout template
 - creates `.nex-mail/`
-- starts Codex and Claude Code in their panes
-- primes each agent with the mailbox protocol
+- starts the worker loops
+- optionally tails worker logs in the `codex` and `claude` panes when using background worker mode
 
 Environment variables supported by `scripts/start_bridge.sh`:
 
@@ -42,15 +41,15 @@ Environment variables supported by `scripts/start_bridge.sh`:
 - `MAIL_DIR`
 - `POLL_INTERVAL`
 - `SPLIT_DELAY`
-- `LAYOUT`
+- `LAYOUT_TEMPLATE`
+- `ROOT_DIRECTION`
+- `WORKER_DIRECTION`
+- `WORKER_ORDER`
+- `ROOT_RATIO`
+- `WORKER_RATIO`
+- `WORKER_MODE`
 
-By default the script preserves the explicit split tree and does not call `nex layout select`. Set `LAYOUT` only if you explicitly want Nex to rearrange the pane tree. Valid layouts in the current Nex CLI are:
-
-- `tiled`
-- `even-horizontal`
-- `even-vertical`
-- `main-horizontal`
-- `main-vertical`
+The script now creates both worker panes directly from the coordinator pane, then applies the desired three-pane layout through Nex's persisted workspace layout JSON. This avoids using `nex pane send` for structural pane creation.
 
 By default the bridge starts:
 
@@ -59,7 +58,27 @@ By default the bridge starts:
 
 Override either with `CODEX_FLAGS` or `CLAUDE_FLAGS` if you want a safer mode for a specific run.
 
-Each worker pane runs a polling loop from `scripts/agent_loop.sh`. The loop watches its inbox file, invokes the agent non-interactively for each new message, and writes a single reply into the peer outbox. `POLL_INTERVAL` defaults to `2` seconds.
+Worker startup modes:
+
+- `WORKER_MODE=pane` is now the default. It runs the polling loops directly inside the worker panes so you can see Codex and Claude doing the work.
+- `WORKER_MODE=background` is the fallback mode. It starts mailbox workers with pidfiles and logs under `.nex-mail/`, and the `codex` / `claude` panes tail those logs.
+
+Each worker loop runs from `scripts/agent_loop.sh`. The loop watches its inbox file, invokes the agent non-interactively for each new message, and writes a single reply into the peer outbox. `POLL_INTERVAL` defaults to `2` seconds.
+
+## Layout Capture
+
+To reuse the current bridge layout in future runs, capture the active Nex workspace layout into the worktree:
+
+```bash
+./scripts/capture_layout.sh /path/to/worktree/.nex-bridge-layout.json
+```
+
+That script reads the active workspace layout from `~/Library/Application Support/Nex/nex.db`, expects the bridge labels `coordinator`, `codex`, and `claude`, and writes a reusable template. On future `start_bridge.sh` runs, the template is used automatically if `/path/to/worktree/.nex-bridge-layout.json` exists.
+
+Current limitation:
+
+- captured templates currently require `coordinator` to be the first root pane
+- layout application currently updates Nex's SQLite workspace state directly because the current Nex CLI does not expose ratio-setting or targetable nested-split commands
 
 ## Mailbox Protocol
 
@@ -76,6 +95,14 @@ printf '%s\n' 'Claude replied in .nex-mail/to-codex.md. Resolve the blocking dec
 ```
 
 No explicit `CHECK_INBOX` wake-up message is required.
+
+Worker lifecycle helpers:
+
+```bash
+./scripts/start_workers.sh /path/to/worktree
+./scripts/status_workers.sh /path/to/worktree
+./scripts/stop_workers.sh /path/to/worktree
+```
 
 ## Operating Rules
 

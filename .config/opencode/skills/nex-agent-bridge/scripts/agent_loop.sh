@@ -18,12 +18,6 @@ if [[ ! -d "$WORKDIR" ]]; then
   exit 1
 fi
 
-read_flags() {
-  local raw="$1"
-  local -n out_ref="$2"
-  read -r -a out_ref <<< "$raw"
-}
-
 hash_file() {
   shasum -a 256 "$1" | awk '{print $1}'
 }
@@ -54,6 +48,26 @@ $message
 EOF
 }
 
+_child_pid=""
+_on_exit() { [[ -n "$_child_pid" ]] && kill "$_child_pid" 2>/dev/null || true; }
+trap _on_exit EXIT
+
+run_agent() {
+  local prompt_file="$1"
+  local outbox_tmp="$2"
+
+  if [[ "$ROLE" == "codex" ]]; then
+    codex exec "${FLAG_ARR[@]}" -C "$WORKDIR" -o "$outbox_tmp" - <"$prompt_file" &
+  else
+    claude "${FLAG_ARR[@]}" -p <"$prompt_file" >"$outbox_tmp" &
+  fi
+  _child_pid=$!
+  wait "$_child_pid"
+  local rc=$?
+  _child_pid=""
+  return "$rc"
+}
+
 case "$ROLE" in
   codex)
     PEER="CLAUDE"
@@ -76,9 +90,10 @@ esac
 mkdir -p "$WORKDIR/$MAIL_DIR"
 touch "$INBOX" "$OUTBOX"
 
-read_flags "$ROLE_FLAGS" FLAG_ARR
-
+FLAG_ARR=()
+read -r -a FLAG_ARR <<< "$ROLE_FLAGS"
 LAST_HASH=""
+ROLE_UPPER="$(printf '%s' "$ROLE" | tr '[:lower:]' '[:upper:]')"
 
 printf '[%s] polling %s every %ss\n' "$ROLE" "$INBOX" "$POLL_INTERVAL"
 
@@ -91,22 +106,23 @@ while true; do
       PROMPT_FILE="$(mktemp)"
       OUTBOX_TMP="$(mktemp)"
 
-      build_prompt "${ROLE^^}" "$PEER" "$INBOX" "$OUTBOX" "$MESSAGE" >"$PROMPT_FILE"
+      build_prompt "$ROLE_UPPER" "$PEER" "$INBOX" "$OUTBOX" "$MESSAGE" >"$PROMPT_FILE"
 
       printf '\n[%s] %s processing inbox at %s\n' "$ROLE" "$(date '+%H:%M:%S')" "$INBOX"
 
-      if [[ "$ROLE" == "codex" ]]; then
-        codex exec "${FLAG_ARR[@]}" -C "$WORKDIR" -o "$OUTBOX_TMP" - <"$PROMPT_FILE"
+      if run_agent "$PROMPT_FILE" "$OUTBOX_TMP"; then
+        mv "$OUTBOX_TMP" "$OUTBOX"
+        printf '[%s] wrote reply to %s\n' "$ROLE" "$OUTBOX"
       else
-        claude "${FLAG_ARR[@]}" -p <"$PROMPT_FILE" >"$OUTBOX_TMP"
+        STATUS=$?
+        printf '[%s] agent command failed with exit %s\n' "$ROLE" "$STATUS" >&2
+        printf 'AGENT_ERROR: %s failed with exit %s. Check .nex-mail/%s.log.\n' \
+          "$ROLE_UPPER" "$STATUS" "$ROLE" >"$OUTBOX_TMP"
+        mv "$OUTBOX_TMP" "$OUTBOX"
       fi
 
-      mv "$OUTBOX_TMP" "$OUTBOX"
       LAST_HASH="$CURRENT_HASH"
-
       rm -f "$PROMPT_FILE"
-
-      printf '[%s] wrote reply to %s\n' "$ROLE" "$OUTBOX"
     fi
   fi
 
