@@ -11,6 +11,13 @@ if ! command -v nex >/dev/null 2>&1; then
   exit 1
 fi
 
+send_line() {
+  local pane="$1"
+  local text="$2"
+
+  nex pane send --to "$pane" "$(printf '%s\r' "$text")"
+}
+
 if [[ $# -lt 2 || $# -gt 3 ]]; then
   echo "Usage: post_message.sh <codex|claude> <message-file|-> [workdir]" >&2
   exit 1
@@ -47,6 +54,6 @@ else
   cp "$SOURCE" "$INBOX"
 fi
 
-nex pane send --to "$PANE" CHECK_INBOX
+send_line "$PANE" CHECK_INBOX
 
 echo "Posted message to $TARGET and sent CHECK_INBOX."

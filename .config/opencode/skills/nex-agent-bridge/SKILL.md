@@ -28,7 +28,6 @@ The script:
 - names the current pane `coordinator`
 - creates a right-hand worker column by splitting the coordinator pane once
 - creates the `claude` pane by splitting the `codex` pane before either agent starts
-- selects a visible multi-pane Nex layout
 - creates `.nex-mail/`
 - starts Codex and Claude Code in their panes
 - primes each agent with the mailbox protocol
@@ -42,7 +41,7 @@ Environment variables supported by `scripts/start_bridge.sh`:
 - `SPLIT_DELAY`
 - `LAYOUT`
 
-`LAYOUT` defaults to `main-vertical`, which keeps the coordinator as the large left pane and stacks `codex` and `claude` on the right. Valid layouts in the current Nex CLI are:
+By default the script preserves the explicit split tree and does not call `nex layout select`. Set `LAYOUT` only if you explicitly want Nex to rearrange the pane tree. Valid layouts in the current Nex CLI are:
 
 - `tiled`
 - `even-horizontal`

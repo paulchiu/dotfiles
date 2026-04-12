@@ -13,6 +13,13 @@ for cmd in nex codex claude; do
   fi
 done
 
+send_line() {
+  local pane="$1"
+  local text="$2"
+
+  nex pane send --to "$pane" "$(printf '%s\r' "$text")"
+}
+
 WORKDIR="${1:-$PWD}"
 WORKDIR="${WORKDIR%/}"
 MAIL_DIR="${MAIL_DIR:-.nex-mail}"
@@ -20,7 +27,7 @@ COORDINATOR_NAME="${COORDINATOR_NAME:-coordinator}"
 CODEX_NAME="${CODEX_NAME:-codex}"
 CLAUDE_NAME="${CLAUDE_NAME:-claude}"
 SPLIT_DELAY="${SPLIT_DELAY:-2}"
-LAYOUT="${LAYOUT:-main-vertical}"
+LAYOUT="${LAYOUT:-}"
 
 if [[ ! -d "$WORKDIR" ]]; then
   echo "Workdir does not exist: $WORKDIR" >&2
@@ -64,21 +71,24 @@ EOF
 
 printf -v CODEX_CMD 'cd %q && codex --no-alt-screen -C %q %q' "$WORKDIR" "$WORKDIR" "$CODEX_PROMPT"
 printf -v CLAUDE_CMD 'cd %q && claude %q' "$WORKDIR" "$CLAUDE_PROMPT"
-printf -v CREATE_CLAUDE_PANE_CMD 'cd %q && nex pane split --name %q --direction horizontal --path %q' "$WORKDIR" "$CLAUDE_NAME" "$WORKDIR"
+printf -v CREATE_CLAUDE_PANE_CMD 'cd %q && nex pane split --name %q --direction vertical --path %q' "$WORKDIR" "$CLAUDE_NAME" "$WORKDIR"
 
 nex pane name "$COORDINATOR_NAME"
-nex pane split --name "$CODEX_NAME" --direction vertical --path "$WORKDIR"
+nex pane split --name "$CODEX_NAME" --direction horizontal --path "$WORKDIR"
 sleep "$SPLIT_DELAY"
 
 # Build a nested layout: coordinator on the left, codex/claude stacked on the right.
-nex pane send --to "$CODEX_NAME" "$CREATE_CLAUDE_PANE_CMD"
+send_line "$CODEX_NAME" "$CREATE_CLAUDE_PANE_CMD"
 sleep "$SPLIT_DELAY"
-nex layout select "$LAYOUT"
-sleep 1
 
-nex pane send --to "$CODEX_NAME" "$CODEX_CMD"
+if [[ -n "$LAYOUT" ]]; then
+  nex layout select "$LAYOUT"
+  sleep 1
+fi
+
+send_line "$CODEX_NAME" "$CODEX_CMD"
 sleep 1
-nex pane send --to "$CLAUDE_NAME" "$CLAUDE_CMD"
+send_line "$CLAUDE_NAME" "$CLAUDE_CMD"
 
 cat <<EOF
 Bridge started in $WORKDIR
@@ -86,7 +96,15 @@ Bridge started in $WORKDIR
 - codex pane: $CODEX_NAME
 - claude pane: $CLAUDE_NAME
 - mail dir: $MAIL_DIR
-- layout: $LAYOUT
+EOF
+
+if [[ -n "$LAYOUT" ]]; then
+  cat <<EOF
+- layout override: $LAYOUT
+EOF
+fi
+
+cat <<EOF
 
 Send work with:
   printf '%s\n' 'Your message' | ./scripts/post_message.sh codex -
