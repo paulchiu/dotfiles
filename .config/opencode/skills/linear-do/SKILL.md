@@ -93,7 +93,7 @@ After the PR is created, check that CI passes:
 2. If checks are still pending, set up a `/loop` to poll every 3 minutes:
    - Run `gh pr checks <number>` each iteration.
    - If all checks pass, report success and stop the loop.
-   - If any checks fail, investigate the failure logs, fix the issues, commit the fix (using write-commit-message skill), push, and continue monitoring.
+   - If any checks fail, use the **bk-buildkite** skill to investigate Buildkite failures. Run `bk use mryum`, then `bk build view <build-number> -p <pipeline> -s failed,broken` to find the failed job, then `bk job log <job-uuid> -p <pipeline> --no-timestamps` to read the logs. Fix the issues, commit the fix (using write-commit-message skill), push, and continue monitoring.
 3. Once all checks are green, notify the user and ask if they want to:
    - Mark the PR as ready for review (`gh pr ready <number>`)
    - Request reviewers
