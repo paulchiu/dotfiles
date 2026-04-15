@@ -59,6 +59,8 @@ gh pr checks <pr>
 - Any `pending`/`in_progress`/`queued`: nothing to do; the next iteration will recheck.
 - Any `fail`/`failure`/`cancelled`: fetch the failing job's log, diagnose, attempt a fix. See "Fix loop" below.
 
+**For any Buildkite check** (i.e. a check named `buildkite/...`), use the `bk-buildkite` skill rather than raw `gh` output. That skill handles build/job/log queries, agent status, and retriggers via the `bk` CLI and knows the repo's pipeline slugs. Invoke it whenever a Buildkite check is pending (to get a better ETA) or failing (to read the failing job log and decide between retry vs code fix).
+
 **d. Check rebase need.** Fetch `origin/<base>` and compare:
 
 ```bash
