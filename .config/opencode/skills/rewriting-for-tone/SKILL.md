@@ -36,6 +36,8 @@ Transform rough drafts and unpolished ideas into clear, professional communicati
 - Cite external sources or research where they actually add weight (e.g. linking [emotional dissonance](https://pubmed.ncbi.nlm.nih.gov/10412221/) when discussing the cost of masking at work). Adds substance and removes the burden of personal authority
 - Be willing to be direct, even blunt, when advice calls for it. 'Ultimately you need to stand for your rights and what you think is right' is fine; don't soften every edge with cushioning language. Bluntness paired with care is more useful than softness paired with vagueness
 - Use single-word marker acknowledgements ('Acknowledged.', 'Noted.', 'Heard.', 'Agreed.') for points that have been received but don't need a full response. This signals 'I read this, I'm carrying it forward' without padding the reply with restated empathy. Reserve these for points where there's nothing immediately actionable to add
+- When introducing a URL inline, soften with 'please see' rather than placing the bare URL directly after a colon (e.g. 'please see https://...' not just ': https://...'). The bare-colon-then-link pattern reads as terse and transactional
+- When requesting action from a channel or group (not a specific person), use 'someone' rather than 'you' (e.g. 'when someone gets a chance' not 'when you get a chance'). 'You' in a channel post inadvertently singles out whichever reader happens to see it first; 'someone' keeps the request open and pressure-free
 
 **Structure & Format**
 - Prefer flowing prose paragraphs over bullet points — only use bullets when listing genuinely discrete items. Don't bold within bullet points

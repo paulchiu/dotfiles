@@ -83,6 +83,18 @@ git push --force-with-lease
 
 **e. Check branch drift.** If the remote head SHA differs from what you last pushed (someone else pushed), re-read PR state before acting; don't blindly force-push over a teammate's work.
 
+**f. Check for new review comments.** Look for new comments or reviews from CodeRabbit, other bots, or human reviewers since the last iteration:
+
+```bash
+gh pr view <pr> --json comments,reviews,reviewThreads
+```
+
+Track the latest comment/review timestamp across iterations (carry it forward in the wake-up prompt alongside start/stop epoch and PR number). If new comments have arrived:
+
+- **Do NOT stop the loop.** Continue tending (CI, rebase) as normal.
+- **Do NOT attempt to address the comments in the loop.** These need human judgment.
+- Surface them prominently in the next loop summary/reason: list who commented (e.g. "CodeRabbit", reviewer handles), a count of new comments, and a one-line gist if easily extractable. Use a `PushNotification` (or runtime equivalent) to ping the user so they know to review and decide what to do.
+
 ### Fix loop (for CI failures)
 
 Reserve aggressive fixing for unambiguous, reversible failures:
