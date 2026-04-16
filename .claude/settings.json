@@ -99,12 +99,12 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "voiceEnabled": true,
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
   "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": true,
   "allowedDirectories": [
     "/tmp"
   ],
