@@ -38,6 +38,7 @@ Linear text is read by both agents and humans. These rules apply to issue bodies
 - Don't add wrap-up, summary, or evaluative closing sentences; stop when the facts are stated
 - Single quotes for scare quotes and emphasis ('in theory'), not italics
 - Lead with the finding or action, not validation or framing
+- Cite sources APA/Harvard style: a short hyperlinked label in parentheses after the referenced statement, e.g. `data stops flowing once a site is migrated ([Playbook](https://...))`. Use one-word labels (`(Playbook)`, `(Slack)`, `(Dashboard)`, `(Grafana docs)`); hyperlink only the label, not surrounding prose. Do not drop raw URLs inline, wrap long phrases in links (which swallow the prose), or use numbered footnotes like `[1]` (Linear escapes the brackets). Skip a `## References` section unless a source is cited many times and needs disambiguation.
 
 ## The Agent-Ready Card Template
 
@@ -192,11 +193,13 @@ Use this structure when the spike is investigating an unknown problem:
 - Is it worth fixing? (Consider effort vs impact)
 
 # Possible Outcomes
-1. Additional spike required; if further investigation is needed
-2. Close as won't do; if effort outweighs benefit or issue is not actionable
-3. Create resolution issue; if we decide to proceed with a fix
-4. Fix issue; if solution is simple and time allows
+- Additional spike required; if further investigation is needed
+- Close as won't do; if effort outweighs benefit or issue is not actionable
+- Create resolution issue; if we decide to proceed with a fix
+- Fix issue; if solution is simple and time allows
 ```
+
+Use bullets, not a numbered list. Linear's renderer truncates multi-item numbered lists in saved descriptions (items after the first silently disappear); bullets are safe.
 
 ### Enumeration spike description
 
@@ -204,15 +207,17 @@ Use this structure when the spike is enumerating a known list of work items:
 
 ```markdown
 # Action Items
-1. Review scope and identify specific items that need work
-2. Note any constraints or special considerations for each item
-3. Compile list of tasks needed and have team/PM review and prioritise
-4. Create Linear issues for approved work
+- Review scope and identify specific items that need work
+- Note any constraints or special considerations for each item
+- Compile list of tasks needed and have team/PM review and prioritise
+- Create Linear issues for approved work
 
 # Possible Outcomes
-1. Additional spike required; if scope is unclear or further investigation needed
-2. Create (sub)tasks for each item of work; descope certain items if effort outweighs value
+- Additional spike required; if scope is unclear or further investigation needed
+- Create (sub)tasks for each item of work; descope certain items if effort outweighs value
 ```
+
+Use bullets, not a numbered list (see the note under the exploratory template).
 
 ## Comments
 
@@ -324,6 +329,7 @@ linear issue create --team ENG -t "[2 day spike] Investigate slow checkout" -l "
 - **Update later** with `mcp__claude_ai_Linear__save_issue` (passing the existing id) or `linear issue update <ID> ...`.
 - **Prefer linking to one example file** over writing a paragraph of prose about a pattern.
 - **More detail is not always better.** A 500-word card with contradictory instructions is worse than a 100-word card with clear acceptance criteria.
+- **Numbered lists get truncated.** When Linear saves a description through MCP, multi-item numbered lists (`1.` `2.` `3.`) are sometimes reduced to just the first item; the others silently disappear. Use bulleted lists (`-` or `*`) for anything that doesn't need ordering. Only use a numbered list when order is semantically required, and verify the saved result with `get_issue` if you do.
 
 ## Guidelines
 
