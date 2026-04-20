@@ -66,5 +66,13 @@
   "Front Split Right": {
     "type": "duration",
     "aliases": ["front split right", "front split, right"]
+  },
+  "Kneeling Quad Stretch Left": {
+    "type": "duration",
+    "aliases": ["kneeling quad stretch left"]
+  },
+  "Kneeling Quad Stretch Right": {
+    "type": "duration",
+    "aliases": ["kneeling quad stretch right"]
   }
 }

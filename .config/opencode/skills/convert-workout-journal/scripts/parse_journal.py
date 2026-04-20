@@ -95,6 +95,19 @@ def parse_duration_seconds(minutes_str, seconds_str=None):
     return total
 
 
+def parse_simple_duration_seconds(raw):
+    """Parse a bare duration value like M:SS or Xmin Ys."""
+    mmss = re.match(r'^\s*(\d+):(\d{2})\s*$', raw)
+    if mmss:
+        return parse_duration_seconds(mmss.group(1), mmss.group(2))
+
+    verbose = re.match(r'^\s*(\d+)\s*min(?:\s+(\d+)\s*s)?\s*$', raw, re.IGNORECASE)
+    if verbose:
+        return parse_duration_seconds(verbose.group(1), verbose.group(2))
+
+    return None
+
+
 def parse_journal(text, date, alias_map, exercises, exercises_dir):
     """Parse raw journal text into structured workout data."""
     lines = text.split("\n")
@@ -155,6 +168,7 @@ def parse_journal(text, date, alias_map, exercises, exercises_dir):
         sets = []
         notes = []
         duration_exercises = []
+        direct_duration = None
 
         for line in block_lines:
             stripped = line.strip()
@@ -191,12 +205,26 @@ def parse_journal(text, date, alias_map, exercises, exercises_dir):
                 })
                 continue
 
+            # Try a direct duration value beneath a duration exercise heading
+            if ex_type == "duration":
+                seconds = parse_simple_duration_seconds(stripped)
+                if seconds is not None:
+                    direct_duration = seconds
+                    continue
+
             # Otherwise it's a note line
             notes.append(stripped)
 
         # If we got duration sub-exercises (container heading pattern)
         if duration_exercises:
             result["exercises"].extend(duration_exercises)
+        elif direct_duration is not None:
+            result["exercises"].append({
+                "name": canonical,
+                "type": "duration",
+                "notes": notes,
+                "duration": direct_duration,
+            })
         elif sets:
             exercise = {
                 "name": canonical,
