@@ -59,6 +59,10 @@
     "type": "duration",
     "aliases": ["middle split", "split", "splits"]
   },
+  "Front Split": {
+    "type": "duration",
+    "aliases": ["front split", "front splits"]
+  },
   "Front Split Left": {
     "type": "duration",
     "aliases": ["front split left", "front split, left"]
@@ -66,6 +70,10 @@
   "Front Split Right": {
     "type": "duration",
     "aliases": ["front split right", "front split, right"]
+  },
+  "Kneeling Quad Stretch": {
+    "type": "duration",
+    "aliases": ["kneeling quad stretch", "kneeling quad stretches"]
   },
   "Kneeling Quad Stretch Left": {
     "type": "duration",

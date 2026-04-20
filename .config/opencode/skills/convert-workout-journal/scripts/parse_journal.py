@@ -96,7 +96,7 @@ def parse_duration_seconds(minutes_str, seconds_str=None):
 
 
 def parse_simple_duration_seconds(raw):
-    """Parse a bare duration value like M:SS or Xmin Ys."""
+    """Parse a bare duration value like M:SS, Xmin Ys, or Xs."""
     mmss = re.match(r'^\s*(\d+):(\d{2})\s*$', raw)
     if mmss:
         return parse_duration_seconds(mmss.group(1), mmss.group(2))
@@ -104,6 +104,10 @@ def parse_simple_duration_seconds(raw):
     verbose = re.match(r'^\s*(\d+)\s*min(?:\s+(\d+)\s*s)?\s*$', raw, re.IGNORECASE)
     if verbose:
         return parse_duration_seconds(verbose.group(1), verbose.group(2))
+
+    bare_seconds = re.match(r'^\s*(\d+)\s*s\s*$', raw, re.IGNORECASE)
+    if bare_seconds:
+        return int(bare_seconds.group(1))
 
     return None
 
