@@ -1,5 +1,5 @@
 ---
-name: rewriting-for-tone
+name: writing-tone
 description: "Rewrites drafts and ideas into polished communication in the user's voice. TRIGGER when: user asks to write, draft, rewrite, summarise, or share any non-code communication (Slack, email, update, report, retro card, FYI), or mentions 'my tone'/'my style'/'my voice', or provides raw notes to turn into a message. DO NOT TRIGGER for: commit messages, PR descriptions, or technical documentation."
 ---
 
