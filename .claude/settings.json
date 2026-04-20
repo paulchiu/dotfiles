@@ -33,7 +33,8 @@
       "mcp__chrome-devtools__*",
       "Skill"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "auto"
   },
   "hooks": {
     "Stop": [
@@ -110,5 +111,6 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  }
+  },
+  "skipAutoPermissionPrompt": true
 }
