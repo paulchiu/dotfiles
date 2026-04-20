@@ -14,9 +14,9 @@ Drives a self-paced `/loop` that repeatedly checks one specific pull request, re
 Ask the user for any of the following that aren't already obvious from the request:
 
 1. **PR identifier** — a PR number, URL, or branch name. If the user said "this PR" without context, try `gh pr view` in the current repo first; otherwise ask.
-2. **Loop interval** — how often to check. Default `10min`. Accept `5min`, `10min`, `20m`, `1h`, etc. Snap to 270s if the user picks 5min (prompt-cache TTL consideration — see `/loop` skill notes if unsure).
-3. **Timeout** — how long to keep tending before handing back to the user. Default `2h`. Accept `1h`, `2h`, `3h`, etc. At timeout, do not silently stop — ask the user whether to extend, stop, or hand off.
-4. **Collision handling** — if any existing `/loop` or scheduled wakeup already targets the same PR, ask whether to (a) cancel the existing one and start fresh, (b) skip starting a new one and let the existing one continue, or (c) run both (rarely correct — warn).
+2. **Loop interval** — how often to check. Default `10 min`. Accept `5 min`, `10 min`, `20 min`, `1 h`, etc. Snap to 270s if the user picks 5 min (prompt-cache TTL consideration — see `/loop` skill notes if unsure).
+3. **Timeout** — how long to keep tending before handing back to the user. Default `2 h`. Accept `1 h`, `2 h`, `3 h`, etc. At timeout, do not silently stop — ask the user whether to extend, stop, or hand off.
+4. **Collision handling** — if any existing `/loop` or scheduled wake-up already targets the same PR, ask whether to (a) cancel the existing one and start fresh, (b) skip starting a new one and let the existing one continue, or (c) run both (rarely correct — warn).
 
 Confirm all four values back to the user in one sentence before kicking off the loop.
 
@@ -47,7 +47,7 @@ Each iteration does the following, in order, stopping as soon as a terminal cond
 
 **a. Check merge status.** If `state == MERGED`, stop the loop and report success with merge URL and timestamp.
 
-**b. Check timeout.** If `now >= stop_epoch`, stop the loop and ask the user whether to extend (and by how long), hand off, or close out. Do not schedule another wakeup until they answer.
+**b. Check timeout.** If `now >= stop_epoch`, stop the loop and ask the user whether to extend (and by how long), stop, or hand off. Do not schedule another wake-up until they answer.
 
 **c. Check CI status.**
 
@@ -67,7 +67,15 @@ gh pr checks <pr>
 cd <worktree> && git fetch origin <base> --quiet && git rev-list --left-right --count origin/<base>...HEAD
 ```
 
-The left count is commits-behind. If behind > 0 AND `mergeStateStatus` is `BEHIND` or a rebase would unblock merge:
+The left count is commits-behind. If behind > 0 AND `mergeStateStatus` is `BEHIND` or a rebase would unblock merge, run the **preflight branch guard** below before touching history:
+
+```bash
+current=$(git rev-parse --abbrev-ref HEAD)
+[ "$current" = "<pr-head-branch>" ] || { echo "preflight: on $current, expected <pr-head-branch>"; exit 1; }
+[ "$current" != "<base>" ] && [ "$current" != "main" ] || { echo "preflight: refusing to rebase/push on base branch"; exit 1; }
+```
+
+If either assertion fails, stop the loop and ask the user: something has switched the worktree off the PR head, and blindly rebasing would be destructive. Only once the preflight passes:
 
 ```bash
 git rebase origin/<base>
@@ -79,15 +87,17 @@ Resolve conflicts if safely resolvable (obvious one-side-only changes, auto-merg
 git push --force-with-lease
 ```
 
-**Never** use bare `--force`. **Never** rebase `main` itself.
+**Never** use bare `--force`. **Never** rebase `main` itself. The preflight guard above must run before every rebase or force-push attempt, not just the first.
 
 **e. Check branch drift.** If the remote head SHA differs from what you last pushed (someone else pushed), re-read PR state before acting; don't blindly force-push over a teammate's work.
 
 **f. Check for new review comments.** Look for new comments or reviews from CodeRabbit, other bots, or human reviewers since the last iteration:
 
 ```bash
-gh pr view <pr> --json comments,reviews,reviewThreads
+gh pr view <pr> --json comments,reviews
 ```
+
+(The `reviewThreads` field is not exposed by `gh pr view --json`. If you need per-file inline review threads, fetch them separately via `gh api graphql` or a compatible extension.)
 
 Track the latest comment/review timestamp across iterations (carry it forward in the wake-up prompt alongside start/stop epoch and PR number). If new comments have arrived:
 
@@ -109,7 +119,7 @@ Safety rules for every fix attempt:
 - Run the repo's full local validation (typecheck + test + lint) before pushing a fix.
 - Never skip hooks (`--no-verify`) unless the user has explicitly authorised it for this PR.
 - Never push to `main` directly.
-- If the same fix attempt fails twice in a row, stop and hand back.
+- If two fix attempts fail consecutively (regardless of fix type), stop and hand back.
 
 ### 4. Schedule the next wake-up
 
@@ -124,7 +134,7 @@ so later iterations have everything they need without re-asking the user.
 
 ### 5. At timeout, ask to continue
 
-When `now >= stop_epoch`, do NOT reschedule. Post a short summary: total iterations, fixes applied, current PR state, current CI state, current rebase state. Then ask: "Extend by how long? Or stop?" Wait for the user.
+When `now >= stop_epoch`, do NOT reschedule. Post a short summary: total iterations, fixes applied, current PR state, current CI state, current rebase state. Then ask: "Extend by how long? Stop? Or hand off to a human/owner?" Treat the three options as mutually exclusive and wait for the user before doing anything else.
 
 ## Notes
 
