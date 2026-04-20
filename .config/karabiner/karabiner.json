@@ -7,7 +7,6 @@
                     {
                         "available_since": "13.6.0",
                         "description": "Mouse Keys Mode v4 (rev 3)",
-                        "enabled": false,
                         "manipulators": [
                             {
                                 "conditions": [
@@ -1315,6 +1314,15 @@
                         "vendor_id": 7504
                     },
                     "manipulate_caps_lock_led": false
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 1809,
+                        "vendor_id": 13364
+                    },
+                    "ignore": false
                 }
             ],
             "name": "Default profile",
