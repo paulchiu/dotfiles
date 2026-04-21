@@ -219,6 +219,12 @@ export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 export PATH="/opt/homebrew/opt/helm@3/bin:$PATH"
 export GPG_TTY=$(tty)
 
+# Nex: when a pane opens in $HOME, jump to the sandbox dir.
+# Skip if the pane was launched with --path (PWD != $HOME).
+if [[ -n $NEX_PANE_ID && -o interactive && $PWD == $HOME && -d /Users/paul/dev/sandbox ]]; then
+  cd /Users/paul/dev/sandbox
+fi
+
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
 
