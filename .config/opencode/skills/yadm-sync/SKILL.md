@@ -9,10 +9,12 @@ Add, commit, and push dotfile changes using `yadm`.
 
 ## Workflow
 
-1. Run `yadm status` to see modified and untracked files.
+Assume the user has already told you (or you have already edited) the specific file(s) to stage. Work from that known path list. Do not scan the home directory for untracked files.
+
+1. Run `yadm status` (no flags) to confirm modified tracked files. This is safe: it hides untracked by default.
 2. Run `yadm diff <file>` for modified files, or read new files directly to understand the change.
 3. Run `yadm log -5 --oneline` to match the recent commit style.
-4. Stage the file(s):
+4. Stage the file(s) by exact path:
    - Tracked and modified: `yadm add <path>`
    - New, or `.gitignore`-blocked (e.g. anything under `.claude/`, `.config/opencode/`): `yadm add -f <path>`
 5. Commit with a Conventional-Commits-style subject that matches the recent log. Use a HEREDOC for multi-line bodies:
@@ -45,3 +47,8 @@ Keep the subject short and descriptive. Put the "why" in the body only when the 
 - `~/.claude/skills` is a symlink to `~/.config/opencode/skills`, so edit skills under the opencode path and stage them there.
 - Do not use `--no-verify` or skip hooks unless the user explicitly asks.
 - If the user said "commit" only, stop after commit. If they said "update", "sync", or "add commit and push", complete the full cycle through push.
+
+## Never do
+
+- **Never run `yadm status -u`, `yadm status -uall`, or any discovery that lists untracked files under `~`.** The home directory contains hundreds of thousands of untracked files across caches, app bundles, Google Drive, etc. Past runs have produced 400MB+ of output and stalled the session. If you don't know the file path to stage, ask the user rather than scanning.
+- Never `yadm add .` or `yadm add -A` from `$HOME`. Always stage an explicit path.
