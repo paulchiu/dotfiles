@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rename Dated Documents"
+  short_description: "Rename docs to yyyy-mm-dd Title.md"
+  default_prompt: "Use $dated-doc-renamer to rename these notes into yyyy-mm-dd Title.md format using created-at dates and preserving acronyms."
