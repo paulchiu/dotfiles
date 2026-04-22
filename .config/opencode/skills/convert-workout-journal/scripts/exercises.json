@@ -55,6 +55,10 @@
     "type": "strength",
     "aliases": ["cable skull crushers", "skull crushers", "cable skull crusher"]
   },
+  "Bar Skull Crushers": {
+    "type": "strength",
+    "aliases": ["bar skull crushers", "bar skull crusher"]
+  },
   "Middle Split": {
     "type": "duration",
     "aliases": ["middle split", "split", "splits"]
