@@ -60,6 +60,8 @@ alias zc="zellij --layout compact"
 alias ftx="fzf_to_context"
 alias hs="atuin search -i"
 alias s="~/dev/search.sh"
+# Global alias: `bat F`, `vim F`, `less F` expand F to "$(fzf)" anywhere on the line.
+alias -g F='"$(fzf)"'
 ## Development Tools
 alias sf="swift-format --recursive -i ."
 alias tf="terraform"
