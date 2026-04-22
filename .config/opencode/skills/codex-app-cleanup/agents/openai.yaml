@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex App Cleanup"
+  short_description: "Clean stale Codex desktop app refs"
+  default_prompt: "Use $codex-app-cleanup to remove stale Codex desktop project picker entries and invalid local environment refs safely."
