@@ -29,8 +29,10 @@ Hardcoded page IDs. The pages are expected to live at these locations indefinite
 | --- | --- | --- |
 | TypeORM → Prisma Migration | `2e43d52b38384694b06f897645d82d3d` | `33c3c67199468023b997ef7e9821532b` |
 | Vulnerability Remediation | `9c4798e8630e45ddb04aef74f661f4e1` | `33d3c671994681bd9c06ec8eaf76b95e` |
-| Form Library Migration | `d9a13af6e5274d8fb7c2e53e6a2fd7be` | `3403c6719946812ebd2fccd24545f931` |
-| Formik+Yup → RHF+Zod | `547e626d2c4f4c48a0c77d96da682098` | `33d3c671994680d4b8bcfc716a88314a` |
+| Manage FE forms — Phase 1–2 (yum-ui / Formik decouple, prep work) | `d9a13af6e5274d8fb7c2e53e6a2fd7be` | `3403c6719946812ebd2fccd24545f931` |
+| Manage FE forms — Phase 3–4 (Formik→RHF + Yup→Zod migration) | `547e626d2c4f4c48a0c77d96da682098` | `33d3c671994680d4b8bcfc716a88314a` |
+
+**Note on the two Manage FE forms pages**: these two children cover different phases of the same Linear project (`2026 AI-pril Clean Kitchen - 🔪 Formik + Yup`), split by milestone. Phase 1–2 is the in-flight prep/decouple work (roughly 111 tickets). Phase 3–4 is the actual Formik→RHF and Yup→Zod migration (roughly 180 tickets, all in Backlog at time of writing, at risk of missing the Apr 30 deadline). Each parent plan's Generation prompt scopes the subagent's Linear query to the correct milestones: do not let a subagent lump them together.
 
 ### Consolidated snapshot (regenerate after all 4 above)
 
@@ -76,6 +78,7 @@ You are regenerating a Notion daily progress report. {{ reason_clause }}
    Find the "Generation prompt" section (a toggle under a "## Progress updates" heading with a blockquote). It names the Linear project to query.
 2. Fetch the current child page: `https://www.notion.so/{{ child_id }}` ({{ child_title }}).
    Study the existing tables, toggles, and assessment callout. You will preserve this format exactly. Only values, dates, and narrative change.
+   **Scope-change exception**: if the parent plan's Generation prompt narrows or widens the milestone scope compared to the current child page (e.g. the prompt says "this page now covers Phase 3–4 only" but the existing page shows Phase 1–2 data), the parent prompt wins: rescope the tables to match the parent prompt and flag this in your report back. Do not preserve stale scoping.
 3. Query Linear for ALL CUSM tickets in the project named in the generation prompt. Use `mcp__claude_ai_Linear__list_issues` with the `project` parameter. Paginate with `cursor` if needed. Capture identifier, title, state name, state type, assignee, completedAt, updatedAt.
 4. Cross-reference Linear results with the parent plan page's listed tickets. The parent plan is authoritative for scope. Do NOT reduce the tracked ticket count below what the parent plan lists. If Linear has more tickets than the parent plan lists, include them all.
 5. Regenerate the child page content for {{ report_date }}:
@@ -134,7 +137,21 @@ You are regenerating the consolidated Clean Kitchen daily project snapshot in No
 ### Vulnerability Remediation (child: `9c4798e8630e45ddb04aef74f661f4e1`)
 {{ vuln_summary }}
 
-### Form Library / Formik+Yup (same underlying workstream; children: `d9a13af6e5274d8fb7c2e53e6a2fd7be` and `547e626d2c4f4c48a0c77d96da682098`)
+### Manage FE forms (single consolidated workstream, two phases tracked as separate detail pages)
+
+The two form-related detail pages cover different phases of the same underlying Linear project:
+- **Phase 1–2 prep / decouple** (child `d9a13af6e5274d8fb7c2e53e6a2fd7be`): in-flight, roughly 111 tickets.
+- **Phase 3–4 Formik→RHF + Yup→Zod** (child `547e626d2c4f4c48a0c77d96da682098`): not started, roughly 180 tickets, at risk of missing Apr 30.
+
+In the Overall Health table, combine these into a **single "Manage FE forms" row** rather than two rows. That row's values:
+- `% Complete` = done_across_all_4_phases / total_across_all_4_phases
+- `Projected finish`: use the Phase 3–4 outlook, since the workstream as a whole cannot finish until Phase 3–4 completes.
+- `Health` color: reflect the worse of the two (Phase 3–4 is at risk / red).
+- Link to both child detail pages via `<mention-page url="…"/>` in the row's label or a note below.
+
+For the per-workstream section below the Overall Health table, write one "Manage FE forms" section whose "Movement since last report" bullets and Assessment paragraph distinguish the two phases (e.g. "Phase 1–2: X tickets shipped today; Phase 3–4: not started, blocked on Phase 1–2").
+
+Aggregated summary data (both phases):
 {{ form_summary }}
 
 4. Regenerate the consolidated page content for {{ report_date }}:
