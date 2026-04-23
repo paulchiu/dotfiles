@@ -176,6 +176,7 @@ local autoload_functions=(
     write_pull_request
     create_pull_request
     jj_rewrite_revision
+    ff
 )
 autoload -Uz $autoload_functions
 
