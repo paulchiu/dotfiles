@@ -119,3 +119,5 @@ if [[ ${PLATFORM} == "Linux" ]]; then
     alias sc="scrot -d 3 -e 'mv \$f ~/Pictures/screenshots/'"
 fi
 alias c="pbcopy"
+
+alias no="nex open"
