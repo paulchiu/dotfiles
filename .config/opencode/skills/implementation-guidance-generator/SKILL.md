@@ -1,6 +1,6 @@
 ---
 name: implementation-guidance-generator
-description: Generates structured implementation guidance documents for technical issues, bug fixes, and feature development. Use when creating actionable implementation plans with file references, code locations, and step-by-step approaches following Obsidian markdown formatting standards.
+description: "Generates Obsidian-style implementation guidance docs for technical issues, bug fixes, and features with file refs, code locations, and step-by-step plans."
 ---
 
 # Implementation Guidance Generator

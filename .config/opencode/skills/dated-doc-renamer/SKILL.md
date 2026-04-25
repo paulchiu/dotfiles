@@ -1,6 +1,6 @@
 ---
 name: dated-doc-renamer
-description: Renames notes and documents into a consistent `yyyy-mm-dd Title.md` style. Use when the user wants filenames normalised, wants created-at dates added or preserved once, wants slugs converted to readable sentence-style titles, or wants acronym casing like `CAD`, `CUSM`, or `US` preserved.
+description: "Renames notes/docs to `yyyy-mm-dd Title.md` style. Use when normalising filenames, adding/preserving created-at dates, or converting slugs to sentence-case titles (preserves acronyms like CAD, US)."
 ---
 
 # Dated Doc Renamer

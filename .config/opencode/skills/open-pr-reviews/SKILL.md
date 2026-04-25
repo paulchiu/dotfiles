@@ -1,6 +1,6 @@
 ---
 name: open-pr-reviews
-description: "Opens GitHub PR URLs in cmux tabs for review, and cleans up review worktrees when done. Creates a workspace named 'Reviews YYYY-MM-DD' with one tab per PR, using git worktrees so multiple PRs from the same repo can be reviewed simultaneously. Use when asked to open PRs for review, set up PR review tabs, start morning PR review routine, clean review worktrees, clean up PR worktrees, or remove review worktrees."
+description: "Opens GitHub PR URLs in cmux tabs for review (one tab per PR via git worktrees) and cleans up review worktrees afterward. Use when asked to open PRs for review, start morning PR review, or clean review worktrees."
 ---
 
 # Open PR Reviews

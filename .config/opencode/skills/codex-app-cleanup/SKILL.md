@@ -1,6 +1,6 @@
 ---
 name: codex-app-cleanup
-description: Cleans stale Codex desktop app state such as dead project picker entries, invalid local environment refs, and obsolete worktree pairings. Use when the user says Codex still shows old projects or envs, mentions cleaned-up worktrees still appearing, or wants invalid desktop app refs removed safely.
+description: "Cleans stale Codex/ChatGPT desktop state: dead project picker entries, invalid env refs, obsolete worktree pairings. Use when Codex shows old projects/envs or stale worktrees still appear."
 ---
 
 # Codex App Cleanup

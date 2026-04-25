@@ -1,6 +1,6 @@
 ---
 name: linear-do
-description: "Implements a Linear issue end-to-end: reads the issue, implements the changes, commits, creates a PR, and monitors CI. Use when asked to do, implement, build, or work on a Linear issue. Triggers on phrases like 'do this Linear issue', 'implement CUSM-123', 'work on this Linear ticket', or when a Linear issue URL is provided with intent to implement it."
+description: "Implement a Linear issue end-to-end: read the ticket, code, commit, open a PR, monitor CI. Use for do/implement/work on a Linear issue, or when given a Linear URL/ID with intent to implement."
 ---
 
 # Linear Do

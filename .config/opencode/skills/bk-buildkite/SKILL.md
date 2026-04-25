@@ -1,6 +1,6 @@
 ---
 name: bk-buildkite
-description: Query Buildkite builds, jobs, logs, pipelines, and agents via the bk CLI. Use when investigating CI failures, viewing build status, reading job logs, retrying builds, listing pipelines, or any Buildkite interaction. Triggers on mentions of Buildkite, CI failures, build logs, pipeline status, or job errors.
+description: "Query Buildkite builds, jobs, logs, pipelines, and agents via the bk CLI. Use when investigating CI failures, reading build logs, retrying builds, or any Buildkite interaction."
 ---
 
 # Buildkite (bk CLI)

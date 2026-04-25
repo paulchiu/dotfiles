@@ -1,6 +1,6 @@
 ---
 name: worktree-tilt-schema
-description: "Modify a Tiltfile in a git worktree so the NestJS app can boot and regenerate schema.gql. Use when working in a worktree and needing to regenerate the GraphQL schema, or when schema.gql is stale after changing @Field decorators."
+description: "Modify a Tiltfile in a git worktree so the NestJS app boots and regenerates schema.gql. Use when in a worktree needing GraphQL schema regeneration, or when schema.gql is stale after @Field changes."
 ---
 
 # Worktree Tilt Schema Regeneration

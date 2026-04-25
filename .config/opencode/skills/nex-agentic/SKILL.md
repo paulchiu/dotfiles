@@ -1,13 +1,6 @@
 ---
 name: nex-agentic
-description: >
-  Use the Nex terminal multiplexer and its CLI to orchestrate multi-agent
-  development workflows. Enables spawning named child panes, starting Claude
-  agents in them, farming out parallel work, and coordinating results via
-  markdown files and direct pane messaging. Trigger when: the user asks to
-  "spawn agents", "fan out work", "create worker panes", "orchestrate panes",
-  "use nex to coordinate", "multi-agent", "farm out tasks", or any variation
-  of parallelizing work across Nex panes.
+description: "Orchestrate multi-agent work in Nex by spawning named child panes, starting Claude agents, and farming out tasks. Trigger on spawn agents, fan out work, multi-agent, farm out tasks, or worker panes."
 ---
 
 # Nex Agentic Development Skill

@@ -1,6 +1,6 @@
 ---
 name: archive-obsidian-vault
-description: Archives monthly work items from Obsidian vault Area/ and Projects/ to Archive/ with proper organization and attachment handling. Use when archiving completed monthly work.
+description: "Archives monthly Obsidian vault items from Area/ and Projects/ to Archive/, handling attachments. Use when archiving completed monthly work."
 ---
 
 # Archive Obsidian Vault

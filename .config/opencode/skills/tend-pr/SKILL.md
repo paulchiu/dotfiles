@@ -1,6 +1,6 @@
 ---
 name: tend-pr
-description: Actively maintains an open pull request until it merges or a timeout elapses — rebases onto main when out of date, diagnoses and fixes CI/build failures, pushes fixes, and hands control back to the user at timeout. Use when asked to "tend", "caretake", "babysit", "shepherd", "monitor", "watch", or "keep alive" a PR, or asked to keep a PR green/up-to-date/mergeable until it lands.
+description: "Maintain one open PR until merge or timeout: rebase onto main, diagnose CI/build failures, push fixes. Use for tend, caretake, babysit, shepherd, monitor, watch, keep alive, or keep green/mergeable."
 ---
 
 # Tend a Pull Request

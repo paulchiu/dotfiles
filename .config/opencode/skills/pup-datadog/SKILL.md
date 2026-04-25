@@ -1,6 +1,6 @@
 ---
 name: pup-datadog
-description: Query Datadog metrics, logs, monitors, traces, and 30+ API domains via the pup CLI. Use when working with Datadog observability data - searching logs, querying metrics, checking monitor status, investigating APM traces, analyzing security signals, auditing cloud costs, or any Datadog API interaction. Supports OAuth2 and API key authentication.
+description: "Query Datadog metrics, logs, monitors, traces, and 30+ API domains via the pup CLI. Use when searching logs, querying metrics, checking monitors, investigating APM traces, or any Datadog API interaction."
 ---
 
 # Datadog (Pup CLI)

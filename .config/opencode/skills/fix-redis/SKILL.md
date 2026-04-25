@@ -1,6 +1,6 @@
 ---
 name: fix-redis
-description: Fix "port is already allocated" errors for Redis (port 6379) when starting Docker/OrbStack containers. Use when the user reports a Redis port conflict, a failed Docker container startup citing port 6379, or asks to "fix redis", "free port 6379", or "shut down whatever is using redis".
+description: "Fix Redis 'port is already allocated' / port 6379 conflicts for Docker or OrbStack. Use when container startup fails on 6379, or asked to fix Redis or free 6379."
 ---
 
 # Fix Redis Port Conflict

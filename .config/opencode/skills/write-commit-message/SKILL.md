@@ -1,6 +1,6 @@
 ---
 name: write-commit-message
-description: "Generates conventional commit messages from current branch changes against main. Use when asked to write a commit message, commit changes, or generate a commit."
+description: "Generate a conventional commit message from current-branch changes against main. Use when asked to write or suggest a commit message, title, or body."
 ---
 
 # Commit Message Generator

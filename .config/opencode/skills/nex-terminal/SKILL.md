@@ -1,6 +1,6 @@
 ---
 name: nex-terminal
-description: "Manages Nex terminal panes, workspaces, events, and file opening via the nex CLI. Use when asked to split panes, create terminal tabs, send commands to other panes, open files in Nex, create workspaces, or manage terminal layout."
+description: "Manages Nex terminal panes, workspaces, events, and file opening via the nex CLI. Use when asked to split panes, create tabs, send commands to other panes, open files in Nex, or manage layout."
 ---
 
 # Nex Terminal Manager

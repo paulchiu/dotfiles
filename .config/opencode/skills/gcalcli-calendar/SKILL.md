@@ -1,6 +1,6 @@
 ---
 name: gcalcli-calendar
-description: Manages Google Calendar events using gcalcli command-line tool. Use when adding, listing, searching, deleting, or viewing calendar events from the terminal.
+description: "Manages Google Calendar events using gcalcli. Use when adding, listing, searching, deleting, or viewing calendar events from the terminal."
 ---
 
 # Gcalcli Calendar Manager

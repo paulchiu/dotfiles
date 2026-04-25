@@ -1,6 +1,6 @@
 ---
 name: translate-to-taiwan-chinese
-description: "Translates text (usually English) into Taiwan-appropriate Traditional Chinese, pitched for a 70-year-old parent who is not technically savvy. Use when the user asks to translate, rewrite, or localise text for a Taiwanese elder, mentions 'for my mum/dad', 'for my parent', 'Taiwan Chinese', '繁體中文', '正體中文', or asks to make a message readable for a non-technical older Taiwanese reader. Performs the translation inline using whichever model is running this skill."
+description: "Translate text into Taiwan Traditional Chinese for a non-technical 70-year-old parent. Use when asked to translate or localise for a Taiwanese elder, 'for my mum/dad', '繁體中文', or '正體中文'."
 ---
 
 # Translate to Taiwan Traditional Chinese (for a 70-year-old parent)

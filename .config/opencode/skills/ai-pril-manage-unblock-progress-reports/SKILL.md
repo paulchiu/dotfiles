@@ -1,6 +1,6 @@
 ---
 name: ai-pril-manage-unblock-progress-reports
-description: "Regenerates the four 2026 AI-pril Manage-Unblock daily progress reports (TypeORM→Prisma, Vulnerability Remediation, Form Library Migration, Formik+Yup→RHF+Zod) and the consolidated Clean Kitchen snapshot in Notion. Queries Linear for current ticket state per workstream, then overwrites each Notion page (callout on each says the page is overwritten daily, with history preserved). Use when the user asks to regenerate, refresh, or update the AI-pril progress reports, the Manage-Unblock reports, the Clean Kitchen progress reports, the daily snapshot, or 'the reports'. Also covers: 'run the daily update', 'redo yesterday's progress report', 'notion agent messed up the reports, please re-run'."
+description: "Regenerates the 2026 AI-pril Manage-Unblock daily Notion reports (TypeORM→Prisma, Vuln Remediation, Form Library, Formik+Yup→RHF+Zod) and Clean Kitchen snapshot from Linear. Use to refresh, redo, or run the daily reports."
 ---
 
 # 2026 AI-pril Manage-Unblock Progress Reports

@@ -1,6 +1,6 @@
 ---
 name: convert-workout-journal
-description: "Converts raw workout journal notes into structured Dataview-compatible fitness logs in the Obsidian vault. Use when asked to convert a workout, process a gym log, add a workout, import fitness data, or journal exercises."
+description: "Converts raw workout journal notes into Dataview-compatible fitness logs in the Obsidian vault. Use when asked to convert a workout, process a gym log, or journal exercises."
 ---
 
 # Convert Workout Journal

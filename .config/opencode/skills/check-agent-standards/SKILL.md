@@ -1,6 +1,6 @@
 ---
 name: check-agent-standards
-description: "Checks current branch changes against local main for AGENTS.md conformance, writes a report, and auto-fixes violations. Use when asked to enforce standards, check conformance, or fix branch to match AGENTS.md."
+description: "Audits current branch changes against local main for AGENTS.md conformance, writes a report, and auto-fixes violations. Use to enforce standards or check conformance."
 ---
 
 # Check Agent Standards

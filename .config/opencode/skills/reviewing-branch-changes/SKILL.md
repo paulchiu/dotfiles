@@ -1,6 +1,6 @@
 ---
 name: reviewing-branch-changes
-description: Principal engineer review of current branch changes against main. Use when asked to review branch, review changes, review a PR, or do a code review of the current branch. Produce a checklist-first review with stable finding IDs plus GitHub-ready, file-by-file review comments with exact line targets, severity, practical fix guidance, and high-signal reasoning.
+description: "Principal-engineer review of current branch changes against main. Use for branch/PR/code review; outputs a checklist with stable finding IDs and GitHub-ready file-by-file comments with line targets and severity."
 ---
 
 # Branch Review Skill

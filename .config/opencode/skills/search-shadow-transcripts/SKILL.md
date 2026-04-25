@@ -1,6 +1,6 @@
 ---
 name: search-shadow-transcripts
-description: Search and query Shadow.app meeting transcripts from the local SQLite database. Use when the user wants to (1) search for specific text in Shadow transcripts, (2) query meeting recordings by content, (3) find conversations containing keywords, (4) extract transcript data from Shadow.app
+description: "Search Shadow.app meeting transcripts from the local SQLite database. Use when searching for text in Shadow transcripts, querying meeting recordings, or extracting conversation data."
 ---
 
 # Search Shadow Transcripts

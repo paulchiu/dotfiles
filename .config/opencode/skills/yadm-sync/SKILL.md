@@ -1,6 +1,6 @@
 ---
 name: yadm-sync
-description: Add, commit, and push dotfile changes with yadm. Use when the user asks to update dotfiles, sync dotfiles, commit dotfile changes, track a new file with yadm, or save changes under ~/.claude, ~/.config, or similar yadm-managed paths. Triggers on phrases like "yadm add/commit/push", "update dotfiles" (user treats "update" as the full add/commit/push cycle), "track this with yadm", "sync my dotfiles".
+description: "Add, commit, and push dotfile changes with yadm. Use when asked to update/sync dotfiles, commit dotfile changes, track a new file with yadm, or save changes under ~/.claude or ~/.config."
 ---
 
 # yadm Sync

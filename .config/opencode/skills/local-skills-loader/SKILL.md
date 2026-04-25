@@ -1,14 +1,6 @@
 ---
 name: local-skills-loader
-description: >-
-  Loads and executes the user's personal skill collection from a folder they've
-  granted Cowork access to. MANDATORY TRIGGERS: any time the user references a
-  personal skill by name ("use the X skill", "run my X skill", "with the X
-  skill, ...", "apply the X skill"), asks "what skills do I have" or "list my
-  skills", or names a skill that isn't in your built-in skill list. The user
-  keeps a frequently-edited skill collection on their host machine and this is
-  the only way to reach it from inside Cowork - use it whenever they refer to a
-  skill by a name you don't recognize.
+description: "Load and follow the user's personal skills from the host skills folder. Mandatory triggers: named personal skill requests, 'list my skills' / 'what skills do I have', or a skill name not in the built-in list."
 ---
 
 # Local Skills Loader

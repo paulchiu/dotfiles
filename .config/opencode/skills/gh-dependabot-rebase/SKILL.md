@@ -1,6 +1,6 @@
 ---
 name: gh-dependabot-rebase
-description: Bulk comment @dependabot rebase on open Dependabot PRs in GitHub repositories. Use when the user wants to rebase multiple Dependabot PRs at once, or when they mention rebasing Dependabot PRs in bulk. Triggers include requests like "rebase all dependabot PRs", "comment rebase on dependabot PRs", "bulk rebase dependabot PRs in repo OWNER/REPO".
+description: "Bulk-comment '@dependabot rebase' on open Dependabot PRs in a GitHub repo. Use when asked to rebase all/multiple Dependabot PRs at once or bulk-rebase Dependabot PRs in OWNER/REPO."
 ---
 
 # GH Dependabot Rebase
