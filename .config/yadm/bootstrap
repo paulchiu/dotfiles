@@ -24,7 +24,7 @@ clone_plugin() {
     echo "✓ $name already installed"
   else
     echo "→ cloning $name"
-    git clone --depth 1 "$repo" "$dest"
+    git clone --depth 1 --recurse-submodules --shallow-submodules "$repo" "$dest"
   fi
 }
 
