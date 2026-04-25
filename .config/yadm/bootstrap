@@ -1,0 +1,31 @@
+#!/usr/bin/env zsh
+# yadm bootstrap: runs after `yadm clone` on a fresh machine,
+# or manually via `yadm bootstrap`. Must be idempotent.
+
+set -e
+
+# --- oh-my-zsh ---------------------------------------------------------------
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+  echo "→ installing oh-my-zsh"
+  RUNZSH=no KEEP_ZSHRC=yes sh -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+    "" --unattended
+else
+  echo "✓ oh-my-zsh already installed"
+fi
+
+OMZ_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# --- oh-my-zsh custom plugins ------------------------------------------------
+clone_plugin() {
+  local repo="$1" name="${1##*/}"; name="${name%.git}"
+  local dest="$OMZ_CUSTOM/plugins/$name"
+  if [[ -d "$dest" ]]; then
+    echo "✓ $name already installed"
+  else
+    echo "→ cloning $name"
+    git clone --depth 1 "$repo" "$dest"
+  fi
+}
+
+clone_plugin https://github.com/olets/zsh-abbr.git

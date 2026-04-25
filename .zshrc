@@ -71,7 +71,7 @@ export ZSH="/Users/paul/.oh-my-zsh"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # OPTIMIZED: Removed zsh-nvm plugin for lazy loading
-plugins=(git)
+plugins=(git zsh-abbr)
 autoload -U add-zsh-hook
 
 source $ZSH/oh-my-zsh.sh
@@ -176,7 +176,6 @@ local autoload_functions=(
     write_pull_request
     create_pull_request
     jj_rewrite_revision
-    ff
 )
 autoload -Uz $autoload_functions
 
