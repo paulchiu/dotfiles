@@ -4,6 +4,29 @@
 
 set -e
 
+# --- Homebrew + Brewfile -----------------------------------------------------
+if ! command -v brew >/dev/null 2>&1; then
+  echo "→ installing Homebrew"
+  /bin/bash -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # Add brew to PATH for the rest of this script (Apple Silicon vs Intel)
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+else
+  echo "✓ Homebrew already installed"
+fi
+
+BREWFILE="$HOME/bootstrap/Brewfile"
+if [[ -f "$BREWFILE" ]]; then
+  echo "→ brew bundle install ($BREWFILE)"
+  brew bundle install --file="$BREWFILE"
+else
+  echo "⚠ skipping brew bundle: $BREWFILE not found"
+fi
+
 # --- oh-my-zsh ---------------------------------------------------------------
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   echo "→ installing oh-my-zsh"
