@@ -1,11 +1,11 @@
 ---
 name: write-commit-message
-description: "Generate a conventional commit message from current-branch changes against main. Use when asked to write or suggest a commit message, title, or body."
+description: "Generate a conventional commit message from current-branch changes against main and create the commit. Use when asked to commit, write a commit message, or generate a commit."
 ---
 
 # Commit Message Generator
 
-Generate a conventional commit message from the current branch's staged or unstaged changes.
+Generate a conventional commit message from the current branch's changes and create the commit.
 
 ## Prerequisites
 
@@ -41,6 +41,29 @@ When the current branch name contains an issue code (e.g., `feature/cad-1438-...
 
 To determine commit count, run `git log main..HEAD --oneline` and count the results.
 
-### Step 3: Output
+### Step 3: Stage Changes (if needed)
 
-Output the raw commit message only. No explanation, no code blocks, no markdown formatting around it.
+If `git diff --cached` was empty in Step 1, stage the changed files before committing:
+
+1. Run `git status --porcelain` to list modified/added/deleted paths.
+2. Stage each path explicitly with `git add <path1> <path2> ...`. Never use `git add -A` or `git add .` (avoids accidentally staging secrets, large binaries, or unrelated work).
+3. If any path looks sensitive (`.env`, `credentials*`, `*.pem`, `*.key`, `id_rsa*`, anything containing `secret`/`token`), stop and ask the user before staging it.
+
+### Step 4: Create the Commit
+
+Run `git commit` with a HEREDOC for safe multi-line formatting:
+
+```bash
+git commit -m "$(cat <<'EOF'
+type(scope): Short description
+
+- Optional bullet list of per-file changes
+EOF
+)"
+```
+
+If a pre-commit hook fails, the commit did NOT happen. Fix the underlying issue and create a NEW commit (do not amend, do not pass `--no-verify`).
+
+### Step 5: Confirm
+
+Print the new commit's short SHA and subject line, then run `git status` to confirm the working tree state.
