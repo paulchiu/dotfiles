@@ -1,13 +1,10 @@
 Adguard.app
-Antigravity.app
 AppCleaner.app
 Audiobook Builder.app
-Azure Data Studio.app
 Bing Wallpaper.app
 Bitwarden.app
 Caffeine.app
 ChatGPT.app
-Chrome Remote Desktop Host Uninstaller.app
 Claude Code History Viewer.app
 Claude.app
 cmux.app
@@ -46,16 +43,13 @@ Karabiner-EventViewer.app
 KeyCastr.app
 Kiro CLI.app
 lghub.app
-Logseq.app
 Loom.app
 MacWhisper.app
 MeetingBar.app
 Microsoft Azure Storage Explorer.app
 Microsoft Excel.app
-MongoDB Compass.app
 Neovide.app
 Nex.app
-Nexus.app
 NordVPN.app
 Obsidian.app
 OrbStack.app
@@ -79,9 +73,7 @@ SoundAnchor.app
 Syncthing.app
 Tailscale.app
 The Unarchiver.app
-Unshaky.app
 Utilities
-VIA.app
 Vial.app
 Visual Studio Code.app
 Windows App.app
