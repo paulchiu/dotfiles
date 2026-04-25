@@ -79,7 +79,7 @@ Use the **git-commit** skill to generate and create the commit.
 
 ### Phase 6: Create PR
 
-Use the **write-pull-request** skill to generate and create the pull request.
+Use the **gh-pr** skill to generate and create the pull request.
 
 - The skill will generate a PR title and body from the branch's changes against main.
 - The PR is created as a draft by default.

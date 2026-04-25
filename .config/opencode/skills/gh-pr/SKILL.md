@@ -1,6 +1,6 @@
 ---
-name: write-pull-request
-description: "Generates pull request descriptions from current branch changes against main. Use when asked to write a PR description, create a PR, or generate a pull request."
+name: gh-pr
+description: "Generate a pull request description from current-branch changes against main and create the draft PR via gh. Use when asked to create a PR, open a draft PR, or write a PR description."
 ---
 
 # PR Description Generator
