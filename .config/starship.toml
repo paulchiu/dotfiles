@@ -1,3 +1,13 @@
 # Starship configuration
 # Increase command timeout to prevent helm timeout warnings
 command_timeout = 5000
+
+[aws]
+disabled = true
+
+[custom.aws]
+command = 'printf "☁️  %s (%s)" "$AWS_PROFILE" "$AWS_REGION"'
+when = '[ -n "$AWS_SESSION_TOKEN" ] || [ -n "$AWS_ACCESS_KEY_ID" ]'
+format = 'on [$output]($style) '
+style = 'yellow bold'
+shell = ['sh', '--noprofile', '--norc']
