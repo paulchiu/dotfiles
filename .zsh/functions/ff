@@ -1,0 +1,9 @@
+# Filtered fzf file picker. Pair with `alias -g F='"$(fzf)"'` for the unfiltered case.
+# Usage: vim "$(ff '*.md')"
+ff() {
+  if (( $# )); then
+    fd --glob "$1" | fzf
+  else
+    fzf
+  fi
+}
