@@ -1,0 +1,4 @@
+interface:
+  display_name: "Branded Deck Builder"
+  short_description: "Build decks in the me&u branded style"
+  default_prompt: "Use $branded-deck-builder to create a polished branded presentation from these notes."
