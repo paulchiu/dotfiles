@@ -6,20 +6,8 @@ command_timeout = 5000
 disabled = true
 
 [custom.aws]
-command = 'printf "☁️  %s (%s)" "$AWS_PROFILE" "$AWS_REGION"'
-when = '''
-[ -n "$AWS_SESSION_TOKEN" ] && exit 0
-[ -n "$AWS_ACCESS_KEY_ID" ] && exit 0
-now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-for f in "$HOME"/.aws/sso/cache/*.json; do
-  [ -f "$f" ] || continue
-  grep -q '"accessToken"' "$f" || continue
-  exp=$(sed -n 's/.*"expiresAt"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$f")
-  [ -n "$exp" ] || continue
-  [ "$exp" \> "$now" ] && exit 0
-done
-exit 1
-'''
+command = '"$HOME"/.config/starship/aws-status.sh print'
+when = '"$HOME"/.config/starship/aws-status.sh check'
 format = 'on [$output]($style) '
 style = 'yellow bold'
 shell = ['sh', '--noprofile', '--norc']
