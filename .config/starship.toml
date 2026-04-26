@@ -7,7 +7,7 @@ disabled = true
 
 [custom.aws]
 command = 'printf "☁️  %s (%s)" "$AWS_PROFILE" "$AWS_REGION"'
-when = '[ -n "$AWS_SESSION_TOKEN" ] || [ -n "$AWS_ACCESS_KEY_ID" ]'
+when = '[ -n "$AWS_PROFILE" ] || [ -n "$AWS_REGION" ] || [ -n "$AWS_SESSION_TOKEN" ] || [ -n "$AWS_ACCESS_KEY_ID" ]'
 format = 'on [$output]($style) '
 style = 'yellow bold'
 shell = ['sh', '--noprofile', '--norc']
