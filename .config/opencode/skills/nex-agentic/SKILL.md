@@ -1,6 +1,13 @@
 ---
 name: nex-agentic
-description: "Orchestrate multi-agent work in Nex by spawning named child panes, starting Claude agents, and farming out tasks. Trigger on spawn agents, fan out work, multi-agent, farm out tasks, or worker panes."
+description: >
+  Use the Nex terminal multiplexer and its CLI to orchestrate multi-agent
+  development workflows. Enables spawning named child panes, starting Claude
+  agents in them, farming out parallel work, and coordinating results via
+  markdown files and direct pane messaging. Trigger when: the user asks to
+  "spawn agents", "fan out work", "create worker panes", "orchestrate panes",
+  "use nex to coordinate", "multi-agent", "farm out tasks", or any variation
+  of parallelizing work across Nex panes.
 ---
 
 # Nex Agentic Development Skill
@@ -11,14 +18,55 @@ work, and collect results.
 
 ## Prerequisites
 
-You must be running inside a Nex pane (the `NEX_PANE_ID` environment variable
-is set). Verify with:
+You must be running inside a Nex pane. Verify with:
 
 ```bash
-echo $NEX_PANE_ID
+nex pane id
 ```
 
-If this is empty, you are not inside Nex and these commands will silently no-op.
+Exit 0 with the pane UUID on stdout means you're in Nex; exit 1 with
+empty output means you're not, and every other `nex` command below will
+silently no-op. This command is purely local (no socket, no shell `$`
+expansion) so it allowlists cleanly as `Bash(nex pane id)`.
+
+## Required up-front questions
+
+Before spawning any panes, confirm two choices with the user. Skip a
+question only if the answer is unambiguous from the invoking prompt
+(e.g. "spawn headless workers with --dangerously-skip-permissions").
+Otherwise ask via `AskUserQuestion` — do not assume defaults.
+
+1. **Execution mode** — headless or interactive?
+   - **Headless** (`claude -p "<prompt>"`): non-interactive, runs to
+     completion, exits when done. Best for fan-out: workers write
+     result files, coordinator polls. Default for most automation.
+   - **Interactive** (`claude` then `pane send` the prompt): Claude
+     stays open in the pane for follow-ups. Use when the user wants to
+     supervise, iterate, or intervene mid-task.
+
+2. **Permission mode** — which `--permission-mode` flag?
+   - `default` — prompt on each tool use (safest; requires the user to
+     babysit each worker)
+   - `acceptEdits` — auto-accept file edits, still prompt on Bash/other
+   - `plan` — planning only, no writes
+   - `bypassPermissions` (aka `--dangerously-skip-permissions`) — full
+     autonomy, no prompts. Common for trusted fan-outs in worktrees.
+
+Ask both in a single `AskUserQuestion` call with two questions. Record
+the answers and reuse them for every worker spawn in the session unless
+the user changes them.
+
+Once chosen, the worker-start command shape is:
+
+```bash
+# Headless
+nex pane send --to worker-1 claude -p --permission-mode <mode> "<prompt>"
+
+# Interactive
+nex pane send --to worker-1 claude --permission-mode <mode>
+sleep 2
+nex pane send --to worker-1 "<prompt>"
+```
 
 ## Nex CLI Reference
 
@@ -44,6 +92,9 @@ nex pane send --to <label-or-uuid> <command...>
 
 # List panes (only command that returns data — use for reconciliation)
 nex pane list [--workspace <name-or-id> | --current] [--json] [--no-header]
+
+# Print current pane's UUID (local; no socket). Exit 1 if not in Nex.
+nex pane id
 ```
 
 ### `pane list` — reconcile with live state
