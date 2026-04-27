@@ -105,6 +105,7 @@
     "mode": "hold"
   },
   "skipDangerousModePermissionPrompt": true,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true,
   "allowedDirectories": [
@@ -112,6 +113,5 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  },
-  "agentPushNotifEnabled": true
+  }
 }
