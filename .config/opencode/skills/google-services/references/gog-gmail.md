@@ -1,8 +1,3 @@
----
-name: gog-gmail
-description: "Manages Gmail via the gog CLI: search, read, send, reply, draft, label, attachments. Use when asked to check email, send email, search inbox, manage labels, or work with Gmail."
----
-
 # gog Gmail Manager
 
 Manage Gmail using the `gog` CLI (v0.9.0+). Authentication is pre-configured.
