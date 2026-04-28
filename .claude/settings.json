@@ -28,8 +28,8 @@
       "Bash(git rev-parse *)",
       "Bash(git remote *)",
       "Bash(git stash list *)",
-      "Bash(node:*)",
-      "Bash(cat:*)",
+      "Bash(node *)",
+      "Bash(cat *)",
       "mcp__chrome-devtools__*",
       "Skill"
     ],
@@ -80,8 +80,8 @@
     ]
   },
   "enabledPlugins": {
-    "session-review@meandu-plugins": true,
-    "codebase-index@meandu-plugins": true,
+    "session-review@meandu-plugins": false,
+    "codebase-index@meandu-plugins": false,
     "codex@openai-codex": true
   },
   "extraKnownMarketplaces": {
