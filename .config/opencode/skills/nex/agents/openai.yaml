@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nex"
+  short_description: "Nex panes, status, and live delegation"
+  default_prompt: "Use $nex to delegate work to a live cxd pane or manage Nex panes."

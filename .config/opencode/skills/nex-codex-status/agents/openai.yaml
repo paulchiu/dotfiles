@@ -1,7 +1,0 @@
-interface:
-  display_name: "Nex Codex Status"
-  short_description: "Codex-only Nex status indicators"
-  default_prompt: "Use $nex-codex-status to keep the Nex indicator updated while you work."
-
-policy:
-  allow_implicit_invocation: true
