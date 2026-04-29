@@ -61,8 +61,10 @@ alias no="nex open --here"
 alias ftx="fzf_to_context"
 alias hs="atuin search -i"
 alias s="~/dev/search.sh"
-# Global alias: `bat F`, `vim F`, `less F` expand F to "$(fzf)" anywhere on the line.
+# Global aliases: `bat F`, `vim F`, `less F` expand F to "$(fzf)" anywhere on the line.
+# Use F1 for the same flow limited to files in the current directory.
 alias -g F='"$(fzf)"'
+alias -g F1='"$(fd --type f --hidden --follow --exclude .git --max-depth 1 | fzf)"'
 ## Development Tools
 alias sf="swift-format --recursive -i ."
 alias tf="terraform"
