@@ -270,6 +270,7 @@ Run `linear issue create --help` for the full flag list.
 - **Escaping `@` mentions.** Linear parses `@` as a mention trigger and shells may interpret it as command substitution. Wrap package names in backticks (`` `@mr-yum/foo` ``) inside descriptions; wrap shell args in single quotes; or use `--description-file` to bypass shell quoting entirely.
 - **Team identifiers** are usually uppercase (CAD, ENG, PROD, CUSM).
 - **Numbered lists get truncated.** Multi-item `1.` `2.` `3.` lists saved via MCP often drop everything after the first item silently. Use bulleted lists unless order is semantically required, and verify with `get_issue` if you do use numbers.
+- **Bulleted lists can also collapse.** Bullets that share a line break without a blank line between them sometimes drop everything after the first item too, especially under headings like `### Out of scope` near a fenced code block. After saving, fetch the issue back with `get_issue` and check that every bullet survived; if a section was clipped, re-save with a blank line between bullets and the items will stick.
 - **More detail isn't always better.** A 500-word card with contradictory instructions is worse than a 100-word card with clear acceptance criteria.
 - **Prefer linking to one example file** over writing a paragraph of prose about a pattern.
 
