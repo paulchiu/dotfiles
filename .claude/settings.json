@@ -76,6 +76,14 @@
             "command": "nex event start"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/paul/.claude/hooks/openacp-inject-session.sh"
+          }
+        ]
       }
     ]
   },
