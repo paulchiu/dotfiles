@@ -265,3 +265,10 @@ _cmux_auto_rename_tab() {
 
 # Hook into directory changes
 add-zsh-hook chpwd _cmux_auto_rename_tab
+
+# qlty completions
+[ -s "/opt/homebrew/share/zsh/site-functions/_qlty" ] && source "/opt/homebrew/share/zsh/site-functions/_qlty"
+
+# qlty
+export QLTY_INSTALL="$HOME/.qlty"
+export PATH="$QLTY_INSTALL/bin:$PATH"
