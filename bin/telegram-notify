@@ -1,0 +1,381 @@
+#!/usr/bin/env python3
+"""
+Send a Telegram notification from an agent hook or the command line.
+
+Agent hook usage:
+  /Users/paul/bin/telegram-notify
+
+Expected hook JSON:
+  Uses last-assistant-message when present.
+
+Sender format:
+  The title line is normalized to [Sender] for easy scanning.
+
+Config is loaded from ~/.config/telegram-notify.env by default. Environment
+variables override file values.
+
+Required:
+  TELEGRAM_BOT_TOKEN=123:abc
+  TELEGRAM_CHAT_ID=-1001234567890
+
+Useful commands:
+  telegram-notify '{"last-assistant-message":"Done"}'
+  telegram-notify --discover-chat-id
+  telegram-notify --print-config
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shlex
+import shutil
+import subprocess
+import sys
+import urllib.error
+import urllib.request
+from pathlib import Path
+from typing import Any
+
+
+DEFAULT_CONFIG = "~/.config/telegram-notify.env"
+DEFAULT_MESSAGE = "Task completed - ready for input."
+TELEGRAM_LIMIT = 4096
+KNOWN_CONFIG_KEYS = {
+    "TELEGRAM_API_BASE",
+    "TELEGRAM_BOT_TOKEN",
+    "TELEGRAM_CHAT_ID",
+    "TELEGRAM_CONNECT_TIMEOUT",
+    "TELEGRAM_DISABLE_WEB_PAGE_PREVIEW",
+    "TELEGRAM_MAX_CHARS",
+    "TELEGRAM_MESSAGE_THREAD_ID",
+    "TELEGRAM_NOTIFY_SILENT",
+    "TELEGRAM_NOTIFY_TITLE",
+    "TELEGRAM_PARSE_MODE",
+    "TELEGRAM_PROTECT_CONTENT",
+    "TELEGRAM_SUMMARIZE_JSON",
+}
+
+
+def parse_env_file(path: Path) -> dict[str, str]:
+    values: dict[str, str] = {}
+    if not path.exists():
+        return values
+
+    for line_number, raw_line in enumerate(path.read_text().splitlines(), start=1):
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line.removeprefix("export ").strip()
+        if "=" not in line:
+            raise ValueError(f"{path}:{line_number}: expected KEY=VALUE")
+        key, raw_value = line.split("=", 1)
+        key = key.strip()
+        raw_value = raw_value.strip()
+        try:
+            value = shlex.split(raw_value, comments=False, posix=True)
+        except ValueError as exc:
+            raise ValueError(f"{path}:{line_number}: invalid quoting: {exc}") from exc
+        values[key] = value[0] if value else ""
+    return values
+
+
+def load_config(config_path: str | None) -> dict[str, str]:
+    path = Path(config_path or os.environ.get("TELEGRAM_NOTIFY_CONFIG", DEFAULT_CONFIG)).expanduser()
+    config = parse_env_file(path)
+    for key in KNOWN_CONFIG_KEYS:
+        if key in os.environ:
+            config[key] = os.environ[key]
+    config["_CONFIG_PATH"] = str(path)
+    return config
+
+
+def as_bool(value: str | None, default: bool = False) -> bool:
+    if value is None or value == "":
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def as_int(value: str | None, default: int, key: str) -> int:
+    if value is None or value == "":
+        return default
+    try:
+        return int(value)
+    except ValueError as exc:
+        raise ValueError(f"{key} must be an integer") from exc
+
+
+def truncate(text: str, max_chars: int) -> str:
+    max_chars = max(1, min(max_chars, TELEGRAM_LIMIT))
+    if len(text) <= max_chars:
+        return text
+    suffix = "\n..."
+    return text[: max_chars - len(suffix)].rstrip() + suffix
+
+
+def format_sender(title: str | None) -> str:
+    sender = (title or "").strip()
+    if not sender:
+        return ""
+    if sender.startswith("[") and sender.endswith("]"):
+        return sender
+    return f"[{sender}]"
+
+
+def compact_json_text(text: str) -> str:
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        return text
+    return json.dumps(parsed, separators=(",", ":"), ensure_ascii=False)
+
+
+def maybe_summarize_json(text: str, enabled: bool) -> str:
+    stripped = text.strip()
+    if not enabled or not stripped.startswith(("{", "[")):
+        return text
+    aichat = shutil.which("aichat")
+    if not aichat:
+        return compact_json_text(text)
+
+    prompt = (
+        "Summarize this agent hook payload as one short plain-English "
+        "notification sentence. Include only the sentence.\n\n"
+        f"{stripped}"
+    )
+    try:
+        completed = subprocess.run(
+            [aichat],
+            input=prompt,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=8,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return compact_json_text(text)
+
+    summary = completed.stdout.strip()
+    return summary or compact_json_text(text)
+
+
+def first_present(data: dict[str, Any], keys: tuple[str, ...]) -> Any:
+    for key in keys:
+        value = data.get(key)
+        if value not in (None, ""):
+            return value
+    return None
+
+
+def stringify(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    return json.dumps(value, ensure_ascii=False, indent=2)
+
+
+def extract_from_payload(payload: Any) -> tuple[str | None, str]:
+    if isinstance(payload, dict):
+        title = first_present(payload, ("title", "notification-title", "name"))
+        message = first_present(
+            payload,
+            (
+                "last-assistant-message",
+                "last_assistant_message",
+                "message",
+                "text",
+                "body",
+                "summary",
+                "result",
+            ),
+        )
+
+        if message is None and isinstance(payload.get("payload"), dict):
+            nested_title, nested_message = extract_from_payload(payload["payload"])
+            title = title or nested_title
+            message = nested_message
+
+        if message is None:
+            event = first_present(payload, ("event", "hook_event_name", "hook"))
+            cwd = first_present(payload, ("cwd", "workspace", "project"))
+            parts = [str(part) for part in (event, cwd) if part]
+            message = " - ".join(parts) if parts else DEFAULT_MESSAGE
+
+        return stringify(title) or None, stringify(message).strip()
+
+    if isinstance(payload, list):
+        return None, stringify(payload)
+
+    return None, stringify(payload).strip()
+
+
+def read_input(args: list[str]) -> str:
+    if args:
+        return " ".join(args)
+    if not sys.stdin.isatty():
+        return sys.stdin.read()
+    return ""
+
+
+def build_notification(raw_input: str, config: dict[str, str]) -> str:
+    title = config.get("TELEGRAM_NOTIFY_TITLE", "Codex")
+    message = raw_input.strip()
+
+    if message:
+        try:
+            payload = json.loads(message)
+        except json.JSONDecodeError:
+            pass
+        else:
+            payload_title, payload_message = extract_from_payload(payload)
+            if payload_title:
+                title = payload_title
+            message = payload_message
+
+    message = message or DEFAULT_MESSAGE
+    message = maybe_summarize_json(message, as_bool(config.get("TELEGRAM_SUMMARIZE_JSON"), True))
+
+    sender = format_sender(title)
+    text = f"{sender}\n\n{message}" if sender else message
+    max_chars = as_int(config.get("TELEGRAM_MAX_CHARS"), 3500, "TELEGRAM_MAX_CHARS")
+    return truncate(text, max_chars)
+
+
+def api_url(config: dict[str, str], method: str) -> str:
+    token = config.get("TELEGRAM_BOT_TOKEN")
+    if not token:
+        raise ValueError("TELEGRAM_BOT_TOKEN is required")
+    base = config.get("TELEGRAM_API_BASE", "https://api.telegram.org").rstrip("/")
+    return f"{base}/bot{token}/{method}"
+
+
+def call_telegram(config: dict[str, str], method: str, payload: dict[str, Any] | None = None) -> Any:
+    timeout = as_int(config.get("TELEGRAM_CONNECT_TIMEOUT"), 15, "TELEGRAM_CONNECT_TIMEOUT")
+    data = None
+    headers = {}
+    if payload is not None:
+        data = json.dumps(payload).encode("utf-8")
+        headers["Content-Type"] = "application/json"
+
+    request = urllib.request.Request(api_url(config, method), data=data, headers=headers)
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            body = response.read().decode("utf-8")
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Telegram API HTTP {exc.code}: {body}") from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(f"Telegram API request failed: {exc}") from exc
+
+    decoded = json.loads(body)
+    if not decoded.get("ok"):
+        raise RuntimeError(f"Telegram API returned ok=false: {decoded}")
+    return decoded.get("result")
+
+
+def send_message(config: dict[str, str], text: str) -> Any:
+    chat_id = config.get("TELEGRAM_CHAT_ID")
+    if not chat_id:
+        raise ValueError("TELEGRAM_CHAT_ID is required")
+
+    payload: dict[str, Any] = {
+        "chat_id": chat_id,
+        "text": text,
+        "disable_web_page_preview": as_bool(config.get("TELEGRAM_DISABLE_WEB_PAGE_PREVIEW"), True),
+    }
+
+    optional_fields = {
+        "TELEGRAM_MESSAGE_THREAD_ID": "message_thread_id",
+        "TELEGRAM_PARSE_MODE": "parse_mode",
+    }
+    for env_key, api_key in optional_fields.items():
+        value = config.get(env_key)
+        if value:
+            payload[api_key] = value
+
+    if as_bool(config.get("TELEGRAM_NOTIFY_SILENT"), False):
+        payload["disable_notification"] = True
+    if as_bool(config.get("TELEGRAM_PROTECT_CONTENT"), False):
+        payload["protect_content"] = True
+
+    return call_telegram(config, "sendMessage", payload)
+
+
+def discover_chat_ids(config: dict[str, str]) -> int:
+    updates = call_telegram(config, "getUpdates")
+    if not updates:
+        print("No updates found. Send a message the bot can see, then retry.", file=sys.stderr)
+        return 1
+
+    seen: set[str] = set()
+    for update in updates:
+        for update_type in ("message", "channel_post", "edited_message", "edited_channel_post"):
+            message = update.get(update_type)
+            if not isinstance(message, dict):
+                continue
+            chat = message.get("chat")
+            if not isinstance(chat, dict):
+                continue
+
+            chat_id = str(chat.get("id"))
+            if chat_id in seen:
+                continue
+            seen.add(chat_id)
+
+            label = chat.get("title") or chat.get("username") or "private chat"
+            chat_type = chat.get("type", "unknown")
+            sample = message.get("text") or message.get("caption") or ""
+            sample = sample.replace("\n", " ")[:80]
+            print(f"{chat_id}\t{chat_type}\t{label}\t{sample}")
+
+    return 0 if seen else 1
+
+
+def print_config(config: dict[str, str]) -> int:
+    print(f"config={config.get('_CONFIG_PATH')}")
+    for key in sorted(KNOWN_CONFIG_KEYS):
+        if key not in config:
+            continue
+        value = config[key]
+        if key == "TELEGRAM_BOT_TOKEN" and value:
+            value = value[:6] + "..." + value[-4:]
+        print(f"{key}={value}")
+    return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Send Telegram notifications from agent hooks.")
+    parser.add_argument("message", nargs="*", help="plain text or a JSON hook payload")
+    parser.add_argument("--config", help=f"config file path, default {DEFAULT_CONFIG}")
+    parser.add_argument("--discover-chat-id", action="store_true", help="list chat ids from bot updates")
+    parser.add_argument("--dry-run", action="store_true", help="print what would be sent without sending")
+    parser.add_argument("--print-config", action="store_true", help="print effective config with token redacted")
+    args = parser.parse_args()
+
+    try:
+        config = load_config(args.config)
+        if args.print_config:
+            return print_config(config)
+        if args.discover_chat_id:
+            return discover_chat_ids(config)
+
+        text = build_notification(read_input(args.message), config)
+        if args.dry_run:
+            print(text)
+            return 0
+
+        result = send_message(config, text)
+        if isinstance(result, dict) and "message_id" in result:
+            print(f"sent message_id={result['message_id']}")
+        return 0
+    except Exception as exc:
+        print(f"telegram-notify: {exc}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

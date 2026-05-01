@@ -1,3 +1,5 @@
 .npmrc
 .env.secret
 Library/Application Support/aichat/config.yaml
+.codex/config.toml
+.config/telegram-notify.env
