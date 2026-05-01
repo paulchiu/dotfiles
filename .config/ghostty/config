@@ -1,0 +1,4 @@
+custom-shader = ./shaders/tft.glsl
+custom-shader = ./shaders/retro-terminal.glsl
+custom-shader = ./shaders/bloom.glsl
+custom-shader-animation = always
