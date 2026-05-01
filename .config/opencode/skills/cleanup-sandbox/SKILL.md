@@ -1,6 +1,6 @@
 ---
 name: cleanup-sandbox
-description: Clean up Paul's sandbox note repo by dating top-level documents, archiving files dated yesterday or earlier into archive/yyyy-mm-dd folders, normalising existing archive layout, and committing the result in logical git commits. Use when asked to "cleanup sandbox", archive old sandbox files, normalise dated docs, or commit the sandbox cleanup.
+description: Clean up Paul's sandbox note repo by dating top-level documents, archiving files dated yesterday or earlier into archive/yyyy-mm/yyyy-mm-dd folders, normalising existing archive layout, and committing the result in logical git commits. Use when asked to "cleanup sandbox", archive old sandbox files, normalise dated docs, or commit the sandbox cleanup.
 ---
 
 # Cleanup Sandbox
@@ -9,13 +9,14 @@ description: Clean up Paul's sandbox note repo by dating top-level documents, ar
 
 Use this for the local sandbox workspace, usually `/Users/paul/dev/sandbox`.
 The goal is to leave the root focused on today's docs, keep old dated files under
-`archive/yyyy-mm-dd/`, and commit the result without staging local secrets.
+`archive/yyyy-mm/yyyy-mm-dd/`, and commit the result without staging local secrets.
 
 ## Core Rules
 
 - Treat "older than yesterday" as inclusive by default: archive files dated `<= yesterday`.
 - Use the current date and timezone from the environment context when available.
 - Never read, stage, or commit `.openacp/`; it contains local OpenACP secrets.
+- Treat workspace instruction files such as `AGENTS.md` and `CLAUDE.md` as config, not dated notes.
 - Do not use `git add -A` or `git add .`.
 - Use `git mv` for tracked files and plain `mv` for untracked files.
 - Stop on destination collisions instead of overwriting.
@@ -41,12 +42,13 @@ The goal is to leave the root focused on today's docs, keep old dated files unde
 3. Move dated root files or directories with a prefix `<= yesterday` into:
 
    ```text
-   archive/yyyy-mm-dd/yyyy-mm-dd Title.ext
+   archive/yyyy-mm/yyyy-mm-dd/yyyy-mm-dd Title.ext
    ```
 
 4. Normalise existing archive entries. Any direct child of `archive/` named
-   `yyyy-mm-dd Title...` moves under `archive/yyyy-mm-dd/`. Existing
-   `archive/yyyy-mm-dd/` folders stay where they are.
+   `yyyy-mm-dd Title...` moves under `archive/yyyy-mm/yyyy-mm-dd/`. Existing
+   `archive/yyyy-mm-dd/` folders move under their matching `archive/yyyy-mm/`
+   month folder. Existing `archive/yyyy-mm/` folders stay where they are.
 
 5. Run the helper script when the task is the standard sandbox cleanup:
 
@@ -70,6 +72,7 @@ The goal is to leave the root focused on today's docs, keep old dated files unde
    rg --files --max-depth 1 -g '*' | sort
    find archive -maxdepth 1 -type f -print | sort
    find archive -maxdepth 1 -mindepth 1 -type d -print | sort
+   find archive -mindepth 2 -maxdepth 2 -type d -print | sort
    git status --short
    git check-ignore -v .openacp || true
    ```
@@ -78,7 +81,8 @@ The goal is to leave the root focused on today's docs, keep old dated files unde
 
    - No root files dated `<= yesterday`.
    - No direct files inside `archive/`.
-   - First-level archive entries are date folders.
+   - First-level archive entries are `yyyy-mm` month folders.
+   - Second-level archive entries are `yyyy-mm-dd` day folders.
    - `.openacp/` is ignored.
 
 ## Commit Pattern
@@ -91,8 +95,8 @@ For archive moves and date bucket normalisation:
 git commit -m "$(cat <<'EOF'
 chore(archive): Group dated notes by day
 
-- Move dated archive entries into archive/yyyy-mm-dd folders
-- Archive root files dated yesterday or earlier under matching date folders
+- Move dated archive entries into archive/yyyy-mm/yyyy-mm-dd folders
+- Archive root files dated yesterday or earlier under matching month/day folders
 - Preserve existing file contents while normalising note locations
 EOF
 )"

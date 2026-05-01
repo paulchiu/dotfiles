@@ -12,8 +12,8 @@ Defaults:
 
 This script:
   - Renames visible, non-dated, top-level document files with their created date.
-  - Moves root files/directories dated on or before the cutoff into archive/yyyy-mm-dd/.
-  - Moves direct archive children named "yyyy-mm-dd ..." into matching date folders.
+  - Moves root files/directories dated on or before the cutoff into archive/yyyy-mm/yyyy-mm-dd/.
+  - Moves direct archive children named "yyyy-mm-dd" or "yyyy-mm-dd ..." into matching month/day folders.
   - Uses git mv for tracked paths and mv for untracked paths.
 EOF
 }
@@ -73,25 +73,33 @@ if [[ ! "$cutoff" =~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' ]]; then
 fi
 
 is_document_file() {
-  local path="$1"
-  case "${path:e:l}" in
+  local entry_path="$1"
+  case "${entry_path:e:l}" in
     md|txt|csv|json|mjs|js|sql|png) return 0 ;;
     *) return 1 ;;
   esac
 }
 
+is_workspace_config_file() {
+  local entry_path="$1"
+  case "$entry_path" in
+    AGENTS.md|CLAUDE.md) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 created_date() {
-  local path="$1"
+  local entry_path="$1"
   local value=""
 
-  if value="$(stat -f '%SB' -t '%Y-%m-%d' "$path" 2>/dev/null)"; then
+  if value="$(stat -f '%SB' -t '%Y-%m-%d' "$entry_path" 2>/dev/null)"; then
     if [[ "$value" =~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' ]]; then
       print -r -- "$value"
       return 0
     fi
   fi
 
-  echo "Could not determine created-at date for: $path" >&2
+  echo "Could not determine created-at date for: $entry_path" >&2
   return 1
 }
 
@@ -105,7 +113,7 @@ trim_title() {
 }
 
 title_from_markdown() {
-  local path="$1"
+  local entry_path="$1"
   local stem="${2}"
 
   awk -v stem="$stem" '
@@ -122,7 +130,7 @@ title_from_markdown() {
         exit
       }
     }
-  ' "$path" | head -n 1 | trim_title
+  ' "$entry_path" | head -n 1 | trim_title
 }
 
 title_from_name() {
@@ -131,12 +139,12 @@ title_from_name() {
 }
 
 derived_title() {
-  local path="$1"
-  local stem="${path:t:r}"
+  local entry_path="$1"
+  local stem="${entry_path:t:r}"
   local title=""
 
-  if [[ "${path:e:l}" == "md" ]]; then
-    title="$(title_from_markdown "$path" "$stem")"
+  if [[ "${entry_path:e:l}" == "md" ]]; then
+    title="$(title_from_markdown "$entry_path" "$stem")"
   fi
 
   if [[ -z "$title" ]]; then
@@ -144,7 +152,7 @@ derived_title() {
   fi
 
   if [[ -z "$title" ]]; then
-    echo "Could not derive title for: $path" >&2
+    echo "Could not derive title for: $entry_path" >&2
     return 1
   fi
 
@@ -152,11 +160,11 @@ derived_title() {
 }
 
 is_tracked_path() {
-  local path="$1"
-  if [[ -d "$path" ]]; then
-    [[ -n "$(git ls-files -- "$path")" ]]
+  local entry_path="$1"
+  if [[ -d "$entry_path" ]]; then
+    [[ -n "$(git ls-files -- "$entry_path")" ]]
   else
-    git ls-files --error-unmatch -- "$path" >/dev/null 2>&1
+    git ls-files --error-unmatch -- "$entry_path" >/dev/null 2>&1
   fi
 }
 
@@ -200,6 +208,12 @@ date_prefix_for_name() {
   return 1
 }
 
+archive_bucket_for_date() {
+  local date_part="$1"
+  local month_part="${date_part%-??}"
+  print -r -- "archive/$month_part/$date_part"
+}
+
 print -r -- "repo: $repo"
 print -r -- "cutoff: $cutoff"
 print -r -- "mode: $mode"
@@ -208,6 +222,7 @@ for entry in *(N); do
   [[ "$entry" == "archive" ]] && continue
   [[ "$entry" == .* ]] && continue
   [[ -f "$entry" ]] || continue
+  is_workspace_config_file "$entry" && continue
   is_document_file "$entry" || continue
 
   if date_prefix_for_name "$entry" >/dev/null; then
@@ -221,7 +236,9 @@ for entry in *(N); do
   move_path "$entry" "$dst"
 done
 
-mkdir -p archive
+if [[ "$mode" == "apply" ]]; then
+  mkdir -p archive
+fi
 
 for entry in *(N); do
   [[ "$entry" == "archive" ]] && continue
@@ -229,7 +246,7 @@ for entry in *(N); do
 
   if date_part="$(date_prefix_for_name "$entry")"; then
     if [[ "$date_part" < "$cutoff" || "$date_part" == "$cutoff" ]]; then
-      move_path "$entry" "archive/$date_part/$entry"
+      move_path "$entry" "$(archive_bucket_for_date "$date_part")/$entry"
     fi
   fi
 done
@@ -237,13 +254,32 @@ done
 for entry in archive/*(N); do
   base="${entry:t}"
 
-  if [[ "$base" =~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' ]]; then
+  if [[ "$base" =~ '^[0-9]{4}-[0-9]{2}$' ]]; then
+    continue
+  fi
+
+  if [[ "$base" =~ '^([0-9]{4}-[0-9]{2}-[0-9]{2})$' ]]; then
+    move_path "$entry" "$(archive_bucket_for_date "$base")"
     continue
   fi
 
   if date_part="$(date_prefix_for_name "$base")"; then
-    move_path "$entry" "archive/$date_part/$base"
+    move_path "$entry" "$(archive_bucket_for_date "$date_part")/$base"
   fi
+done
+
+for month_dir in archive/[0-9][0-9][0-9][0-9]-[0-9][0-9](N/); do
+  for entry in "$month_dir"/*(N); do
+    base="${entry:t}"
+
+    if [[ "$base" =~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' ]]; then
+      continue
+    fi
+
+    if date_part="$(date_prefix_for_name "$base")"; then
+      move_path "$entry" "$(archive_bucket_for_date "$date_part")/$base"
+    fi
+  done
 done
 
 print -r -- "done"
