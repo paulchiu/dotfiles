@@ -14,6 +14,7 @@ This script:
   - Renames visible, non-dated, top-level document files with their created date.
   - Moves root files/directories dated on or before the cutoff into archive/yyyy-mm/yyyy-mm-dd/.
   - Moves direct archive children named "yyyy-mm-dd" or "yyyy-mm-dd ..." into matching month/day folders.
+  - Moves matching conversation sidecars from conversations/ next to archived notes.
   - Uses git mv for tracked paths and mv for untracked paths.
 EOF
 }
@@ -214,6 +215,102 @@ archive_bucket_for_date() {
   print -r -- "archive/$month_part/$date_part"
 }
 
+conversation_sidecar_for_note() {
+  local note_name="$1"
+  [[ "${note_name:e:l}" == "md" ]] || return 1
+  print -r -- "conversations/${note_name:r}.conversation.md"
+}
+
+update_conversation_archive_path() {
+  local note_path="$1"
+  local old_rel="$2"
+  local new_rel="$3"
+  local updated=0
+
+  [[ "${note_path:e:l}" == "md" ]] || return 0
+  [[ -f "$note_path" ]] || return 0
+
+  if grep -Fq "path: \"$old_rel\"" "$note_path"; then
+    print -r -- "$note_path: conversation_archive path $old_rel -> $new_rel"
+    updated=1
+  elif grep -Fq 'conversation_archive:' "$note_path" && grep -Fq 'status: "not archived"' "$note_path"; then
+    print -r -- "$note_path: conversation_archive status not archived -> $new_rel"
+    updated=1
+  fi
+
+  if [[ "$updated" != 1 ]]; then
+    return 0
+  fi
+
+  if [[ "$mode" == "dry-run" ]]; then
+    return 0
+  fi
+
+  OLD_REL="$old_rel" NEW_REL="$new_rel" perl -0pi -e \
+    's/path:\s*"\Q$ENV{OLD_REL}\E"/path: "$ENV{NEW_REL}"/g;
+     s/(conversation_archive:\n)([ \t]*)status:\s*"not archived"/$1$2status: "archived"\n$2path: "$ENV{NEW_REL}"/g' \
+    "$note_path"
+}
+
+move_matching_conversation_sidecar() {
+  local note_name="$1"
+  local note_path="$2"
+  local dst_dir="$3"
+  local sidecar=""
+  local dst=""
+
+  if ! sidecar="$(conversation_sidecar_for_note "$note_name")"; then
+    return 0
+  fi
+  [[ -e "$sidecar" ]] || return 0
+
+  dst="$dst_dir/${sidecar:t}"
+  move_path "$sidecar" "$dst"
+  update_conversation_archive_path "$note_path" "$sidecar" "$dst"
+}
+
+normalise_archived_conversation_sidecars() {
+  local sidecar=""
+  local base=""
+  local date_part=""
+  local note_name=""
+  local bucket=""
+  local note_path=""
+  local dst=""
+
+  for sidecar in conversations/*.conversation.md(N); do
+    base="${sidecar:t}"
+
+    if [[ ! "$base" =~ '^([0-9]{4}-[0-9]{2}-[0-9]{2})[[:space:]].+[.]conversation[.]md$' ]]; then
+      continue
+    fi
+
+    date_part="${match[1]}"
+    note_name="${base%.conversation.md}.md"
+    bucket="$(archive_bucket_for_date "$date_part")"
+    note_path="$bucket/$note_name"
+    dst="$bucket/$base"
+
+    [[ -f "$note_path" ]] || continue
+
+    move_path "$sidecar" "$dst"
+    update_conversation_archive_path "$note_path" "$sidecar" "$dst"
+  done
+}
+
+sync_archived_conversation_references() {
+  local sidecar=""
+  local base=""
+  local note_path=""
+
+  for sidecar in archive/[0-9][0-9][0-9][0-9]-[0-9][0-9]/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/*.conversation.md(N); do
+    base="${sidecar:t}"
+    note_path="${sidecar:h}/${base%.conversation.md}.md"
+    [[ -f "$note_path" ]] || continue
+    update_conversation_archive_path "$note_path" "conversations/$base" "$sidecar"
+  done
+}
+
 print -r -- "repo: $repo"
 print -r -- "cutoff: $cutoff"
 print -r -- "mode: $mode"
@@ -246,7 +343,9 @@ for entry in *(N); do
 
   if date_part="$(date_prefix_for_name "$entry")"; then
     if [[ "$date_part" < "$cutoff" || "$date_part" == "$cutoff" ]]; then
-      move_path "$entry" "$(archive_bucket_for_date "$date_part")/$entry"
+      dst="$(archive_bucket_for_date "$date_part")/$entry"
+      move_path "$entry" "$dst"
+      move_matching_conversation_sidecar "$entry" "$dst" "${dst:h}"
     fi
   fi
 done
@@ -281,5 +380,8 @@ for month_dir in archive/[0-9][0-9][0-9][0-9]-[0-9][0-9](N/); do
     fi
   done
 done
+
+normalise_archived_conversation_sidecars
+sync_archived_conversation_references
 
 print -r -- "done"

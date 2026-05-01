@@ -1,4 +1,4 @@
 interface:
   display_name: "Cleanup Sandbox"
   short_description: "Archive dated sandbox notes and commit the result."
-  default_prompt: "Clean up the sandbox workspace by dating notes, archiving old files into archive/yyyy-mm/yyyy-mm-dd folders, and committing the result logically."
+  default_prompt: "Clean up the sandbox workspace by dating notes, archiving old files into archive/yyyy-mm/yyyy-mm-dd folders, moving matching conversation sidecars beside archived notes, and committing the result logically."
