@@ -1,0 +1,4 @@
+.npmrc
+.env.secret
+Library/Application Support/aichat/config.yaml
+dev-misc/open-acp/.openacp/
