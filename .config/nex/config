@@ -1,0 +1,11 @@
+focus-follows-mouse = true
+macos-option-as-alt = left
+
+keybind = alt+f=unbind
+keybind = alt+left=unbind
+keybind = alt+right=unbind
+keybind = alt+super+down=unbind
+keybind = alt+super+up=unbind
+keybind = escape=unbind
+keybind = shift+super+[=previous_workspace
+keybind = shift+super+]=next_workspace
