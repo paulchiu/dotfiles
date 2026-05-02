@@ -20,7 +20,7 @@ Required:
 
 Useful commands:
   telegram-notify '{"last-assistant-message":"Done"}'
-  telegram-notify --video /path/to/test.mov "Manual test video"
+  telegram-notify --video /path/to/test.mp4 --video-width 432 --video-height 768 "Manual test video"
   telegram-notify --discover-chat-id
   telegram-notify --print-config
 """
@@ -386,6 +386,9 @@ def send_video(
     video_path: Path,
     caption: str,
     fallback_to_document: bool,
+    width: int | None,
+    height: int | None,
+    duration: int | None,
 ) -> tuple[str, Any]:
     if not video_path.exists():
         raise ValueError(f"video file does not exist: {video_path}")
@@ -396,6 +399,12 @@ def send_video(
         "caption": caption,
         "supports_streaming": True,
     }
+    if width is not None:
+        fields["width"] = width
+    if height is not None:
+        fields["height"] = height
+    if duration is not None:
+        fields["duration"] = duration
     try:
         return "video", call_telegram_multipart(config, "sendVideo", fields, "video", video_path)
     except RuntimeError:
@@ -457,6 +466,9 @@ def main() -> int:
     parser.add_argument("--discover-chat-id", action="store_true", help="list chat ids from bot updates")
     parser.add_argument("--dry-run", action="store_true", help="print what would be sent without sending")
     parser.add_argument("--video", help="send a local video file with the message as its caption")
+    parser.add_argument("--video-width", type=int, help="video width in pixels for Telegram metadata")
+    parser.add_argument("--video-height", type=int, help="video height in pixels for Telegram metadata")
+    parser.add_argument("--video-duration", type=int, help="video duration in seconds for Telegram metadata")
     parser.add_argument(
         "--no-video-document-fallback",
         action="store_true",
@@ -478,6 +490,10 @@ def main() -> int:
             caption = build_media_caption(raw_input, config)
             if args.dry_run:
                 print(f"video={video_path}")
+                if args.video_width is not None or args.video_height is not None:
+                    print(f"size={args.video_width or '?'}x{args.video_height or '?'}")
+                if args.video_duration is not None:
+                    print(f"duration={args.video_duration}s")
                 print(caption)
                 return 0
 
@@ -486,6 +502,9 @@ def main() -> int:
                 video_path,
                 caption,
                 fallback_to_document=not args.no_video_document_fallback,
+                width=args.video_width,
+                height=args.video_height,
+                duration=args.video_duration,
             )
             if isinstance(result, dict) and "message_id" in result:
                 print(f"sent {kind} message_id={result['message_id']}")
