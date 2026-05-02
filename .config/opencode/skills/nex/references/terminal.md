@@ -38,6 +38,10 @@ Notes:
 - `pane send` types text into the target PTY and presses Enter. If a shell is
   running, the text executes as shell input. If an agent is running, the text is
   sent as agent input.
+- `pane send` exit `0` is not proof that text reached the PTY. When launching
+  delegates, always verify with `pane capture`. If capture does not show the
+  command or agent UI, retry once at most, then use the focused-pane fallback in
+  `delegation.md`.
 - `pane capture --lines N` is useful for checking whether a launch completed or
   whether an agent is waiting for input.
 
@@ -47,6 +51,11 @@ Notes:
 nex workspace create [--name "Workspace Name"] [--path /dir] [--color blue] [--group <name>]
 nex workspace move <name-or-id> (--group <name> | --top-level) [--index N]
 ```
+
+`workspace create` opens the new workspace and gives it an initial shell pane in
+Nex `0.22.0`. Verify before relying on focus-sensitive fallbacks:
+`nex pane list --workspace "<name>" --json` should show the intended pane with
+both `is_active_workspace: true` and `is_focused: true`.
 
 `workspace move` requires either `--group <name>` or `--top-level`, but not both.
 `--index` must be an integer when supplied.
