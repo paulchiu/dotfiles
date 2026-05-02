@@ -20,6 +20,7 @@ Required:
 
 Useful commands:
   telegram-notify '{"last-assistant-message":"Done"}'
+  telegram-notify --video /path/to/test.mov "Manual test video"
   telegram-notify --discover-chat-id
   telegram-notify --print-config
 """
@@ -28,7 +29,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import mimetypes
 import os
+import secrets
 import shlex
 import shutil
 import subprocess
@@ -42,6 +45,7 @@ from typing import Any
 DEFAULT_CONFIG = "~/.config/telegram-notify.env"
 DEFAULT_MESSAGE = "Task completed - ready for input."
 TELEGRAM_LIMIT = 4096
+TELEGRAM_CAPTION_LIMIT = 1024
 KNOWN_CONFIG_KEYS = {
     "TELEGRAM_API_BASE",
     "TELEGRAM_BOT_TOKEN",
@@ -277,16 +281,12 @@ def call_telegram(config: dict[str, str], method: str, payload: dict[str, Any] |
     return decoded.get("result")
 
 
-def send_message(config: dict[str, str], text: str) -> Any:
+def common_send_fields(config: dict[str, str]) -> dict[str, Any]:
     chat_id = config.get("TELEGRAM_CHAT_ID")
     if not chat_id:
         raise ValueError("TELEGRAM_CHAT_ID is required")
 
-    payload: dict[str, Any] = {
-        "chat_id": chat_id,
-        "text": text,
-        "disable_web_page_preview": as_bool(config.get("TELEGRAM_DISABLE_WEB_PAGE_PREVIEW"), True),
-    }
+    payload: dict[str, Any] = {"chat_id": chat_id}
 
     optional_fields = {
         "TELEGRAM_MESSAGE_THREAD_ID": "message_thread_id",
@@ -302,7 +302,110 @@ def send_message(config: dict[str, str], text: str) -> Any:
     if as_bool(config.get("TELEGRAM_PROTECT_CONTENT"), False):
         payload["protect_content"] = True
 
+    return payload
+
+
+def send_message(config: dict[str, str], text: str) -> Any:
+    payload: dict[str, Any] = common_send_fields(config) | {
+        "text": text,
+        "disable_web_page_preview": as_bool(config.get("TELEGRAM_DISABLE_WEB_PAGE_PREVIEW"), True),
+    }
+
     return call_telegram(config, "sendMessage", payload)
+
+
+def multipart_payload(
+    fields: dict[str, Any],
+    file_field: str,
+    file_path: Path,
+) -> tuple[bytes, str]:
+    boundary = f"----telegram-notify-{secrets.token_hex(12)}"
+    filename = (
+        file_path.name.replace("\\", "_").replace('"', "'").replace("\r", "_").replace("\n", "_")
+    )
+    parts: list[bytes] = []
+
+    for key, value in fields.items():
+        parts.append(f"--{boundary}\r\n".encode("utf-8"))
+        parts.append(f'Content-Disposition: form-data; name="{key}"\r\n\r\n'.encode("utf-8"))
+        if isinstance(value, bool):
+            rendered = "true" if value else "false"
+        else:
+            rendered = str(value)
+        parts.append(rendered.encode("utf-8"))
+        parts.append(b"\r\n")
+
+    content_type = mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
+    parts.append(f"--{boundary}\r\n".encode("utf-8"))
+    parts.append(
+        (
+            f'Content-Disposition: form-data; name="{file_field}"; '
+            f'filename="{filename}"\r\n'
+            f"Content-Type: {content_type}\r\n\r\n"
+        ).encode("utf-8"),
+    )
+    parts.append(file_path.read_bytes())
+    parts.append(b"\r\n")
+    parts.append(f"--{boundary}--\r\n".encode("utf-8"))
+    return b"".join(parts), boundary
+
+
+def call_telegram_multipart(
+    config: dict[str, str],
+    method: str,
+    fields: dict[str, Any],
+    file_field: str,
+    file_path: Path,
+) -> Any:
+    timeout = as_int(config.get("TELEGRAM_CONNECT_TIMEOUT"), 15, "TELEGRAM_CONNECT_TIMEOUT")
+    body, boundary = multipart_payload(fields, file_field, file_path)
+    headers = {"Content-Type": f"multipart/form-data; boundary={boundary}"}
+    request = urllib.request.Request(api_url(config, method), data=body, headers=headers)
+
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            response_body = response.read().decode("utf-8")
+    except urllib.error.HTTPError as exc:
+        body_text = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Telegram API HTTP {exc.code}: {body_text}") from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(f"Telegram API request failed: {exc}") from exc
+
+    decoded = json.loads(response_body)
+    if not decoded.get("ok"):
+        raise RuntimeError(f"Telegram API returned ok=false: {decoded}")
+    return decoded.get("result")
+
+
+def build_media_caption(raw_input: str, config: dict[str, str]) -> str:
+    return truncate(build_notification(raw_input, config), TELEGRAM_CAPTION_LIMIT)
+
+
+def send_video(
+    config: dict[str, str],
+    video_path: Path,
+    caption: str,
+    fallback_to_document: bool,
+) -> tuple[str, Any]:
+    if not video_path.exists():
+        raise ValueError(f"video file does not exist: {video_path}")
+    if not video_path.is_file():
+        raise ValueError(f"video path is not a file: {video_path}")
+
+    fields = common_send_fields(config) | {
+        "caption": caption,
+        "supports_streaming": True,
+    }
+    try:
+        return "video", call_telegram_multipart(config, "sendVideo", fields, "video", video_path)
+    except RuntimeError:
+        if not fallback_to_document:
+            raise
+        document_fields = dict(common_send_fields(config) | {"caption": caption})
+        return (
+            "document",
+            call_telegram_multipart(config, "sendDocument", document_fields, "document", video_path),
+        )
 
 
 def discover_chat_ids(config: dict[str, str]) -> int:
@@ -353,6 +456,12 @@ def main() -> int:
     parser.add_argument("--config", help=f"config file path, default {DEFAULT_CONFIG}")
     parser.add_argument("--discover-chat-id", action="store_true", help="list chat ids from bot updates")
     parser.add_argument("--dry-run", action="store_true", help="print what would be sent without sending")
+    parser.add_argument("--video", help="send a local video file with the message as its caption")
+    parser.add_argument(
+        "--no-video-document-fallback",
+        action="store_true",
+        help="fail instead of sending the file as a document if Telegram rejects it as video",
+    )
     parser.add_argument("--print-config", action="store_true", help="print effective config with token redacted")
     args = parser.parse_args()
 
@@ -363,7 +472,26 @@ def main() -> int:
         if args.discover_chat_id:
             return discover_chat_ids(config)
 
-        text = build_notification(read_input(args.message), config)
+        raw_input = read_input(args.message)
+        if args.video:
+            video_path = Path(args.video).expanduser()
+            caption = build_media_caption(raw_input, config)
+            if args.dry_run:
+                print(f"video={video_path}")
+                print(caption)
+                return 0
+
+            kind, result = send_video(
+                config,
+                video_path,
+                caption,
+                fallback_to_document=not args.no_video_document_fallback,
+            )
+            if isinstance(result, dict) and "message_id" in result:
+                print(f"sent {kind} message_id={result['message_id']}")
+            return 0
+
+        text = build_notification(raw_input, config)
         if args.dry_run:
             print(text)
             return 0
