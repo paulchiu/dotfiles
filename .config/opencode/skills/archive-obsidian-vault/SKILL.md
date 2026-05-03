@@ -185,6 +185,13 @@ Archived for $MONTH:
 1. **Nested attachments/** - flatten if `attachments/attachments/` appears
 2. **Shared attachments** - copy (don't move) when referenced across months
 3. **Cloud sync delays** - tell user to reload vault (Cmd+R) if files aren't visible in Obsidian
+4. **iCloud restoring deleted/moved originals** - in iCloud Drive vaults (path contains `Mobile Documents/iCloud~md~obsidian`), local `mv` and `rm` (including the deletes done inside `combine_journals.py`, `delete_empty_journals.py`, and `extract_bookmarks.py`) can complete locally, then iCloud re-syncs the original files back from the cloud minutes later. The result: source files reappear at `Area/Journal/`, `Area/Fitness/Workouts/`, etc. after the archival run looked clean.
+   - At the end of every archival run in such a vault, re-list each source directory for the just-archived `$MONTH`
+   - For files that reappeared, verify they're safe to delete:
+     - **Daily journals**: each daily file's content should already be inside the combined `Archive/$YEAR Journals/$MONTH Journal.md` (check the matching `# YYYY-MM-DD` section). Empty/whitespace-only files are always safe. Bookmark-only files are safe if their bookmark already lives in `$MONTH Links.md`.
+     - **Workouts / other moved files**: `diff -q` each pair against the destination copy.
+   - If identical / fully captured, `rm` the source copies
+   - If a daily file has content NOT in the combined journal (e.g. an entry edited after the archival run), stop and ask the user — it may be a real new edit, not a stale sync
 
 ## Best Practices
 
