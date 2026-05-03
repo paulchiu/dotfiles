@@ -1,13 +1,10 @@
-Adguard.app
 AppCleaner.app
 Audiobook Builder.app
 Bing Wallpaper.app
 Bitwarden.app
 Caffeine.app
 ChatGPT.app
-Claude Code History Viewer.app
 Claude.app
-cmux.app
 Codex.app
 ColorSlurp.app
 Conductor.app
@@ -34,6 +31,7 @@ Google Slides.app
 Granola.app
 HandBrake.app
 Ice.app
+iMovie.app
 Insta360 Link Controller.app
 Iru Self Service.app
 JDownloader 2
@@ -42,11 +40,8 @@ Kagi for Safari.app
 Karabiner-Elements.app
 Karabiner-EventViewer.app
 KeyCastr.app
-Kiro CLI.app
 lghub.app
-Loom.app
 MacWhisper.app
-MeetingBar.app
 Microsoft Azure Storage Explorer.app
 Microsoft Excel.app
 Neovide.app
@@ -61,7 +56,6 @@ Pop.app
 Postman.app
 qbittorrent.app
 QSpace Pro.app
-Raycast.app
 Rectangle.app
 RemotePCSuite.app
 RustDesk.app
@@ -70,7 +64,6 @@ SF Symbols.app
 Shottr.app
 Slack.app
 SoundAnchor.app
-Syncthing.app
 Tailscale.app
 The Unarchiver.app
 Utilities
