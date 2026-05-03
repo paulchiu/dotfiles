@@ -31,6 +31,7 @@ Google Docs.app
 Google Drive.app
 Google Sheets.app
 Google Slides.app
+Granola.app
 HandBrake.app
 Ice.app
 Insta360 Link Controller.app
@@ -66,7 +67,6 @@ RemotePCSuite.app
 RustDesk.app
 Safari.app
 SF Symbols.app
-Shadow.app
 Shottr.app
 Slack.app
 SoundAnchor.app

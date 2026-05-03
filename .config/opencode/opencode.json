@@ -1,7 +1,7 @@
 {
     "plugin": [],
     "provider": {},
-    "model": "opencode/kimi-k2.6",
+    "model": "opencode/kimi-k2.5",
     "agent": {},
     "$schema": "https://opencode.ai/config.json"
 }
