@@ -41,6 +41,31 @@ Items that don't fit a recurring category stay at the Archive root with a datest
 - `Archive/2025-10 On-call training/`
 - `Archive/2024 Links.md`
 
+### Workouts (in-place, NOT archived to Archive/)
+
+`Area/Fitness/Workouts/` is a live Dataview source for `Area/Fitness/Fitness Dashboard.md` (queries use `FROM "Area/Fitness/Workouts"`). Moving sessions to `Archive/` silently drops them from PB calculations and per-exercise tables, so workouts are kept in place.
+
+Past months are tucked into **monthly subfolders** under the same root; the current month stays at the root:
+
+```
+Area/Fitness/Workouts/
+  2026-03/                # past month
+    2026-03-16.md
+    ...
+  2026-04/                # past month
+    2026-04-06.md
+    ...
+  2026-05-02.md           # current month, at the root
+```
+
+Dataview's `FROM "Area/Fitness/Workouts"` recurses into subfolders, so the dashboard keeps working without query edits.
+
+When the user asks to archive workouts (or it surfaces as part of a monthly archive run):
+1. Detect past-month files at the workouts root (`Area/Fitness/Workouts/YYYY-MM-*.md` where `YYYY-MM` is before the current month).
+2. For each past month present, `mkdir -p "Area/Fitness/Workouts/$MONTH"` and `mv` matching daily files into it.
+3. Leave current-month files at the root.
+4. Do NOT move workout files to `Archive/`, do NOT combine them into a monthly file (the per-session structure is what Dataview queries).
+
 ## Determining the Month to Archive
 
 Do NOT ask the user which month to archive. Instead, auto-detect:
