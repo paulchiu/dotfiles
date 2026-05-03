@@ -1,9 +1,9 @@
 focus-follows-mouse = true
 macos-option-as-alt = left
 
-custom-shader = ~/.config/ghostty/shaders/retro-terminal.glsl
-custom-shader = ~/.config/ghostty/shaders/bloom.glsl
-custom-shader-animation = always
+# custom-shader = ~/.config/ghostty/shaders/retro-terminal.glsl
+# custom-shader = ~/.config/ghostty/shaders/bloom.glsl
+# custom-shader-animation = always
 
 keybind = alt+f=unbind
 keybind = alt+left=unbind
