@@ -27,6 +27,7 @@ Assume the user has already told you (or you have already edited) the specific f
    EOF
    )"
    ```
+
 6. Run `yadm push`.
 7. Run `yadm status` to confirm a clean tree.
 
@@ -47,6 +48,16 @@ Keep the subject short and descriptive. Put the "why" in the body only when the 
 - `~/.claude/skills` is a symlink to `~/.config/opencode/skills`, so edit skills under the opencode path and stage them there.
 - Do not use `--no-verify` or skip hooks unless the user explicitly asks.
 - If the user said "commit" only, stop after commit. If they said "update", "sync", or "add commit and push", complete the full cycle through push.
+
+## RTK gotcha
+
+The Claude Code hook routes `yadm` through `rtk` (Rust Token Killer). RTK's `yadm status` summary can return a stale `clean — nothing to commit` line even when files in `~/.config/opencode/` or `~/.claude/` are modified. If `yadm status` claims clean but you know you just edited a tracked file, run `rtk proxy yadm status --short` to bypass the cache. If RTK still gets in the way, fall back to operating the underlying repo directly:
+
+```
+git --git-dir=$(yadm introspect repo) --work-tree="$HOME" status --short
+```
+
+Use the same pattern (`rtk proxy yadm <cmd>` or the explicit `git --git-dir=...`) for `add`, `diff`, `commit`, and `push` if RTK keeps short-circuiting. Always run a final `rtk proxy yadm status --short` to confirm the tree is actually clean.
 
 ## Never do
 
