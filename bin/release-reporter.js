@@ -8,8 +8,10 @@
 
 // @ts-ignore
 const API_TOKEN = process.env.BUILDKITE_API_TOKEN;
-const API_URL = "https://api.buildkite.com/v2/organizations/mryum/pipelines";
-const PAGE_PARAMS = "page=1&per_page=20";
+const ORGANIZATION = process.env.BUILDKITE_ORGANIZATION || "mryum";
+const API_URL = `https://api.buildkite.com/v2/organizations/${ORGANIZATION}/pipelines`;
+const PAGE = "1";
+const PER_PAGE = "20";
 
 // ------------------------------------------------------------
 // Functions
@@ -25,22 +27,75 @@ const PAGE_PARAMS = "page=1&per_page=20";
  * @property {boolean} blocked
  * @property {Author} author
  *
+ * @typedef {Error & { pipeline?: String, branch?: String }} PipelineNotFoundError
+ */
+
+/**
  * @param {String} pipeline
  * @param {String} branch
- * @returns Build
+ * @returns PipelineNotFoundError
+ */
+function createPipelineNotFoundError(pipeline, branch) {
+  /** @type {PipelineNotFoundError} */
+  const error = new Error(
+    `Buildkite pipeline not found: ${pipeline} (${branch})`
+  );
+  error.name = "PipelineNotFoundError";
+  error.pipeline = pipeline;
+  error.branch = branch;
+  return error;
+}
+
+/**
+ * @param {String} pipeline
+ * @param {String} branch
+ * @returns String
+ */
+function getBuildsUrl(pipeline, branch) {
+  const url = new URL(`${API_URL}/${encodeURIComponent(pipeline)}/builds`);
+  url.searchParams.set("branch", branch);
+  url.searchParams.set("page", PAGE);
+  url.searchParams.set("per_page", PER_PAGE);
+
+  return url.toString();
+}
+
+/**
+ * @param {String} body
+ * @returns String
+ */
+function getErrorBodySnippet(body) {
+  if (!body) {
+    return "";
+  }
+
+  return `: ${body.substring(0, 500)}`;
+}
+
+/**
+ * @param {String} pipeline
+ * @param {String} branch
+ * @returns Promise<Build[]>
+ *
  */
 async function fetchBuilds(pipeline, branch) {
-  const response = await fetch(
-    `${API_URL}/${pipeline}/builds?branch=${branch}&${PAGE_PARAMS}`,
-    {
-      headers: {
-        Authorization: `Bearer ${API_TOKEN}`,
-      },
-    }
-  );
+  const response = await fetch(getBuildsUrl(pipeline, branch), {
+    headers: {
+      Authorization: `Bearer ${API_TOKEN}`,
+    },
+  });
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    if (response.status === 404) {
+      throw createPipelineNotFoundError(pipeline, branch);
+    }
+
+    const body = await response.text();
+    throw new Error(
+      `Buildkite API error for ${pipeline} (${branch}): HTTP ${
+        response.status
+      }${getErrorBodySnippet(body)}`
+    );
   }
 
   return await response.json();
@@ -103,18 +158,31 @@ function getFirstLine(text) {
  *
  * @typedef {Object} PipelineBuilds
  * @property {String} pipeline
- * @property {Object[]} builds
+ * @property {Build[]} builds
  * @property {number} number
  * @property {String} url
  *
  * @param {PipelineTuple[]} pipelineTuples
- * @returns PipelineBuilds[]
+ * @returns Promise<PipelineBuilds[]>
  */
 async function getPipelinesBuilds(pipelineTuples) {
   const pipelineBuilds = await Promise.all(
     pipelineTuples.map(async (pipelineTuple) => {
       const [pipeline, branch] = pipelineTuple;
-      const builds = await fetchBuilds(pipeline, branch);
+      let builds;
+
+      try {
+        builds = await fetchBuilds(pipeline, branch);
+      } catch (error) {
+        if (error?.name === "PipelineNotFoundError") {
+          console.warn(
+            `Skipping missing Buildkite pipeline: ${pipeline} (${branch})`
+          );
+          return undefined;
+        }
+
+        throw error;
+      }
 
       if (builds.length === 0) {
         return undefined;
@@ -132,7 +200,17 @@ async function getPipelinesBuilds(pipelineTuples) {
     })
   );
 
-  return pipelineBuilds.filter((b) => !!b);
+  const existingPipelineBuilds = /** @type {PipelineBuilds[]} */ (
+    pipelineBuilds.filter((b) => !!b)
+  );
+
+  if (existingPipelineBuilds.length === 0 && pipelineTuples.length > 0) {
+    throw new Error(
+      `No Buildkite pipelines could be fetched for organization ${ORGANIZATION}. Check BUILDKITE_API_TOKEN and BUILDKITE_ORGANIZATION.`
+    );
+  }
+
+  return existingPipelineBuilds;
 }
 
 /**
@@ -242,6 +320,10 @@ function getNextClosest(minutesInFuture, minutesToRoundTo) {
  * @param {PipelineTuple[]} pipelines
  */
 async function logReleaseNotes(pipelines) {
+  if (!API_TOKEN) {
+    throw new Error("BUILDKITE_API_TOKEN is required.");
+  }
+
   const pipelinesBuilds = await getPipelinesBuilds(pipelines);
   console.log(`### ctrl-alt-delight releases for ${getReleaseDate()}`);
   console.log("");
@@ -259,7 +341,6 @@ async function logReleaseNotes(pipelines) {
 // ------------------------------------------------------------
 
 logReleaseNotes([
-  ["beamer", "main"],
   ["cloudflare-workers", "main"],
   ["guest-gateway", "main"],
   ["manage-api", "main"],
@@ -270,4 +351,7 @@ logReleaseNotes([
   ["serve-frontend", "main"],
   ["stable-api", "main"],
   ["pos-integrations", "main"],
-]);
+]).catch((error) => {
+  console.error(error.message);
+  process.exitCode = 1;
+});
