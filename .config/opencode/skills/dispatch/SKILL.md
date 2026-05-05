@@ -151,6 +151,28 @@ Brief reviewer with:
 
 The reviewer must be a separate Agent invocation for the dispatch gate. Codex self-review is valuable inside the implementation brief, but it is preflight only. It does not replace an independent Claude reviewer because codex is defending its own patch and will share its blind spots. If the user explicitly downgrades the task to an inline/tiny edit, exit dispatch rather than pretending codex self-review satisfied this gate.
 
+## External CLI reviews
+
+After the Claude adversarial reviewer returns `NITPICKS_ONLY` or `CLEAN`, run two more reviews in parallel before pushing:
+
+```
+# from the worktree root, both backgrounded so they run in parallel
+codex review --base main
+coderabbit review --plain --type committed --base main
+```
+
+The Claude reviewer is the gate; these two are independent second opinions that catch things a single reviewer misses (CodeRabbit is good at policy/style/security drift, Codex CLI tends to spot regressions in adjacent code paths the implementation brief did not name). Run them only when there is at least one local commit on the branch, and run both at once so the wall-clock cost is one review's latency, not two.
+
+Aggregating:
+
+- Treat any `[P0]` / `[P1]` from either tool as a blocker. Loop back to codex with the exact wording, just like a Claude blocker round.
+- Treat `[P2]` and below as nitpicks. Default to push and surface them; fold them in only if they materially affect the user-visible deliverable (e.g. they describe a regression in the same feature the user just asked for).
+- "No findings" / clean from CodeRabbit is informational, not authoritative — it does not override a Claude blocker.
+
+When folding in an external-review finding, make a NEW commit (still no amend, still HEREDOC message) and re-run the verification commands. You do not need a fresh Claude review for a small mechanical fix-up driven by an external CLI finding, but if the change touches new files or new behaviour, spawn one.
+
+CodeRabbit needs network and an authenticated session; if it errors with auth, surface and skip rather than blocking the dispatch.
+
 ## Watchdog loop
 
 When work is in flight, arm a 2-minute `/loop` watchdog:
@@ -189,8 +211,9 @@ Each tick:
    - explicit EPERM OR two stable ticks with uncommitted codex changes and no active process → run lint/format/test/build, stage only codex-touched files, commit on codex's behalf using codex's proposed message, spawn Claude review.
    - uncommitted changes overlap user files or another codex session → stop advancing and surface collision.
    - review done with blockers → re-delegate to codex with exact blocker text and current SHA; require a new commit.
-   - review done CLEAN → push, then run `gh pr checks <N>` if a PR exists.
-   - review done NITPICKS_ONLY → push by default, include nitpicks in the summary, unless the user gave a standing rule to fold in nitpicks before push.
+   - review done CLEAN or NITPICKS_ONLY → kick off `codex review` and `coderabbit review` in parallel (background bash). Stay in review until both return.
+   - external CLI reviews returned with `[P0]` / `[P1]` findings → treat as blockers, re-delegate to codex.
+   - external CLI reviews returned with `[P2]` or no findings → push by default, surface all blockers/nitpicks/Pn findings in the summary, unless the user gave a standing rule to fold them in before push.
    - push/CI finds a generated lockfile or dependency metadata mismatch → allow one codex fix round and one CI rerun; repeated lockfile churn becomes a blocker for the user.
    - push done and CI green or queued → CronDelete this loop, post one-line summary. NO auto-merge.
 3. Output ONE line per tick: `[HH:MM] stage=<stage>, action=<action_or_none>`.
@@ -227,6 +250,24 @@ When review returns nitpicks only:
 2. Surface nitpicks to user.
 3. If user wants them addressed, frame the next round explicitly as "consider each — accept and action OR push back with rationale". A nitpick is not automatically a fix-it; codex should weigh each.
 
+## Demo recording handoff
+
+Sometimes the user wants a video demo of the user-visible change ("record a video", "make a demo", "capture before/after"). This is opt-in and runs after CI is green, not as a default step.
+
+Two paths, pick the one that matches the demo:
+
+**Path A: Programmatic via Playwright.** When the demo is deterministic and headless-safe (paste content, wait, screenshot/record), write a self-contained `.mjs` that imports `chromium` from the repo's `playwright` install, opens a `recordVideo` context, drives the dev server, then renames the resulting webm into `~/Downloads/<feature>-demo.webm`. Spin up a separate nex pane for `npm run dev:app` (the dev-server pane) so the recording pane is free to run `node /tmp/<script>.mjs`. Wait for `curl -fsS http://localhost:5173` to return 200 before recording. Common foot-guns: zsh has read-only shell variables (`$status`, `$RANDOM`, `$SECONDS`, `$EUID`) — use `http_code`, `ready`, etc. instead.
+
+**Path B: Codex desktop handoff.** When the demo needs real computer-use (theme toggles, real cursor movement, region selection, OS-level recording tools), the CLI codex agent in a nex pane is too restricted. Stop the pane task, then hand the user a self-contained prompt to paste into the Codex desktop app, which has computer-control tools. The prompt must brief codex desktop the same way you'd brief a fresh subagent: working dir, branch, dev-server URL (already running in your dev-server pane), exact markdown to paste, the visual outcome to verify, and the absolute output path under `~/Downloads`. State explicitly "do not modify the repo, the dev server, or the branch state".
+
+In both paths:
+
+- Always start the dev server in its OWN nex pane, not in the recording pane. The recording pane needs a free prompt.
+- Keep the worktree in place until the recording is verified saved (`ls -la <path>` non-empty) — don't `git worktree remove` early.
+- Print the absolute path and size of the resulting file in your final summary so the user can click through.
+
+If the recording fails or the user takes over manually, drop the autopolling and let the user signal completion. Don't loop on `~/Downloads` waiting.
+
 ## Companion skills
 
 Use these where they fit; this skill orchestrates around them:
@@ -237,15 +278,16 @@ Use these where they fit; this skill orchestrates around them:
 - `bk-buildkite` — inspect Buildkite builds, jobs, and logs when CI status is too coarse from `gh pr checks`.
 - `github:gh-fix-ci` — diagnose GitHub Actions failures when CI repair becomes the primary task. Use intentionally; do not let watchdog retries become an unbounded fix loop.
 - `reviewing-branch-changes` — borrow review heuristics and output shape for the separate Claude reviewer. Do not substitute it for the required separate Agent invocation.
+- `nex` — split panes for the dev-server and demo-recording handoff steps; `cxd` alias delegates a task to a live codex CLI pane.
 - `yadm-sync` — sync dotfiles when this skill itself, memory entries, or other `~/.claude`/`~/.config` content is updated. It usually does not belong in product-repo dispatch work.
 
 ## What lives where
 
-| Where | What |
-|-------|------|
-| This skill | Universal pattern: roles, pipeline, EPERM fallback, watchdog template, briefing checklists. |
+| Where                                                 | What                                                                                                                   |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| This skill                                            | Universal pattern: roles, pipeline, EPERM fallback, watchdog template, briefing checklists.                            |
 | Per-project memory (`~/.claude/projects/.../memory/`) | Branch naming, CHANGELOG conventions, required PR labels, dev paths, project-specific "do this / don't do that" rules. |
-| `CLAUDE.md` | Project-specific guardrails the project author wants every assistant to see. |
+| `CLAUDE.md`                                           | Project-specific guardrails the project author wants every assistant to see.                                           |
 
 ## Briefing checklists
 
