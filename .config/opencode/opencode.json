@@ -1,7 +1,7 @@
 {
     "plugin": [],
     "provider": {},
-  "model": "opencode/kimi-k2.5",
+  "model": "openrouter/deepseek/deepseek-v4-flash",
   "permission": "allow",
   "agent": {},
     "$schema": "https://opencode.ai/config.json"
