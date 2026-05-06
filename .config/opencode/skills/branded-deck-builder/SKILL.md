@@ -34,6 +34,14 @@ When tools are available, consult these source references before relying on the 
 - Convert raw metrics into audience-readable deltas. For values greater than 10, prefer a percentage as the main hero number when a percentage is meaningful; include the raw count in smaller supporting text.
 - Use short labels on cards and charts. Put nuance in speaker notes, detailed docs, or supporting captions.
 - For engineering updates, highlight reductions, simplifications, remaining risks, and the next action.
+- Write slide headings as headlines. Drop terminal full stops on major slide titles, eyebrows, kickers, and section headers unless the punctuation carries meaning (e.g. a question mark, or a deliberate two-sentence beat). Speaker notes and body copy keep normal sentence punctuation.
+- For dated deck titles, default to `yyyy-mm-dd Title` style on the cover slide and document title (e.g. `2026-05-06 Clean Kitchen Manage Unblock Showcase`).
+
+## Layout And Spacing
+
+- Leave clear breathing room between the eyebrow/kicker, the headline, the subtitle, and any proof objects (stats, charts, tiles). Stack them with consistent vertical rhythm rather than crowding to fill space.
+- Do not let headlines, key stats, or text-heavy tiles sit awkwardly across a diagonal Splice band or behind a bright brand strip. Either move the content off the band, move the band, or switch the affected tile to an opaque/darker fill so the band reads as backdrop, not interference.
+- When a diagonal stripe must cross a text tile, raise the tile fill toward fully opaque Olive/Kale (top of the 70-92% range) and keep the stripe behind the tile, not over the copy.
 
 ## Visual QA
 
