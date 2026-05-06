@@ -1,6 +1,6 @@
 ---
 name: notion-anchored-comments
-description: "Post block-anchored review comments on Notion pages via the Notion MCP. Use when posting RFC/doc review feedback to Notion, anchoring on specific code blocks or prose, replying to existing discussions, or recovering from selection_with_ellipsis validation errors. Covers wrapper format (LLM note + ref suffix), inline-code styling, anchor pitfalls, and verification."
+description: "Post block-anchored review comments on Notion pages via the Notion MCP. Use when posting RFC/doc review feedback to Notion, anchoring on specific code blocks or prose, replying to existing discussions, or recovering from selection_with_ellipsis validation errors. Covers wrapper format (LLM note + ref suffix), inline-code styling, block-type sub-selection behaviour (paragraph/bullet vs table cell/code block), and verification."
 ---
 
 # Notion Anchored Comments
@@ -24,7 +24,7 @@ Notion comments do **not** render fenced code blocks (triple-backtick) when post
 `notion-create-comment` has three targeting modes — pick exactly one:
 
 1. **Page-level**: `page_id` only. **Avoid for review feedback.** Page-level comments lose context and are usually a mistake; if anchoring fails, stop and report rather than degrade to page-level.
-2. **Block-anchored**: `page_id` + `selection_with_ellipsis`. Anchors to a specific block (and within the UI, often a sub-selection of that block).
+2. **Block-anchored**: `page_id` + `selection_with_ellipsis`. Anchors to a specific block. Whether the UI *also* captures a sub-selection within that block depends on the block type, not on anchor tightness: table cells and code blocks typically sub-select; paragraph and bullet blocks highlight the whole block regardless of how surgical the anchor looks. See *Block-type behaviour for sub-selection*.
 3. **Discussion reply**: `page_id` + `discussion_id`. Replies into an existing thread. Use this when explicitly continuing a conversation rather than starting a new finding.
 
 ## selection_with_ellipsis Rules
@@ -43,9 +43,31 @@ Recovery recipe:
 2. Pick a `<start>` that names a specific declaration or unique phrase (`const currentPosIntegrationType`, `Blocking prerequisite`, `Flip ENABLE_CUSTOMER_IO_ANALYTICS`).
 3. Pick an `<end>` that occurs exactly once **between the intended start and the next ambiguous boundary**. Closing punctuation (`):`, `).`, `:`) and uniquely-spelled identifiers help.
 4. The selection must fit within a single block. You cannot anchor across blocks; pick the most representative one.
-5. The schema says "up to ~10 characters" but in practice longer (20–40 char) start/end strings are accepted and often necessary for uniqueness.
+5. Snippet length only affects **uniqueness** (the start+end combo must match the page exactly once). It does **not** drive sub-selection on paragraph or bullet blocks — those highlight the whole block in the UI regardless of how tight the anchor is. See *Block-type behaviour for sub-selection* below.
+6. Uniqueness matching is strict and operates on substring level, not word boundaries. A start anchor like `initi` will match every occurrence of that substring on the page (`initiative`, `initialise`, etc.), so even a single-word visual target often needs surrounding context to combine into a unique start+end pair. Verified 2026-05-06: `initi...ative` failed with `Multiple occurrences found: 3 occurrences` because `initi` appeared in `initiative` twice plus a third matching token elsewhere.
 
 If after two attempts the selection still has multiple matches, switch the anchor to a different unique line in the same logical area rather than fighting the matcher.
+
+## Block-type behaviour for sub-selection
+
+`selection_with_ellipsis` always anchors at block level. Whether the UI *also* captures a sub-selection inside the block — visible in the API as a `text-context` attribute on the discussion, and in the UI as an in-block underline of the targeted phrase — depends on the **block type**, not on how tight the anchor is.
+
+**Sub-selection captured (in-block underline)**:
+
+- Table cells.
+- Code blocks.
+- Reference data point: the Fox PaaS BullMQ thread on `3563c6719946813e9fbfedf7efe77685` produced `text-context="BullMQ"` because the anchor was a single word inside a table cell.
+
+**Sub-selection NOT captured (whole block highlights)**:
+
+- Paragraph blocks.
+- Bulleted list items.
+- Heading blocks (treat as no-sub-selection until proven otherwise; not yet directly tested).
+- Test data, 2026-05-06 against Notion page `3503c6719946806d9bfcffaafead7219`: three variants on the same paragraph block — long anchor (~50 char start, ~22 char end), tight ~10-char-per-side anchor, and a tightest-feasible word-scoped anchor — all returned `context="block"` with no `text-context`. The Notion UI highlighted the whole paragraph in every case.
+
+**Implication**: tightening the anchor on a paragraph or bullet block will not produce a tighter UI highlight. Anchor tightness only matters there for uniqueness validation. Set the user's expectations up front: on prose blocks, posting a comment underlines the whole block in the UI regardless of how surgical the `selection_with_ellipsis` looks. The substance of the comment still lands correctly; readers just see a wider visual scope than the targeted sentence.
+
+**Verifying which behaviour you got**: in `notion-get-comments` output, look at the `<discussion>` element. A `text-context="<phrase>"` attribute means Notion captured a sub-selection. Its absence means block-level highlight only — for paragraph and bullet blocks this is normal and not a failure. The create call returns success either way; the difference only shows up here.
 
 ## Block-Discussion Merging Behavior
 
@@ -98,7 +120,7 @@ Build the body as an array of rich_text objects, alternating plain and `code: tr
 ## Posting Workflow
 
 1. **Fetch and orient**. Call `notion-fetch` with `include_discussions: true`. Note existing discussions, their `text-context`, and the IDs of any threads you might reply to.
-2. **Test one anchor first**. Post the most-likely-tricky finding as a single test, then `notion-get-comments` (`include_all_blocks: true`) and confirm `context="block"` (not page-level). Only proceed once anchoring is confirmed.
+2. **Test one anchor first**. Post the most-likely-tricky finding as a single test, then `notion-get-comments` (`include_all_blocks: true`) and confirm `context="block"` (not page-level) and that the discussion landed on the intended block. `text-context` will be present on table-cell and code-block anchors and absent on paragraph/bullet blocks; either is normal — its absence on prose blocks is the platform's behaviour, not a failure to retry. Tell the user up-front when posts will land on prose blocks so they expect whole-block highlighting.
 3. **Post the rest**. Parallel calls are fine. Each anchored comment that lands on a fresh block creates its own discussion; ones that share a block get bundled.
 4. **Verify**. Final `notion-get-comments` (`include_all_blocks: true`). Tally discussions and per-thread comment counts. Report the breakdown to the user.
 5. **Stop on failure**. If anchoring repeatedly fails (multiple-occurrence errors with no good unique anchor), stop and report the limitation. Do not fall back to page-level.
@@ -116,7 +138,7 @@ Final state — N discussions, M comments:
 ...
 ```
 
-Always confirm `context="block"`, never page-level, and call out any thread-merging up front so the user isn't surprised.
+Always confirm `context="block"` (never page-level) and that each discussion landed on the intended block. The `text-context` attribute will be populated on table-cell and code-block anchors and absent on paragraph and bullet blocks; treat its presence as informational, not as a pass/fail signal. Call out any thread-merging up front so the user isn't surprised, and surface in advance whenever comments will land on prose blocks (paragraph, bullet) so the user expects whole-block highlighting in the Notion UI.
 
 ## Quick Reference: Common Anchor Picks
 
