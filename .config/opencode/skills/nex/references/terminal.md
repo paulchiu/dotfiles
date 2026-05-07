@@ -4,7 +4,7 @@ Use this reference for exact Nex CLI syntax and common terminal-management
 patterns.
 
 Source of truth: `/Applications/Nex.app/Contents/Helpers/nex`.
-Verified against Nex `0.22.0`.
+Verified against Nex `0.23.0`.
 
 ## Version and Availability
 
@@ -24,7 +24,7 @@ nex pane split [--direction horizontal|vertical] [--path /dir] [--name <label>] 
 nex pane create [--path /dir] [--name <label>] [--target <name-or-uuid>]
 nex pane close [--target <name-or-uuid>] [--workspace <name-or-uuid>]
 nex pane name <name>
-nex pane send --to <name-or-uuid> <command...>
+nex pane send [--bare] --target <name-or-uuid> [--workspace <name-or-uuid>] <command...>
 nex pane move [left|right|up|down]
 nex pane move-to-workspace --to-workspace <name-or-uuid> [--create]
 nex pane list [--workspace <name-or-id> | --current] [--json] [--no-header]
@@ -53,7 +53,7 @@ nex workspace move <name-or-id> (--group <name> | --top-level) [--index N]
 ```
 
 `workspace create` opens the new workspace and gives it an initial shell pane in
-Nex `0.22.0`. Verify before relying on focus-sensitive fallbacks:
+Nex `0.23.0`. Verify before relying on focus-sensitive fallbacks:
 `nex pane list --workspace "<name>" --json` should show the intended pane with
 both `is_active_workspace: true` and `is_focused: true`.
 
@@ -106,7 +106,7 @@ Set up a small dev workspace:
 nex workspace create --name "Dev" --path ~/dev/project --color green
 nex pane name "editor"
 nex pane split --direction horizontal --name "server"
-nex pane send --to "server" "npm run dev"
+nex pane send --target "server" "npm run dev"
 ```
 
 Capture recent pane output:

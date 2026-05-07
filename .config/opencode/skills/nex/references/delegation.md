@@ -44,7 +44,7 @@ language.
 3. Launch the agent alias in that pane.
 
    ```bash
-   nex pane send --to "cxd-review" cxd
+   nex pane send --target "cxd-review" cxd
    ```
 
    Replace `cxd` with `ccd` when the user asked for a Claude pane, and target
@@ -87,7 +87,7 @@ language.
 5. Send the task prompt to the running agent.
 
    ```bash
-   nex pane send --to "cxd-review" "Review the current branch for regressions. Report findings in this pane. Do not edit files."
+   nex pane send --target "cxd-review" "Review the current branch for regressions. Report findings in this pane. Do not edit files."
    ```
 
    Apply the same capture check to the first task prompt. If launch required the
@@ -175,7 +175,7 @@ plus capture verification.
 
 ```bash
 nex pane split --direction vertical --path "$PWD" --name "cxd-worker"
-nex pane send --to "cxd-worker" cxd
+nex pane send --target "cxd-worker" cxd
 nex pane capture --target "cxd-worker" --lines 80
 nex pane list --json
 nex pane close --target "cxd-worker"
