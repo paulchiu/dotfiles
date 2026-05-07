@@ -1,6 +1,6 @@
 ---
 name: notion-anchored-comments
-description: "Post block-anchored review comments on Notion pages via the Notion MCP. Use when posting RFC/doc review feedback to Notion, anchoring on specific code blocks or prose, replying to existing discussions, or recovering from selection_with_ellipsis validation errors. Covers wrapper format (LLM note + ref suffix), inline-code styling, block-type sub-selection behaviour (paragraph/bullet vs table cell/code block), and verification."
+description: "Post block-anchored review comments on Notion pages via the Notion MCP. Use when posting RFC/doc review feedback to Notion, anchoring on code blocks or prose, replying to existing discussions, or hitting selection_with_ellipsis validation errors."
 ---
 
 # Notion Anchored Comments

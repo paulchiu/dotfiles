@@ -1,6 +1,6 @@
 ---
 name: dispatch
-description: "Coordinate non-trivial coding work as an orchestrator-only main thread: delegate implementation to codex, require separate Claude adversarial review, run a 2-minute /loop watchdog, and handle git/gh plumbing. Use when the user wants engineering-manager delegation for coding work. Skip tiny edits, pure questions, and tasks the user explicitly wants done inline."
+description: "Coordinate non-trivial coding work as an orchestrator-only main thread: delegate to codex, require separate Claude adversarial review, run a /loop watchdog, handle git/gh plumbing. Use when the user wants engineering-manager delegation for coding work."
 ---
 
 # /dispatch — engineering-manager orchestration

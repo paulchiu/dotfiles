@@ -1,6 +1,6 @@
 ---
 name: dated-doc-renamer
-description: "Renames notes/docs to `yyyy-mm-dd Title.md` style and, when generating or materially updating dated docs, adds lightweight reproducibility front matter with a summary prompt and optional conversation archive pointer. Use when normalising filenames, adding/preserving created-at dates, or converting slugs to sentence-case titles (preserves acronyms like CAD, US)."
+description: "Renames notes/docs to `yyyy-mm-dd Title.md` and adds reproducibility front matter (summary prompt, conversation archive pointer). Use when normalising filenames, preserving created-at dates, or converting slugs to sentence-case titles."
 ---
 
 # Dated Doc Renamer
