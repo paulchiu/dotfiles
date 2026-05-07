@@ -3,3 +3,4 @@
 Library/Application Support/aichat/config.yaml
 .codex/config.toml
 .config/telegram-notify.env
+dev-misc/open-acp/.openacp/plugins/data/@openacp/speech/settings.json
