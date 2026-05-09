@@ -16,7 +16,19 @@ Do not read Gmail just to rediscover the recurring recipients or wording. Use th
 - Subject: `Family finances for <Month>, <Year>`
 - Sender style: short, plain, direct, ending with `Kind regards,` and `Paul.`
 
-Gmail or Firefox access is still needed if Paul asks to create the actual saved Gmail draft or to inspect a newer prior thread. Creating a draft is allowed when explicitly requested, but never send it.
+Gmail or Firefox access is still needed only if Paul asks to create the actual saved Gmail draft, place screenshots inline through the Gmail UI, or inspect a newer prior thread. Creating a draft is allowed when explicitly requested, but never send it.
+
+## Access Boundary
+
+Generate the report artifacts with CLI tools by default. Do not use desktop/browser access for transaction conversion, row filtering, categorisation, workbook creation, chart rendering, or screenshot generation.
+
+Use:
+
+- shell commands for file discovery, `paul-tools`, CSV inspection, and reconciliation
+- the Spreadsheets skill plus bundled workspace dependencies for `.xlsx` creation and rendered PNG screenshots
+- `email-draft.md` as a complete local draft when Gmail access is unavailable or not yet confirmed
+
+Prefer the Gmail connector for creating a saved draft when it can attach the workbook/screenshots. Use Firefox/Computer Use only when connector support is insufficient for the desired draft formatting, especially inline image placement.
 
 ## Sources
 
