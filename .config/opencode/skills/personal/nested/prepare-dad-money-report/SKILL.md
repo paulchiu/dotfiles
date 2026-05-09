@@ -1,0 +1,121 @@
+---
+name: prepare-dad-money-report
+description: "Prepare Paul's monthly family money report email for his dad from ANZ credit card exports, the prior Excel format, and the current Obsidian journal account details. Use when asked to prepare Dad's monthly family finances, family money report, ANZ report, credit card bill email, or the recurring Gmail draft for Dad/Mom/Nicole."
+---
+
+# Prepare Dad Money Report
+
+Prepare the monthly family finance report, workbook, screenshots, and Gmail draft. Treat this as sensitive personal finance work: read current values from local private sources, avoid committing raw outputs, and never send the email.
+
+## Stable Email Context
+
+Do not read Gmail just to rediscover the recurring recipients or wording. Use this stable context unless Paul says it changed:
+
+- To: `Dad <henry998@gmail.com>`
+- Cc: `Mom <sumei598@gmail.com>, Nicole Chiu <nicole.hsinlan.chiu@gmail.com>`
+- Subject: `Family finances for <Month>, <Year>`
+- Sender style: short, plain, direct, ending with `Kind regards,` and `Paul.`
+
+Gmail or Firefox access is still needed if Paul asks to create the actual saved Gmail draft or to inspect a newer prior thread. Creating a draft is allowed when explicitly requested, but never send it.
+
+## Sources
+
+- Current credit card export: look in `~/Downloads`, usually `anz.txt`.
+- Converter: `/Users/paul/dev-misc/paul-tools`, command:
+
+```bash
+npm start -- anz:csv /Users/paul/Downloads/anz.txt <output.csv>
+```
+
+- Previous report workbook: latest relevant `~/Downloads/anz-*.xlsx`; use it for sheet shape and visual expectations, not for current values.
+- Current account details: `/Users/paul/Library/Mobile Documents/iCloud~md~obsidian/Documents/Quartz/Area/Journal/YYYY-MM-DD.md`.
+- Working outputs: `/Users/paul/dev/sandbox/outputs/dad-money-report-YYYY-MM/`.
+
+Do not hardcode bank account numbers, balances, or current-month deposit details in this skill. Read them from the journal each month.
+
+## Workflow
+
+### 1. Gather current files
+
+Inspect `~/Downloads` for the current ANZ text export and last month's Excel report. Read today's journal note for:
+
+- credit card closing balance
+- cash balance
+- ANZ Access Advantage account details
+- deposit notes or other monthly commentary
+
+Create a fresh output directory under `outputs/`.
+
+### 2. Convert and clean transactions
+
+Run the `paul-tools` converter into the output directory. Inspect the CSV and remove the credit card payment line, usually `AUTOREPAYMENT - THANK YOU`, before calculating report totals.
+
+Keep statement-period rows from the export unless Paul explicitly asks for strict calendar-month filtering. The prior report has used the statement period, not only the named month.
+
+Reconcile the cleaned transaction total against the journal credit card closing balance. Stop and investigate if the totals do not match.
+
+### 3. Build the workbook and screenshots
+
+Use the Spreadsheets skill and bundled workspace dependencies for workbook creation/editing. Preserve the prior workbook's two-sheet shape unless Paul asks for a redesign:
+
+- `Statement`: date, description, card, card holder, for/category, amount
+- `Spend On`: Home/Mom/Nicole breakdown with a visible grand total and chart
+
+Use the prior report's categorisation pattern. Known recurring defaults:
+
+- card `1864` is Mom
+- card `7703` is Nicole
+- shared household charges such as council rates and Mom-card RACQ are `Home`
+- otherwise, use the card holder as the spend category
+
+Sort statement rows by amount descending so the over-$100 screenshot is easy to scan. Produce:
+
+- `anz-<month>-<year>.xlsx`
+- `over-100-transactions.png`
+- `spend-breakdown.png`
+- `email-draft.md`
+
+### 4. Draft the email
+
+Keep the draft close to this template:
+
+```text
+Hi Dad,
+
+This month the credit card bill is $X. We still have $Y remaining in cash.
+
+The ANZ Access Advantage details are:
+
+BSB and account number: <from journal>
+
+Balance: $Y
+
+The over $100 transactions this month have been:
+
+[insert over-100-transactions.png]
+
+The spend breakdown is:
+
+[insert spend-breakdown.png]
+
+Kind regards,
+
+Paul.
+```
+
+Add deposit notes only when the journal or Paul indicates they are needed for this month.
+
+If creating a Gmail draft, attach the workbook and include the screenshots inline or as attachments according to what the Gmail tooling supports. If using Computer Use to type/upload sensitive financial data into Gmail, pause at the action-time confirmation required by the Computer Use policy.
+
+### 5. Verify and report
+
+Before finishing, verify:
+
+- CSV conversion succeeded and the payment row was excluded
+- cleaned total equals the journal credit card closing balance
+- workbook opens/exports successfully
+- workbook formula-error scan is clean
+- screenshot images render legibly
+- Gmail draft was created, or the task is explicitly paused awaiting confirmation
+
+In the final response, link only the useful output files and state whether a Gmail draft exists. Do not paste bank account numbers, recipient addresses, or full email body unless Paul asks.

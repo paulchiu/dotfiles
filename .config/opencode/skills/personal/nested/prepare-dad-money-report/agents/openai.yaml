@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dad Money Report"
+  short_description: "Prepare Dad monthly family money report"
+  default_prompt: "Use $prepare-dad-money-report to prepare this month's family finance report email draft from ANZ exports."
