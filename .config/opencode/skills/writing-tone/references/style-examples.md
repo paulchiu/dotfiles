@@ -143,3 +143,56 @@ What's coming up repeatedly:
 I've been offering thoughts on the last two of: Fox is a best-case scenario rather than a benchmark, and patterns won't translate immediately because legacy stack, customer impact, and review/CI/CD bottlenecks are real constraints Fox doesn't have. I've also reassured directly where the headcount question came up, since AFAIK there's no restructuring (in downsizing sense) conversation happening.
 
 **Demonstrates the sentiment-share post structure:** a 'Hi team,' anchor, a one-line framing opener stating what the post is, three sections each with a one-paragraph headline read followed by clustered observation bullets, and a closing paragraph that surfaces the manager's own 1:1 context-setting without converting it into a 'What I'm doing with it' / 'Next steps' section. **Specific patterns:** proper-noun fidelity ('AI-pril' as branded, not 'AI-April'), concrete nouns ('three recent events' not 'three of the recent moments'), neutral noting verbs ('Skill atrophy was mentioned' not 'the only concern that landed cold'), selection-implied negatives reframed factually ('wanted in but were assigned to deadline work' not 'weren't selected'), collaborative verbs over PR-register ('offering thoughts on' not 'counter-messaging'), disambiguated reassurance ('no restructuring (in downsizing sense)' not blanket 'no restructuring'), AFAIK used sparingly. **NOT here:** a 'What I'm doing with it' / 'Next steps' section, an open-invitation closer ('useful to compare notes', 'happy to dig in'), a presumptuous bridging opener ('some patterns likely cross PLT lines'), or operational-status follow-ups about EM feedback being collected and Q3 follow-up dates.
+
+---
+
+## 12. Product-share / community-announce post (e.g. forum launch, plugin beta)
+
+## Disclaimer
+
+- Is this project open source? **Yes** (MIT, source on GitHub)
+- Is this project completely free? **Yes** (no paid tiers, no telemetry)
+- Is this project vibe-coded beyond the author's ability to comprehend how it works? **No**
+
+## Why I made it
+
+I got sick of looking for iOS workout trackers that weren't buggy or full of ads. I wanted a workout tracker where the source of truth was Markdown in my own vault, with a proper structured editor instead of hand-typing inline fields. FitKit is what I use to track my workouts now.
+
+## What it does
+
+FitKit tracks workouts as plain (well, Dataview supported) Markdown notes in your vault. Data lives in Dataview inline fields so it stays readable and portable, and FitKit gives you a structured editor on top for daily entry of sets, reps, weight, duration, and rest timing.
+
+![Workout editor, designed to be mobile friendly too](upload://example1.png)
+
+The 'kit' is a small set of pieces that work together (path can be configured):
+
+- Workout notes in `Fitness/Workouts`.
+- Exercise notes in `Fitness/Exercises`.
+- A generated `Fitness/Fitness Dashboard.md` with PBs and recent-session tables.
+
+![Fitness dashboard to view your exercises and workouts at a 'glance'](upload://example2.png)
+
+## What would help me most from testers
+
+It's a beta, currently 0.15.2. Things I'd love eyes on:
+
+- Mobile entry on iOS and Android, especially how the editor feels on narrow widths.
+- Vault layouts where the default `Fitness` root or generated dashboard bumps into existing notes.
+- There are some known missing features (like repeat workouts) that I don't use, but would like to know if they'd be useful to others.
+
+## Installing
+
+1. Install BRAT from Obsidian's community plugins.
+2. Add the FitKit repo as a beta plugin: `https://github.com/paulchiu/obsidian-fitkit`
+3. Make sure Dataview is installed and enabled too.
+
+## Links
+
+- Repo and issue tracker: `https://github.com/paulchiu/obsidian-fitkit`
+- Licence: MIT
+
+## AI disclaimer
+
+I use Claude Code and Codex day-to-day on this. I read every diff, set the architecture and the `AGENTS.md` conventions the agents follow, and review PRs myself. If you raise something in this thread or on GitHub, I'll personally respond.
+
+**Demonstrates the product-share post structure:** Disclaimer → Why → What → Tester asks → Install → Links → AI disclaimer ordering, with personal motivation leading and the AI footer trailing. **Specific patterns:** pain-point opener ('I got sick of looking for iOS workout trackers that weren't buggy or full of ads') landing the reader in the problem before any abstract benefits, self-aware parenthetical asides ('plain (well, Dataview supported) Markdown', 'path can be configured') that surface caveats inline rather than deferring them, image captions that name the artefact plus one beat of personality ('designed to be mobile friendly too', 'at a 'glance'' with the existing scare-quote convention), known-gap framing as an audience question ('would like to know if they'd be useful to others') instead of an apology or a roadmap promise, 'agents' over 'assistants' for current AI coding tools, minimal AI disclosure focused on ownership and response commitment. **NOT here:** an AI banner at the top of the post, safety-net detail in the AI section (adversarial review pass, CI gate of build/tests/lint/format), design-rationale jargon for general audiences ('the dashboard rebuilt itself from the notes rather than the other way around'), precious closers performing dedication ('FitKit is what I use every session'), or marketing-verb image captions ('beautifully crafted workout editor').
