@@ -77,8 +77,15 @@ Use the prior report's categorisation pattern. Known recurring defaults:
 
 - card `1864` is Mom
 - card `7703` is Nicole
-- shared household charges such as council rates and Mom-card RACQ are `Home`
 - otherwise, use the card holder as the spend category
+
+Home-use heuristics:
+
+- classify council bills, water, and electricity/energy as `Home`
+- classify home insurance as `Home`
+- RACQ can be either home insurance or car insurance; use judgement rather than classifying all RACQ as Home
+- home insurance tends to be steadier and monthly, while car insurance or motoring costs may vary more; use amount, regularity, card, and prior reports to guess when the merchant text is ambiguous
+- if unsure after checking prior reports, choose the most likely category and keep the workbook easy to edit
 
 Sort statement rows by amount descending so the over-$100 screenshot is easy to scan. Produce:
 
