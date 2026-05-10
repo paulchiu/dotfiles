@@ -40,10 +40,10 @@ npm start -- anz:csv /Users/paul/Downloads/anz.txt <output.csv>
 ```
 
 - Previous report workbook: latest relevant `~/Downloads/anz-*.xlsx`; use it for sheet shape and visual expectations, not for current values.
-- Current account details: `/Users/paul/Library/Mobile Documents/iCloud~md~obsidian/Documents/Quartz/Area/Journal/YYYY-MM-DD.md`.
+- Current balances and monthly notes: `/Users/paul/Library/Mobile Documents/iCloud~md~obsidian/Documents/Quartz/Area/Journal/YYYY-MM-DD.md`.
 - Working outputs: `/Users/paul/dev/sandbox/outputs/dad-money-report-YYYY-MM/`.
 
-Do not hardcode bank account numbers, balances, or current-month deposit details in this skill. Read them from the journal each month.
+Do not hardcode bank account numbers, balances, or current-month deposit details in this skill. Read balances and monthly notes from the journal each month. Do not include bank account numbers or BSB details in the email draft; Dad already knows them.
 
 ## Workflow
 
@@ -53,7 +53,7 @@ Inspect `~/Downloads` for the current ANZ text export and last month's Excel rep
 
 - credit card closing balance
 - cash balance
-- ANZ Access Advantage account details
+- ANZ Access Advantage cash balance
 - deposit notes or other monthly commentary
 
 Create a fresh output directory under `outputs/`.
@@ -102,12 +102,6 @@ Keep the draft close to this template:
 Hi Dad,
 
 This month the credit card bill is $X. We still have $Y remaining in cash.
-
-The ANZ Access Advantage details are:
-
-BSB and account number: <from journal>
-
-Balance: $Y
 
 The over $100 transactions this month have been:
 
