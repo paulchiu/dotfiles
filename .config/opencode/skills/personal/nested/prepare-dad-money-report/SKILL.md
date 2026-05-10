@@ -66,7 +66,7 @@ Keep statement-period rows from the export unless Paul explicitly asks for stric
 
 Reconcile the cleaned transaction total against the journal credit card closing balance. Stop and investigate if the totals do not match.
 
-### 3. Build the workbook and screenshots
+### 3. Build the workbook, table, and screenshot
 
 Use the Spreadsheets skill and bundled workspace dependencies for workbook creation/editing. Preserve the prior workbook's two-sheet shape unless Paul asks for a redesign:
 
@@ -87,10 +87,10 @@ Home-use heuristics:
 - home insurance tends to be steadier and monthly, while car insurance or motoring costs may vary more; use amount, regularity, card, and prior reports to guess when the merchant text is ambiguous
 - if unsure after checking prior reports, choose the most likely category and keep the workbook easy to edit
 
-Sort statement rows by amount descending so the over-$100 screenshot is easy to scan. Produce:
+Sort statement rows by amount descending. For the email body, render transactions over $100 as a markdown table, not as a screenshot. Produce:
 
 - `anz-<month>-<year>.xlsx`
-- `over-100-transactions.png`
+- a markdown table of transactions over $100 inside `email-draft.md`
 - `spend-breakdown.png`
 - `email-draft.md`
 
@@ -105,7 +105,9 @@ This month the credit card bill is $X. We still have $Y remaining in cash.
 
 The over $100 transactions this month have been:
 
-[insert over-100-transactions.png]
+| Date | Description | Card | Card Holder | For | Amount |
+| --- | --- | --- | --- | --- | ---: |
+| ... | ... | ... | ... | ... | $... |
 
 The spend breakdown is:
 
