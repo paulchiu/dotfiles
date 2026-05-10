@@ -31,6 +31,15 @@ Assume the user has already told you (or you have already edited) the specific f
 6. Run `yadm push`.
 7. Run `yadm status` to confirm a clean tree.
 
+## Splitting into logical commits
+
+If the staged set spans multiple scopes (e.g. a `docs(claude)` tweak plus a new `feat(skills)` skill plus a `chore(shell)` zshrc edit), commit each scope separately rather than one mixed commit. The user's recent log keeps one scope per commit.
+
+1. Group the changed paths by scope (see scope conventions below). One scope per commit.
+2. For each group: `yadm add <paths>`, then `yadm commit` with the scoped subject. Do not stage the next group until the previous commit has succeeded.
+3. Push once at the end (`yadm push`), not per-commit.
+4. If a single file legitimately covers two scopes, pick the dominant one and mention the other in the body. Don't fragment a single file across commits.
+
 ## Commit scope conventions
 
 The user's yadm repo uses Conventional Commits with a scope tied to the path:
@@ -58,6 +67,23 @@ git --git-dir=$(yadm introspect repo) --work-tree="$HOME" status --short
 ```
 
 Use the same pattern (`rtk proxy yadm <cmd>` or the explicit `git --git-dir=...`) for `add`, `diff`, `commit`, and `push` if RTK keeps short-circuiting. Always run a final `rtk proxy yadm status --short` to confirm the tree is actually clean.
+
+## Lock contention (`.git/index.lock`)
+
+If `yadm add` or `yadm commit` fails with `Unable to create '.../index.lock': File exists` (or EPERM in a delegated process like codex), another `yadm`/`git` process is likely mid-write against the bare repo. The repo lives at `$(yadm introspect repo)`, and the lock is `$(yadm introspect repo)/index.lock`.
+
+1. Check whether anything actually holds the lock:
+
+   ```bash
+   REPO=$(yadm introspect repo)
+   ls -l "$REPO/index.lock" 2>/dev/null
+   lsof "$REPO/index.lock" 2>/dev/null
+   pgrep -fl 'yadm|git.*'"$REPO" || true
+   ```
+
+2. If a live process owns it: wait and retry once (`sleep 2`, then re-run the failed command). If it still fails, sleep 5 and retry once more. Do not loop indefinitely.
+3. If no process owns it (stale lock from a crashed/killed run, common after a codex EPERM): remove just the lock file and retry: `rm "$REPO/index.lock"`. Do not `rm -rf` anything else under `$REPO`.
+4. If the contention is with the main Claude thread (codex was delegated and hit EPERM), stop the codex-side yadm work and have the main thread complete the sync. Two writers against the same yadm repo is the root cause; fixing the lock without fixing the contention will recur.
 
 ## Never do
 
