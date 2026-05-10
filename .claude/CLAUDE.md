@@ -5,4 +5,17 @@
 - When saving a draft/note/write-up, name it `yyyy-mm-dd Title.md` (preserve acronym casing). If today's date isn't in context, run `date +%Y-%m-%d`.
 - After saving such a file, print its absolute path in your reply. The nex terminal only renders previews/click-to-open on full paths.
 
+## Response Style
+
+- When asked for a diagnosis, review, or analysis: provide the answer FIRST in 1-3 sentences, then offer to investigate deeper if needed. Do not run extensive bash exploration before stating a hypothesis.
+- When given a specific subject (a person, ticket, or file), scope work narrowly to that subject. Do not expand to "review all related items" unless explicitly asked.
+
+## Linear Conventions
+
+- Linear collapsible syntax uses `+++ Title` / `+++` markers, NOT GitHub-style `<details>/<summary>` tags. Always use Linear's native syntax when posting to Linear.
+
+## PR Workflow
+
+- When updating PR descriptions via the gh-pr skill, NEVER remove the template checkboxes. Edit content around them, not the structure.
+
 @RTK.md
