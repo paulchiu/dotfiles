@@ -20,6 +20,16 @@ Load this only when reviewing `manage-frontend` or diffs that use `@mr-yum/front
 - UI wrappers such as `InputRightElement asChild` do not turn a raw child `<button>` into a `frontend-ui` `Button`; review the rendered child element's native semantics.
 - Review raw `<button>` and `asChild` button compositions with normal HTML semantics in mind.
 
+## Manage Team Structure Conventions
+
+Source: review comments from Victoria P. (`vicki3z`), manage team, on [manage-frontend#2226](https://github.com/mr-yum/manage-frontend/pull/2226).
+
+- Prefer `@mr-yum/frontend-ui` components over `@mr-yum/yum-ui` when an equivalent exists. When a diff introduces `@mr-yum/yum-ui` imports for primitives like `FormControl`, `Select`, etc., check whether `frontend-ui` already covers that primitive and ask the author to switch.
+- Push feature-scoped state and handlers into the feature subcomponent that owns them. A parent page that composes a feature panel should receive parsed/derived data from the panel via callbacks, not own the parsing state and lifecycle itself.
+  - Example: CSV parsing state (`parsedCsv`, `isCsvParsed`, `handleCsvFiles`, parse error handling) belongs in `*SetupPanel`, with the parent only receiving the resulting line items, customer info, and venue name.
+  - When reviewing, flag large blocks of feature-specific `useState` / handlers in a top-level page component that could be encapsulated in the child panel.
+- Co-locate closely related files in a single feature folder. A component, its sibling action buttons, and its parser/util module should live together (e.g., `CsvUpload.tsx`, `DownloadCsvTemplateButton.tsx`, and `parseInvoiceCsv.ts` in the same `InvoiceGenerator/` subfolder), not split between a generic `components/` root and the feature folder.
+
 ## Drawer / Dialog Lifecycle
 
 - `frontend-ui` `DrawerContent` wraps Radix `DialogPortal` and `Dialog.Content`.
