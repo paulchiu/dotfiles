@@ -193,6 +193,8 @@ Same as interactive, with two changes:
    - **Actionable + clearly correct**: implement the change, commit (via git-commit skill), push.
    - **Stylistic / nit you disagree with**: post a brief polite reply explaining your reasoning. Do not silently ignore.
    - **Substantive disagreement** (e.g. reviewer wants a different approach to the AC): stop and escalate. Do not unilaterally rewrite.
+
+   **Any human-facing reply** (replying to a reviewer, posting on a discussion thread, ad-hoc PR comment the user asked for mid-run): draft via the `writing-tone` skill before posting. Default to a blockquote-led inline reply (see `writing-tone` example 7): short, quote the relevant line, then respond. Do not write a freeform paragraph that references the comment by paraphrase.
 4. Exit the loop when: an approving review lands AND CI is green, OR 30 minutes elapse.
 
 ### Phase 9 (new) — merge and archive
