@@ -1239,6 +1239,7 @@
                     },
                     {
                         "description": "Hyper+E -> Emoji & Symbols",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {

@@ -196,3 +196,33 @@ It's a beta, currently 0.15.2. Things I'd love eyes on:
 I use Claude Code and Codex day-to-day on this. I read every diff, set the architecture and the `AGENTS.md` conventions the agents follow, and review PRs myself. If you raise something in this thread or on GitHub, I'll personally respond.
 
 **Demonstrates the product-share post structure:** Disclaimer → Why → What → Tester asks → Install → Links → AI disclaimer ordering, with personal motivation leading and the AI footer trailing. **Specific patterns:** pain-point opener ('I got sick of looking for iOS workout trackers that weren't buggy or full of ads') landing the reader in the problem before any abstract benefits, self-aware parenthetical asides ('plain (well, Dataview supported) Markdown', 'path can be configured') that surface caveats inline rather than deferring them, image captions that name the artefact plus one beat of personality ('designed to be mobile friendly too', 'at a 'glance'' with the existing scare-quote convention), known-gap framing as an audience question ('would like to know if they'd be useful to others') instead of an apology or a roadmap promise, 'agents' over 'assistants' for current AI coding tools, minimal AI disclosure focused on ownership and response commitment. **NOT here:** an AI banner at the top of the post, safety-net detail in the AI section (adversarial review pass, CI gate of build/tests/lint/format), design-rationale jargon for general audiences ('the dashboard rebuilt itself from the notes rather than the other way around'), precious closers performing dedication ('FitKit is what I use every session'), or marketing-verb image captions ('beautifully crafted workout editor').
+
+---
+
+## 13. Delegation / agent-work debrief reply to a peer-leader (memo-style, multi-example with per-example lessons)
+
+RE: standup delegation details
+
+The concrete examples I had in mind were the last couple of agent-heavy pieces I picked up.
+
+*CAD-1449 / CAD-1706 `posDiscountId` data inclusion in POS payloads change*
+
+- PR #3518 was opened on the 30th of April and merged on the 4th of May.
+- It then needed #3591 the next day to narrow the change to INFOGENESIS integration only.
+- PR #3604 followed on the 6th of May as the final polish, dropping leftover `Object.assign` Venue clones.
+
+*CAD-733 invoice generator*
+
+- PR #2226 merged quickly in wall-clock terms, about 10 hours after opening, but it had 46 review events.
+- The polish PR #2227 was closed after being folded back into #2226; this was my mistake in splitting/stacking. The lesson is that team members want pull requests to be a polished piece of work, and polishing can't be a separate phase as nit-pick comments will happen if you don't include it.
+- The E2E PR #2229 is still open and rolled in more polishing comments.
+
+This one is the clearest example of 'designing through PR' for me: live preview, print/PDF shape, tax registration copy, CSV behaviour, navigation, reset behaviour, and e2e shape were all still moving while the PR was under review.
+
+*Lessons*
+
+The LLM conclusion is that delegation works best when the acceptance criteria and review boundaries are tight enough that the agent can produce the right diff, and reviewers can reject out-of-scope churn.
+
+When the issue is still being designed, the cycle time can quickly blow out with our long build times.
+
+**Demonstrates the structural pattern for a memo-style debrief reply:** `RE: <topic>` subject-line opener (memo style for a known follow-up, not a prose 'Quick update from...' warm-up), one-line lead-in pointing at the examples, then each example lifted into its own `*Section title*` block with a brief descriptive phrase (`*CAD-1449 / CAD-1706 posDiscountId data inclusion in POS payloads change*` not bare `*CAD-1449*`), per-example bullets that stay tight and only carry the salient facts, the lesson attached at the point in the section where it came from ('this was my mistake in splitting/stacking. The lesson is that...') rather than collected at the bottom, a closing `*Lessons*` block in paragraph form (not bullets) holding the cross-cutting conclusion, direct first-person ownership of the misstep ('this was my mistake'), self-tagging an AI-generated framing the author kept ('The LLM conclusion is that...') as a transparency move, and a final lesson anchored in a named local factor ('our long build times') instead of an abstract principle. **Also note the backtick scope:** `posDiscountId` is backticked because it's a literal code identifier; ticket IDs (CAD-1449, CAD-1706), PR numbers (#3518, #2226), and the integration name spelled in prose (INFOGENESIS) all stay in plain prose. **NOT here:** dense diff/commit/line-count statistics ('+758 / -96 across 14 commits', 'about 1000 added lines'), a synthesised cycle-time metric ('roughly five calendar days from first pickup to final merge'), a 'My read is that...' diagnosis paragraph collected at the bottom, or an abstract closing principle ('the review and rework cost just moves into the PR') without a local anchor.
