@@ -47,3 +47,11 @@
 - Prefer descriptive assertions over snapshots/object-wide comparisons.
 - Keep snapshots short (about 12 lines max) when snapshots are used.
 - Avoid `test-id` when stronger queries are available.
+
+## Core Ordering (cart/order paths in `manage-api`)
+
+Apply when reviewing changes under `src/modules/cart/`, `src/modules/cartValidation/`, `src/modules/order/`, or related `schema.gql` enums/types. Standards observed from Core Ordering reviewers (Benno007, OscarAvellan).
+
+- New persistence reads/writes in cart/order code should use Prisma, not TypeORM. TypeORM is being removed from manage-api, so flag any newly added TypeORM query as a `suggestion` to use Prisma; existing call sites in the same file are fine to leave alone for the PR. Evidence: https://github.com/mr-yum/manage/pull/3204#discussion_r3222779310
+- Guest-facing validation error copy must match the frontend string the guest actually sees. When adding or modifying a `CartValidationError` message (or any other text surfaced verbatim to guests), look up the equivalent frontend string and reuse it. The EONX session-expiry copy is the canonical example: `"Your session has expired! Please click the Home tab and select Order at Table to start again."` Evidence: https://github.com/mr-yum/manage/pull/3204#discussion_r3222778208
+- Public schema additions (GraphQL enum values, proto types, new error codes) need an explicit downstream-consumer follow-up. When a new value must be handled by serve-frontend, manage-frontend, or guest-gateway, raise it as a `question` and recommend a follow-up ticket; do not assume frontends will discover the new value passively. Evidence: https://github.com/mr-yum/manage/pull/3204#discussion_r3222786543
