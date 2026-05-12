@@ -30,6 +30,16 @@ Source: review comments from Victoria P. (`vicki3z`), manage team, on [manage-fr
   - When reviewing, flag large blocks of feature-specific `useState` / handlers in a top-level page component that could be encapsulated in the child panel.
 - Co-locate closely related files in a single feature folder. A component, its sibling action buttons, and its parser/util module should live together (e.g., `CsvUpload.tsx`, `DownloadCsvTemplateButton.tsx`, and `parseInvoiceCsv.ts` in the same `InvoiceGenerator/` subfolder), not split between a generic `components/` root and the feature folder.
 
+## E2E Test Folder Classification
+
+Source: review comment from Benno007, manage team, on [manage-frontend#2229](https://github.com/mr-yum/manage-frontend/pull/2229#discussion_r3216850050).
+
+- `e2e/src/tests/` is split by severity: `critical/<role>/` blocks releases and is reserved for SEV-1/2 scenarios; `non-critical/<role>/` runs on schedule and holds SEV-3 and lower. Source of truth: the README in each folder, plus the team Notion playbook linked from `e2e/README.md`.
+- When a diff adds a new spec, check that the chosen folder matches the SEV classification of the scenario being tested. If a feature is admin-only invoice tooling, table copy, etc., default to non-critical and ask the author to justify any critical placement.
+- New severity/role combos also require a matching project entry in `e2e/playwright.config.ts`. If a diff adds `e2e/src/tests/<severity>/<role>/...` for a `<severity>/<role>` pair that has no existing project entry, the spec is dead code: Playwright's `testMatch` glob will not pick it up. Flag this as `blocking`; mirror an existing project (`Desktop Chrome - Owner non critical` is a good template) and copy the matching storage state and `setup_*` dependency.
+- Open question: Ben has proposed re-evaluating the mapping to SEV-2/3 (critical) vs SEV-4/5 (non-critical) for manage-fe specifically. Until that lands, enforce the README convention (SEV-1/2 vs SEV-3+) and note the open question in the finding if classification is borderline.
+- Follow-up to watch for: [CAD-1726](https://linear.app/mr-yum/issue/CAD-1726/add-e2eagentsmd-and-claudemd-pointer-codifying-critical-vs-non) adds `e2e/AGENTS.md` to codify this in-repo. Once that ships, prefer linking to `e2e/AGENTS.md` from review comments instead of re-explaining the rule.
+
 ## Drawer / Dialog Lifecycle
 
 - `frontend-ui` `DrawerContent` wraps Radix `DialogPortal` and `Dialog.Content`.
