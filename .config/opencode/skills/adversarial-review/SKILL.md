@@ -239,6 +239,23 @@ gh pr review <PR_NUMBER> --repo <org>/<repo> --approve --body "<short summary>"
 gh pr review <PR_NUMBER> --repo <org>/<repo> --request-changes --body "<short summary>"
 ```
 
+### Review body style
+
+Keep the review-level body **ultra-terse: one short sentence, ~10 words**. It's a vibe-check on top of the inline comments, not a restatement. Do **not** recap findings, AC trace, test counts, or repeat what's already in the inline comments. The reader is about to scroll the inline thread anyway.
+
+Pattern: `<one-line sentiment>, <brief tally of inline findings>.`
+
+Examples (match this register, casual abbreviations like "LGTM" are fine):
+
+- `LGTM, just one change requested and a nit pick.`
+- `Looks good, two nit picks inline.`
+- `One blocker inline, see REV-1.`
+- `Ship it.` (for `--approve` with nothing to flag)
+
+Tone rules: no em dashes (commas, colons, or separate sentences instead); Australian spelling; "nit pick" as two words to match the user's voice.
+
+Avoid: "Adversarial review: bug fix is correct and all 5 ACs satisfied…", lists of findings with file paths, test counts, or any sentence longer than the inline-comment summary.
+
 Verify the review was recorded:
 
 ```bash
