@@ -9,14 +9,12 @@ Prepare the monthly family finance report, workbook, screenshots, and Gmail draf
 
 ## Stable Email Context
 
-Do not read Gmail just to rediscover the recurring recipients or wording. Use this stable context unless Paul says it changed:
+Recipients are not stored in this skill. When you need them, look up the most recent prior `Family finances for <Month>, <Year>` thread in Gmail and reuse its To/Cc list verbatim. Do not hardcode or echo the addresses back to Paul in chat.
 
-- To: `Dad <henry998@gmail.com>`
-- Cc: `Mom <sumei598@gmail.com>, Nicole Chiu <nicole.hsinlan.chiu@gmail.com>`
 - Subject: `Family finances for <Month>, <Year>`
 - Sender style: short, plain, direct, ending with `Kind regards,` and `Paul.`
 
-Gmail or Firefox access is still needed only if Paul asks to create the actual saved Gmail draft, place screenshots inline through the Gmail UI, or inspect a newer prior thread. Creating a draft is allowed when explicitly requested, but never send it.
+Gmail or Firefox access is still needed when Paul asks to create the actual saved Gmail draft, place screenshots inline through the Gmail UI, or inspect a newer prior thread. Creating a draft is allowed when explicitly requested, but never send it.
 
 ## Access Boundary
 
