@@ -156,14 +156,6 @@ fi
 # Secret keys
 [ -f "$HOME/.env.secret" ] && source "$HOME/.env.secret"
 
-# pnpm
-export PNPM_HOME="/Users/paul/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
 # Created by `pipx` on 2025-01-27 08:40:10
 export PATH="$PATH:/Users/paul/.local/bin"
 
@@ -272,3 +264,11 @@ add-zsh-hook chpwd _cmux_auto_rename_tab
 # qlty
 export QLTY_INSTALL="$HOME/.qlty"
 export PATH="$QLTY_INSTALL/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/paul/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
