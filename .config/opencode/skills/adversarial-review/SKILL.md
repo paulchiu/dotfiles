@@ -57,6 +57,7 @@ Hunt actively, not passively. Run each lens against the changed code:
 - **Security**: input not sanitized, auth check bypassed, secrets in logs, SQL/command injection, XSS surface, missing rate limit on a new endpoint.
 - **Data integrity**: migration without rollback, schema change without backfill plan, money math in float, non-atomic multi-write, missing index on new query path.
 - **Test quality**: snapshot-only assertions, mocked-away the thing under test, flaky timer/network, no negative case, no boundary case.
+- **Build / CI supply chain**: in Buildkite `pipeline.yml` steps, any Docker Hub or non-ECR base image (e.g. `node:24`, `node:24-bookworm-slim`) instead of the internal `${DOCKERTOOLS_REGISTRY}/base/node-24-install:v3` + `ecr#v2.12.0: login: true` plugin. Treat as `blocking`. Reference repos using the correct pattern: `serve-frontend`, `manage-frontend`. (Repos on `pipeline.ts` via `@mr-yum/service-pipeline` use the just-built service image instead, which is also fine.) Past incident: PR `mr-yum/stable-api-docs#171`.
 
 For each finding, capture: file, line, what's wrong, why it matters, smallest fix.
 

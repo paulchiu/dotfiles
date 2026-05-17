@@ -41,6 +41,10 @@
 
 - For CRDB changes, prefer explicit target scoping to limit unintended changes.
 
+## Build / CI Conventions
+
+- Buildkite Node-side `pipeline.yml` steps must use the internal builder image `${DOCKERTOOLS_REGISTRY}/base/node-24-install:v3` with the `ecr#v2.12.0: login: true` plugin, not Docker Hub images like `node:24-bookworm-slim` or plain `node:24`. Reference repos: `serve-frontend` and `manage-frontend` (`pipeline.yml`). Core-ordering services (`bill-api`, `payment-api`, `order-api`, `order-worker`) use `pipeline.ts` via `@mr-yum/service-pipeline` and run inside the just-built service image instead; if a repo is on `pipeline.ts`, that path is fine. Evidence: https://github.com/mr-yum/stable-api-docs/pull/171#discussion_r... (Benno007 flag, fixed in commit a672009). Flag any new pipeline step pulling from Docker Hub or a non-ECR registry as `blocking` (supply-chain / org policy).
+
 ## Testing Preferences
 
 - Prefer readable fixture values over realistic-looking random values.
