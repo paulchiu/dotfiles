@@ -13,3 +13,6 @@ keybind = alt+super+up=unbind
 keybind = escape=unbind
 keybind = shift+super+[=previous_workspace
 keybind = shift+super+]=next_workspace
+global-hotkey = shift+super+t
+global-hotkey-hide-on-repress = false
+tcp-port = 65535
