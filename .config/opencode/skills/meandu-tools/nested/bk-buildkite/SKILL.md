@@ -64,7 +64,59 @@ bk build rebuild <build-number> -p mr-yum
 bk build create -p mr-yum --branch main --commit HEAD --message "Manual rebuild"
 ```
 
-### 4. View Pipeline Information
+### 4. Release / Unblock Blocked Builds (Push to Production)
+
+Use when Paul gives one or more Buildkite URLs and says "release these", "unblock these", "promote to prod", "push to prod", or similar. Each build typically has ONE gating manual step (e.g. ":rocket: Deploy to production", "Push to production"); once that is unblocked the rest of the blocked jobs proceed automatically, so you only need to unblock the gating job per build.
+
+**Parse each URL** to get pipeline slug and build number:
+- `https://buildkite.com/mryum/<pipeline>/builds/<number>/...` → `-p <pipeline>` and build `<number>`
+- Note pipelines are NOT always `mr-yum` — use the exact slug from the URL (e.g. `cloudflare-workers`, `manage`, `manage-frontend`, `mr-yum-deploy`, `stable-api`).
+
+**Find the gating job** in each build. The gating job has `type: "manual"`, `state: "blocked"`, and `unblockable: true`:
+
+```bash
+bk build view <number> -p <pipeline> --json | \
+  jq -r '.jobs[] | select(.type == "manual" and .state == "blocked" and .unblockable == true) | "\(.id)\t\(.label)"'
+```
+
+**If `fields` is `null`** the job needs no input — just unblock:
+
+```bash
+bk job unblock <job-id> --yes
+```
+
+**If `fields` is non-null** (rare for prod gates), the manual step requires field values. Inspect the schema and pass `--data '{"key":"value"}'`:
+
+```bash
+bk build view <number> -p <pipeline> --json | jq '.jobs[] | select(.id=="<job-id>") | .fields'
+bk job unblock <job-id> --data '{"field-key":"value"}' --yes
+```
+
+**Confirmation policy**: production unblocks are visible and not easily reversible. Always present the table of `pipeline / build / step label / job id` and ask for confirmation BEFORE firing the unblocks (a single AskUserQuestion is enough — don't ask per-build). After confirmation, run them in parallel.
+
+**End-to-end pattern** for a list of URLs:
+
+```bash
+# 1. For each URL: extract pipeline + build, then find the gating job
+for spec in "cloudflare-workers:1329" "manage:28181" "stable-api:2662"; do
+  pipeline="${spec%:*}"; build="${spec#*:}"
+  echo "=== $pipeline #$build ==="
+  bk build view "$build" -p "$pipeline" --json | \
+    jq -r '.jobs[] | select(.type=="manual" and .state=="blocked" and .unblockable==true) | "\(.id)\t\(.label)"'
+done
+
+# 2. After confirmation, unblock each
+bk job unblock <job-id-1> --yes
+bk job unblock <job-id-2> --yes
+# ...
+```
+
+Notes:
+- The other `state: "blocked"` jobs in the build are downstream `script` jobs gated on the manual step — leave them alone.
+- If `unblockable` is `false` on the manual job, the user may not have permission, or a prior step is still running. Surface this rather than retrying.
+- For builds that have already passed the gate (state: `passed`, `blocked: false`), report "already released" rather than erroring.
+
+### 5. View Pipeline Information
 
 ```bash
 # List all pipelines
@@ -74,7 +126,7 @@ bk pipeline list
 bk pipeline view mr-yum
 ```
 
-### 5. Watch a Build in Real-Time
+### 6. Watch a Build in Real-Time
 
 ```bash
 # Watch build progress (useful for monitoring after a push)
