@@ -79,18 +79,22 @@ bk build view <number> -p <pipeline> --json | \
   jq -r '.jobs[] | select(.type == "manual" and .state == "blocked" and .unblockable == true) | "\(.id)\t\(.label)"'
 ```
 
-**If `fields` is `null`** the job needs no input — just unblock:
+**Use the REST API, not `bk job unblock`.** `bk job unblock` calls GraphQL, and the current OAuth token does not have the `graphql` scope (fails with `403: Your access token doesn't have the graphql scope`). The REST `PUT .../unblock` endpoint works:
 
 ```bash
-bk job unblock <job-id> --yes
+# Body MUST be a JSON object even if no fields are required — use '{}'.
+# bk api auto-prefixes /organizations/mryum — do NOT include it.
+bk api --method PUT /pipelines/<pipeline>/builds/<number>/jobs/<job-id>/unblock --data '{}'
 ```
 
-**If `fields` is non-null** (rare for prod gates), the manual step requires field values. Inspect the schema and pass `--data '{"key":"value"}'`:
+**If `fields` is non-null** (rare for prod gates), the manual step requires field values. Inspect the schema and pass them in the JSON body:
 
 ```bash
 bk build view <number> -p <pipeline> --json | jq '.jobs[] | select(.id=="<job-id>") | .fields'
-bk job unblock <job-id> --data '{"field-key":"value"}' --yes
+bk api --method PUT /pipelines/<pipeline>/builds/<number>/jobs/<job-id>/unblock --data '{"fields":{"field-key":"value"}}'
 ```
+
+Successful response includes `"state": "unblocked"` and `"unblocked_by"`. Pipe through `jq -r` to get a one-line confirmation per build.
 
 **Confirmation policy**: production unblocks are visible and not easily reversible. Always present the table of `pipeline / build / step label / job id` and ask for confirmation BEFORE firing the unblocks (a single AskUserQuestion is enough — don't ask per-build). After confirmation, run them in parallel.
 
@@ -105,9 +109,9 @@ for spec in "cloudflare-workers:1329" "manage:28181" "stable-api:2662"; do
     jq -r '.jobs[] | select(.type=="manual" and .state=="blocked" and .unblockable==true) | "\(.id)\t\(.label)"'
 done
 
-# 2. After confirmation, unblock each
-bk job unblock <job-id-1> --yes
-bk job unblock <job-id-2> --yes
+# 2. After confirmation, unblock each (run in parallel)
+bk api --method PUT /pipelines/<pipeline-1>/builds/<n1>/jobs/<job-id-1>/unblock --data '{}'
+bk api --method PUT /pipelines/<pipeline-2>/builds/<n2>/jobs/<job-id-2>/unblock --data '{}'
 # ...
 ```
 
