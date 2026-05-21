@@ -105,25 +105,35 @@ Load `references/persona-lens.md` and apply:
 
 The persona is **lens, not voice**. Posted comments are always drafted in the user's voice using the wrapper in `references/posting.md`. See `persona-lens.md` for the full rule, push-back behavior, and self-check.
 
-## Step 5: Round 3 (optional) — Codex outside view via Nex
+## Step 5: Round 3 — Codex outside view via Nex
 
-Ask the user once:
+**MUST ask before writing the decision doc, unless one of the skip conditions below applies.** Round 3 is the most reliable round at catching findings the self-passes miss (verified in practice: cxd surfaced two AC violations and one boundary leak that rounds 1, 2, and 2.5 all missed on PR #3708). Skipping silently is the bug. Asking is mandatory.
 
-> "Send to a `cxd` Nex pane for an outside-view review?"
+Ask the user once, before drafting the decision doc:
+
+> "Send to a `cxd` Nex pane for an outside-view review? (round 3)"
+
+Skip the ask only when:
+
+- The user opted out explicitly in the original prompt ("skip round 3", "no cxd", "branch-review only", "rounds 1-2 only").
+- The user opted in explicitly in the original prompt ("include cxd outside view", "do all three rounds", "full review with codex") — proceed without asking.
+- Auto-mode is active AND the user opted out in this session or a recent one; otherwise even in auto-mode, ask.
 
 If yes, use the `nex` skill to spawn a pane running `cxd`, hand it:
 
 - The in-progress decision doc draft.
 - The diff and worktree path.
-- A short prompt: "Adversarially review *this review*. What did I miss? Which findings would you drop or downgrade?"
+- A short prompt: "Adversarially review _this review_. What did I miss? Which findings would you drop or downgrade?"
+
+cxd's response often scrolls past the visible pane viewport. Ask cxd to write its full response (REV-N re-rank + missed findings) to a file like `/tmp/cxd-<pr-num>-review.md`, then Read that file. Don't try to reconstruct from `pane capture` alone.
 
 Pull the response back in. Resolve disagreements:
 
-- Codex flags a new issue not yet captured → add as the next `REV-N`.
+- Codex flags a new issue not yet captured → verify against the diff first (don't take the claim at face value), then add as the next `REV-N`.
 - Codex contests one of mine → re-evaluate against the false-positive gate in `severity-and-ids.md`; keep, downgrade, or drop.
 - **Consensus** = no new findings added and none contested after this round.
 
-If skipped, round 2 (and 2.5 if run) output is final.
+If skipped (user opted out), round 2 (and 2.5 if run) output is final. Note "Round 3 skipped per user preference" in the decision doc.
 
 ## Step 6: Write decision doc
 
@@ -163,7 +173,7 @@ Tick the actions you want to take. The skill will execute the ticked ones on req
 - [ ] Ask the author the open questions below
 - [ ] No action; archive only
 
-## Persona lens: <name>          (omit section if no persona was used)
+## Persona lens: <name> (omit section if no persona was used)
 
 Focus areas: ...
 Severity calibration: ...
@@ -173,7 +183,7 @@ Known exceptions: ...
 | ------- | ----------- | ------------ | --- |
 | REV-1   | suggestion  | blocking     | ... |
 
-## ACs not met                    (omit section if no ACs found or all met)
+## ACs not met (omit section if no ACs found or all met)
 
 - **AC2**: <text>. Where it should live: ...
 
@@ -191,6 +201,7 @@ Recommended change:
 \`\`\`
 
 ### `REV-2` suggestion, `path/to/other.ts:88`
+
 ...
 
 ## Open questions
