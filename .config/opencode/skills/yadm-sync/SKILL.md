@@ -60,13 +60,37 @@ Keep the subject short and descriptive. Put the "why" in the body only when the 
 
 ## RTK gotcha
 
-The Claude Code hook routes `yadm` through `rtk` (Rust Token Killer). RTK's `yadm status` summary can return a stale `clean — nothing to commit` line even when files in `~/.config/opencode/` or `~/.claude/` are modified. If `yadm status` claims clean but you know you just edited a tracked file, run `rtk proxy yadm status --short` to bypass the cache. If RTK still gets in the way, fall back to operating the underlying repo directly:
+The Claude Code hook routes `yadm` through `rtk` (Rust Token Killer). Up to rtk
+`0.42.0`, rtk rewrites `yadm <cmd>` to `rtk git <cmd>`, which then runs against
+the CWD repo instead of yadm's `--git-dir`/`--work-tree`. Symptoms:
+`yadm status` may report stale `clean — nothing to commit` for files in
+`~/.config/opencode/` or `~/.claude/`; `yadm add <path>` fails with
+"outside repository"; `yadm push` pushes the wrong remote. Tracked upstream as
+[rtk-ai/rtk#2077](https://github.com/rtk-ai/rtk/issues/2077), fix in flight at
+[rtk-ai/rtk#2078](https://github.com/rtk-ai/rtk/pull/2078).
+
+The user already applied the workaround in their committed rtk config — the
+yadm exclusion lives in `~/Library/Application Support/rtk/config.toml`
+(macOS) or `~/.config/rtk/config.toml` (Linux):
+
+```toml
+[hooks]
+exclude_commands = ["^yadm(?:$| )"]
+```
+
+With that exclusion in place, run `yadm` normally — no `rtk proxy` wrapping
+needed. If something goes wrong, first confirm the exclusion is still present
+(`grep yadm "$HOME/Library/Application Support/rtk/config.toml"`). Only fall
+back to the explicit form below if the config has been wiped or if rtk has
+regressed:
 
 ```
-git --git-dir=$(yadm introspect repo) --work-tree="$HOME" status --short
+rtk proxy yadm <cmd>                                               # bypass rtk's rewrite
+git --git-dir=$(yadm introspect repo) --work-tree="$HOME" <cmd>    # bypass rtk entirely
 ```
 
-Use the same pattern (`rtk proxy yadm <cmd>` or the explicit `git --git-dir=...`) for `add`, `diff`, `commit`, and `push` if RTK keeps short-circuiting. Always run a final `rtk proxy yadm status --short` to confirm the tree is actually clean.
+Once #2078 ships, the `exclude_commands` entry and this whole section become
+unnecessary.
 
 ## Lock contention (`.git/index.lock`)
 
