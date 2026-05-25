@@ -4,10 +4,11 @@ description: >
   Manage Nex terminal workflows with the nex CLI. Use when asked to split,
   create, close, move, rename, capture, or send to panes; manage workspaces,
   groups, layouts, file opening, or diffs; show Codex progress/status in Nex;
-  or delegate work to live Nex panes using cxd/ccd agent aliases. Trigger
-  phrases include "delegate to Nex pane", "Codex pane", "Claude pane", "ccd",
-  "cxd", "split pane", "send to pane", "capture pane", "open in Nex",
-  "Nex indicator", or "Nex status".
+  broadcast a command to all panes in a group; or delegate work to live Nex
+  panes using cxd/ccd agent aliases. Trigger phrases include "delegate to Nex
+  pane", "Codex pane", "Claude pane", "ccd", "cxd", "split pane", "send to
+  pane", "send to group", "broadcast to panes", "all panes in group", "capture
+  pane", "open in Nex", "Nex indicator", or "Nex status".
 ---
 
 # Nex
@@ -39,7 +40,8 @@ This skill was consolidated against Nex `0.22.0`.
 Load only the reference needed for the task:
 
 - For pane, workspace, group, layout, file-open, and diff command syntax, read
-  `references/terminal.md`.
+  `references/terminal.md`. Also covers the SQLite-join recipe for broadcasting
+  a command to every pane in a group (no CLI filter exists for this).
 - For live `cxd`/`ccd` delegation workflows, read `references/delegation.md`.
 - For Codex-owned Nex indicator/status events, read
   `references/codex-status.md`.

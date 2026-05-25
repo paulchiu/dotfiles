@@ -68,6 +68,51 @@ nex group rename <name-or-id> <new-name>
 nex group delete <name-or-id> [--cascade]
 ```
 
+### Group-scoped pane operations (broadcast)
+
+The CLI does not expose group membership on `pane list`, and there is no
+`--group` filter. To act on all panes in a group (e.g. send `/compact` to every
+Claude pane in "Side quests"), join SQLite group data with `pane list --json`.
+
+`workspace_group.childOrderJSON` in `~/Library/Application Support/Nex/nex.db`
+holds the ordered workspace IDs for each group. The pane list JSON includes
+`workspace_id`, `claude_session_id` (set when Claude Code is running), and the
+title prefix `✳`/`✶`/`⠐` (set while an agent is active).
+
+Reusable broadcast pattern — replace `GROUP`, `AGENT_FILTER`, and `MSG`:
+
+```bash
+GROUP="Side quests"
+# Agent filter examples:
+#   Claude only:      select(.claude_session_id != null)
+#   Any agent pane:   select(.title | startswith("✳") or startswith("✶") or startswith("⠐"))
+#   All panes:        .  (omit select)
+AGENT_FILTER='select(.claude_session_id != null)'
+MSG="/compact"
+
+WS_IDS=$(sqlite3 "$HOME/Library/Application Support/Nex/nex.db" \
+  "SELECT childOrderJSON FROM workspace_group WHERE name='$GROUP';")
+PANE_IDS=$(nex pane list --json | jq -r --argjson ws "$WS_IDS" \
+  ".[] | . as \$p | $AGENT_FILTER | select(\$ws | index(\$p.workspace_id) != null) | .id")
+
+for id in $PANE_IDS; do
+  nex pane send --target "$id" "$MSG"
+done
+```
+
+Notes:
+
+- Match on `workspace_group.name` is case-sensitive in SQLite by default; add
+  `COLLATE NOCASE` if needed.
+- `childOrderJSON` is a JSON array of workspace UUID strings, so it passes
+  directly to `jq --argjson ws`.
+- `pane send` typing the slash command lands as agent input when an agent is
+  the foreground process. Verify with `nex pane capture --target <id> --lines 20`
+  on at least one pane before assuming the broadcast worked.
+- For agent detection, `claude_session_id` is the most reliable signal for
+  Claude panes. Codex panes do not currently expose an analogous field; fall
+  back to the title-prefix filter when targeting any running agent.
+
 ## Layouts
 
 ```bash
