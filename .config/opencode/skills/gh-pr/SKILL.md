@@ -88,6 +88,28 @@ Good (feature-focused):
 - Users can now sign in with their GitHub account.
 - GitHub profile data is automatically linked to user profiles.
 
+### Never expose review-round internals
+
+PR reviewers don't have access to the adversarial / persona-lens / Codex / Claude-pane rounds that ran before the PR opened, and don't need to. The PR description is the final artifact: roll every accepted finding into the relevant section (What's new, Acceptance criteria, Risks, Local verification) as if the author thought of it. Do not include:
+
+- A "Review consensus" / "Review findings" / "Adversarial review" / "Codex review" section.
+- Phrases like "cxd-3 suggestion", "BT-2 blocker", "addresses adversarial review on PR #...", or any other reference to a review round, finding ID, or reviewing agent.
+- Severity tables, consensus tables, or "Applied / Deferred" lists framed as review output.
+
+**Persona names are never quoted.** Persona-lens reviews are a focus reshuffle, not a real reviewer's signoff. Naming the persona (Ben Thompson, Yofamb, any real or invented person used as a lens) in the PR body misrepresents simulated review as actual representation or approval. Drop the name and keep the substance.
+
+**If a "what was considered but not implemented" rollup is genuinely useful** (e.g., reviewers might wonder why X wasn't done), add it as a plain "Scope" or "Considered, not implemented" section written in the author's voice, framed as the author's own design decisions. Each line states the choice and the reason, with no reference to which review round raised it. Default: no such section — most deferrals belong in follow-up tickets, not PR bodies.
+
+Bad:
+- `## Review consensus (cxd adversarial + Ben Thompson lens)`
+- `Addresses adversarial review on PR #2391: ...`
+- `Deferred per BT-1: shared AlertDialog helper extraction.`
+
+Good (when a scope rollup is warranted):
+- `## Considered, not implemented`
+- `- Shared AlertDialog page-object helper: would only have one other call site today; revisit when the third lands.`
+- `- Stronger testName uniqueness: changing only the new tests creates intra-file inconsistency; whole-file refactor is out of scope for this ticket.`
+
 ### Stacked PRs
 
 For PRs in a stacked series (each PR's base is another PR's branch, not `main`), two adjustments apply.
