@@ -9,6 +9,7 @@ description: >
   pane", "Codex pane", "Claude pane", "ccd", "cxd", "split pane", "send to
   pane", "send to group", "broadcast to panes", "all panes in group", "capture
   pane", "open in Nex", "Nex indicator", or "Nex status".
+model: haiku
 ---
 
 # Nex
