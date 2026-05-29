@@ -5,14 +5,16 @@ macos-option-as-alt = left
 # custom-shader = ~/.config/ghostty/shaders/bloom.glsl
 # custom-shader-animation = always
 
-keybind = alt+f=unbind
-keybind = alt+left=unbind
-keybind = alt+right=unbind
-keybind = alt+super+down=unbind
-keybind = alt+super+up=unbind
-keybind = escape=unbind
-keybind = shift+super+[=previous_workspace
-keybind = shift+super+]=next_workspace
 global-hotkey = shift+super+t
 global-hotkey-hide-on-repress = false
 tcp-port = 65535
+
+keybind = shift+super+]=next_workspace
+keybind = alt+super+down=unbind
+keybind = shift+super+[=previous_workspace
+keybind = alt+super+up=unbind
+keybind = escape=unbind
+keybind = shift+super+h=move_pane_left
+keybind = shift+super+l=move_pane_right
+keybind = shift+super+k=move_pane_up
+keybind = shift+super+j=move_pane_down
