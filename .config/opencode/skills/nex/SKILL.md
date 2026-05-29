@@ -40,9 +40,11 @@ This skill was consolidated against Nex `0.22.0`.
 
 Load only the reference needed for the task:
 
-- For pane, workspace, group, layout, file-open, and diff command syntax, read
-  `references/terminal.md`. Also covers the SQLite-join recipe for broadcasting
-  a command to every pane in a group (no CLI filter exists for this).
+- For pane, workspace, group, layout, file-open, diff, and web-view command
+  syntax, read `references/terminal.md`. Also covers the SQLite-join recipe for
+  broadcasting a command to every pane in a group (no CLI filter exists for
+  this), and the web-view dark-theme gotcha (`prefers-color-scheme` is not
+  honoured reliably, so generate HTML with an explicit dark theme).
 - For live `cxd`/`ccd` delegation workflows, read `references/delegation.md`.
 - For Codex-owned Nex indicator/status events, read
   `references/codex-status.md`.

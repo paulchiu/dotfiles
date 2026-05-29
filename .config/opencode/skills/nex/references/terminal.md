@@ -143,6 +143,29 @@ nex diff [<path>]
 Use `nex open --here <filepath>` when the file should open in the current pane
 context.
 
+## Web View
+
+```bash
+nex web open [--private] <url>
+nex web reload [--target <name-or-uuid>] [--workspace <name-or-uuid>] [--hard]
+nex web url|back|forward [--target <name-or-uuid>] [--workspace <name-or-uuid>]
+nex web capture [--target <name-or-uuid>] [--mode meta|text|screenshot]
+```
+
+`nex web open` creates a web-view pane in the current workspace and prints the
+new pane UUID. To preview a local HTML file, pass a `file://` URL with spaces
+percent-encoded (`%20`), for example
+`nex web open "file:///Users/paul/dev/sandbox/outputs/2026-05-30%20My%20Doc.html"`.
+After editing the file, refresh with `nex web reload --target <uuid> --hard`.
+
+Gotcha: the web view does NOT reliably honour `prefers-color-scheme: dark`, and
+it can render against a dark Nex chrome, so a light-themed page (or the light
+half of a `@media (prefers-color-scheme: dark)` stylesheet) shows up as
+low-contrast grey-on-white. When generating HTML for Paul to read or comment on
+in a web pane, default to an explicit dark theme with hardcoded colours
+(`color-scheme: dark`, dark background, near-white text), rather than relying on
+media-query auto-switching.
+
 ## Examples
 
 Set up a small dev workspace:
