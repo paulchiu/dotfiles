@@ -1,4 +1,5 @@
 ---
+model: haiku
 name: codex-app-cleanup
 description: "Cleans stale Codex/ChatGPT desktop state: dead project picker entries, invalid env refs, obsolete worktree pairings. Use when Codex shows old projects/envs or stale worktrees still appear."
 ---

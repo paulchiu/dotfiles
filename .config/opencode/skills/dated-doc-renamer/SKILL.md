@@ -1,4 +1,5 @@
 ---
+model: haiku
 name: dated-doc-renamer
 description: "Renames notes/docs to `yyyy-mm-dd Title.md` and adds reproducibility front matter (summary prompt, conversation archive pointer). Use when normalising filenames, preserving created-at dates, or converting slugs to sentence-case titles."
 ---

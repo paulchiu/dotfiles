@@ -1,4 +1,5 @@
 ---
+model: haiku
 name: archive-obsidian-vault
 description: "Archives monthly Obsidian vault items from Area/ and Projects/ to Archive/, handling attachments. Use when archiving completed monthly work."
 ---

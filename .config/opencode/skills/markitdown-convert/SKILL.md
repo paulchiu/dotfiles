@@ -1,4 +1,5 @@
 ---
+model: haiku
 name: markitdown-convert
 description: "Convert files to Markdown with MarkItDown. Use when asked to convert a PDF, Word, PowerPoint, Excel, image, audio, HTML, CSV, JSON, XML, ZIP, or EPUB to markdown, or save a source file as .md."
 ---

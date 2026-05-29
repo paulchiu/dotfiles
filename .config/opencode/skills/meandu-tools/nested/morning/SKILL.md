@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: morning
 description: "Read today's daily brief and walk Paul through items conversationally for triage (file ticket / mark done / defer / draft reply / discuss). Use on 'morning', 'let's triage', 'walk me through today', 'morning triage', or `/morning`. Pairs with the daily-brief skill."
 ---

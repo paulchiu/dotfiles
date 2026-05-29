@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: linear-write
 description: "Create or rewrite Linear issues using the agent-ready card template. Use when asked to create/rewrite a Linear issue, write a spike, or clean up an issue from a URL/ID."
 ---

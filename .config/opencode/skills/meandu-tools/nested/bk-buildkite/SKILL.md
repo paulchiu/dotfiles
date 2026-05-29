@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: bk-buildkite
 description: "Query Buildkite builds, jobs, logs, pipelines, and agents via the bk CLI. Use when investigating CI failures, reading build logs, retrying builds, or any Buildkite interaction."
 ---

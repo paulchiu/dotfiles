@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: daily-brief
 description: "Generate a structured daily brief from Slack, Linear, Google Calendar, Google Drive, and the Obsidian vault, then write it to today's journal note (`Area/Journal/YYYY-MM-DD.md`). Use when invoked at 3am via cron, or manually as `/daily-brief`, 'run daily brief', or 'regenerate today's brief'."
 ---

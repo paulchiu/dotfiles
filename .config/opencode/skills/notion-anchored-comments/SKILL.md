@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: notion-anchored-comments
 description: "Post block-anchored review comments on Notion pages via the Notion MCP. Use when posting RFC/doc review feedback to Notion, anchoring on code blocks or prose, replying to existing discussions, or hitting selection_with_ellipsis validation errors."
 ---

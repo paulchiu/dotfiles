@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: pup-datadog
 description: "Query Datadog metrics, logs, monitors, traces, and 30+ API domains via the pup CLI. Use when searching logs, querying metrics, checking monitors, investigating APM traces, or any Datadog API interaction."
 ---

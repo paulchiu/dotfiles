@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: refine-aichat-role
 description: "Refines aichat role prompts (committer, pr-writer, etc.) based on user feedback about output quality. Use when asked to fix, adjust, or improve any aichat role's generation."
 ---

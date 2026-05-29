@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: ast-grep
 description: "Write ast-grep rules for structural code search using AST patterns. Use when searching for code patterns, language constructs, or queries beyond text search."
 ---

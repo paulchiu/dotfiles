@@ -1,4 +1,5 @@
 ---
+model: haiku
 name: git-commit
 description: "Generate a conventional commit message from current-branch changes against main and create the commit. Use when asked to commit, write a commit message, or generate a commit."
 ---

@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: gh-pr
 description: "Generate a pull request description from current-branch changes against main and create the draft PR via gh. Use when asked to create a PR, open a draft PR, or write a PR description."
 ---

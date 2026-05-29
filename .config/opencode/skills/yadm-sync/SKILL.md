@@ -1,4 +1,5 @@
 ---
+model: haiku
 name: yadm-sync
 description: "Add, commit, and push dotfile changes with yadm. Use when asked to update/sync dotfiles, commit dotfile changes, track a new file with yadm, or save changes under ~/.claude or ~/.config."
 ---

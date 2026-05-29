@@ -1,4 +1,5 @@
 ---
+model: haiku
 name: worktree-tilt-schema
 description: "Modify a Tiltfile in a git worktree so the NestJS app boots and regenerates schema.gql. Use when in a worktree needing GraphQL schema regeneration, or when schema.gql is stale after @Field changes."
 ---

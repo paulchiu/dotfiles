@@ -1,4 +1,5 @@
 ---
+model: sonnet
 name: check-agent-standards
 description: "Audits current branch changes against local main for AGENTS.md conformance, writes a report, and auto-fixes violations. Use to enforce standards or check conformance."
 ---
