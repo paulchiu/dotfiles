@@ -109,6 +109,12 @@ Notes:
 - `pane send` typing the slash command lands as agent input when an agent is
   the foreground process. Verify with `nex pane capture --target <id> --lines 20`
   on at least one pane before assuming the broadcast worked.
+- The Enter that `pane send` appends is occasionally swallowed by the Claude
+  Code TUI when the pane is mid-state-transition (e.g., just finishing
+  `/compact` and restoring skills): the text appears in the input box but is
+  not submitted. If `pane capture` shows the message sitting in the prompt
+  with no agent activity, kick it with
+  `nex pane send-key --target <id> Return` to force submission.
 - For agent detection, `claude_session_id` is the most reliable signal for
   Claude panes. Codex panes do not currently expose an analogous field; fall
   back to the title-prefix filter when targeting any running agent.
