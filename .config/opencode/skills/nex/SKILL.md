@@ -7,8 +7,9 @@ description: >
   broadcast a command to all panes in a group; or delegate work to live Nex
   panes using cxd/ccd agent aliases. Trigger phrases include "delegate to Nex
   pane", "Codex pane", "Claude pane", "ccd", "cxd", "split pane", "send to
-  pane", "send to group", "broadcast to panes", "all panes in group", "capture
-  pane", "open in Nex", "Nex indicator", or "Nex status".
+  pane", "send to group", "broadcast to panes", "broadcast to <group>", "nex
+  broadcast", "all panes in group", "capture pane", "open in Nex", "Nex
+  indicator", or "Nex status".
 model: haiku
 ---
 
