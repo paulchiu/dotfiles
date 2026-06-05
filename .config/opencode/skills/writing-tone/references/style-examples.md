@@ -226,3 +226,37 @@ The LLM conclusion is that delegation works best when the acceptance criteria an
 When the issue is still being designed, the cycle time can quickly blow out with our long build times.
 
 **Demonstrates the structural pattern for a memo-style debrief reply:** `RE: <topic>` subject-line opener (memo style for a known follow-up, not a prose 'Quick update from...' warm-up), one-line lead-in pointing at the examples, then each example lifted into its own `*Section title*` block with a brief descriptive phrase (`*CAD-1449 / CAD-1706 posDiscountId data inclusion in POS payloads change*` not bare `*CAD-1449*`), per-example bullets that stay tight and only carry the salient facts, the lesson attached at the point in the section where it came from ('this was my mistake in splitting/stacking. The lesson is that...') rather than collected at the bottom, a closing `*Lessons*` block in paragraph form (not bullets) holding the cross-cutting conclusion, direct first-person ownership of the misstep ('this was my mistake'), self-tagging an AI-generated framing the author kept ('The LLM conclusion is that...') as a transparency move, and a final lesson anchored in a named local factor ('our long build times') instead of an abstract principle. **Also note the backtick scope:** `posDiscountId` is backticked because it's a literal code identifier; ticket IDs (CAD-1449, CAD-1706), PR numbers (#3518, #2226), and the integration name spelled in prose (INFOGENESIS) all stay in plain prose. **NOT here:** dense diff/commit/line-count statistics ('+758 / -96 across 14 commits', 'about 1000 added lines'), a synthesised cycle-time metric ('roughly five calendar days from first pickup to final merge'), a 'My read is that...' diagnosis paragraph collected at the bottom, or an abstract closing principle ('the review and rework cost just moves into the PR') without a local anchor.
+
+---
+
+## 14. Peer-leader meeting-outcome update (memo-style: surfaced issue, action items, next steps)
+
+RE: Engineering onboarding walkthrough with Alice
+
+Following the retro topic of design onboarding, a peer leader suggested I walk Alice through how engineering onboards new starters. We did that this afternoon. Quick summary of what came out of it and where we'd like to take it.
+
+**Key thing we surfaced: environment setup**
+
+Alice hit permission blockers trying to set up a proper local dev environment and got steered fairly hard toward the lightweight sandbox instead, with little support for the full setup. The current dev-setup docs assume an engineering account and break for that group.
+
+Alice's preference (and I'm happy to support) is for designers to go through the full local environment from the start, not the sandbox shortcut, so we're future-proofed for designers owning the design system and associated Storybook.
+
+**Action items**
+
+- Designers to go through the full local dev setup: Alice, Bob, Carol, plus a (technical) new designer when they start.
+- CAD to assign buddies to support Bob and Carol through full setup.
+- Fix the dev-setup docs for the product design group so they're followable step by step for a non-engineering account.
+- Capture the product walkthrough: Alice is participating in an intensive session with Dave and Erin across all products and recording it for reuse. There are older recorded product videos floating around but they're a few years stale.
+- Stand up a designer home in Notion: I shared the old design space, and encourage the current design group to claim or create their own space to share knowledge.
+
+**Next steps / where we'd like to go**
+
+Tactically, CAD is happy to support the 'co-contribution training' piece now (buddies for setup, plus a gentle first task). My pitch on the first task: don't have designers touch production first. If their domain is the UI/component library, a small Storybook tweak that they then watch get released teaches the lifecycle with very little risk.
+
+The principle we use in eng is that first and second tickets are deliberately trivial, so the new starter goes through the motions without having to prove competency. Ideally we have something similar for designers.
+
+The bigger ask is on Alice: I'd encourage new designer onboarding to be designed as a deliberate new-starter journey (each piece feeding the next toward a capability), rather than us piecemeal-ing nice-to-knows. Once the broad strokes exist, I can slot in where CAD fits and code contribution training sits.
+
+Posting here for visibility. If anyone has thoughts please feel free to share, otherwise I'll move on to trying to action my parts in the coming weeks.
+
+**Demonstrates the structural pattern for a peer-leader meeting-outcome update:** the same `RE: <topic>` subject-line opener as the debrief reply (example 13), used here even though the audience is a whole peer-leader channel rather than one person — a walkthrough that a leader asked for in a retro is a known follow-up, so it gets the memo opener, not a 'Hi team,' anchor or a `👋` greeting. Body is three labelled blocks: the single issue worth surfacing, the action items, and the forward-looking next steps. **Specific patterns:** no background/justification section — the audience shared the retro context, so the post leads straight with what was surfaced and never explains the program's philosophy, history, or headcount ('CAD owns onboarding for the whole org', '18 engineers last year', 'we've churned through three designers') even though all of that was discussed in the meeting; supportive endorsement framing when backing a peer's call in their own domain ('Alice's preference (and I'm happy to support)' not '(and I agree)' or 'Alice's strong preference (and I agree)'); a neutral, fault-free statement of the technical cause ('the docs assume an engineering account and break for that group') with no blame or root-cause callout assigning fault to how access was provisioned or 'marketed'; plain-bullet action items (not `- [ ]` checkboxes — Slack doesn't render them and they imply a tracker the post isn't); tight one-line action items with the justifying asides cut ('designers will need more hand-holding than engineers', 'this is how our eng docs got good', 'the new JD goes out next week'); enablement framed as empowering the group to own it ('encourage the current design group to claim or create their own space') rather than enumerating everything you'll personally hand them; a closing that takes hedged personal ownership of your own follow-through ('I'll move on to trying to action my parts in the coming weeks') over a collective-momentum claim ('we'll get moving on the setup support'), and a polite open invitation to the group ('please feel free to share') over a casual 'shout'. **NOT here:** a 'Context' / background paragraph justifying the program before the substance, an emoji-and-greeting opener ('Hey PLT 👋'), checkbox-style action items, per-action justifying parentheticals, a list of everything-a-designer-should-know appended to the end (scope the post to what was decided, not the full brainstorm), or a closing that claims shared momentum instead of owning your own parts.
