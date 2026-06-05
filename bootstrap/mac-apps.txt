@@ -3,16 +3,15 @@ Audiobook Builder.app
 Bing Wallpaper.app
 Bitwarden.app
 Caffeine.app
+ChatGPT Atlas.app
 ChatGPT.app
 Claude.app
 Codex.app
 ColorSlurp.app
-Conductor.app
 DaisyDisk.app
 DBeaver.app
 Default Browser.app
 Discord.app
-DockDoor.app
 Dropbox.app
 Easy Move+Resize.app
 features.cfg
@@ -44,10 +43,17 @@ lghub.app
 MacWhisper.app
 Microsoft Azure Storage Explorer.app
 Microsoft Excel.app
+Microsoft OneNote.app
+Microsoft Outlook.app
+Microsoft PowerPoint.app
+Microsoft Teams.app
+Microsoft Word.app
 Neovide.app
+Neru.app
 Nex.app
 NordVPN.app
 Obsidian.app
+OneDrive.app
 OrbStack.app
 PastePal.app
 PICO-8.app
@@ -70,5 +76,6 @@ Utilities
 Vial.app
 Visual Studio Code.app
 Windows App.app
+Wispr Flow.app
 Xcode.app
 zoom.us.app
