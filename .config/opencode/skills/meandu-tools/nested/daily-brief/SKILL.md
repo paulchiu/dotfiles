@@ -152,14 +152,16 @@ What lands here: Slack threads where someone is awaiting Paul's call; Linear tic
 
 ## Action Items Owed
 
+Render every bullet in this section as plain markdown (no surrounding backticks), so `#name` person tags and `[[wikilinks]]` resolve to live links in Obsidian.
+
 ### Overdue / due today
-- `[YYYY-MM-DD] <verbatim task text from Tasks.md>` *(link to source)*
+- [YYYY-MM-DD] <verbatim task text from Tasks.md> *(link to source)*
 
 ### Tied to today's meetings
-- `[#name] <task text>` — for each open task tagged with a person on today's calendar.
+- [#name] <task text> *(link to source)*, for each open task tagged with a person on today's calendar.
 
 ### Surfaced from recent 1:1s
-- `[<person>, 1:1 on YYYY-MM-DD] <action item from Granola>` — *still open in Tasks.md*. Link to `[[<Granola filename without .md>]]`.
+- [<person>, 1:1 on YYYY-MM-DD] <action item from Granola>, *still open in Tasks.md*. Link to `[[<Granola filename without .md>]]`.
 
 ## Suggested Linear Tickets to Create
 
