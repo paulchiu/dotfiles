@@ -61,6 +61,8 @@ Create a fresh output directory under `outputs/`.
 
 Run the `paul-tools` converter into the output directory. Inspect the CSV and remove the credit card payment line, usually `AUTOREPAYMENT - THANK YOU`, before calculating report totals.
 
+Watch for mis-signed refund/credit rows. The converter reads every amount as a positive debit, but the raw ANZ export puts refunds and credits in a separate (second) amount column. A row whose amount sits in that credit column is a refund, not spend, and must be excluded (or netted) before totalling. A reconciliation that is off by exactly one transaction amount (for example a round `$44.00`) is the usual tell. Confirm by checking the raw export column position for that row before deciding.
+
 Keep statement-period rows from the export unless Paul explicitly asks for strict calendar-month filtering. The prior report has used the statement period, not only the named month.
 
 Reconcile the cleaned transaction total against the journal credit card closing balance. Stop and investigate if the totals do not match.
@@ -81,6 +83,7 @@ Use the prior report's categorisation pattern. Known recurring defaults:
 Home-use heuristics:
 
 - classify council bills, water, and electricity/energy as `Home`
+- match utilities on specific retailer/biller names (Origin Energy, AGL, Alinta, Unitywater, Seqwater, Allconnex, Urban Utilities, City Council), not on bare substrings like `WATER`. Gold Coast suburb names such as Biggera Waters, Helensvale, and Pacific Pines appear in ordinary merchant lines and will false-match a loose `WATER`/utility keyword, wrongly pulling chemist and grocery spend into `Home`
 - classify home insurance as `Home`
 - RACQ can be either home insurance or car insurance; use judgement rather than classifying all RACQ as Home
 - home insurance tends to be steadier and monthly, while car insurance or motoring costs may vary more; use amount, regularity, card, and prior reports to guess when the merchant text is ambiguous
