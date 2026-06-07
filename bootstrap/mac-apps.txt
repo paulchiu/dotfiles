@@ -60,6 +60,7 @@ PICO-8.app
 Pixelmator Pro.app
 Pop.app
 Postman.app
+ProtonVPN.app
 qbittorrent.app
 QSpace Pro.app
 Rectangle.app
