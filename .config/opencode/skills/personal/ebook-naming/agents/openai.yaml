@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ebook Naming"
+  short_description: "Rename epub/pdf files to Paul's personal convention (Title - Subtitle. LastName, I. Year.ext)"
+  default_prompt: "Rename ebook files to match the naming convention at ~/.config/opencode/skills/personal/ebook-naming/SKILL.md"
