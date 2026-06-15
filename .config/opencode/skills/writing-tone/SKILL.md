@@ -30,7 +30,7 @@ Re-check the draft against these before outputting (the most-violated rules; ful
 Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`. When adding a rule, extend the right cluster's carve-out rather than appending a sibling.
 
 **Register & word choice**
-- Professional yet collaborative, medium formality (conversational but polished, not stiff). Direct but not absolute; use measured hedging ('is unlikely to be immediately observable' not 'doesn't hold in practice').
+- Professional yet collaborative, medium formality (conversational but polished, not stiff). Direct but not absolute; use measured hedging ('is unlikely to be immediately observable' not 'doesn't hold in practice'). In team guidance/checklist/process docs, frame norms as shared 'should' rather than declared accomplished fact ('we should apply this to every issue' not 'this applies'; 'should be the exception' not 'is now the exception'; 'should pass code review' not 'would pass code review').
 - Plain language over institutional terms ('the arrangement' not 'the program design'; 'two-fold' not 'two-pronged'). For family/non-technical readers, go plainer still: short sentences, one idea per paragraph.
 - Casual abbreviations (AFAIK, IMO) fit DMs, retro cards, and leads channels; use sparingly in broad-audience posts. Don't abbreviate everyday words ('dependency' not 'dep', 'configuration' not 'config').
 - Concrete, specific verbs and nouns ('once we've replaced TypeORM' not 'once we're through'; 'three recent events' not 'three of the recent moments'). 'Moments'/'things'/'moves' read as fluff.
@@ -62,7 +62,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - 'FYI' over 'Heads up:'; 'Context:' over 'Background:' for the short 'why'.
 
 **Closers & wrap-ups**
-- End at the last real point. No wrap-up, summary, or evaluative restatement (don't close with 'That's the definition of leading by example', or 'which is a critical dependency' when the facts already carry it). Don't explain reasons already obvious from context.
+- End at the last real point. No wrap-up, summary, or evaluative restatement (don't close with 'That's the definition of leading by example', or 'which is a critical dependency' when the facts already carry it). Don't explain reasons already obvious from context. Cut folksy aphorisms and cute self-referential reframes too ('Measure twice, cut once', 'that's the checklist doing its job', 'we'd rather hear it'); state the instruction plainly instead.
 - Complete subject-verb closers, not gerund fragments ('I'll be booking the first slots this week' not 'Booking the first slots this week').
 - Soft connector for closing reframings ('So... I guess' not 'That's the pattern, because'/'The real point is'), especially when speculative or for a thoughtful audience.
 - Front-load epistemic humility with a compact phrase ('as an anecdote', 'one data point', 'rough cut') rather than only a later caveats block. Own refrains in first person ('recently I've shared in different conversations that X' not 'I've been hearing X anecdotally').
@@ -154,7 +154,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 ## Communication principles
 
 - Maintain key information from the original. Stick to the scope given: transform the points provided, don't expand them; no added closing paragraphs, motivational reframings, tangential context, or follow-up offers ('happy to do a write-up later').
-- Never invent proper nouns or unevidenced facts/figures; use bracketed placeholders ('[teammate]', '[project name]'). Especially strict for credit lists and action-item participants: if the source says 'Alice and Bob', don't add Carol. Use the exact source spelling, even for playful coinages ('AI-pril' not 'AI-April').
+- Never invent proper nouns or unevidenced facts/figures; use bracketed placeholders ('[teammate]', '[project name]'). Especially strict for credit lists and action-item participants: if the source says 'Alice and Bob', don't add Carol. Use the exact source spelling, even for playful coinages ('AI-pril' not 'AI-April'). When a transcript labels speakers generically (Granola renders them 'You' and 'Guest'), don't promote a 'Guest' line to a named individual just because they were on the attendee list; attribute it to '[a team member]' or leave it unattributed, and flag the guess if one is unavoidable.
 - Output only the rewritten message; no meta-commentary about choices made.
 - In summaries/TL;DRs, give enough context for the 'why' (name the initiatives causing pressure, not just symptoms). Be precise where it matters ('Eve still has leave' when only one does), approximate where it doesn't ('multi-session' not '11-session' if the count isn't the point).
 - When reassuring on sensitive topics (layoffs, restructuring, performance), disambiguate the term ('no restructuring in the downsizing sense'); don't blanket-reassure across senses some of which may still be live.
