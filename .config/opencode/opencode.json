@@ -1,7 +1,7 @@
 {
     "plugin": [],
     "provider": {},
-  "model": "openrouter/deepseek/deepseek-v4-flash",
+  "model": "zen/deepseek-v4-flash",
   "permission": "allow",
   "agent": {},
     "$schema": "https://opencode.ai/config.json"
