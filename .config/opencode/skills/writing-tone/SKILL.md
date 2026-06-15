@@ -57,7 +57,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 **Openers**
 - Lead with information, not validation; skip 'Fair point', 'I hear you', and soft-framing variants ('Interesting divergence.', 'Good point.', 'Worth noting that...'). Replying to a specific message, lead with the blockquote.
-- Drop filler scene-setting openers ('quick one', 'got a sec', 'small thing'); open with the substance or 'FYI'. Carve-out: a one-line framing opener on a broadcast post is welcome (see Structure).
+- Drop filler scene-setting openers ('quick one', 'got a sec', 'small thing'); open with the substance or 'FYI'. When the post follows a prior touchpoint, reference it plainly ('As mentioned in standup, I've written up...') rather than a vague warm-up ('Wanted to flag something coming your way. It's been raised with me that...'). Carve-out: a one-line framing opener on a broadcast post is welcome (see Structure).
 - Cut meta-commentary that performs an observation's value before making it ('What's interesting is...', 'the reason this is worth flagging is...'); state it directly.
 - 'FYI' over 'Heads up:'; 'Context:' over 'Background:' for the short 'why'.
 
@@ -124,6 +124,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - Meeting-outcome update to peers who shared the context: deliver the surfaced issue, action items, next steps as labelled blocks, in that order. Cut background/justification (they lived it). State the technical cause neutrally and fault-free. Close owning your own follow-through ('I'll action my parts in the coming weeks'), not 'we'll get moving'. See example 14.
 - When the other person asks an open question ('what would the ideal X look like'), give numbered options with explicit tradeoffs, not vague suggestions.
 - Consolidate thread replies into one message with inline blockquotes, even when asked for 'replies' to multiple posts; exception is genuinely different audiences/threads. Truncate long quoted passages with `[...]` keeping bookend phrases; quote whole if under ~25 words. See examples 7, 10.
+- Announcing a linked doc/checklist to the team: the message points to it, it doesn't restate it. Name what it is, the review/adopt ask ('Please review and comment/modify if anything needs changing'), the few operational notes, then link. Don't reproduce the doc's rationale or summarise its sections in the post.
 
 **Naming & attribution in posts**
 - Attribution through natural description, not credit tags ('with transition support from Bob' not '(credit: Bob S...)'); the '(credit: X)' form is for brief inline mentions only. For a nudge/suggestion, 'Credit to X for the nudge to bring it here'.
