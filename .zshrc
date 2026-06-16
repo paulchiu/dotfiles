@@ -169,6 +169,8 @@ local autoload_functions=(
     create_pull_request
     jj_rewrite_revision
     ff
+    resign_rg
+    brew
 )
 autoload -Uz $autoload_functions
 

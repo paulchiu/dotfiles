@@ -1,0 +1,16 @@
+brew() {
+    # Thin wrapper around Homebrew that re-signs ripgrep after it is installed
+    # or upgraded, so macOS Gatekeeper keeps trusting `rg`. See resign_rg.
+    command brew "$@"
+    local ret=$?
+
+    if [[ "$1" == (install|upgrade|reinstall) ]]; then
+        # Only when ripgrep is actually involved: named explicitly, or a bare
+        # `brew upgrade` (no formula) that may have bumped it.
+        if [[ "$*" == *ripgrep* || ( "$1" == "upgrade" && $# -eq 1 ) ]]; then
+            resign_rg >/dev/null 2>&1
+        fi
+    fi
+
+    return $ret
+}
