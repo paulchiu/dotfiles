@@ -89,6 +89,15 @@ Good (feature-focused):
 - Users can now sign in with their GitHub account.
 - GitHub profile data is automatically linked to user profiles.
 
+### Context framing: state scope modestly, name no colleagues
+
+The "what this is / why" preamble is where PR bodies oversell. Keep it accurate to what the branch actually does:
+
+- **No unverified specifics.** Drop lead-time and impact claims you cannot back from the diff ("roughly two weeks ahead of the full UI"); state the scope plainly without the number.
+- **No defensive justifications.** Cut value-defending closers ("built for real so it is not throwaway work", "this is not wasted effort"); let the change speak. Same principle as ending at the last real point.
+- **Match the verb to the actual maturity.** A prototype "helps explore requirements"; it is not "the interim slice" or "the full answer". Prefer plain words ("prototype", "step") over coined slicing jargon ("slice").
+- **Don't name individual colleagues or their separate workstreams.** Refer neutrally ("a separate design task"), not "Chloe's design track". Same family as never quoting persona names below: keep internal-people specifics out of the PR body.
+
 ### Never expose review-round internals
 
 PR reviewers don't have access to the adversarial / persona-lens / Codex / Claude-pane rounds that ran before the PR opened, and don't need to. The PR description is the final artifact: roll every accepted finding into the relevant section (What's new, Acceptance criteria, Risks, Local verification) as if the author thought of it. Do not include:
