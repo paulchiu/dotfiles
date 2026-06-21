@@ -89,6 +89,16 @@ Every issue you create or rewrite MUST follow this structure:
 
 [Low / Medium / High] - [One sentence justification]
 
+## Due diligence
+
+Run the [change due diligence checklist](https://app.notion.com/p/meandu/Ctrl-alt-delight-Change-Due-Diligence-Checklist-3803c6719946810f8b7edcb94b875130) before shipping. Universal gates:
+
+- [ ] We know how this functionality is currently used: all the ways, not just the one in the ticket; how often and by whom
+- [ ] Blast radius assessed: downstream features, venues, and integrations that could be affected are listed
+- [ ] Behind a feature flag where there's meaningful risk, off by default and verified; an emergency rollback path exists and has been tested
+
+Add the conditional gates that apply (see source): existing DB data checked against a new validation or schema (scope a migration if it fails); checkout, cart, or payment changes move slowly; POS or integration plans reviewed by a custodian before code is written; schema changes staged as a backward-compatible two-step; AI-generated root cause treated as a hypothesis until confirmed.
+
 ## Files likely involved
 
 - `src/[module]/[file].ts`
@@ -139,6 +149,14 @@ Research the codebase as part of drafting; don't wait to be asked. If you have n
 | **High**            | Auth, payments, data migrations              | Two humans incl. security   |
 | **Do not delegate** | Architecture, novel algorithms, PII handling | Human writes, agent assists |
 
+### Due diligence: understand first, then change
+
+The [change due diligence checklist](https://app.notion.com/p/meandu/Ctrl-alt-delight-Change-Due-Diligence-Checklist-3803c6719946810f8b7edcb94b875130) is a confidence check, not just a box in the card. Work it while researching every non-spike issue (bug, security fix, or feature); its sections 1-4 feed the Scope, blast radius, and Risk tier you are drafting.
+
+- **The core gate (how is it used).** If you cannot confidently answer how the functionality is currently used (all the ways, how often, by whom), do not draft a direct-change card. Propose telemetry-first two-phase work (add telemetry and monitors, gather data, then patch) or a spike, and say so explicitly in the draft.
+- **Surface, don't bury.** If working the checklist turns up a risk or unknown (existing DB data that fails a new validation, a checkout-adjacent surface, a vendor-dependent behaviour), name it in the draft and fold the relevant gate into the Due diligence section rather than leaving it implicit.
+- **Time pressure.** Don't quietly skip steps. Escalate to Shawn or Paul; whoever approves moving faster owns that risk. Note any skipped gate in the card rather than omitting it silently.
+
 ### The Complexity / Ambiguity matrix
 
 |                     | Low ambiguity                                                       | High ambiguity                                  |
@@ -155,6 +173,7 @@ Applies to both creating and rewriting. Steps flagged **[rewrite]** only apply w
 1. **[rewrite] Fetch and read.** Extract the Linear issue ID (`CAD-1295` or a `linear.app` URL), fetch via `mcp__claude_ai_Linear__get_issue`, and identify the core goal, listed items, open questions from the original author, and any scope/exclusion context.
 2. **Clarify before drafting.** Ask the questions needed to fill every section of the template. Common gaps: team/project/labels/assignee, scope boundaries, acceptance criteria, verification commands, risk tier and justification, sub-issue grouping, and (on rewrites) answers to the original author's open questions.
 3. **Research the codebase** to fill in implementation guidance. Default to doing this whenever you have repo access (current working directory, a repo the user has opened, or GitHub search); do not wait for the user to prompt you. Follow the research checklist above. If you have no repo access, state that explicitly and mark the section best-effort.
+   - For non-spike cards, work the change due diligence checklist in the same pass (see 'Due diligence: understand first, then change'). Fill the Due diligence section with the universal gates plus any conditional gate the research surfaced. If the core 'how is it used' gate can't be answered, propose telemetry-first two-phase work or a spike instead of a direct-change card.
 4. **Draft the full issue** using the template. Present the draft to the user and wait for approval before writing to Linear.
 5. **Create or update the issue** via `mcp__claude_ai_Linear__save_issue` (pass the existing id on a rewrite) or, as fallback, `linear issue create ...` / `linear issue update <ID> ...`.
 6. **Return the URL and identifier** (e.g. `CAD-1234`).
@@ -209,6 +228,8 @@ A spike is a time-boxed investigation, used when ambiguity is too high to write 
 ```
 
 Use bullets, not numbered lists. Linear's renderer silently drops items after the first in multi-item numbered lists saved via MCP.
+
+The spike card itself doesn't carry the full due diligence gates; the investigation is what informs them. When a spike resolves into work, note under Possible Outcomes that any resolution issue or sub-task runs the [change due diligence checklist](https://app.notion.com/p/meandu/Ctrl-alt-delight-Change-Due-Diligence-Checklist-3803c6719946810f8b7edcb94b875130), e.g. add `Create resolution issue / sub-tasks (each runs the change due diligence checklist)` to the outcomes list.
 
 ## Comments
 
@@ -283,3 +304,4 @@ Run `linear issue create --help` for the full flag list.
 - Risk tier should reflect the actual change, not the importance of the feature.
 - When listing handlers, endpoints, or items, prefer grouping by module or domain over enumerating individually.
 - If the work has high ambiguity, propose a spike instead of trying to write it as an executable card.
+- Every non-spike card carries a Due diligence section and is drafted with the change due diligence checklist worked through. If the core 'how is it used' gate can't be answered, don't write a direct-change card; propose telemetry-first two-phase work or a spike. Don't quietly skip gates under time pressure; escalate to Shawn or Paul and note it in the card.

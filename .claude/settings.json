@@ -67,7 +67,34 @@
         "hooks": [
           {
             "type": "command",
-            "command": "nex event session-start"
+            "command": "~/.claude/hooks/cbm-session-reminder"
+          }
+        ]
+      },
+      {
+        "matcher": "resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/cbm-session-reminder"
+          }
+        ]
+      },
+      {
+        "matcher": "clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/cbm-session-reminder"
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/cbm-session-reminder"
           }
         ]
       }
@@ -99,6 +126,16 @@
             "command": "rtk hook claude"
           }
         ]
+      },
+      {
+        "matcher": "Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/cbm-code-discovery-gate",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "SessionEnd": [
@@ -113,8 +150,6 @@
     ]
   },
   "enabledPlugins": {
-    "session-review@meandu-plugins": false,
-    "codebase-index@meandu-plugins": false,
     "codex@openai-codex": true
   },
   "extraKnownMarketplaces": {
