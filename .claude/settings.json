@@ -150,7 +150,8 @@
     ]
   },
   "enabledPlugins": {
-    "codex@openai-codex": true
+    "codex@openai-codex": true,
+    "release-reporter@meandu-plugins": true
   },
   "extraKnownMarketplaces": {
     "meandu-plugins": {
@@ -181,5 +182,6 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  }
+  },
+  "tui": "fullscreen"
 }
