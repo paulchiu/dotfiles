@@ -12,6 +12,9 @@ for arg in "$@"; do
             echo "  (default)  Remove worktrees whose branch is gone from origin, or whose"
             echo "             detached HEAD has merged into the default branch; keep dirty"
             echo "             ones. Then delete local branches with no remote counterpart."
+            echo "             For detached worktrees not yet on the default branch, fall"
+            echo "             back to a gh check so squash/rebase-merged PRs are detected"
+            echo "             (requires gh; skipped silently if unavailable)."
             echo "  -a, --all  Force-remove ALL non-main worktrees regardless of branch,"
             echo "             merge, or clean state (discards uncommitted work in them)."
             echo "             Prints the list and prompts for confirmation first."
@@ -50,6 +53,14 @@ if [[ -z "$default_remote" ]]; then
     elif git show-ref --verify --quiet refs/remotes/origin/master; then
         default_remote="origin/master"
     fi
+fi
+
+# Resolve the GitHub owner/repo once, used by the gh squash-merge fallback below.
+# Empty if gh is unavailable, unauthenticated, or this isn't a GitHub remote, in
+# which case the fallback is skipped and detached worktrees are kept conservatively.
+repo_slug=""
+if command -v gh >/dev/null 2>&1; then
+    repo_slug="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null)"
 fi
 
 # In --all mode, list the worktrees that will be force-removed and confirm before
@@ -98,6 +109,19 @@ worktree_keep_reason() {
     return 0
 }
 
+# Returns 0 if a merged PR is associated with commit $1 on the GitHub remote. This
+# catches squash/rebase merges, where the PR's head commit never becomes an ancestor
+# of the default branch (so git merge-base --is-ancestor can't see it). Returns 1 on
+# any uncertainty (no gh, no repo, network error, or no merged PR) so the caller keeps
+# the worktree rather than removing on a false negative.
+pr_commit_merged() {
+    local head="$1" count
+    [[ -n "$repo_slug" ]] || return 1
+    count="$(gh api "repos/$repo_slug/commits/$head/pulls" \
+        --jq '[.[] | select(.merged_at != null)] | length' 2>/dev/null)" || return 1
+    [[ -n "$count" && "$count" -gt 0 ]]
+}
+
 # Walk every worktree and decide its fate. Reads via process substitution (not a
 # pipe) so the kept/removed arrays survive into the summary below. The awk emits
 # "-" for an empty branch so the tab-delimited fields don't collapse on read.
@@ -122,25 +146,31 @@ while IFS=$'\t' read -r wt branch detached head; do
     fi
 
     # Detached-HEAD worktrees (e.g. PR checkouts): remove only once their commit
-    # has merged into the default branch
+    # has landed. Prefer the local check (commit is an ancestor of the default
+    # branch); if that says no, fall back to gh to catch squash/rebase merges where
+    # the head commit never becomes an ancestor. Keep on any remaining uncertainty.
     if [[ "$detached" == "1" || -z "$branch" ]]; then
-        if [[ -z "$default_remote" ]]; then
+        merged_desc=""
+        if [[ -n "$default_remote" ]] && git merge-base --is-ancestor "$head" "$default_remote" 2>/dev/null; then
+            merged_desc="merged into $default_remote"
+        elif pr_commit_merged "$head"; then
+            merged_desc="PR squash/rebase-merged (via gh)"
+        elif [[ -z "$default_remote" ]]; then
             kept+=("$wt  (detached; no default branch to compare)")
             continue
-        fi
-        if ! git merge-base --is-ancestor "$head" "$default_remote" 2>/dev/null; then
+        else
             kept+=("$wt  (detached; not merged into $default_remote)")
             continue
         fi
         if ! reason="$(worktree_keep_reason "$wt")"; then
-            kept+=("$wt  (detached & merged, but $reason)")
+            kept+=("$wt  (detached & $merged_desc, but $reason)")
             continue
         fi
-        echo "Removing worktree: $wt  [detached, merged into $default_remote]"
+        echo "Removing worktree: $wt  [detached, $merged_desc]"
         if git worktree remove "$wt"; then
             removed+=("$wt")
         else
-            kept+=("$wt  (detached & merged, but removal failed)")
+            kept+=("$wt  (detached & $merged_desc, but removal failed)")
         fi
         continue
     fi
