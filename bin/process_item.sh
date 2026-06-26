@@ -48,3 +48,11 @@ elif [[ -f "package-lock.json" ]]; then
 else
   echo "$directory dependencies were not installed because no lock file found"
 fi
+
+# Anti-fragile: refresh the codebase-memory index for this repo after the pull.
+# Runs only if the helper exists; the `|| true` keeps `set -e` from aborting the
+# sync if the refresh (or the codebase-memory tooling) is unavailable.
+reindex_helper="${0:a:h}/cbm-reindex.sh"
+if [[ -x "$reindex_helper" ]]; then
+  "$reindex_helper" "$PWD" || true
+fi
