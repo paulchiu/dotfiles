@@ -1,0 +1,12 @@
+# Self-managed apps: each ships its own privileged auto-updater, so letting
+# `brew upgrade` manage it causes repeated sudo prompts (the updater resets the
+# .app bundle to root ownership). update.sh strips these casks from every fresh
+# `brew bundle dump` and re-appends this list to the Brewfile for the record.
+# Add or remove an exclusion by editing the `cask "..."` lines below.
+# Install these by hand (or temporarily uncomment in the Brewfile) on a fresh bootstrap.
+#   cask "firefox"              # Mozilla updater
+#   cask "google-chrome"        # GoogleSoftwareUpdate / Keystone
+#   cask "google-drive"         # Google updater
+#   cask "microsoft-office"     # Microsoft AutoUpdate (Word/Excel/PowerPoint/Outlook/OneNote)
+#   cask "microsoft-auto-update"
+#   cask "zoom"                 # Zoom auto-updater

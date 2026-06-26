@@ -13,13 +13,13 @@ DBeaver.app
 Default Browser.app
 Discord.app
 Dropbox.app
+DuckDuckGo.app
 Easy Move+Resize.app
 features.cfg
 Firefox.app
 FluxMarkdown.app
 FocuSee.app
 Garmin Express.app
-GatherV2.app
 GeForceNOW.app
 Ghostty.app
 Google Chrome.app
@@ -30,7 +30,6 @@ Google Slides.app
 Granola.app
 HandBrake.app
 Ice.app
-iMovie.app
 Insta360 Link Controller.app
 Iru Self Service.app
 JDownloader 2
@@ -51,7 +50,6 @@ Microsoft Word.app
 Neovide.app
 Neru.app
 Nex.app
-NordVPN.app
 Obsidian.app
 OneDrive.app
 OrbStack.app
@@ -77,6 +75,5 @@ Utilities
 Vial.app
 Visual Studio Code.app
 Windows App.app
-Wispr Flow.app
 Xcode.app
 zoom.us.app

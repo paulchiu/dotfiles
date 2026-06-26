@@ -1,198 +1,354 @@
-tap "azure/functions"
-tap "buildkite/buildkite"
-tap "datadog-labs/pack"
-tap "felixkratz/formulae"
-tap "hashicorp/tap"
-tap "homebrew-ffmpeg/ffmpeg"
-tap "nikitabobko/tap"
-tap "openclaw/tap"
-tap "osx-cross/arm"
-tap "osx-cross/avr"
-tap "qmk/qmk"
-tap "schpet/tap"
-tap "steipete/tap"
-tap "stripe/stripe-cli"
-tap "tilt-dev/tap"
-tap "wix/brew"
-tap "xykong/tap"
-tap "y3owk1n/tap"
+tap "buildkite/buildkite", trusted: true
+tap "datadog-labs/pack", trusted: true
+tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
+tap "hashicorp/tap", trusted: true
+tap "homebrew-ffmpeg/ffmpeg", trusted: true
+tap "nikitabobko/tap", trusted: true
+tap "openclaw/tap", trusted: true
+tap "osx-cross/arm", trusted: true
+tap "osx-cross/avr", trusted: true
+tap "qmk/qmk", trusted: true
+tap "schpet/tap", trusted: true
+tap "steipete/tap", trusted: true
+tap "stripe/stripe-cli", trusted: true
+tap "tilt-dev/tap", trusted: true
+tap "wix-incubator/brew", "https://github.com/wix-incubator/homebrew-brew.git"
+tap "xykong/tap", trusted: true
+tap "y3owk1n/tap", trusted: true
+# All-in-one AI-Powered CLI Chat & Copilot
 brew "aichat"
+# Record and share terminal sessions
 brew "asciinema"
+# Code searching, linting, rewriting
 brew "ast-grep"
+# Improved shell history for zsh, bash, fish and nushell
 brew "atuin"
+# Use AWS IAM credentials to authenticate to Kubernetes
 brew "aws-iam-authenticator"
+# Official Amazon AWS command-line interface
 brew "awscli"
+# Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Command-line automation tool
 brew "bitrise"
+# Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
+# Statistics utility to count lines of code
 brew "cloc"
+# Cloudflare Tunnel client (formerly Argo Tunnel)
 brew "cloudflared"
+# Cross-platform make
 brew "cmake"
-brew "ruby"
+# Powerful, clean, object-oriented scripting language
+brew "ruby", link: false
+# Dependency manager for Cocoa projects
 brew "cocoapods"
+# GNU File, Shell, and Text utilities
 brew "coreutils"
+# Command-line csv viewer
 brew "csvlens"
-brew "docker", link: false
+# Pack, ship and run any application as a lightweight container
+brew "docker"
+# Text processing system for reStructuredText
 brew "docutils"
+# Convert text between DOS, UNIX, and Mac formats
 brew "dos2unix"
+# Disk Usage/Free Utility - a better 'df' alternative
 brew "duf"
+# More intuitive version of du in rust
 brew "dust"
+# Maintain consistent coding style between multiple editors
 brew "editorconfig"
+# Speech synthesizer that supports more than hundred languages and accents
 brew "espeak-ng"
+# Work with ID3 metadata in .mp3 files
 brew "eye-d3"
+# Modern, maintained replacement for ls
 brew "eza"
+# Simple, fast and user-friendly alternative to find
 brew "fd"
+# Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
+# Terminal JSON viewer
 brew "fx"
+# Command-line fuzzy finder written in Go
 brew "fzf"
+# Easily access your Google Calendar(s) from a command-line
 brew "gcalcli"
+# GNU compiler collection
 brew "gcc"
+# GitHub command-line tool
 brew "gh"
+# Syntax-highlighting pager for git and diff output
 brew "git-delta"
+# Quickly rewrite git repository history
 brew "git-filter-repo"
+# Render markdown on the CLI
 brew "glow"
+# Library to load and enumerate PKCS#11 modules
 brew "p11-kit"
+# GNU Transport Layer Security (TLS) Library
 brew "gnutls"
+# Asynchronous event library
 brew "libevent"
+# Validating, recursive, caching DNS resolver
 brew "unbound"
+# Open source programming language to build simple/reliable/efficient software
 brew "go"
+# Make JSON greppable
 brew "gron"
+# Like cURL, but for gRPC
 brew "grpcurl"
+# Kubernetes package manager
 brew "helm", link: false
+# Kubernetes package manager
 brew "helm@3", link: true
+# Deploy Kubernetes Helm Charts
 brew "helmfile"
+# Improved top (interactive process viewer)
 brew "htop"
+# Run and Test HTTP Requests with plain text and curl
 brew "hurl"
+# C/C++ and Java libraries for Unicode and globalization
 brew "icu4c@76"
+# Tools and libraries to manipulate images in select formats
 brew "imagemagick"
+# Update of iperf: measures TCP, UDP, and SCTP bandwidth
 brew "iperf3"
+# Git-compatible distributed version control system
 brew "jj"
+# Lightweight and flexible command-line JSON processor
 brew "jq"
+# Modern load testing tool, using Go and JavaScript
 brew "k6"
+# Kubernetes CLI To Manage Your Clusters In Style!
 brew "k9s"
+# Run local Kubernetes cluster in Docker
 brew "kind"
+# Network authentication protocol
 brew "krb5"
+# Tool that can switch between kubectl contexts easily and create aliases
 brew "kubectx"
+# Kubernetes command-line interface
 brew "kubernetes-cli"
+# Lazier way to manage everything docker
 brew "lazydocker"
+# Simple terminal UI for git commands
 brew "lazygit"
+# Library for complex text layout
 brew "libraqm"
+# Curses-based tool for viewing and analyzing log files
 brew "lnav"
+# Tool to convert MDF (Alcohol 120% images) images to ISO images
 brew "mdf2iso"
+# Polyglot runtime manager (asdf rust clone)
 brew "mise"
+# Simple tool to make locally trusted development certificates
 brew "mkcert"
+# Update multiple repositories in with one command
 brew "multi-gitter"
+# Fast, highly customisable system info script
 brew "neofetch"
+# Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
+# Open-source, cross-platform JavaScript runtime environment
 brew "node"
+# Libraries for security-enabled client and server applications
 brew "nss"
+# Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# AI coding agent, built for the terminal
 brew "opencode"
+# Cryptography and SSL/TLS Toolkit
 brew "openssl@1.1"
+# Vulnerability scanner which uses the OSV database
+brew "osv-scanner"
+# Multithreaded PNG optimizer written in Rust
 brew "oxipng"
+# 7-Zip (high compression file archiver) implementation
 brew "p7zip"
+# CLI for Postgres with auto-completion and syntax highlighting
 brew "pgcli"
+# Friendly PIL fork (Python Imaging Library)
 brew "pillow"
+# Execute binaries from Python packages in isolated environments
 brew "pipx"
+# Package compiler and linker metadata toolkit
 brew "pkgconf"
+# PNG image optimizing utility
 brew "pngquant"
+# Fast, disk space efficient package manager
 brew "pnpm"
+# Python package management tool
 brew "poetry"
+# PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
+# Object-relational database system
 brew "postgresql@14"
+# Object-relational database system
 brew "postgresql@16"
+# Protocol buffers (Google's data interchange format)
 brew "protobuf"
+# Interpreted, interactive, object-oriented programming language
 brew "python@3.10"
+# Interpreted, interactive, object-oriented programming language
 brew "python@3.11"
+# Interpreted, interactive, object-oriented programming language
 brew "python@3.9"
+# Install various Ruby versions and implementations
 brew "ruby-build"
+# Ruby version manager
 brew "rbenv"
+# Persistent key-value database, with built-in net interface
 brew "redis"
+# Pack repository contents into a single AI-friendly file
 brew "repomix"
+# CLI proxy to minimize LLM token consumption
 brew "rtk"
+# Intuitive find & replace CLI
 brew "sd"
+# Autoformat shell script source code
 brew "shfmt"
+# SOund eXchange: universal sound sample translator
 brew "sox"
+# Cross-shell prompt for astronauts
 brew "starship"
+# Formatting technology for Swift source code
 brew "swift-format"
+# Formatting tool for reformatting Swift code
 brew "swiftformat"
+# Tool to enforce Swift style and conventions
 brew "swiftlint"
+# Change macOS audio source from the command-line
 brew "switchaudio-osx"
+# Tool Command Language
 brew "tcl-tk"
+# Temporal CLI (tctl)
 brew "tctl"
+# Very fast implementation of tldr in Rust
 brew "tealdeer"
+# Command-line interface for running and interacting with Temporal Server and UI
 brew "temporal"
+# Tool to generate documentation from Terraform modules
 brew "terraform-docs"
+# Display directories as trees (with optional color/HTML output)
 brew "tree"
+# TUI and CLI dual pane markdown viewer
 brew "treemd"
+# Executes a program periodically, showing output fullscreen
 brew "watch"
+# Internet file retriever
 brew "wget"
+# Generate your Xcode project from a spec file and your folder structure
 brew "xcodegen"
+# Yet Another Dotfiles Manager
 brew "yadm"
+# JavaScript package manager
 brew "yarn"
+# Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
+# Feature-rich command-line audio/video downloader
 brew "yt-dlp"
+# Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "zellij"
+# Programming language designed for robustness, optimality, and clarity
 brew "zig", link: false
+# Programming language designed for robustness, optimality, and clarity
 brew "zig@0.15", link: true
+# Shell extension to navigate your filesystem faster
 brew "zoxide"
+# Geo-scale, next-generation sharing platform built on top of OpenZiti
 brew "zrok"
-brew "azure/functions/azure-functions-core-tools@4"
+# Work with Buildkite from the command-line
 brew "buildkite/buildkite/bk@3"
+# Build runner for use with Buildkite
 brew "buildkite/buildkite/buildkite-agent@3"
+# Go-based command-line wrapper for easy interaction with Datadog APIs
 brew "datadog-labs/pack/pup"
+# A window border system for macOS
 brew "felixkratz/formulae/borders"
+# Terraform
 brew "hashicorp/tap/terraform"
+# Google CLI for Gmail, Calendar, Drive, Docs, Sheets, and more
 brew "openclaw/tap/gogcli"
+# Quantum Mechanical Keyboard (QMK) Firmware
 brew "qmk/qmk/qmk"
+# CLI tool for linear.app that uses git branch names and directory names to open issues and team pages
 brew "schpet/tap/linear"
+# Stripe CLI utility
 brew "stripe/stripe-cli/stripe"
+# A dev environment as code for microservice apps
 brew "tilt-dev/tap/tilt"
-brew "wix/brew/applesimutils"
+# Enable Windows-like alt-tab
 cask "alt-tab"
+# Securely stores and accesses AWS credentials in a development environment
 cask "aws-vault-binary"
+# Virtual Audio Driver
 cask "blackhole-2ch"
+# OpenAI's official browser with ChatGPT built in
 cask "chatgpt-atlas"
+# AI code review CLI
 cask "coderabbit"
+# OpenAI's coding agent that runs in your terminal
 cask "codex"
+# Voice and text chat software
 cask "discord"
+# Window peeking utility app
 cask "dockdoor"
+# Client for the Dropbox cloud storage service
 cask "dropbox"
+# Utility to support moving and resizing using a modifier key and mouse drag
 cask "easy-move+resize"
-cask "fig"
-cask "firefox"
+# Markdown previews in Finder QuickLook with diagrams and math
 cask "xykong/tap/flux-markdown"
+# Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
-cask "google-chrome"
-cask "google-drive"
+# Open-source video transcoder
 cask "handbrake-app"
+# Download manager
 cask "jdownloader"
+# Menu bar manager
 cask "jordanbaird-ice"
+# Keyboard customiser
 cask "karabiner-elements"
+# Open-source keystroke visualiser
 cask "keycastr"
+# Clipboard manager
 cask "maccy"
+# Shows the next meeting in the menu bar
 cask "meetingbar"
-cask "messenger"
-cask "microsoft-auto-update"
-cask "microsoft-office"
-cask "microsoft-remote-desktop"
+# Neovim Client
 cask "neovide-app"
+# Keyboard driven navigation for macOS
 cask "y3owk1n/tap/neru"
+# Replacement for Docker Desktop
 cask "orbstack"
+# Remote pair programming
 cask "pop-app"
+# Collaboration platform for API development
 cask "postman"
+# Quick Look generator for Markdown files
 cask "qlmarkdown"
+# Control your tools with a few keystrokes
 cask "raycast"
+# Move and resize windows using keyboard shortcuts or snap areas
 cask "rectangle"
+# Keyboard-driven cursor actuator
 cask "scoot"
+# Team communication and collaboration software
 cask "slack"
+# Audio device utility
 cask "soundanchor"
+# System monitor for the menu bar
 cask "stats"
+# Quicklook extension for source files
 cask "syntax-highlight"
+# Keyboard configurator
 cask "via"
+# Configurator of compatible keyboards in real time
 cask "vial"
+# Open-source code editor
 cask "visual-studio-code"
-cask "zoom"
 vscode "alexcvzz.vscode-sqlite"
 vscode "amazonwebservices.codewhisperer-for-command-line-companion"
 vscode "anthropic.claude-code"
@@ -266,4 +422,19 @@ npm "@angular-devkit/schematics-cli"
 npm "@mr-yum/schematics"
 npm "@openacp/cli"
 npm "@playwright/test"
+npm "azure-functions-core-tools"
 npm "playwright"
+
+# === Self-managed apps (excluded from the bundle above) ===
+# Self-managed apps: each ships its own privileged auto-updater, so letting
+# `brew upgrade` manage it causes repeated sudo prompts (the updater resets the
+# .app bundle to root ownership). update.sh strips these casks from every fresh
+# `brew bundle dump` and re-appends this list to the Brewfile for the record.
+# Add or remove an exclusion by editing the `cask "..."` lines below.
+# Install these by hand (or temporarily uncomment in the Brewfile) on a fresh bootstrap.
+#   cask "firefox"              # Mozilla updater
+#   cask "google-chrome"        # GoogleSoftwareUpdate / Keystone
+#   cask "google-drive"         # Google updater
+#   cask "microsoft-office"     # Microsoft AutoUpdate (Word/Excel/PowerPoint/Outlook/OneNote)
+#   cask "microsoft-auto-update"
+#   cask "zoom"                 # Zoom auto-updater
