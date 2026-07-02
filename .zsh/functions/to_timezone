@@ -83,6 +83,20 @@ EOF
     result=$(tz at "$tz_string" "$time")
   fi
 
+  # De-duplicate identical entries, preserving order. Without DST, zones like
+  # Melbourne and Brisbane render the same (e.g. "9:03am AEST") and would print twice.
+  local -a parts out
+  local -A seen
+  local part
+  parts=("${(@s: / :)result}")
+  for part in "${parts[@]}"; do
+    if [[ -z "${seen[$part]}" ]]; then
+      seen[$part]=1
+      out+=("$part")
+    fi
+  done
+  result="${(j: / :)out}"
+
   echo "$result" | pbcopy
   echo "📋 $result"
 }
