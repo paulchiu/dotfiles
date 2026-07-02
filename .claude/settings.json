@@ -169,6 +169,7 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "tui": "default",
   "voice": {
     "enabled": true,
     "mode": "hold"
@@ -182,6 +183,5 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  },
-  "tui": "fullscreen"
+  }
 }
