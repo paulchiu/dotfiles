@@ -137,15 +137,15 @@ The normal workflow is one or two live panes for one task. More panes are
 acceptable when the work can be split cleanly or when separate external chats
 need separate delegates.
 
-For Telegram/OpenACP workflows, assume Paul may have multiple chats open and may
+For Telegram workflows, assume Paul may have multiple chats open and may
 want one delegate per chat or session. Do not collapse those into a single
 delegate. Use stable, unique pane labels that encode the route without exposing
 secrets, for example `tg-poe-ccd`, `tg-fitkit-cxd`, or
-`openacp-<project>-<purpose>`. If working from the sandbox and the prompt names
+`<project>-<purpose>`. If working from the sandbox and the prompt names
 a short project handle such as `poe` or `fitkit`, resolve it through
 `/Users/paul/dev/sandbox/.agents/context/dev-misc-projects.md` and start that
 delegate in the canonical project path. Identify the originating chat from the
-prompt itself: the user, OpenACP handoff, or Telegram bridge should name a
+prompt itself: the user or Telegram bridge should name a
 project handle, purpose, or session id. If the prompt is ambiguous and another
 delegate may already serve a different chat, ask before creating a new pane
 rather than guessing a label. Collisions on generic labels such as `cxd-review`
@@ -155,7 +155,7 @@ For multiple panes:
 
 - Use stable labels like `cxd-tests`, `cxd-ui`, or `ccd-review`.
 - Prefer label prefixes that identify the external chat/session when routing
-  from Telegram or OpenACP.
+  from Telegram.
 - Assign disjoint file ownership or responsibility to each pane.
 - Use `nex pane list --json` before targeting panes by label.
 - Use `nex pane capture --target <label> --lines N` to check status.
