@@ -13,7 +13,7 @@ Use this skill to turn rough notes, metrics, diffs, docs, or screenshots into a 
 
 1. Clarify the deliverable only if it is genuinely ambiguous: deck, single promo slide, PNG, PPTX, animated MP4, or a bundle.
 2. Gather brand context from user-provided links, Google Drive/Slides, Notion, screenshots, or existing files. If none are accessible, use the embedded tokens in [brand-system.md](references/brand-system.md).
-3. For PPTX/deck work, use the `presentations` skill and render each slide for visual QA before handing off.
+3. For PPTX/deck work, use the `presentations` skill if available (otherwise python-pptx directly) and render each slide for visual QA before handing off.
 4. For animation/video work, build deterministic HTML/canvas/Python frames, export H.264 MP4, and create a poster plus contact sheet.
 5. Keep artifact paths user-directed. If the user asks for sandbox output, create a dated folder under `~/dev/sandbox`; otherwise use the project or destination they specify.
 
@@ -31,7 +31,7 @@ When tools are available, consult these source references before relying on the 
 ## Content Treatment
 
 - Lead with the key outcome, not process narration.
-- Convert raw metrics into audience-readable deltas. For values greater than 10, prefer a percentage as the main hero number when a percentage is meaningful; include the raw count in smaller supporting text.
+- Convert raw metrics into audience-readable deltas: for values above 10, make the percentage the hero number when a percentage is meaningful, with the raw count in smaller supporting text.
 - Use short labels on cards and charts. Put nuance in speaker notes, detailed docs, or supporting captions.
 - For engineering updates, highlight reductions, simplifications, remaining risks, and the next action.
 - Write slide headings as headlines. Drop terminal full stops on major slide titles, eyebrows, kickers, and section headers unless the punctuation carries meaning (e.g. a question mark, or a deliberate two-sentence beat). Speaker notes and body copy keep normal sentence punctuation.
@@ -40,13 +40,12 @@ When tools are available, consult these source references before relying on the 
 ## Layout And Spacing
 
 - Leave clear breathing room between the eyebrow/kicker, the headline, the subtitle, and any proof objects (stats, charts, tiles). Stack them with consistent vertical rhythm rather than crowding to fill space.
-- Do not let headlines, key stats, or text-heavy tiles sit awkwardly across a diagonal Splice band or behind a bright brand strip. Either move the content off the band, move the band, or switch the affected tile to an opaque/darker fill so the band reads as backdrop, not interference.
-- When a diagonal stripe must cross a text tile, raise the tile fill toward fully opaque Olive/Kale (top of the 70-92% range) and keep the stripe behind the tile, not over the copy.
+- Do not let headlines, key stats, or text-heavy tiles sit awkwardly across a diagonal Splice band or bright brand strip. Move the content or the band; if a stripe must cross a text tile, raise the tile fill toward fully opaque Olive/Kale (top of the 70-92% range) and keep the stripe behind the tile, not over the copy.
 
 ## Visual QA
 
 - Render slides or frames to images and inspect them before finalizing.
 - Check contrast anywhere Splice green appears behind content; use dark olive/kale marks, text, or outlines there.
 - Verify fonts are installed or provide close fallbacks. Do not fail the task only because a proprietary font is unavailable.
-- Confirm exported media opens and is valid. For videos, validate codec, dimensions, duration, frame rate, and pixel format.
+- Confirm exported media opens and is valid (for video: codec, dimensions, duration, frame rate, pixel format).
 - Create shareable outputs: PPTX or PDF for decks, PNG for single slides, MP4 plus poster/contact sheet for animations.

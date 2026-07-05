@@ -15,9 +15,9 @@ Title - Subtitle. LastName, FirstInitial. Year.epub
 
 ### Rules
 
-- **Title**: Capitalize normally (preserve original casing). No trailing punctuation.
+- **Title**: Use the book's published casing. No trailing punctuation.
 - **Subtitle**: After ` - ` (space-hyphen-space) if present. No trailing period in the subtitle (the period after subtitle belongs to the author block).
-- **Author block**: After a period and space: `LastName, FirstInitial.` (initial with period). For multiple authors: `LastName, FirstInitial., & LastName, FirstInitial. Year.ext`
+- **Author block**: After a period and space: `LastName, FirstInitial.` (initial with period). For multiple authors: `LastName, FirstInitial., & LastName, FirstInitial.`
 - **Year**: After another period and space: four-digit year.
 - **Extension**: `.epub` (or `.pdf` etc.)
 - **No extras**: Strip publisher names, edition strings, hash IDs, "Anna's Archive", download site labels.

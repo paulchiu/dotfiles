@@ -1,7 +1,6 @@
 ---
-model: sonnet
 name: linear-write
-description: "Create or rewrite Linear issues using the agent-ready card template. Use when asked to create/rewrite a Linear issue, write a spike, or clean up an issue from a URL/ID."
+description: "Create or rewrite Linear issues using the agent-ready card template. Use when asked to create/rewrite a Linear issue, write a spike, post an investigation-finding comment on an issue, or clean up an issue from a URL/ID."
 ---
 
 # Linear Write Skill
@@ -23,6 +22,8 @@ Always prefer the Linear MCP tools. Fall back to the `linear` CLI only when MCP 
 | List users      | `mcp__claude_ai_Linear__list_users`           | n/a                            |
 
 When passing markdown to MCP tools, send real newlines, not literal `\n` escape sequences.
+
+CLI install, auth, create/spike examples, and flags: see [references/cli.md](references/cli.md).
 
 ## The Core Principle
 
@@ -112,21 +113,13 @@ Add the conditional gates that apply (see source): existing DB data checked agai
 
 ### Writing the implementation guidance section
 
-Research the codebase as part of drafting; don't wait to be asked. If you have no repo access, say so in the draft and flag the section as best-effort.
+Research the codebase as part of drafting; don't wait to be asked. Locate the primary entry point, read the surrounding pattern the agent must match, find at least one alternative or reference pattern elsewhere in the repo, and note binding constraints (transactions, feature flags, dependency boundaries, utilities to reuse). If you have no repo access, say so in the draft and flag the section as best-effort.
 
-**Research checklist**
+Structure notes beyond the template:
 
-- Locate the primary entry point: the file and symbol where the change most likely lands. Use `rg`/`grep`, file search, or an Explore agent for breadth.
-- Read the surrounding code so the guidance reflects the pattern the agent must match or extend.
-- Identify at least one alternative approach or reference pattern elsewhere in the codebase.
-- Note binding constraints: transactions, feature flags, dependency boundaries, existing utilities the agent should reuse.
-
-**Structure**
-
-1. **Primary approach** — name the most likely entry point by symbol and file, with a GitHub deep link. Frame as the 'culprit' or 'entry point', not a prescription. Default to reproducing the referenced code as a fenced snippet whenever it helps illustrate the edit; skip only when the code is >~10 lines or purely structural.
-2. **Alternatives** — patterns elsewhere in the repo the agent can mirror. Label ordered attempts as 'attempt 1', 'attempt 2'.
-3. **Constraints** — binding rules the agent must respect.
-4. **When uncertain** — one-line instruction to stop and surface ambiguity rather than guessing.
+- Frame the entry point as the 'culprit' or 'entry point', not a prescription. Default to reproducing the referenced code as a fenced snippet; skip only when it is >~10 lines or purely structural.
+- Label ordered alternatives as 'attempt 1', 'attempt 2'.
+- End with the one-line 'when uncertain, stop and surface ambiguity' instruction.
 
 **Formatting rules**
 
@@ -138,7 +131,7 @@ Research the codebase as part of drafting; don't wait to be asked. If you have n
   - `// 👈 ...` as a trailing inline comment when the target line is short.
   - Choose one per site; don't stack both. The comment names the edit (e.g. `// 👈 missing tax recalc here`), not the code.
 - One real code snippet outperforms three paragraphs of prose. If you find yourself writing a paragraph, link to an example file instead.
-- The heading is `## Implementation guidance` (sentence case). Do not capitalise the `g`.
+- The heading is `## Implementation guidance` (sentence case, lowercase `g`).
 
 ### Risk tier reference
 
@@ -263,30 +256,6 @@ The verification list is load-bearing. Each bullet should be a check the reader 
 | **Blocked by** | Limited                            | Not supported      | Set manually in Linear web UI        |
 | **Depends on** | Limited                            | Not supported      | Set manually in Linear web UI        |
 
-## CLI Reference (fallback)
-
-```bash
-# Install and auth (once)
-npm install -g @linear/cli   # or: brew install linear
-linear auth login
-
-# Create
-linear issue create --team <TEAM> -t "<TITLE>" -d "<DESCRIPTION>"
-
-# Spike with label, long description via file (avoids shell escaping)
-linear issue create --team ENG -t "[2 day spike] Investigate slow checkout" -l "spike" --description-file spike.md
-```
-
-Non-obvious flags worth knowing:
-
-- `-p, --parent <TEAM-NUMBER>` — parent issue, e.g. `CUSM-42`.
-- `-l, --label <LABEL>` — repeatable.
-- `-a, --assignee <self|username>`, `--priority <1-4>` (1=urgent), `--estimate <POINTS>`.
-- `--description-file <PATH>` — read description from file; bypasses shell quoting issues with `@`, backticks, newlines.
-- `--no-interactive` — skip prompts for scripted use.
-
-Run `linear issue create --help` for the full flag list.
-
 ## Tips and Gotchas
 
 - **Escaping `@` mentions.** Linear parses `@` as a mention trigger and shells may interpret it as command substitution. Wrap package names in backticks (`` `@mr-yum/foo` ``) inside descriptions; wrap shell args in single quotes; or use `--description-file` to bypass shell quoting entirely.
@@ -294,14 +263,9 @@ Run `linear issue create --help` for the full flag list.
 - **Numbered lists get truncated.** Multi-item `1.` `2.` `3.` lists saved via MCP often drop everything after the first item silently. Use bulleted lists unless order is semantically required, and verify with `get_issue` if you do use numbers.
 - **Bulleted lists can also collapse.** Bullets that share a line break without a blank line between them sometimes drop everything after the first item too, especially under headings like `### Out of scope` near a fenced code block. After saving, fetch the issue back with `get_issue` and check that every bullet survived; if a section was clipped, re-save with a blank line between bullets and the items will stick.
 - **More detail isn't always better.** A 500-word card with contradictory instructions is worse than a 100-word card with clear acceptance criteria.
-- **Prefer linking to one example file** over writing a paragraph of prose about a pattern.
 
 ## Guidelines
 
-- Do not create or update an issue until the user approves the draft.
-- Ask clarifying questions up front rather than guessing at scope or implementation details.
 - If acceptance criteria sound testable but are subjective ("clean up the error handling", "improve" something), push back and rewrite them as something verifiable.
 - Risk tier should reflect the actual change, not the importance of the feature.
 - When listing handlers, endpoints, or items, prefer grouping by module or domain over enumerating individually.
-- If the work has high ambiguity, propose a spike instead of trying to write it as an executable card.
-- Every non-spike card carries a Due diligence section and is drafted with the change due diligence checklist worked through. If the core 'how is it used' gate can't be answered, don't write a direct-change card; propose telemetry-first two-phase work or a spike. Don't quietly skip gates under time pressure; escalate to Shawn or Paul and note it in the card.

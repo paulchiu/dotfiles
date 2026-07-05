@@ -38,8 +38,11 @@ async createMatch(name: string): Promise<string> {
 Influence DO creation location for latency-sensitive apps:
 
 ```typescript
-const id = env.GAME.idFromName(gameId, { locationHint: "wnam" });
+const id = env.GAME.idFromName(gameId);
+const stub = env.GAME.get(id, { locationHint: "wnam" });
 ```
+
+`locationHint` is an option on `get()`, not `idFromName()`. It only influences where the DO is first created.
 
 Available hints: `wnam`, `enam`, `sam`, `weur`, `eeur`, `apac`, `oc`, `afr`, `me`.
 
@@ -109,7 +112,7 @@ private migrate() {
 }
 ```
 
-For production apps, consider [`durable-utils`](https://github.com/lambrospetrou/durable-utils#sqlite-schema-migrations) — provides a `SQLSchemaMigrations` class that tracks executed migrations both in memory and in storage. Also see [`@cloudflare/actors` storage utilities](https://github.com/cloudflare/actors/blob/main/packages/storage/src/sql-schema-migrations.ts) — a reference implementation of the same pattern used by the Cloudflare Actors framework.
+For production apps, consider [`durable-utils`](https://github.com/lambrospetrou/durable-utils#sqlite-schema-migrations): it provides a `SQLSchemaMigrations` class that tracks executed migrations both in memory and in storage. Also see [`@cloudflare/actors` storage utilities](https://github.com/cloudflare/actors/blob/main/packages/storage/src/sql-schema-migrations.ts), a reference implementation of the same pattern used by the Cloudflare Actors framework.
 
 ### State Types
 
@@ -275,21 +278,9 @@ async webSocketClose(ws: WebSocket, code: number, reason: string) {
 }
 
 // Broadcast
-getWebSockets().forEach(ws => ws.send(JSON.stringify(payload)));
+this.ctx.getWebSockets().forEach(ws => ws.send(JSON.stringify(payload)));
 ```
 
 ## Error Handling
 
-```typescript
-async safeOperation(): Promise<Result> {
-  try {
-    return await this.riskyOperation();
-  } catch (error) {
-    console.error("Operation failed:", error);
-    // Log to external service if needed
-    throw error; // Re-throw to signal failure to caller
-  }
-}
-```
-
-**Note**: Uncaught exceptions may terminate the DO instance. In-memory state is lost, but SQLite storage persists.
+Uncaught exceptions may terminate the DO instance. In-memory state is lost, but SQLite storage persists. Design so that any in-memory state can be rebuilt from storage.

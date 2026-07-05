@@ -100,7 +100,7 @@ Workers have a 128 MB memory limit. Buffering entire bodies with `await response
 
 **Check**: any `await response.text()`, `await response.json()`, or `await response.arrayBuffer()` on data that could be large or unbounded. Small, bounded payloads (known-size JSON, config files) are fine to buffer.
 
-Correct — stream through:
+Correct (stream through):
 ```ts
 async fetch(request: Request, env: Env): Promise<Response> {
   const response = await fetch("https://api.example.com/large-dataset");
@@ -108,7 +108,7 @@ async fetch(request: Request, env: Env): Promise<Response> {
 }
 ```
 
-Correct — concatenate multiple streams:
+Correct (concatenate multiple streams):
 ```ts
 async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const urls = ["https://api.example.com/part-1", "https://api.example.com/part-2"];
@@ -267,7 +267,7 @@ async fetch(request: Request, env: Env): Promise<Response> {
 
 ### Enable Workers Logs and Traces
 
-Enable `observability` in wrangler config before deploying to production. Use `head_sampling_rate` to control volume and cost. Use structured JSON logging — `console.log(JSON.stringify({...}))` — so logs are searchable. Use `console.error` for errors (appears at error severity in the dashboard).
+Enable `observability` in wrangler config before deploying to production. Use `head_sampling_rate` to control volume and cost. Use structured JSON logging (`console.log(JSON.stringify({...}))`) so logs are searchable. Use `console.error` for errors (appears at error severity in the dashboard).
 
 **Check**: `observability.enabled` is `true` in config. Logging uses structured JSON, not string concatenation.
 
@@ -360,7 +360,7 @@ fetch("https://api.example.com/webhook", { method: "POST", body: JSON.stringify(
 
 ### Be aware of platform limits
 
-Workers have a 10ms CPU time limit (Bundled) or 30s (Standard/Unbound). Heavy synchronous work — tight loops, large JSON parsing, compute-intensive crypto — can hit the CPU limit and terminate the request.
+Workers default to a 30-second CPU time limit, configurable via `limits.cpu_ms`. Heavy synchronous work (tight loops, large JSON parsing, compute-intensive crypto) can hit the CPU limit and terminate the request.
 
 **Check**: compute-heavy operations that run synchronously. Consider breaking work into smaller chunks, offloading to Queues/Workflows, or using WebAssembly for CPU-intensive tasks.
 

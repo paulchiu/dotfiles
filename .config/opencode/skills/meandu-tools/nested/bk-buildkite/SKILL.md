@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: bk-buildkite
-description: "Query Buildkite builds, jobs, logs, pipelines, and agents via the bk CLI. Use when investigating CI failures, reading build logs, retrying builds, or any Buildkite interaction."
+description: "Query Buildkite builds, jobs, logs, pipelines, and agents via the bk CLI, and release blocked builds by unblocking their production gate jobs. Use when investigating CI failures, reading build logs, retrying or rebuilding builds, watching build status, or when given Buildkite URLs with 'release these', 'unblock these', 'promote to prod', or 'push to prod'."
 ---
 
 # Buildkite (bk CLI)
@@ -16,7 +16,7 @@ Run `bk use mryum` at the start of a session if you get auth errors. The org is 
 
 ## Output Format
 
-The CLI defaults to JSON output (`bk config set output_format json`). Use `--json` explicitly when needed. Use `--text` for human-readable output or when JSON is too verbose.
+Output defaults to JSON (set via `bk config set output_format json`), but pass `--json` explicitly when a command must be machine-parsed. Use `--text` for human-readable output or when JSON is too verbose.
 
 ## Common Workflows
 
@@ -71,7 +71,7 @@ Use when Paul gives one or more Buildkite URLs and says "release these", "unbloc
 
 **Parse each URL** to get pipeline slug and build number:
 - `https://buildkite.com/mryum/<pipeline>/builds/<number>/...` → `-p <pipeline>` and build `<number>`
-- Note pipelines are NOT always `mr-yum` — use the exact slug from the URL (e.g. `cloudflare-workers`, `manage`, `manage-frontend`, `mr-yum-deploy`, `stable-api`).
+- Note pipelines are NOT always `mr-yum`: use the exact slug from the URL (e.g. `cloudflare-workers`, `manage`, `manage-frontend`, `mr-yum-deploy`, `stable-api`).
 
 **Find the gating job** in each build. The gating job has `type: "manual"`, `state: "blocked"`, and `unblockable: true`:
 
@@ -83,8 +83,8 @@ bk build view <number> -p <pipeline> --json | \
 **Use the REST API, not `bk job unblock`.** `bk job unblock` calls GraphQL, and the current OAuth token does not have the `graphql` scope (fails with `403: Your access token doesn't have the graphql scope`). The REST `PUT .../unblock` endpoint works:
 
 ```bash
-# Body MUST be a JSON object even if no fields are required — use '{}'.
-# bk api auto-prefixes /organizations/mryum — do NOT include it.
+# Body MUST be a JSON object even if no fields are required: use '{}'.
+# bk api auto-prefixes /organizations/mryum, do NOT include it.
 bk api --method PUT /pipelines/<pipeline>/builds/<number>/jobs/<job-id>/unblock --data '{}'
 ```
 
@@ -97,7 +97,7 @@ bk api --method PUT /pipelines/<pipeline>/builds/<number>/jobs/<job-id>/unblock 
 
 Successful response includes `"state": "unblocked"` and `"unblocked_by"`. Pipe through `jq -r` to get a one-line confirmation per build.
 
-**Confirmation policy**: production unblocks are visible and not easily reversible. Always present the table of `pipeline / build / step label / job id` and ask for confirmation BEFORE firing the unblocks (a single AskUserQuestion is enough — don't ask per-build). After confirmation, run them in parallel.
+**Confirmation policy**: production unblocks are visible and not easily reversible. Always present the table of `pipeline / build / step label / job id` and ask for confirmation BEFORE firing the unblocks (a single AskUserQuestion is enough, don't ask per-build). After confirmation, run them in parallel.
 
 **End-to-end pattern** for a list of URLs:
 
@@ -117,7 +117,7 @@ bk api --method PUT /pipelines/<pipeline-2>/builds/<n2>/jobs/<job-id-2>/unblock 
 ```
 
 Notes:
-- The other `state: "blocked"` jobs in the build are downstream `script` jobs gated on the manual step — leave them alone.
+- The other `state: "blocked"` jobs in the build are downstream `script` jobs gated on the manual step. Leave them alone.
 - If `unblockable` is `false` on the manual job, the user may not have permission, or a prior step is still running. Surface this rather than retrying.
 - For builds that have already passed the gate (state: `passed`, `blocked: false`), report "already released" rather than erroring.
 
@@ -207,12 +207,14 @@ bk build list -p mr-yum --state failed --branch main --since 24h
 
 For endpoints not covered by built-in commands:
 
+Endpoints are org-relative: `bk api` auto-prefixes `/organizations/mryum`, so never include that segment yourself.
+
 ```bash
 # Direct API call
-bk api /organizations/mryum/pipelines/mr-yum/builds/74054
+bk api /pipelines/mr-yum/builds/74054
 
 # With query parameters
-bk api "/organizations/mryum/pipelines?page=1&per_page=30"
+bk api "/pipelines?page=1&per_page=30"
 ```
 
 ## Global Flags

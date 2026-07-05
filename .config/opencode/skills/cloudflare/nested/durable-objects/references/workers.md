@@ -155,79 +155,9 @@ async function handleRooms(request: Request, env: Env): Promise<Response> {
 }
 ```
 
-## Request Validation
+## Observability
 
-```typescript
-import { z } from "zod";
-
-const SendMessageSchema = z.object({
-  userId: z.string().min(1),
-  message: z.string().min(1).max(1000),
-});
-
-async function handleSendMessage(request: Request, env: Env): Promise<Response> {
-  const body = await request.json();
-  const result = SendMessageSchema.safeParse(body);
-
-  if (!result.success) {
-    return Response.json(
-      { error: "Validation failed", details: result.error.issues },
-      { status: 400 }
-    );
-  }
-
-  const stub = env.CHAT_ROOM.getByName(result.data.userId);
-  const message = await stub.sendMessage(result.data.userId, result.data.message);
-  return Response.json(message);
-}
-```
-
-## Observability & Logging
-
-### Structured Logging
-
-```typescript
-function log(level: "info" | "warn" | "error", message: string, data?: Record<string, unknown>) {
-  console.log(JSON.stringify({
-    level,
-    message,
-    timestamp: new Date().toISOString(),
-    ...data,
-  }));
-}
-
-// Usage
-log("info", "Request received", { path: url.pathname, method: request.method });
-log("error", "DO call failed", { roomId, error: String(error) });
-```
-
-### Request Tracing
-
-```typescript
-async function handleRequest(request: Request, env: Env): Promise<Response> {
-  const requestId = crypto.randomUUID();
-  const startTime = Date.now();
-
-  try {
-    const response = await processRequest(request, env);
-
-    log("info", "Request completed", {
-      requestId,
-      duration: Date.now() - startTime,
-      status: response.status,
-    });
-
-    return response;
-  } catch (error) {
-    log("error", "Request failed", {
-      requestId,
-      duration: Date.now() - startTime,
-      error: String(error),
-    });
-    throw error;
-  }
-}
-```
+Validate request bodies in the Worker before calling the DO; keep DO methods trusting their inputs. Use structured (JSON) console logging.
 
 ### Tail Workers (Production)
 
@@ -244,103 +174,20 @@ For production logging, use Tail Workers to forward logs:
 
 ## Error Handling
 
-### Graceful DO Errors
-
-```typescript
-async function callDO(stub: DurableObjectStub<ChatRoom>, method: string): Promise<Response> {
-  try {
-    const result = await stub.getMessages();
-    return Response.json(result);
-  } catch (error) {
-    if (error instanceof Error) {
-      // DO threw an error
-      log("error", "DO operation failed", { error: error.message });
-      return Response.json(
-        { error: "Service temporarily unavailable" },
-        { status: 503 }
-      );
-    }
-    throw error;
-  }
-}
-```
-
-### Timeout Handling
-
-```typescript
-async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-  const timeout = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error("Timeout")), ms)
-  );
-  return Promise.race([promise, timeout]);
-}
-
-// Usage
-const result = await withTimeout(stub.processData(data), 5000);
-```
-
-## CORS Handling
-
-```typescript
-function corsHeaders(): HeadersInit {
-  return {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
-}
-
-export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders() });
-    }
-
-    const response = await handleRequest(request, env);
-    
-    // Add CORS headers to response
-    const newHeaders = new Headers(response.headers);
-    Object.entries(corsHeaders()).forEach(([k, v]) => newHeaders.set(k, v));
-    
-    return new Response(response.body, {
-      status: response.status,
-      headers: newHeaders,
-    });
-  },
-};
-```
+Catch errors from DO stub calls in the Worker and map them to appropriate HTTP responses (e.g. 503). Errors thrown inside DO RPC methods propagate to the caller as rejected promises.
 
 ## Secrets Management
 
-Set secrets via wrangler CLI (not in config files):
+Set secrets via wrangler CLI, never in config files; they arrive on `env` like vars:
 
 ```bash
 wrangler secret put API_KEY
-wrangler secret put DATABASE_URL
-```
-
-Access in code:
-```typescript
-export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const apiKey = env.API_KEY; // From secret
-    // ...
-  },
-};
 ```
 
 ## Development Commands
 
 ```bash
-# Local development
-wrangler dev
-
-# Deploy
-wrangler deploy
-
-# Tail logs
-wrangler tail
-
-# List DOs
-wrangler d1 execute DB --command "SELECT * FROM _cf_DO"
+wrangler dev       # Local development
+wrangler deploy    # Deploy
+wrangler tail      # Tail logs
 ```

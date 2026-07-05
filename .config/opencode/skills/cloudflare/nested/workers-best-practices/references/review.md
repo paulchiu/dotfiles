@@ -135,16 +135,16 @@ See the full anti-patterns table in `SKILL.md`. The type-specific ones to watch 
 
 ## Serialization Boundaries
 
-Data crossing these boundaries must be structured-clone serializable:
+Values crossing these boundaries must survive serialization:
 
-- **Queue messages**: body passed to `.send()` or `.sendBatch()`
-- **Workflow step return values**: persisted to durable storage
-- **DO storage**: values in `storage.put()` or SQL
-- **`postMessage()`**: WebSocket messages
+- **Queue messages**: body passed to `.send()` or `.sendBatch()` (JSON by default; structured clone with `contentType: "v8"`)
+- **Workflow step return values**: persisted as JSON
+- **DO storage**: values in `storage.put()` (structured clone) or SQL
+- **`postMessage()`**: WebSocket messages (string or ArrayBuffer)
 
-Non-serializable types to flag: `Response`, `Request`, `Error`, functions, class instances with methods, `Map`/`Set`, `Symbol`.
-
-Valid: plain objects, arrays, strings, numbers, booleans, null, `ArrayBuffer`, `Date`.
+Always flag: `Response`, `Request`, functions, class instances with methods, `Symbol`.
+On JSON boundaries also flag: `Map`, `Set`, `Error`, `ArrayBuffer`, `Date` (silently serializes to a string).
+Safe everywhere: plain objects, arrays, strings, numbers, booleans, null.
 
 ---
 

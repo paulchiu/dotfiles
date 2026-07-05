@@ -290,7 +290,7 @@ rule:
 
 ## Troubleshooting Tips
 
-1. **Rule doesn't match**: Use `dump_syntax_tree` to see the actual AST structure
+1. **Rule doesn't match**: Use `ast-grep run --pattern '<code>' --lang <lang> --debug-query=cst` to see the actual AST structure
 2. **Relational rule issues**: Ensure `stopBy: end` is set for deep searches
 3. **Wrong node kind**: Check the language's Tree-sitter grammar for correct kind names
 4. **Metavariable not working**: Ensure it's the only content in its AST node

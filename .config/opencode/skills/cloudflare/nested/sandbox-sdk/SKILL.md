@@ -7,16 +7,16 @@ description: Build sandboxed applications for secure code execution. Load when b
 
 Build secure, isolated code execution environments on Cloudflare Workers.
 
-## FIRST: Verify Installation
+## Setup
 
 ```bash
 npm install @cloudflare/sandbox
-docker info  # Must succeed - Docker required for local dev
+docker info  # Must succeed: Docker is required for local dev
 ```
 
 ## Retrieval Sources
 
-Your knowledge of the Sandbox SDK may be outdated. **Prefer retrieval over pre-training** for any Sandbox SDK task.
+Your knowledge of the Sandbox SDK may be outdated. Prefer retrieval over pre-training for any Sandbox SDK task; fetch the relevant doc page or example before implementing.
 
 | Resource | URL |
 |----------|-----|
@@ -25,11 +25,9 @@ Your knowledge of the Sandbox SDK may be outdated. **Prefer retrieval over pre-t
 | Examples | https://github.com/cloudflare/sandbox-sdk/tree/main/examples |
 | Get Started | https://developers.cloudflare.com/sandbox/get-started/ |
 
-When implementing features, fetch the relevant doc page or example first.
-
 ## Required Configuration
 
-**wrangler.jsonc** (exact - do not modify structure):
+**wrangler.jsonc** (exact, do not modify structure):
 
 ```jsonc
 {
@@ -46,7 +44,7 @@ When implementing features, fetch the relevant doc page or example first.
 }
 ```
 
-**Worker entry** - must re-export Sandbox class:
+**Worker entry** must re-export the Sandbox class:
 
 ```typescript
 import { getSandbox } from '@cloudflare/sandbox';
@@ -67,17 +65,9 @@ export { Sandbox } from '@cloudflare/sandbox';  // Required export
 | Expose port | `await sandbox.exposePort(8080)` |
 | Destroy | `await sandbox.destroy()` |
 
-## Core Patterns
+`exec()` returns `{ stdout, stderr, exitCode, success }`. Full options and return types: [references/api-quick-ref.md](references/api-quick-ref.md).
 
-### Execute Commands
-
-```typescript
-const sandbox = getSandbox(env.Sandbox, 'user-123');
-const result = await sandbox.exec('python --version');
-// result: { stdout, stderr, exitCode, success }
-```
-
-### Code Interpreter (Recommended for AI)
+## Code Interpreter (Recommended for AI)
 
 Use `runCode()` for executing LLM-generated code with rich outputs:
 
@@ -91,18 +81,9 @@ const result = await sandbox.runCode('sum(data)', { context: ctx });
 
 **Languages**: `python`, `javascript`, `typescript`
 
-State persists within context. Create explicit contexts for production.
+State persists within a context. Create explicit contexts for production. `runCode()` errors land in `result.error` rather than throwing; check it instead of catching.
 
-### File Operations
-
-```typescript
-await sandbox.mkdir('/workspace/project', { recursive: true });
-await sandbox.writeFile('/workspace/project/main.py', code);
-const file = await sandbox.readFile('/workspace/project/main.py');
-const files = await sandbox.listFiles('/workspace/project');
-```
-
-## When to Use What
+## exec() vs runCode()
 
 | Need | Use | Why |
 |------|-----|-----|
@@ -132,7 +113,7 @@ RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 EXPOSE 8080  # Required for local dev port exposure
 ```
 
-Keep images lean - affects cold start time.
+Keep images lean: size affects cold start time.
 
 ## Preview URLs (Port Exposure)
 
@@ -159,19 +140,17 @@ See `examples/openai-agents` for complete integration pattern.
 
 ## Sandbox Lifecycle
 
-- `getSandbox()` returns immediately - container starts lazily on first operation
+- `getSandbox()` returns immediately; the container starts lazily on first operation
 - Containers sleep after 10 minutes of inactivity (configurable via `sleepAfter`)
-- Use `destroy()` to immediately free resources
-- Same `sandboxId` always returns same sandbox instance
+- `destroy()` immediately frees resources; call it for temporary sandboxes
+- Same `sandboxId` always returns the same sandbox instance, so key IDs by user/session for multi-user apps
 
 ## Anti-Patterns
 
-- **Don't use internal clients** (`CommandClient`, `FileClient`) - use `sandbox.*` methods
-- **Don't skip the Sandbox export** - Worker won't deploy without `export { Sandbox }`
-- **Don't hardcode sandbox IDs for multi-user** - use user/session identifiers
-- **Don't forget cleanup** - call `destroy()` for temporary sandboxes
+- Don't use internal clients (`CommandClient`, `FileClient`); use `sandbox.*` methods
+- Don't skip `export { Sandbox }` in the Worker entry; the Worker won't deploy without it
 
 ## Detailed References
 
-- **[references/api-quick-ref.md](references/api-quick-ref.md)** - Full API with options and return types
-- **[references/examples.md](references/examples.md)** - Example index with use cases
+- **[references/api-quick-ref.md](references/api-quick-ref.md)**: full API with options and return types
+- **[references/examples.md](references/examples.md)**: example index with use cases

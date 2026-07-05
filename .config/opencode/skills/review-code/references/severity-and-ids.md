@@ -30,10 +30,10 @@ The ID appears in:
 
 For each potential finding:
 
-1. **Evidence** — exact changed lines and observed behavior.
-2. **Rule** — concrete team convention, repo policy, or official docs.
-3. **Impact** — realistic risk (correctness, security, reliability, maintainability).
-4. **Fix** — smallest practical correction.
+1. **Evidence**: exact changed lines and observed behavior.
+2. **Rule**: concrete team convention, repo policy, or official docs.
+3. **Impact**: realistic risk (correctness, security, reliability, maintainability).
+4. **Fix**: smallest practical correction.
 
 ## False-positive gate
 

@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: convert-workout-journal
-description: "Converts raw workout journal notes into Dataview-compatible fitness logs in the Obsidian vault. Use when asked to convert a workout, process a gym log, or journal exercises."
+description: "Converts raw workout journal notes into Dataview-compatible fitness logs in the Obsidian vault. Use when asked to convert a workout, process a gym log, log workouts, or journal exercises."
 ---
 
 # Convert Workout Journal
@@ -10,11 +10,11 @@ Converts raw workout journal notes into the structured fitness tracking system a
 
 ## Important Context
 
-The user logs workouts manually in journal files (`Area/Journal/YYYY-MM-DD.md`) at the gym. When they ask to "journal exercises", "log workouts", or similar, they almost always mean **convert existing raw notes** from journal entries into the structured fitness system — not enter new data from scratch.
+The user logs workouts manually in journal files (`Area/Journal/YYYY-MM-DD.md`) at the gym. When they ask to "journal exercises", "log workouts", or similar, they almost always mean **convert existing raw notes** from journal entries into the structured fitness system, not enter new data from scratch.
 
 ## Scripts
 
-All conversion logic lives in `scripts/` relative to this SKILL.md:
+All conversion logic lives in `scripts/` next to this SKILL.md, i.e. `~/.config/opencode/skills/personal/nested/convert-workout-journal/scripts/`. Invoke with absolute paths; cwd does not matter. Both scripts default to the vault at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Quartz` and accept `--vault-path` to override.
 
 | Script | Purpose |
 |--------|---------|
@@ -31,7 +31,7 @@ Determine the date from the user's request (e.g. "yesterday's workout" → yeste
 ### Step 2: Parse the Journal
 
 ```bash
-python3 scripts/parse_journal.py --date YYYY-MM-DD
+python3 ~/.config/opencode/skills/personal/nested/convert-workout-journal/scripts/parse_journal.py --date YYYY-MM-DD
 ```
 
 JSON output goes to stdout. Warnings and unparsed lines go to stderr.
@@ -39,8 +39,8 @@ JSON output goes to stdout. Warnings and unparsed lines go to stderr.
 ### Step 3: Review Parse Output
 
 Check stderr output for:
-- **Warnings** — exercise name corrections, unknown exercises. Show to user only if an exercise is truly unknown (not just a case correction).
-- **Unparsed lines** — non-workout content from the journal. Ignore unless the user asks.
+- **Warnings**: exercise name corrections, unknown exercises. Show to user only if an exercise is truly unknown (not just a case correction).
+- **Unparsed lines**: non-workout content from the journal. Ignore unless the user asks.
 
 If there's a completely unknown exercise, ask the user to confirm the name and whether it's strength (sets/weight/reps) or duration. Then add it to `scripts/exercises.json`.
 
@@ -49,7 +49,7 @@ If there's a completely unknown exercise, ask the user to confirm the name and w
 Pipe the JSON into the generator. The script auto-suggests a workout name from the parsed data, but you can override it:
 
 ```bash
-python3 scripts/parse_journal.py --date YYYY-MM-DD 2>/dev/null | python3 scripts/generate_workout.py --workout-name "Squat Day"
+python3 ~/.config/opencode/skills/personal/nested/convert-workout-journal/scripts/parse_journal.py --date YYYY-MM-DD 2>/dev/null | python3 ~/.config/opencode/skills/personal/nested/convert-workout-journal/scripts/generate_workout.py --workout-name "Squat Day"
 ```
 
 The generator creates:
@@ -72,6 +72,6 @@ The generator prints a summary. Relay it to the user.
 ## Do NOT
 
 - Delete or overwrite existing exercise notes
-- Run `generate_workout.py` without `--dry-run` if warnings indicate ambiguity
+- Write files while parse warnings indicate ambiguity: run `generate_workout.py --dry-run` first and resolve the warnings
 - Use DataviewJS (`$= ...`)
 - Add H1 headings to workout or exercise files

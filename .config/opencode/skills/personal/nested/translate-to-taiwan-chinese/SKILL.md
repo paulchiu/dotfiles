@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: translate-to-taiwan-chinese
-description: "Translate text into Taiwan Traditional Chinese for a non-technical 70-year-old parent. Use when asked to translate or localise for a Taiwanese elder, 'for my mum/dad', '繁體中文', or '正體中文'."
+description: "Translates text into Taiwan Traditional Chinese for a non-technical 70-year-old parent. Use when asked to translate or localise for a Taiwanese elder, 'for my mum/dad', 'Taiwan Chinese', '繁體中文', or '正體中文'."
 ---
 
 # Translate to Taiwan Traditional Chinese (for a 70-year-old parent)

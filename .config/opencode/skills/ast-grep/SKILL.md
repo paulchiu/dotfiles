@@ -1,42 +1,28 @@
 ---
 model: sonnet
 name: ast-grep
-description: "Write ast-grep rules for structural code search using AST patterns. Use when searching for code patterns, language constructs, or queries beyond text search."
+description: "Write and test ast-grep rules for structural code search using AST patterns. Use when asked to find code patterns, language constructs, or structural matches that text search or grep cannot express (e.g. \"find async functions without error handling\", \"find calls with a specific argument shape\", \"write an ast-grep rule\")."
 ---
 
 # ast-grep Code Search
 
-## Overview
+Translate natural language queries into ast-grep rules. ast-grep matches code by AST structure rather than text, so it can express queries like "async functions that lack try-catch" that grep cannot.
 
-This skill helps translate natural language queries into ast-grep rules for structural code search. ast-grep uses Abstract Syntax Tree (AST) patterns to match code based on its structure rather than just text, enabling powerful and precise code search across large codebases.
+## When to Use
 
-## When to Use This Skill
+- Structural matching (e.g., "find all async functions that don't have error handling")
+- Locating specific language constructs (e.g., "find all calls with specific parameters")
+- Any search that depends on code structure rather than text
 
-Use this skill when users:
-- Need to search for code patterns using structural matching (e.g., "find all async functions that don't have error handling")
-- Want to locate specific language constructs (e.g., "find all function calls with specific parameters")
-- Request searches that require understanding code structure rather than just text
-- Ask to search for code with particular AST characteristics
-- Need to perform complex code queries that traditional text search cannot handle
+## Workflow
 
-## General Workflow
+### 1. Understand the query
 
-Follow this process to help users write effective ast-grep rules:
+Pin down: the exact pattern or structure, the language, edge cases or variations, and what to exclude. Ask if ambiguous.
 
-### Step 1: Understand the Query
+### 2. Create example code
 
-Clearly understand what the user wants to find. Ask clarifying questions if needed:
-- What specific code pattern or structure are they looking for?
-- Which programming language?
-- Are there specific edge cases or variations to consider?
-- What should be included or excluded from matches?
-
-### Step 2: Create Example Code
-
-Write a simple code snippet that represents what the user wants to match. Save this to a temporary file for testing.
-
-**Example:**
-If searching for "async functions that use await", create a test file:
+Write a minimal snippet that should match, and save it to a temp file. You will validate the rule against this before touching the real codebase.
 
 ```javascript
 // test_example.js
@@ -46,18 +32,19 @@ async function example() {
 }
 ```
 
-### Step 3: Write the ast-grep Rule
+### 3. Write the rule
 
-Translate the pattern into an ast-grep rule. Start simple and add complexity as needed.
+Start with the simplest rule that could work, then add complexity only as needed:
 
-**Key principles:**
-- Always use `stopBy: end` for relational rules (`inside`, `has`) to ensure search goes to the end of the direction
-- Use `pattern` for simple structures
-- Use `kind` with `has`/`inside` for complex structures
-- Break complex queries into smaller sub-rules using `all`, `any`, or `not`
+1. Try a `pattern` first (direct code matching, e.g. `console.log($ARG)`)
+2. If that fails, match the node type with `kind`
+3. Add relational rules (`has`, `inside`) for context ("function containing await")
+4. Combine with composite rules (`all`, `any`, `not`) for logic ("has await but no try-catch")
 
-**Example rule file (test_rule.yml):**
+**Always add `stopBy: end` to relational rules** (`inside`, `has`). Without it, the search stops at the first non-matching neighbor instead of traversing the whole subtree. This is the single most common cause of missed matches.
+
 ```yaml
+# test_rule.yml
 id: async-with-await
 language: javascript
 rule:
@@ -67,13 +54,12 @@ rule:
     stopBy: end
 ```
 
-See `references/rule_reference.md` for comprehensive rule documentation.
+See `references/rule_reference.md` for the full rule syntax: atomic rules (`pattern`, `kind`, `regex`, `nthChild`, `range`), relational rules, composite rules, and metavariable forms (`$VAR`, `$$VAR`, `$$$MULTI`, `$_NONCAPTURING`).
 
-### Step 4: Test the Rule
+### 4. Test the rule against the example
 
-Use ast-grep CLI to verify the rule matches the example code. There are two main approaches:
+**Option A: inline rule via stdin (quick iterations)**
 
-**Option A: Test with inline rules (for quick iterations)**
 ```bash
 echo "async function test() { await fetch(); }" | ast-grep scan --inline-rules "id: test
 language: javascript
@@ -84,241 +70,116 @@ rule:
     stopBy: end" --stdin
 ```
 
-**Option B: Test with rule files (recommended for complex rules)**
+**Option B: rule file (recommended for complex rules)**
+
 ```bash
 ast-grep scan --rule test_rule.yml test_example.js
 ```
 
-**Debugging if no matches:**
-1. Simplify the rule (remove sub-rules)
-2. Add `stopBy: end` to relational rules if not present
-3. Use `--debug-query` to understand the AST structure (see below)
-4. Check if `kind` values are correct for the language
+Add `--json` to either for structured output.
 
-### Step 5: Search the Codebase
+**If nothing matches, debug in this order:**
 
-Once the rule matches the example code correctly, search the actual codebase:
-
-**For simple pattern searches:**
-```bash
-ast-grep run --pattern 'console.log($ARG)' --lang javascript /path/to/project
-```
-
-**For complex rule-based searches:**
-```bash
-ast-grep scan --rule my_rule.yml /path/to/project
-```
-
-**For inline rules (without creating files):**
-```bash
-ast-grep scan --inline-rules "id: my-rule
-language: javascript
-rule:
-  pattern: \$PATTERN" /path/to/project
-```
-
-## ast-grep CLI Commands
-
-### Inspect Code Structure (--debug-query)
-
-Dump the AST structure to understand how code is parsed:
+1. Simplify: strip sub-rules until something matches, then re-add one at a time
+2. Confirm every relational rule has `stopBy: end`
+3. Dump the AST to see the real structure and node kinds:
 
 ```bash
+# Structure of the target code (all nodes, incl. punctuation)
 ast-grep run --pattern 'async function example() { await fetch(); }' \
-  --lang javascript \
-  --debug-query=cst
-```
+  --lang javascript --debug-query=cst
 
-**Available formats:**
-- `cst`: Concrete Syntax Tree (shows all nodes including punctuation)
-- `ast`: Abstract Syntax Tree (shows only named nodes)
-- `pattern`: Shows how ast-grep interprets your pattern
-
-**Use this to:**
-- Find the correct `kind` values for nodes
-- Understand the structure of code you want to match
-- Debug why patterns aren't matching
-
-**Example:**
-```bash
-# See the structure of your target code
-ast-grep run --pattern 'class User { constructor() {} }' \
-  --lang javascript \
-  --debug-query=cst
-
-# See how ast-grep interprets your pattern
+# How ast-grep interprets your pattern (checks metavariable detection)
 ast-grep run --pattern 'class $NAME { $$$BODY }' \
-  --lang javascript \
-  --debug-query=pattern
+  --lang javascript --debug-query=pattern
 ```
 
-### Test Rules (scan with --stdin)
+Formats: `cst` (all nodes including punctuation), `ast` (named nodes only), `pattern` (pattern interpretation).
 
-Test a rule against code snippet without creating files:
+4. Verify `kind` values against the dumped tree; kinds come from the language's Tree-sitter grammar and vary by language
+5. Check metavariables: a metavariable must be the entire text of its AST node (`obj.on$EVENT` and `"Hello $WORLD"` do not work)
 
-```bash
-echo "const x = await fetch();" | ast-grep scan --inline-rules "id: test
-language: javascript
-rule:
-  pattern: await \$EXPR" --stdin
-```
+### 5. Search the codebase
 
-**Add --json for structured output:**
-```bash
-echo "const x = await fetch();" | ast-grep scan --inline-rules "..." --stdin --json
-```
-
-### Search with Patterns (run)
-
-Simple pattern-based search for single AST node matches:
+Only after the rule matches the example correctly.
 
 ```bash
-# Basic pattern search
-ast-grep run --pattern 'console.log($ARG)' --lang javascript .
+# Simple single-node pattern: use run
+ast-grep run --pattern 'console.log($ARG)' --lang javascript /path/to/project
 
-# Search specific files
-ast-grep run --pattern 'class $NAME' --lang python /path/to/project
-
-# JSON output for programmatic use
-ast-grep run --pattern 'function $NAME($$$)' --lang javascript --json .
-```
-
-**When to use:**
-- Simple, single-node matches
-- Quick searches without complex logic
-- When you don't need relational rules (inside/has)
-
-### Search with Rules (scan)
-
-YAML rule-based search for complex structural queries:
-
-```bash
-# With rule file
+# Complex rule (relational/composite): use scan
 ast-grep scan --rule my_rule.yml /path/to/project
 
-# With inline rules
-ast-grep scan --inline-rules "id: find-async
+# Or scan with the inline rule, no file needed
+ast-grep scan --inline-rules "id: my-rule
 language: javascript
 rule:
   kind: function_declaration
   has:
     pattern: await \$EXPR
     stopBy: end" /path/to/project
-
-# JSON output
-ast-grep scan --rule my_rule.yml --json /path/to/project
 ```
 
-**When to use:**
-- Complex structural searches
-- Relational rules (inside, has, precedes, follows)
-- Composite logic (all, any, not)
-- When you need the power of full YAML rules
+**run vs scan:** `run` takes a bare pattern, good for quick single-node matches. `scan` takes a full YAML rule, required for relational rules (`inside`, `has`, `precedes`, `follows`) and composite logic (`all`, `any`, `not`). Add `--json` to either for programmatic use.
 
-**Tip:** For relational rules (inside/has), always add `stopBy: end` to ensure complete traversal.
+## Shell Escaping for Inline Rules
 
-## Tips for Writing Effective Rules
+The shell interprets `$` as a variable, so in double-quoted `--inline-rules` strings escape metavariables as `\$VAR`, or wrap the whole rule in single quotes:
 
-### Always Use stopBy: end
-
-For relational rules, always use `stopBy: end` unless there's a specific reason not to:
-
-```yaml
-has:
-  pattern: await $EXPR
-  stopBy: end
-```
-
-This ensures the search traverses the entire subtree rather than stopping at the first non-matching node.
-
-### Start Simple, Then Add Complexity
-
-Begin with the simplest rule that could work:
-1. Try a `pattern` first
-2. If that doesn't work, try `kind` to match the node type
-3. Add relational rules (`has`, `inside`) as needed
-4. Combine with composite rules (`all`, `any`, `not`) for complex logic
-
-### Use the Right Rule Type
-
-- **Pattern**: For simple, direct code matching (e.g., `console.log($ARG)`)
-- **Kind + Relational**: For complex structures (e.g., "function containing await")
-- **Composite**: For logical combinations (e.g., "function with await but not in try-catch")
-
-### Debug with AST Inspection
-
-When rules don't match:
-1. Use `--debug-query=cst` to see the actual AST structure
-2. Check if metavariables are being detected correctly
-3. Verify the node `kind` matches what you expect
-4. Ensure relational rules are searching in the right direction
-
-### Escaping in Inline Rules
-
-When using `--inline-rules`, escape metavariables in shell commands:
-- Use `\$VAR` instead of `$VAR` (shell interprets `$` as variable)
-- Or use single quotes: `'$VAR'` works in most shells
-
-**Example:**
 ```bash
-# Correct: escaped $
-ast-grep scan --inline-rules "rule: {pattern: 'console.log(\$ARG)'}" .
+# Escaped $ inside double quotes
+ast-grep scan --inline-rules "id: log-call
+language: javascript
+rule:
+  pattern: console.log(\$ARG)" .
 
-# Or use single quotes
-ast-grep scan --inline-rules 'rule: {pattern: "console.log($ARG)"}' .
+# Or single quotes, no escaping needed
+ast-grep scan --inline-rules 'id: log-call
+language: javascript
+rule:
+  pattern: console.log($ARG)' .
 ```
 
-## Common Use Cases
+Inline rules still require `id` and `language` keys, same as rule files.
 
-### Find Functions with Specific Content
+## Common Recipes
 
 Find async functions that use await:
-```bash
-ast-grep scan --inline-rules "id: async-await
-language: javascript
+
+```yaml
 rule:
   all:
     - kind: function_declaration
     - has:
-        pattern: await \$EXPR
-        stopBy: end" /path/to/project
+        pattern: await $EXPR
+        stopBy: end
 ```
-
-### Find Code Inside Specific Contexts
 
 Find console.log inside class methods:
-```bash
-ast-grep scan --inline-rules "id: console-in-class
-language: javascript
+
+```yaml
 rule:
-  pattern: console.log(\$\$\$)
+  pattern: console.log($$$)
   inside:
     kind: method_definition
-    stopBy: end" /path/to/project
+    stopBy: end
 ```
 
-### Find Code Missing Expected Patterns
-
 Find async functions without try-catch:
-```bash
-ast-grep scan --inline-rules "id: async-no-trycatch
-language: javascript
+
+```yaml
 rule:
   all:
     - kind: function_declaration
     - has:
-        pattern: await \$EXPR
+        pattern: await $EXPR
         stopBy: end
     - not:
         has:
-          pattern: try { \$\$\$ } catch (\$E) { \$\$\$ }
-          stopBy: end" /path/to/project
+          pattern: try { $$$ } catch ($E) { $$$ }
+          stopBy: end
 ```
 
 ## Resources
 
-### references/
-Contains detailed documentation for ast-grep rule syntax:
-- `rule_reference.md`: Comprehensive ast-grep rule documentation covering atomic rules, relational rules, composite rules, and metavariables
-
-Load these references when detailed rule syntax information is needed.
+- `references/rule_reference.md`: full ast-grep rule documentation (atomic, relational, and composite rules, `stopBy`/`field` options, metavariables, troubleshooting). Load it when you need syntax detail beyond this file.

@@ -130,23 +130,23 @@ In agent mode, all command output is wrapped in a metadata envelope:
 
 ## Key Best Practices (Agent Mode)
 
-1. **Always specify `--from`** — most commands default to 1h but be explicit
-2. **Start narrow, widen later** — begin with 1h, expand only if needed
-3. **Filter at the API level** — use `--tags`, `--query`, `--name` instead of local parsing
-4. **Use `aggregate` for counts** — don't fetch all logs and count them yourself
-5. **APM durations are in NANOSECONDS** — 1s = 1,000,000,000
-6. **Use `--yes` for automation** — or rely on agent mode auto-approval
+1. **Always specify `--from`**: most commands default to 1h but be explicit
+2. **Start narrow, widen later**: begin with 1h, expand only if needed
+3. **Filter at the API level**: use `--tags`, `--query`, `--name` instead of local parsing
+4. **Use `aggregate` for counts**: don't fetch all logs and count them yourself
+5. **APM durations are in NANOSECONDS**: 1s = 1,000,000,000
+6. **Use `--yes` for automation**, or rely on agent mode auto-approval
 7. **Check `pup agent schema`** when unsure about flags
-8. **Chain queries** — aggregate first to find patterns, then search for specifics
+8. **Chain queries**: aggregate first to find patterns, then search for specifics
 
 ## Anti-Patterns to Avoid
 
-1. **Don't omit `--from`** on time-series queries — unexpected ranges or errors
-2. **Don't use `--limit=1000` as a first step** — start small and refine
+1. **Don't omit `--from`** on time-series queries, it causes unexpected ranges or errors
+2. **Don't use `--limit=1000` as a first step**: start small and refine
 3. **Don't list all monitors without filters** in large orgs (>10k monitors)
-4. **Don't assume durations are in seconds** — APM uses nanoseconds
-5. **Don't fetch raw logs to count them** — use `pup logs aggregate --compute=count`
-6. **Don't retry 401/403 errors** — re-authenticate or check permissions instead
+4. **Don't assume durations are in seconds**: APM uses nanoseconds
+5. **Don't fetch raw logs to count them**: use `pup logs aggregate --compute=count`
+6. **Don't retry 401/403 errors**: re-authenticate or check permissions instead
 7. **Don't use `--from=30d`** unless you specifically need a month of data
 
 ## Architecture Notes

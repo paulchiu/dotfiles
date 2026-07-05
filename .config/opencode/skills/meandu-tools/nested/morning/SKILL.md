@@ -19,17 +19,18 @@ TODAY=$(date +%Y-%m-%d)
 BRIEF=/Users/paul/meandu/Area/Journal/${TODAY}.md
 ```
 
-- If `$BRIEF` doesn't exist or doesn't contain `<!-- daily-brief:start -->`: tell Paul "No brief for today yet — want me to run `/daily-brief` first?" and stop until he confirms.
-- Otherwise read the file and extract everything between the markers.
+- If `$BRIEF` doesn't exist or doesn't contain `<!-- daily-brief:start -->`: tell Paul "No brief for today yet, want me to run `/daily-brief` first?" and stop until he confirms.
+- Otherwise read the file and extract everything between the `<!-- daily-brief:start -->` / `<!-- daily-brief:end -->` markers.
+- If invoked with an argument (the brief's Suggested next lines emit these, e.g. `/morning prep <event title>`): skip the full loop and handle just that item. For `prep <event title>`, run the Meeting Prep *Draft talking points* action for that event, then do Step 4's brief update for that item only.
 
 ### Step 2: Parse sections
 
 From the brief block, identify items in each section:
 
-- **Decisions Needed** — bullet items, each with a Source link and Suggested next.
-- **Action Items Owed** — three sub-buckets: Overdue/due today, Tied to today's meetings, Surfaced from recent 1:1s.
-- **Suggested Linear Tickets to Create** — Slack candidates, each with a permalink.
-- **Meeting Prep** — one heading per event.
+- **Decisions Needed**: bullet items, each with a Source link and Suggested next.
+- **Action Items Owed**: three sub-buckets: Overdue/due today, Tied to today's meetings, Surfaced from recent 1:1s.
+- **Suggested Linear Tickets to Create**: Slack candidates, each with a permalink.
+- **Meeting Prep**: one heading per event.
 
 Skip handled items: any line annotated with `[handled: …]` from a previous `/morning` run.
 
@@ -50,24 +51,24 @@ If Paul says "stop" / "that's enough" → break the loop, go to Step 4.
 
 **Decisions Needed**
 - *Reply on Slack* → draft via `mcp__claude_ai_Slack__slack_send_message_draft`. Show the draft to Paul; never send without explicit "send it".
-- *Defer to <date>* → append `- [ ] <topic> 📅 <date>` to `Area/Tasks.md` under the Manual section.
+- *Defer to <date>* → append `- [ ] <topic> 📅 <date>` to `/Users/paul/meandu/Area/Tasks.md` under the Manual section.
 - *Discuss* → open the conversation with Paul; once it concludes, resume the loop where it left off.
 - *Mark handled* → annotate `[handled: <one-line summary>]` in the brief.
 
 **Suggested Linear Tickets to Create**
-- *Create ticket* → invoke the `linear-write` skill with the Slack permalink as input. Show the draft ticket; require Paul to confirm before saving.
+- *Create ticket* → follow the `linear-write` skill (read `../linear-write/SKILL.md` relative to this file) with the Slack permalink as input. Show the draft ticket; require Paul to confirm before saving.
 - *Skip / not a bug* → annotate `[skipped: <reason>]` in the brief.
 - *Discuss first* → talk it through, then re-offer.
 
 **Action Items Owed**
-- *Mark done* → edit `Area/Tasks.md` to flip the matching `- [ ]` line to `- [x]` and append ` ✅ ${TODAY}`. Match on the line's verbatim text from the brief.
+- *Mark done* → edit `/Users/paul/meandu/Area/Tasks.md` to flip the matching `- [ ]` line to `- [x]` and append ` ✅ ${TODAY}`. Match on the line's verbatim text from the brief.
 - *Reschedule* → edit the `📅 YYYY-MM-DD` date on that line.
 - *Reassign / hand off* → draft a Slack message to the person and tag them.
 - *Discuss / skip*.
 
 **Meeting Prep**
 - *Show full prep* → read the linked Granola note, surface any open commitments, list Linear tickets tagged with the attendees.
-- *Draft talking points* → write a `YYYY-MM-DD <event-title>.md` prep note in `Area/Journal/Daily Prep/` (create the folder if missing), using the daily-brief Meeting Prep bullets as a starting outline. Don't overwrite if the file already exists.
+- *Draft talking points* → write a `YYYY-MM-DD <event-title>.md` prep note in `/Users/paul/meandu/Area/Journal/Daily Prep/` (create the folder if missing), using the daily-brief Meeting Prep bullets as a starting outline. Don't overwrite if the file already exists.
 - *Skip*.
 
 ### Step 4: Wrap up
@@ -87,8 +88,8 @@ End with the absolute path to `$BRIEF` so Paul can click through.
 
 ## Notes
 
-- One question at a time. Don't dump option menus; offer 2–3 likely actions with short labels.
+- One question at a time. Don't dump option menus; offer 2-3 likely actions with short labels.
 - Never auto-send to Slack or auto-create Linear tickets. Drafts only, with explicit confirmation.
 - If a Tasks.md edit can't find the matching `- [ ]` line (text drifted): tell Paul, don't guess.
 - Australian spelling.
-- This skill is interactive only — don't invoke it from cron.
+- This skill is interactive only: don't invoke it from cron.

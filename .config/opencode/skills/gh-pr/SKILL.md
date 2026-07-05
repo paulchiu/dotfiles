@@ -24,7 +24,7 @@ Generate a pull request description from the current branch's changes compared t
 
 ### Step 2: Generate the PR Description
 
-Output exactly this structure — no wrapping code fences, no preamble, no commentary:
+Output exactly this structure: no wrapping code fences, no preamble, no commentary.
 
 ```
 type(scope): Description
@@ -52,7 +52,7 @@ Write exactly four dashes: `----`
 **If a PR template was found:**
 - Fill in every section of the template with specific details from the diff
 - Keep all original markdown formatting, checkboxes, and HTML elements intact
-- Replace all placeholder text — leave nothing unfilled
+- Replace all placeholder text, leave nothing unfilled
 - Be specific: reference actual file names, function names, and changes
 
 **If no template was found (personal projects):**
@@ -108,7 +108,7 @@ PR reviewers don't have access to the adversarial / persona-lens / Codex / Claud
 
 **Persona names are never quoted.** Persona-lens reviews are a focus reshuffle, not a real reviewer's signoff. Naming the persona (Ben Thompson, Yofamb, any real or invented person used as a lens) in the PR body misrepresents simulated review as actual representation or approval. Drop the name and keep the substance.
 
-**If a "what was considered but not implemented" rollup is genuinely useful** (e.g., reviewers might wonder why X wasn't done), add it as a plain "Scope" or "Considered, not implemented" section written in the author's voice, framed as the author's own design decisions. Each line states the choice and the reason, with no reference to which review round raised it. Default: no such section — most deferrals belong in follow-up tickets, not PR bodies.
+**If a "what was considered but not implemented" rollup is genuinely useful** (e.g., reviewers might wonder why X wasn't done), add it as a plain "Scope" or "Considered, not implemented" section written in the author's voice, framed as the author's own design decisions. Each line states the choice and the reason, with no reference to which review round raised it. Default: no such section; most deferrals belong in follow-up tickets, not PR bodies.
 
 Bad:
 - `## Review consensus (cxd adversarial + Ben Thompson lens)`
@@ -122,31 +122,7 @@ Good (when a scope rollup is warranted):
 
 ### Stacked PRs
 
-For PRs in a stacked series (each PR's base is another PR's branch, not `main`), two adjustments apply.
-
-**Body prepend.** Add this admonition above the template body:
-
-```
-> [!NOTE]
-> **PR N of M** in the <short stack name> stack. Stacked on #<parent-number> (or `main` for PR 1).
->
-> Review bottom-up (PR 1 → PR M):
-> 1. #NNNN — <short title>
-> 2. #NNNN — <short title>
-> ...
-```
-
-Format rules:
-
-- Use the `> [!NOTE]` GitHub admonition. Do not use a `## Stacked PRs` heading or a `---` separator before the body.
-- Keep one blank `>` line between the "Stacked on" line and "Review bottom-up".
-- Every list line is prefixed with `> ` (the list lives inside the blockquote).
-- Each item reads `#<number> — <short title>`. The current PR is `**#<number> — <short title> ← this PR**`.
-- "Stacked on" points to the immediate parent PR, not the eventual base. PR 1 uses `` `main` ``.
-
-**Base branch.** Pass `--base <parent-branch>` on `gh pr create` for every PR except PR 1. PR 1 targets `main`; each subsequent PR targets its predecessor's branch.
-
-**Numbering.** PR numbers are assigned at `gh pr create` time. Create PRs 1 → M first (bodies can omit the numbered list initially), then edit each body with the final numbers once the whole stack exists.
+If this PR is part of a stacked series (its base is another PR's branch, not `main`), read [references/stacked-prs.md](references/stacked-prs.md) for the required body prepend, `--base` flag, and numbering workflow. Skip it for ordinary PRs targeting `main`.
 
 ### Step 3: Create the Draft PR
 

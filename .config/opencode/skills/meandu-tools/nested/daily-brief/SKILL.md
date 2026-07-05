@@ -15,6 +15,8 @@ Designed for headless `claude -p` invocation from a 3am cron, but also runs inte
 ```
 TODAY=$(date +%Y-%m-%d)
 YESTERDAY=$(date -v-1d +%Y-%m-%d)
+THIS_MONTH=$(date +%Y-%m)
+LAST_MONTH=$(date -v-1m +%Y-%m)
 WINDOW_START_ISO=$(date -v-24H -u +%Y-%m-%dT%H:%M:%SZ)
 NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 OUT=/Users/paul/meandu/Area/Journal/${TODAY}.md
@@ -53,28 +55,28 @@ C041AFTTH3L
 
 Run all five fetches in parallel. If any single source errors, append `<source>: <error>` to `$LOG` and continue. Never abort the whole brief because one source is down.
 
-**1a. Slack — unread mentions + threads I'm in (last 24h)**
+**1a. Slack: unread mentions + threads I'm in (last 24h)**
 - Resolve Paul's Slack user ID once: `mcp__claude_ai_Slack__slack_search_users` with `query: "paul@meandu.com"`. Cache the ID for the rest of this run.
 - Mentions of Paul: `mcp__claude_ai_Slack__slack_search_public_and_private` with `query: "<@PAUL_ID> after:${YESTERDAY}"`.
 - Threads Paul posted in: same tool with `query: "from:<@PAUL_ID> after:${YESTERDAY}"`. For each hit, read the parent thread via `slack_read_thread` to capture replies that came in overnight.
 - Capture per item: channel name, ts, snippet (≤200 chars), permalink, whether anyone is waiting on Paul's reply (last message in thread is from someone else, addressed to Paul or with a `?`).
 
-**1b. Linear — assigned + subscribed + overnight changes**
+**1b. Linear: assigned + subscribed + overnight changes**
 - `mcp__claude_ai_Linear__list_issues` with `assignee: me`, exclude Done/Cancelled, `limit: 25`.
-- `mcp__claude_ai_Linear__list_issues` with `subscriber: me`, `updatedAfter: ${WINDOW_START_ISO}`, `limit: 25` — catches mentions on subscribed tickets and overnight status changes.
+- `mcp__claude_ai_Linear__list_issues` with `subscriber: me`, `updatedAfter: ${WINDOW_START_ISO}`, `limit: 25`; catches mentions on subscribed tickets and overnight status changes.
 - For each issue: capture id, title, team, state, updatedAt, last comment author (use `list_comments` only when the title alone isn't enough to know what changed).
 
-**1c. Google Calendar — today's events**
+**1c. Google Calendar: today's events**
 - `mcp__claude_ai_Google_Calendar__list_calendars` once; identify the primary calendar.
 - `mcp__claude_ai_Google_Calendar__list_events` for primary, `timeMin: ${TODAY}T00:00:00+10:00`, `timeMax: ${TODAY}T23:59:59+10:00` (Paul is AEST, see MEMORY).
 - Capture per event: title, start/end, attendees (names only), description, conferencing link, any attachments.
 
-**1d. Google Drive — docs shared with me in last 24h**
+**1d. Google Drive: docs shared with me in last 24h**
 - `mcp__claude_ai_Google_Drive__list_recent_files` with `pageSize: 25`.
 - Keep entries whose `sharedWithMeTime` (or fallback `modifiedTime`) is within the last 24h **and** owner is not Paul.
 - Capture: name, owner, mime type, webViewLink.
 
-**1e. Obsidian — open action items**
+**1e. Obsidian: open action items**
 - Read `/Users/paul/meandu/Area/Tasks.md` directly with `Read`.
 - Parse every line starting `- [ ]`. Extract:
   - `📅 YYYY-MM-DD` → due date
@@ -101,23 +103,23 @@ For each channel ID in the bug-report list above:
 
 For each of today's events with ≥2 attendees:
 
-- Look for a Granola note matching the event title in `Area/Granola/${YYYY-MM}/` from today or yesterday.
+- Look for a Granola note matching the event title in `Area/Granola/${THIS_MONTH}/` from today or yesterday.
 - If no Granola note **and** the event has no description/agenda, flag as "prep gap".
 - For 1:1 events (see 1:1 detection rule in 2c), always include in Meeting Prep with a summary of the last 1:1's open commitments.
 
 **2c. Overdue action items from past 1:1s**
 
-**1:1 detection rule** (used in both 2b and 2c). A Granola filename in `Area/Granola/${YYYY-MM}/*.md` (or last month's folder if within 14 days) is treated as a 1:1 if **any** of:
+**1:1 detection rule** (used in both 2b and 2c). A Granola filename in the scanned folders (see Scan below) is treated as a 1:1 if **any** of:
 
 - Title (after the `YYYY-MM-DD ` date prefix) contains the literal `1:1` or `1-on-1`.
-- Title matches `<X> _ Paul` (Paul as second party — Granola substitutes `/` with `_` in filenames). Examples: `Edgardo _ Paul.md`, `Sophie Chen _ Paul.md`.
+- Title matches `<X> _ Paul` (Paul as second party; Granola substitutes `/` with `_` in filenames). Examples: `Edgardo _ Paul.md`, `Sophie Chen _ Paul.md`.
 - Title matches `Paul _ <Y>` (Paul as first party). Examples: `Paul _ Tal.md`, `Paul _ Kim.md`.
 
-Important: `<X> x me&u` (e.g. `Treetop Golf x me&u`) and `me&u _ <X>` are **customer/venue meetings, not 1:1s** — exclude them.
+Important: `<X> x me&u` (e.g. `Treetop Golf x me&u`) and `me&u _ <X>` are **customer/venue meetings, not 1:1s**: exclude them.
 
 **Scan**:
 
-- Walk `Area/Granola/${YYYY-MM}/*.md` and `Area/Granola/$(date -v-1m +%Y-%m)/*.md` (last month if within 14-day window). For each filename, apply the rule above.
+- Walk `Area/Granola/${THIS_MONTH}/*.md`. Also walk `Area/Granola/${LAST_MONTH}/*.md` when today is within the first 14 days of the month (so 1:1s spanning the month boundary aren't missed). For each filename, apply the rule above.
 - For each file that qualifies, read it and extract:
   - Lines beginning `- [ ]`
   - Lines beginning `Action item:` / `Action:` / `TODO:` / `Follow up:` (case-insensitive)
@@ -223,8 +225,8 @@ Useful for validating prompt changes without clobbering today's note.
 
 ## Notes
 
-- Keep section bodies tight. The brief is for skim, not narrative — bullets over paragraphs.
+- Keep section bodies tight. The brief is for skim, not narrative: bullets over paragraphs.
 - Australian spelling.
-- Don't paraphrase Slack/Linear content beyond the snippet — quote directly so attribution is preserved.
+- Don't paraphrase Slack/Linear content beyond the snippet; quote directly so attribution is preserved.
 - Channel names (not IDs) in the rendered output. Resolve via the Slack search/read response.
 - Times in AEST (UTC+10) when shown to the user; use ISO UTC only in metadata.

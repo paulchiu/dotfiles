@@ -10,9 +10,9 @@ references:
 
 # Cloudflare Platform Skill (router)
 
-Consolidated skill for building on the Cloudflare platform. **First** check the Deep-Dive Sub-Skills table below — for those topics the nested skill is the curated source of truth and supersedes the thin `references/` stub. Otherwise use the decision trees to find the right product, then load detailed references.
+Consolidated skill for building on the Cloudflare platform. **First** check the Deep-Dive Sub-Skills table below: for those topics the nested skill is the curated source of truth and supersedes the thin `references/` stub. Otherwise use the decision trees to find the right product, then load detailed references.
 
-Your knowledge of Cloudflare APIs, types, limits, and pricing may be outdated. **Prefer retrieval over pre-training** — the references in this skill are starting points, not source of truth.
+Your knowledge of Cloudflare APIs, types, limits, and pricing may be outdated. **Prefer retrieval over pre-training**: the references in this skill are starting points, not source of truth.
 
 ## Deep-Dive Sub-Skills
 
@@ -20,18 +20,16 @@ These nested skills are richer than the matching `references/` stub. When the ta
 
 | When the task is about… | Read |
 |--------------------------|------|
-| Building AI agents on Workers — stateful agents, durable workflows, real-time WebSocket apps, scheduled tasks, MCP servers, chat/voice agents, browser automation, React hooks | `nested/agents-sdk/SKILL.md` |
-| Durable Objects — stateful coordination (chat rooms, multiplayer, booking), RPC methods, SQLite storage, alarms, WebSockets, or reviewing DO code | `nested/durable-objects/SKILL.md` |
-| Sandboxed code execution — AI code interpreters, CI/CD runners, interactive dev environments, running untrusted code, preview URLs | `nested/sandbox-sdk/SKILL.md` |
-| Transactional email — sending (Workers binding or REST API), Email Routing, Agents SDK email, deliverability/SPF/DKIM/DMARC, wrangler email setup (even simple "add email to my Worker") | `nested/cloudflare-email-service/SKILL.md` |
-| Wrangler CLI — deploying/developing/managing Workers, KV, R2, D1, Vectorize, Hyperdrive, Workers AI, Containers, Queues, Workflows, Pipelines, Secrets Store | `nested/wrangler/SKILL.md` |
-| Authoring or reviewing Worker code against production best-practices — streaming, floating promises, global state, secrets, bindings, observability, wrangler.jsonc anti-patterns | `nested/workers-best-practices/SKILL.md` |
+| Building AI agents on Workers: stateful agents, durable workflows, real-time WebSocket apps, scheduled tasks, MCP servers, chat/voice agents, browser automation, React hooks | `nested/agents-sdk/SKILL.md` |
+| Durable Objects: stateful coordination (chat rooms, multiplayer, booking), RPC methods, SQLite storage, alarms, WebSockets, or reviewing DO code | `nested/durable-objects/SKILL.md` |
+| Sandboxed code execution: AI code interpreters, CI/CD runners, interactive dev environments, running untrusted code, preview URLs | `nested/sandbox-sdk/SKILL.md` |
+| Transactional email: sending (Workers binding or REST API), Email Routing, Agents SDK email, deliverability/SPF/DKIM/DMARC, wrangler email setup (even simple "add email to my Worker") | `nested/cloudflare-email-service/SKILL.md` |
+| Wrangler CLI: deploying/developing/managing Workers, KV, R2, D1, Vectorize, Hyperdrive, Workers AI, Containers, Queues, Workflows, Pipelines, Secrets Store | `nested/wrangler/SKILL.md` |
+| Authoring or reviewing Worker code against production best-practices: streaming, floating promises, global state, secrets, bindings, observability, wrangler.jsonc anti-patterns | `nested/workers-best-practices/SKILL.md` |
 
 For everything else, continue with the decision trees and Product Index below.
 
 ## Retrieval Sources
-
-Fetch the **latest** information before citing specific numbers, API signatures, or configuration options. Do not rely on baked-in knowledge or these reference files alone.
 
 | Source | How to retrieve | Use for |
 |--------|----------------|---------|
@@ -40,7 +38,7 @@ Fetch the **latest** information before citing specific numbers, API signatures,
 | Wrangler config schema | `node_modules/wrangler/config-schema.json` | Config fields, binding shapes, allowed values |
 | Product changelogs | `https://developers.cloudflare.com/changelog/` | Recent changes to limits, features, deprecations |
 
-When a reference file and the docs disagree, **trust the docs**. This is especially important for: numeric limits, pricing tiers, type signatures, and configuration options.
+Fetch the **latest** information before citing numeric limits, pricing tiers, type signatures, or configuration options. When a reference file and the docs disagree, **trust the docs**.
 
 ## Quick Decision Trees
 

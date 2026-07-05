@@ -25,6 +25,7 @@ nex pane create [--path /dir] [--name <label>] [--target <name-or-uuid>]
 nex pane close [--target <name-or-uuid>] [--workspace <name-or-uuid>]
 nex pane name <name>
 nex pane send [--bare] --target <name-or-uuid> [--workspace <name-or-uuid>] <command...>
+nex pane send-key --target <name-or-uuid> <key>   # e.g. Return
 nex pane move [left|right|up|down]
 nex pane move-to-workspace --to-workspace <name-or-uuid> [--create]
 nex pane list [--workspace <name-or-id> | --current] [--json] [--no-header]
@@ -79,7 +80,7 @@ holds the ordered workspace IDs for each group. The pane list JSON includes
 `workspace_id`, `claude_session_id` (set when Claude Code is running), and the
 title prefix `✳`/`✶`/`⠐` (set while an agent is active).
 
-Reusable broadcast pattern — replace `GROUP`, `AGENT_FILTER`, and `MSG`:
+Reusable broadcast pattern (replace `GROUP`, `AGENT_FILTER`, and `MSG`):
 
 ```bash
 GROUP="Side quests"

@@ -50,7 +50,7 @@ language.
    Replace `cxd` with `ccd` when the user asked for a Claude pane, and target
    the pane id from `pane list` when no stable label exists yet.
 
-4. Wait briefly, then confirm the agent appears ready if needed.
+4. Wait 2 seconds, then capture the pane and confirm the agent is ready.
 
    ```bash
    sleep 2

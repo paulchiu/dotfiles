@@ -15,7 +15,7 @@ Recipients are not stored in this skill. When you need them, look up the most re
 - Subject: `Family finances for <Month>, <Year>`
 - Sender style: short, plain, direct, ending with `Kind regards,` and `Paul.`
 
-Gmail or Firefox access is still needed when Paul asks to create the actual saved Gmail draft, place screenshots inline through the Gmail UI, or inspect a newer prior thread. Creating a draft is allowed when explicitly requested, but never send it.
+Creating a saved Gmail draft is allowed only when Paul explicitly asks. Never send the email.
 
 ## Access Boundary
 
@@ -27,7 +27,7 @@ Use:
 - the Spreadsheets skill plus bundled workspace dependencies for `.xlsx` creation and rendered PNG screenshots
 - `email-draft.md` as a complete local draft when Gmail access is unavailable or not yet confirmed
 
-Prefer the Gmail connector for creating a saved draft when it can attach the workbook/screenshots. Use Firefox/Computer Use only when connector support is insufficient for the desired draft formatting, especially inline image placement.
+Gmail or Firefox access is only for creating the saved draft, placing screenshots inline through the Gmail UI, or inspecting a prior thread. Prefer the Gmail connector for creating a saved draft when it can attach the workbook/screenshots. Use Firefox/Computer Use only when connector support is insufficient for the desired draft formatting, especially inline image placement.
 
 ## Sources
 
@@ -35,7 +35,7 @@ Prefer the Gmail connector for creating a saved draft when it can attach the wor
 - Converter: `/Users/paul/dev-misc/paul-tools`, command:
 
 ```bash
-npm start -- anz:csv /Users/paul/Downloads/anz.txt <output.csv>
+cd /Users/paul/dev-misc/paul-tools && npm start -- anz:csv /Users/paul/Downloads/anz.txt <output.csv>
 ```
 
 - Previous report workbook: latest relevant `~/Downloads/anz-*.xlsx`; use it for sheet shape and visual expectations, not for current values.
@@ -55,7 +55,7 @@ Inspect `~/Downloads` for the current ANZ text export and last month's Excel rep
 - ANZ Access Advantage cash balance
 - deposit notes or other monthly commentary
 
-Create a fresh output directory under `outputs/`.
+Create a fresh output directory: `/Users/paul/dev/sandbox/outputs/dad-money-report-YYYY-MM/`.
 
 ### 2. Convert and clean transactions
 
@@ -92,9 +92,8 @@ Home-use heuristics:
 Sort statement rows by amount descending. For the email body, render transactions over $100 as a markdown table, not as a screenshot. Produce:
 
 - `anz-<month>-<year>.xlsx`
-- a markdown table of transactions over $100 inside `email-draft.md`
 - `spend-breakdown.png`
-- `email-draft.md`
+- `email-draft.md`, containing the markdown table of transactions over $100
 
 ### 4. Draft the email
 

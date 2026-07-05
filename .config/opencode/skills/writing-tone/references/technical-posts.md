@@ -84,7 +84,7 @@ Avoid arrows when the sequence is longer than five steps (use a numbered list), 
 
 ### Backtick density
 
-In technical posts, be aggressive with backticks. Function calls, document IDs, GraphQL mutation names, hook names, column names, error types, state values — all in backticks. The visual density signals "this is technical content" and separates the claims from the surrounding prose, so the reader's eye can jump between them. The main skill's rule ("format code identifiers, filenames, config keys, and CLI commands in backticks") is the floor; in technical posts, apply it more aggressively.
+In technical posts, be aggressive with backticks. Function calls, document IDs, GraphQL mutation names, hook names, column names, error types, state values: all in backticks. The visual density signals "this is technical content" and separates the claims from the surrounding prose, so the reader's eye can jump between them. The main skill's rule ("format code identifiers, filenames, config keys, and CLI commands in backticks") is the floor; in technical posts, apply it more aggressively.
 
 ### Precise test-shape verbs
 

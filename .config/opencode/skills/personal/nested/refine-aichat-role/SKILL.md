@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: refine-aichat-role
-description: "Refines aichat role prompts (committer, pr-writer, etc.) based on user feedback about output quality. Use when asked to fix, adjust, or improve any aichat role's generation."
+description: "Refines aichat role prompts (committer, pr-writer, etc.) based on user feedback about output quality. Use when asked to fix, adjust, tune, or improve an aichat role's generation, e.g. 'wcm keeps getting the scope wrong', 'wpr broke the PR template', 'fix the committer role', or 'refine my aichat role'."
 ---
 
 # Refining aichat Roles
@@ -39,14 +39,17 @@ Apply targeted edits to the role file. Follow these principles tuned for smaller
 - **Negative examples**: Add explicit WRONG/RIGHT pairs for any rule the model keeps breaking.
 - **Examples over prose**: Update the example outputs to demonstrate the desired behaviour rather than relying on prose rules alone.
 - **Repetition**: If a rule is critical, state it in the body rules section AND repeat it in the critical rules section at the end.
+
+House content rules the roles must enforce (keep these intact when editing):
+
 - **Backticks**: Version numbers, file names, package names, and all technical identifiers must be wrapped in backticks. Include concrete examples in the rule.
 - **Scope**: Conventional commit titles must always include a scope in parentheses. Include a WRONG/RIGHT pair.
 
 #### Role-specific guidance
 
-**committer** — The commit type and description must reflect the primary source code change, not accompanying docs or tests. Only use `docs` or `test` when the entire diff is exclusively that type.
+**committer**: The commit type and description must reflect the primary source code change, not accompanying docs or tests. Only use `docs` or `test` when the entire diff is exclusively that type.
 
-**pr-writer** — Template checklist items must be reproduced verbatim. The `----` separator must appear on the line immediately after the title. If no template, output plain prose and bullets only — no headings or checklists.
+**pr-writer**: Template checklist items must be reproduced verbatim. The `----` separator must appear on the line immediately after the title. If no template, output plain prose and bullets only (no headings or checklists).
 
 ### Step 3: Test the change
 
@@ -80,7 +83,7 @@ Check the output against the relevant checklist:
 
 #### committer-specific
 - [ ] Type reflects the primary source code change, not docs or tests.
-- [ ] Output is raw text only — no markdown formatting, no code blocks.
+- [ ] Output is raw text only: no markdown formatting, no code blocks.
 
 #### pr-writer-specific
 - [ ] `----` separator on the line after the title.

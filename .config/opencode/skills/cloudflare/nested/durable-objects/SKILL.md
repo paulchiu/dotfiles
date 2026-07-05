@@ -20,20 +20,11 @@ Your knowledge of Durable Objects APIs and configuration may be outdated. **Pref
 
 Fetch the relevant doc page when implementing features.
 
-## When to Use
-
-- Creating new Durable Object classes for stateful coordination
-- Implementing RPC methods, alarms, or WebSocket handlers
-- Reviewing existing DO code for best practices
-- Configuring wrangler.jsonc/toml for DO bindings and migrations
-- Writing tests with `@cloudflare/vitest-pool-workers`
-- Designing sharding strategies and parent-child relationships
-
 ## Reference Documentation
 
-- `./references/rules.md` - Core rules, storage, concurrency, RPC, alarms
-- `./references/testing.md` - Vitest setup, unit/integration tests, alarm testing
-- `./references/workers.md` - Workers handlers, types, wrangler config, observability
+- `./references/rules.md` - Sharding, storage, SQL migrations, concurrency, RPC, alarms, WebSockets
+- `./references/testing.md` - Vitest pool setup, `runInDurableObject`, `runDurableObjectAlarm`, isolation
+- `./references/workers.md` - Wrangler config, types, Worker handler patterns, secrets, commands
 
 Search: `blockConcurrencyWhile`, `idFromName`, `getByName`, `setAlarm`, `sql.exec`
 
@@ -142,45 +133,4 @@ const id = env.MY_DO.newUniqueId();
 const stub = env.MY_DO.get(id);
 ```
 
-## Storage Operations
-
-```typescript
-// SQL (synchronous, recommended)
-this.ctx.storage.sql.exec("INSERT INTO t (c) VALUES (?)", value);
-const rows = this.ctx.storage.sql.exec<Row>("SELECT * FROM t").toArray();
-
-// KV (async)
-await this.ctx.storage.put("key", value);
-const val = await this.ctx.storage.get<Type>("key");
-```
-
-## Alarms
-
-```typescript
-// Schedule (replaces existing)
-await this.ctx.storage.setAlarm(Date.now() + 60_000);
-
-// Handler
-async alarm(): Promise<void> {
-  // Process scheduled work
-  // Optionally reschedule: await this.ctx.storage.setAlarm(...)
-}
-
-// Cancel
-await this.ctx.storage.deleteAlarm();
-```
-
-## Testing Quick Start
-
-```typescript
-import { env } from "cloudflare:test";
-import { describe, it, expect } from "vitest";
-
-describe("MyDO", () => {
-  it("should work", async () => {
-    const stub = env.MY_DO.getByName("test");
-    const result = await stub.addItem("test");
-    expect(result).toBe(1);
-  });
-});
-```
+Storage, alarm, and WebSocket API details: `./references/rules.md`. Vitest setup and alarm testing: `./references/testing.md`.

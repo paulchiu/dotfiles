@@ -8,17 +8,34 @@ description: "Add, commit, and push dotfile changes with yadm. Use when asked to
 
 Add, commit, and push dotfile changes using `yadm`.
 
+## Hard rules (read before running anything)
+
+- NEVER run `yadm status -u`, `yadm status -uall`, or any command that lists untracked files under `~`. The home directory contains hundreds of thousands of untracked files (caches, app bundles, Google Drive). Past runs produced 400MB+ of output and stalled the session.
+- NEVER run `yadm add .` or `yadm add -A`. Always stage explicit file paths.
+- If you do not know the exact file path(s) to stage, stop and ask the user. Do not scan the home directory to find candidates.
+- Never use `--no-verify` or skip hooks unless the user explicitly asks.
+- If a yadm command fails with an error not covered in [references/troubleshooting.md](references/troubleshooting.md), stop and report the exact error message to the user. Do not improvise recovery steps.
+
 ## Workflow
 
-Assume the user has already told you (or you have already edited) the specific file(s) to stage. Work from that known path list. Do not scan the home directory for untracked files.
+Work only from the file path(s) the user named, or that you edited earlier in this session.
 
-1. Run `yadm status` (no flags) to confirm modified tracked files. This is safe: it hides untracked by default.
-2. Run `yadm diff <file>` for modified files, or read new files directly to understand the change.
-3. Run `yadm log -5 --oneline` to match the recent commit style.
-4. Stage the file(s) by exact path:
+1. Run `yadm status` (no flags; this is safe because it hides untracked files by default).
+   - Expected: each tracked file you changed appears under "Changes not staged for commit".
+   - New files, and files under gitignored directories (anything in `~/.claude/` or `~/.config/opencode/`), will NOT appear here. That is normal; continue.
+   - If the command errors, or reports clean for a tracked file you know you just changed, open [references/troubleshooting.md](references/troubleshooting.md) and follow the "RTK rewrites yadm" section.
+2. For each modified tracked file, run `yadm diff <path>`. For each new file, read the file directly. You need the change content to write the commit message.
+3. Run `yadm log -5 --oneline` and note the style: Conventional Commits, one scope per commit (see scope conventions below).
+4. Stage each file by its exact path:
    - Tracked and modified: `yadm add <path>`
-   - New, or `.gitignore`-blocked (e.g. anything under `.claude/`, `.config/opencode/`): `yadm add -f <path>`
-5. Commit with a Conventional-Commits-style subject that matches the recent log. Use a HEREDOC for multi-line bodies:
+   - New, or under a gitignored directory (`~/.claude/`, `~/.config/opencode/`): `yadm add -f <path>`
+   - A "The following paths are ignored" hint on `-f` adds is expected for those directories. It is not an error.
+   - If `yadm add` fails with "outside repository": follow the "RTK rewrites yadm" section in [references/troubleshooting.md](references/troubleshooting.md).
+   - If `yadm add` fails mentioning `index.lock`: follow the "Lock contention" section in [references/troubleshooting.md](references/troubleshooting.md).
+5. Decide the commit count:
+   - If all staged files belong to one scope: one commit. Go to step 6.
+   - If the files span multiple scopes (e.g. a `docs(claude)` tweak plus a new `feat(skills)` skill plus a `chore(shell)` zshrc edit): follow "Splitting into logical commits" below, then continue at step 7.
+6. Commit with a Conventional-Commits-style subject that matches the recent log. Use a HEREDOC for multi-line bodies:
 
    ```bash
    yadm commit -m "$(cat <<'EOF'
@@ -29,17 +46,21 @@ Assume the user has already told you (or you have already edited) the specific f
    )"
    ```
 
-6. Run `yadm push`.
-7. Run `yadm status` to confirm a clean tree.
+   - If `yadm commit` fails mentioning `index.lock`: follow the "Lock contention" section in [references/troubleshooting.md](references/troubleshooting.md).
+7. Decide whether to push:
+   - If the user said only "commit": stop here. Report the commit subject and hash. Do NOT push.
+   - If the user said "update", "sync", "push", or "add commit and push": run `yadm push`.
+   - If `yadm push` fails: report the exact error and stop. Do not retry with force flags.
+8. Run `yadm status` to confirm a clean tree, then report what was committed and pushed.
 
 ## Splitting into logical commits
 
-If the staged set spans multiple scopes (e.g. a `docs(claude)` tweak plus a new `feat(skills)` skill plus a `chore(shell)` zshrc edit), commit each scope separately rather than one mixed commit. The user's recent log keeps one scope per commit.
+The user's log keeps one scope per commit. When the changed files span multiple scopes:
 
 1. Group the changed paths by scope (see scope conventions below). One scope per commit.
-2. For each group: `yadm add <paths>`, then `yadm commit` with the scoped subject. Do not stage the next group until the previous commit has succeeded.
-3. Push once at the end (`yadm push`), not per-commit.
-4. If a single file legitimately covers two scopes, pick the dominant one and mention the other in the body. Don't fragment a single file across commits.
+2. For each group in turn: run `yadm add <paths>` (with `-f` where step 4 requires it), then `yadm commit` with that group's scoped subject. Do not stage the next group until the previous commit has succeeded.
+3. Push once at the end (`yadm push`, only if step 7 says to push). Do not push per-commit.
+4. If a single file legitimately covers two scopes, pick the dominant scope and mention the other in the commit body. Do not split a single file across commits.
 
 ## Commit scope conventions
 
@@ -50,67 +71,9 @@ The user's yadm repo uses Conventional Commits with a scope tied to the path:
 - `chore(shell):` for `.zshrc` and other shell config tweaks.
 - `feat(<skill-name>):` for changes inside a specific skill directory (e.g. `feat(ai-pril-manage-unblock-progress-reports)`).
 
-Keep the subject short and descriptive. Put the "why" in the body only when the subject alone is insufficient.
+Keep the subject short and descriptive. Add a body only when the subject alone cannot explain the why.
 
 ## Notes
 
-- `.claude` is gitignored in yadm, so any file under `~/.claude/` needs `yadm add -f` on first stage. The "paths are ignored" hint is expected, not an error.
-- `~/.claude/skills` is a symlink to `~/.config/opencode/skills`, so edit skills under the opencode path and stage them there.
-- Do not use `--no-verify` or skip hooks unless the user explicitly asks.
-- If the user said "commit" only, stop after commit. If they said "update", "sync", or "add commit and push", complete the full cycle through push.
-
-## RTK gotcha
-
-The Claude Code hook routes `yadm` through `rtk` (Rust Token Killer). Up to rtk
-`0.42.0`, rtk rewrites `yadm <cmd>` to `rtk git <cmd>`, which then runs against
-the CWD repo instead of yadm's `--git-dir`/`--work-tree`. Symptoms:
-`yadm status` may report stale `clean — nothing to commit` for files in
-`~/.config/opencode/` or `~/.claude/`; `yadm add <path>` fails with
-"outside repository"; `yadm push` pushes the wrong remote. Tracked upstream as
-[rtk-ai/rtk#2077](https://github.com/rtk-ai/rtk/issues/2077), fix in flight at
-[rtk-ai/rtk#2078](https://github.com/rtk-ai/rtk/pull/2078).
-
-The user already applied the workaround in their committed rtk config — the
-yadm exclusion lives in `~/Library/Application Support/rtk/config.toml`
-(macOS) or `~/.config/rtk/config.toml` (Linux):
-
-```toml
-[hooks]
-exclude_commands = ["^yadm(?:$| )"]
-```
-
-With that exclusion in place, run `yadm` normally — no `rtk proxy` wrapping
-needed. If something goes wrong, first confirm the exclusion is still present
-(`grep yadm "$HOME/Library/Application Support/rtk/config.toml"`). Only fall
-back to the explicit form below if the config has been wiped or if rtk has
-regressed:
-
-```
-rtk proxy yadm <cmd>                                               # bypass rtk's rewrite
-git --git-dir=$(yadm introspect repo) --work-tree="$HOME" <cmd>    # bypass rtk entirely
-```
-
-Once #2078 ships, the `exclude_commands` entry and this whole section become
-unnecessary.
-
-## Lock contention (`.git/index.lock`)
-
-If `yadm add` or `yadm commit` fails with `Unable to create '.../index.lock': File exists` (or EPERM in a delegated process like codex), another `yadm`/`git` process is likely mid-write against the bare repo. The repo lives at `$(yadm introspect repo)`, and the lock is `$(yadm introspect repo)/index.lock`.
-
-1. Check whether anything actually holds the lock:
-
-   ```bash
-   REPO=$(yadm introspect repo)
-   ls -l "$REPO/index.lock" 2>/dev/null
-   lsof "$REPO/index.lock" 2>/dev/null
-   pgrep -fl 'yadm|git.*'"$REPO" || true
-   ```
-
-2. If a live process owns it: wait and retry once (`sleep 2`, then re-run the failed command). If it still fails, sleep 5 and retry once more. Do not loop indefinitely.
-3. If no process owns it (stale lock from a crashed/killed run, common after a codex EPERM): remove just the lock file and retry: `rm "$REPO/index.lock"`. Do not `rm -rf` anything else under `$REPO`.
-4. If the contention is with the main Claude thread (codex was delegated and hit EPERM), stop the codex-side yadm work and have the main thread complete the sync. Two writers against the same yadm repo is the root cause; fixing the lock without fixing the contention will recur.
-
-## Never do
-
-- **Never run `yadm status -u`, `yadm status -uall`, or any discovery that lists untracked files under `~`.** The home directory contains hundreds of thousands of untracked files across caches, app bundles, Google Drive, etc. Past runs have produced 400MB+ of output and stalled the session. If you don't know the file path to stage, ask the user rather than scanning.
-- Never `yadm add .` or `yadm add -A` from `$HOME`. Always stage an explicit path.
+- `.claude` is gitignored in yadm, so any file under `~/.claude/` needs `yadm add -f` on first stage.
+- `~/.claude/skills` is a symlink to `~/.config/opencode/skills`. Edit skills under the opencode path and stage them at the opencode path.

@@ -28,7 +28,7 @@ Re-check the draft against these before outputting (the most-violated rules; ful
 
 ## Writing style
 
-Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`. When adding a rule, extend the right cluster's carve-out rather than appending a sibling.
+Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`.
 
 **Register & word choice**
 
@@ -258,7 +258,7 @@ For longer-form posts, load `references/style-examples.md` and find the matching
 ## Workflow
 
 1. Before drafting, load the right reference for the post type:
-   - **Technical posts** (code/file/symbol references — incident writeups with code citations, architecture proposals, PR commentary): read `references/technical-posts.md`.
+   - **Technical posts** (code/file/symbol references: incident writeups with code citations, architecture proposals, PR commentary): read `references/technical-posts.md`.
    - **Niche post types** (voluntary-support offering / office hours, product or community launch): read `references/situational-patterns.md`.
    - **Other longer-form posts** (broadcast, recognition, sentiment-share, blockquote DM reply, retro card, consolidated thread reply, meeting-outcome update): read `references/style-examples.md` and find the matching example.
    - **Short messages** (FYI, brief reply, single-sentence ack): the anchors above are enough.
@@ -275,6 +275,6 @@ For longer-form posts, load `references/style-examples.md` and find the matching
 
 ### references/
 
-- `technical-posts.md` — Posts that cite specific code, argue for a technical investment, or summarise root causes at the code level. Diagnosis/proposal bullet pairs, precise absence quantifiers, ticket-mapped proposals, symbol-first bullets, arrow notation, backtick density, worked example.
-- `style-examples.md` — Long-form worked examples (5-14): retro card, broadcast announcement, sensitive 1:1 blockquote reply, peer consent-check DM, channel recognition, consolidated thread reply, sentiment-share to peer leaders, product-share post, delegation debrief reply, peer-leader meeting-outcome update. Each has the message body and structural commentary.
-- `situational-patterns.md` — Niche post types loaded on demand: voluntary-support offerings (office hours, drop-in time, ad-hoc pairing) and product-share/community-announce posts (structure, AI disclosure, image captions).
+- `technical-posts.md`: posts that cite specific code, argue for a technical investment, or summarise root causes at the code level. Diagnosis/proposal bullet pairs, precise absence quantifiers, ticket-mapped proposals, symbol-first bullets, arrow notation, backtick density, worked example.
+- `style-examples.md`: long-form worked examples (5-14): retro card, broadcast announcement, sensitive 1:1 blockquote reply, peer consent-check DM, channel recognition, consolidated thread reply, sentiment-share to peer leaders, product-share post, delegation debrief reply, peer-leader meeting-outcome update. Each has the message body and structural commentary.
+- `situational-patterns.md`: niche post types loaded on demand: voluntary-support offerings (office hours, drop-in time, ad-hoc pairing) and product-share/community-announce posts (structure, AI disclosure, image captions).

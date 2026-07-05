@@ -3,47 +3,45 @@ name: dispatch
 description: "Coordinate non-trivial coding work as an orchestrator-only main thread: delegate to codex, require separate Claude adversarial review, run a /loop watchdog, handle git/gh plumbing. Use when the user wants engineering-manager delegation for coding work."
 ---
 
-# /dispatch — engineering-manager orchestration
+# /dispatch: engineering-manager orchestration
 
-You are operating as orchestrator. The main thread does NOT write project source. Codex implements, a separate Claude subagent reviews adversarially, and the main thread runs git/gh plumbing plus the watchdog.
+The main thread is orchestrator only. Codex implements, a separate Claude subagent reviews adversarially, and the main thread runs git/gh plumbing plus the watchdog.
 
 ## Role
 
-The main thread is **orchestrator only**:
-
 - Never edit project source, tests, plan docs, or seed data directly. All of those go through `codex:codex-rescue` via `Agent` with `run_in_background: true`.
-- Reading for orchestration is fine: `git status`, `git log`, `git diff`, `gh pr view`, file probes via Bash, occasional Read for clarification.
+- Reading for orchestration is fine: `git status`, `git log`, `git diff`, `gh pr view`, file probes, occasional Read.
 - Git, gh, and npm verification commands run on the main thread.
-- Memory writes (under `~/.claude/projects/...`) are main-thread work — they are not project files.
+- Memory writes (under `~/.claude/projects/...`) are main-thread work, not project files.
 
-If the user asks the main thread to "just edit the file" or "skip codex, this is small", push back briefly and offer to delegate. Only edit project files directly with explicit user approval that overrides this rule.
+If the user asks to "just edit the file" or "skip codex, this is small", push back briefly and offer to delegate. Only edit project files directly with explicit user approval that overrides this rule.
 
 Before the first delegation, establish the operating envelope:
 
-- **Repo/worktree.** Resolve the exact working directory, current branch, base branch, current `HEAD`, and whether the user expects a PR or only local commits.
-- **Cleanliness.** Inspect `git status --short`. If there are user changes, isolate with a worktree or brief codex with exact ownership boundaries. Do not let codex "clean up" unrelated files.
+- **Repo/worktree.** Exact working directory, branch, base branch, current `HEAD`, and whether the user expects a PR or only local commits.
+- **Cleanliness.** `git status --short`. If there are user changes, isolate with a worktree or brief codex with exact ownership boundaries. Do not let codex "clean up" unrelated files.
 - **Existing automation.** Check for active agents, `/loop` jobs, or previous dispatch sessions touching the same branch/worktree. Reuse or stop the old loop before starting another.
-- **Definition of done.** Capture acceptance criteria, required verification commands, PR readiness expectations, and explicit non-goals.
-- **Project rules.** Read project memory, `CLAUDE.md`, ticket text, PR template, or implementation guidance that will materially change the brief.
+- **Definition of done.** Acceptance criteria, required verification commands, PR readiness expectations, explicit non-goals.
+- **Project rules.** Project memory, `CLAUDE.md`, ticket text, PR template, or implementation guidance that will materially change the brief.
 
-Anti-patterns to avoid:
+Anti-patterns:
 
 - Starting codex with "fix this" and no working dir, branch, scope, acceptance criteria, or exact verification commands.
-- Running two codex implementations in the same worktree without disjoint file ownership and an explicit merge plan.
+- Two codex implementations in the same worktree without disjoint file ownership and an explicit merge plan.
 - Treating codex's self-critique as the adversarial review gate.
-- Staging with `git add -A`, committing unrelated user changes, or hiding partial/interleaved work in one commit.
+- Staging with `git add -A`, committing unrelated user changes, or hiding interleaved work in one commit.
 - Asking codex to push, merge, mark a PR ready, or bypass hooks with `--no-verify`.
 - Rearming a new watchdog while an old one can still tick on the same branch.
-- Letting tick summaries become narrative logs. The loop should advance state or report a blocker, not chat.
+- Letting tick summaries become narrative logs. The loop advances state or reports a blocker, not chat.
 
 ## Pipeline state machine
 
 For each non-trivial task, drive these stages explicitly:
 
-1. **codex_running** — codex implements in the background.
-2. **review_running** — a separate Claude subagent reviews the codex commit adversarially.
-3. **push** — main thread commits (if codex EPERMed) and pushes.
-4. **done** — CI verified; watchdog stopped.
+1. **codex_running**: codex implements in the background.
+2. **review_running**: a separate Claude subagent reviews the codex commit adversarially.
+3. **push**: main thread commits (if codex EPERMed) and pushes.
+4. **done**: CI verified; watchdog stopped.
 
 Do not enter `review_running` until there is a local commit (or a clearly documented no-code result). If review finds blockers, return to `codex_running` for a new correction commit; do not amend the previous commit. Track the round number in tick prompts so "round 2" does not accidentally review the old SHA.
 
@@ -60,18 +58,18 @@ Agent({
 
 Brief codex with:
 
-- **Self-contained context.** Working dir, branch, base branch, latest commit SHA, today's date, issue/PR/ticket links, and the relevant user ask. Codex cannot see prior conversation.
-- **Goal and acceptance criteria.** State what user-visible or developer-visible outcome must be true when done. Include examples for edge cases when helpful.
+- **Self-contained context.** Working dir, branch, base branch, latest commit SHA, today's date, issue/PR/ticket links, and the relevant user ask copied verbatim. Codex cannot see prior conversation.
+- **Goal and acceptance criteria.** The user-visible or developer-visible outcome that must be true when done.
 - **Scope.** What is in, what is out. Files codex may touch, files it must not, and any existing user changes it must preserve.
-- **Local conventions.** Mention project memory, `CLAUDE.md`, PR template, package manager, branch naming, schema generation, migration rules, or other repo-specific constraints that affect the implementation.
+- **Local conventions.** Project memory, `CLAUDE.md`, PR template, package manager, branch naming, schema generation, migration rules, or other repo-specific constraints that affect the implementation.
 - **Use its own subagents.** Tell codex explicitly: "Use your own subagents / parallel-task capabilities to decompose work where useful, and run a self-critique pass before reporting."
-- **Verification.** Prefer exact commands discovered from the repo: e.g. `pnpm lint`, `pnpm format:check`, `pnpm test -- <path>`, `pnpm build`. If only generic commands are known, say they are expected checks and codex should map them to the repo's scripts.
+- **Verification.** Prefer exact commands discovered from the repo, e.g. `pnpm lint`, `pnpm format:check`, `pnpm test -- <path>`, `pnpm build`. If only generic commands are known, say they are expected checks and codex should map them to the repo's scripts.
 - **Commit instructions.** New commit, don't amend, don't `--no-verify`, HEREDOC message. If git EPERM blocks (codex's sandbox sometimes locks `.git/index.lock`), leave changes in working tree and the orchestrator will commit using codex's proposed message.
 - **Failure policy.** If blocked by missing env, failing pre-existing tests, or unclear product behaviour, stop and report the smallest concrete blocker instead of guessing.
 - **Handoff report.** Require commit SHA (or explicit EPERM/no-commit status), changed files, verification commands/results, known risks, and the proposed commit message if codex could not commit.
 - **Don't push.** Orchestrator pushes after review. Codex's sandbox usually cannot reach GitHub anyway.
 
-Useful prompt skeleton:
+Prompt skeleton:
 
 ```
 Codex task: <one-line outcome>
@@ -142,14 +140,15 @@ Agent({
 
 Brief reviewer with:
 
-- **Exact commit SHA** — `git show <sha>`, `git diff <base>..<sha>`.
-- **Claimed scope** — what codex says it did, copied from codex's report.
-- **Adversarial framing** — "Hunt bugs, edge cases, regressions, behavioural drift. Don't rubber-stamp."
-- **Specific risks** — edge cases worth probing for this change.
-- **Verification** — reviewer runs the exact lint/format/test/build commands itself; doesn't trust codex's claim.
-- **Report format** — verdict (`BLOCKERS_FOUND` / `NITPICKS_ONLY` / `CLEAN`), blockers, nitpicks, verification results, what was actually checked.
+- **Exact commit SHA**: `git show <sha>`, `git diff <base>..<sha>`.
+- **Claimed scope**: what codex says it did, copied from codex's report.
+- **Adversarial framing**: "Hunt bugs, edge cases, regressions, behavioural drift. Don't rubber-stamp."
+- **Specific risks**: edge cases worth probing for this change.
+- **Out of scope**: files intentionally untouched, so review does not invent scope creep.
+- **Verification**: reviewer runs the exact lint/format/test/build commands itself; doesn't trust codex's claim.
+- **Report format**: verdict (`BLOCKERS_FOUND` / `NITPICKS_ONLY` / `CLEAN`), blockers, nitpicks, verification results, what was actually checked.
 
-The reviewer must be a separate Agent invocation for the dispatch gate. Codex self-review is valuable inside the implementation brief, but it is preflight only. It does not replace an independent Claude reviewer because codex is defending its own patch and will share its blind spots. If the user explicitly downgrades the task to an inline/tiny edit, exit dispatch rather than pretending codex self-review satisfied this gate.
+The reviewer must be a separate Agent invocation for the dispatch gate. Codex self-review is preflight only: codex is defending its own patch and shares its blind spots. If the user explicitly downgrades the task to an inline/tiny edit, exit dispatch rather than pretending codex self-review satisfied this gate.
 
 ## External CLI reviews
 
@@ -161,15 +160,15 @@ codex review --base main
 coderabbit review --plain --type committed --base main
 ```
 
-The Claude reviewer is the gate; these two are independent second opinions that catch things a single reviewer misses (CodeRabbit is good at policy/style/security drift, Codex CLI tends to spot regressions in adjacent code paths the implementation brief did not name). Run them only when there is at least one local commit on the branch, and run both at once so the wall-clock cost is one review's latency, not two.
+The Claude reviewer is the gate; these two are independent second opinions (CodeRabbit is good at policy/style/security drift, Codex CLI tends to spot regressions in adjacent code paths the brief did not name). Run them only when there is at least one local commit on the branch, and run both at once so the wall-clock cost is one review's latency.
 
 Aggregating:
 
-- Treat any `[P0]` / `[P1]` from either tool as a blocker. Loop back to codex with the exact wording, just like a Claude blocker round.
-- Treat `[P2]` and below as nitpicks. Default to push and surface them; fold them in only if they materially affect the user-visible deliverable (e.g. they describe a regression in the same feature the user just asked for).
-- "No findings" / clean from CodeRabbit is informational, not authoritative — it does not override a Claude blocker.
+- Any `[P0]` / `[P1]` from either tool is a blocker. Loop back to codex with the exact wording, like a Claude blocker round.
+- `[P2]` and below are nitpicks. Default to push and surface them; fold them in only if they materially affect the user-visible deliverable.
+- "No findings" / clean from CodeRabbit is informational, not authoritative. It does not override a Claude blocker.
 
-When folding in an external-review finding, make a NEW commit (still no amend, still HEREDOC message) and re-run the verification commands. You do not need a fresh Claude review for a small mechanical fix-up driven by an external CLI finding, but if the change touches new files or new behaviour, spawn one.
+When folding in an external-review finding, make a NEW commit (still no amend, still HEREDOC message) and re-run the verification commands. A small mechanical fix-up driven by an external CLI finding doesn't need a fresh Claude review, but if the change touches new files or new behaviour, spawn one.
 
 CodeRabbit needs network and an authenticated session; if it errors with auth, surface and skip rather than blocking the dispatch.
 
@@ -188,7 +187,7 @@ CronCreate({
 Tick prompt template (adapt the task description per call):
 
 ```
-Watchdog tick — <task description>.
+Watchdog tick: <task description>.
 
 State carried forward:
 - worktree: <absolute path>
@@ -230,25 +229,21 @@ End the loop (`CronDelete`) when push completes and CI is green or queued, when 
 - **Between substantive moments:** brief sentence updates ("codex returned, spawning review", "review found 1 blocker, re-delegating").
 - **After review:** surface verdict with blocker count and nitpick count. Blockers always loop. Nitpicks are pushable by default; ask before folding them in only if the user gave that preference or the nitpick is really a disguised blocker.
 - **Before merge:** always ask explicitly. Default to no-auto-merge.
-- **Final summary:** one or two sentences when the loop ends — what shipped, where the artefacts are, any follow-ups.
+- **Final summary:** one or two sentences when the loop ends: what shipped, where the artefacts are, any follow-ups.
 - **If interrupted:** tell the user the current stage, branch, commit/PR if any, and whether a background agent may still be running before switching context.
 
 ## Rounds and iteration
 
 When review returns blockers:
 
-1. Re-delegate to codex (background) with the specific blockers + reviewer's exact wording.
+1. Re-delegate to codex (background) with the specific blockers plus the reviewer's exact wording.
 2. New commit (don't amend).
 3. New review pass on the new commit.
 4. Repeat until verdict is `NITPICKS_ONLY` or `CLEAN`.
 
 Before each new round, confirm the previous codex process is no longer writing and the worktree has no unrelated changes. The correction brief should include the blocker text, the current `HEAD`, what changed in previous rounds, and an explicit "do not rewrite unrelated earlier work" instruction.
 
-When review returns nitpicks only:
-
-1. Push.
-2. Surface nitpicks to user.
-3. If user wants them addressed, frame the next round explicitly as "consider each — accept and action OR push back with rationale". A nitpick is not automatically a fix-it; codex should weigh each.
+When review returns nitpicks only: push, surface nitpicks. If the user wants them addressed, frame the next round explicitly as "consider each: accept and action OR push back with rationale". A nitpick is not automatically a fix-it; codex should weigh each.
 
 ## Demo recording handoff
 
@@ -256,67 +251,36 @@ Sometimes the user wants a video demo of the user-visible change ("record a vide
 
 Two paths, pick the one that matches the demo:
 
-**Path A: Programmatic via Playwright.** When the demo is deterministic and headless-safe (paste content, wait, screenshot/record), write a self-contained `.mjs` that imports `chromium` from the repo's `playwright` install, opens a `recordVideo` context, drives the dev server, then renames the resulting webm into `~/Downloads/<feature>-demo.webm`. Spin up a separate nex pane for `npm run dev:app` (the dev-server pane) so the recording pane is free to run `node /tmp/<script>.mjs`. Wait for `curl -fsS http://localhost:5173` to return 200 before recording. Common foot-guns: zsh has read-only shell variables (`$status`, `$RANDOM`, `$SECONDS`, `$EUID`) — use `http_code`, `ready`, etc. instead.
+**Path A: Programmatic via Playwright.** When the demo is deterministic and headless-safe (paste content, wait, screenshot/record), write a self-contained `.mjs` that imports `chromium` from the repo's `playwright` install, opens a `recordVideo` context, drives the dev server, then renames the resulting webm into `~/Downloads/<feature>-demo.webm`. Spin up a separate nex pane for `npm run dev:app` (the dev-server pane) so the recording pane is free to run `node /tmp/<script>.mjs`. Wait for `curl -fsS http://localhost:5173` to return 200 before recording. Foot-gun: zsh has read-only shell variables (`$status`, `$RANDOM`, `$SECONDS`, `$EUID`), use `http_code`, `ready`, etc. instead.
 
-**Path B: Codex desktop handoff.** When the demo needs real computer-use (theme toggles, real cursor movement, region selection, OS-level recording tools), the CLI codex agent in a nex pane is too restricted. Stop the pane task, then hand the user a self-contained prompt to paste into the Codex desktop app, which has computer-control tools. The prompt must brief codex desktop the same way you'd brief a fresh subagent: working dir, branch, dev-server URL (already running in your dev-server pane), exact markdown to paste, the visual outcome to verify, and the absolute output path under `~/Downloads`. State explicitly "do not modify the repo, the dev server, or the branch state".
+**Path B: Codex desktop handoff.** When the demo needs real computer-use (theme toggles, real cursor movement, region selection, OS-level recording tools), the CLI codex agent in a nex pane is too restricted. Stop the pane task, then hand the user a self-contained prompt to paste into the Codex desktop app, which has computer-control tools. Brief codex desktop like a fresh subagent: working dir, branch, dev-server URL (already running in your dev-server pane), exact content to paste, the visual outcome to verify, and the absolute output path under `~/Downloads`. State explicitly "do not modify the repo, the dev server, or the branch state".
 
 In both paths:
 
 - Always start the dev server in its OWN nex pane, not in the recording pane. The recording pane needs a free prompt.
-- Keep the worktree in place until the recording is verified saved (`ls -la <path>` non-empty) — don't `git worktree remove` early.
+- Keep the worktree in place until the recording is verified saved (`ls -la <path>` non-empty); don't `git worktree remove` early.
 - Print the absolute path and size of the resulting file in your final summary so the user can click through.
 
 If the recording fails or the user takes over manually, drop the autopolling and let the user signal completion. Don't loop on `~/Downloads` waiting.
 
 ## Companion skills
 
-Use these where they fit; this skill orchestrates around them:
-
-- `git-commit` — generate a conventional commit message from the diff. Useful when codex EPERMs and you need to compose a commit on its behalf, especially when codex's report doesn't include a message.
-- `gh-pr` — generate a PR description from the branch. Useful when opening a new PR.
-- `tend-pr` — keep a single PR green until merge. Complementary to dispatch when the work is rebases/CI babysitting rather than fresh implementation.
-- `bk-buildkite` — inspect Buildkite builds, jobs, and logs when CI status is too coarse from `gh pr checks`.
-- `github:gh-fix-ci` — diagnose GitHub Actions failures when CI repair becomes the primary task. Use intentionally; do not let watchdog retries become an unbounded fix loop.
-- `reviewing-branch-changes` — borrow review heuristics and output shape for the separate Claude reviewer. Do not substitute it for the required separate Agent invocation.
-- `nex` — split panes for the dev-server and demo-recording handoff steps; `cxd` alias delegates a task to a live codex CLI pane.
-- `yadm-sync` — sync dotfiles when this skill itself, memory entries, or other `~/.claude`/`~/.config` content is updated. It usually does not belong in product-repo dispatch work.
+- `git-commit`: generate a conventional commit message from the diff. Useful when codex EPERMs and its report doesn't include a message.
+- `gh-pr`: generate a PR description when opening a new PR.
+- `tend-pr`: keep a single PR green until merge. Complementary to dispatch when the work is rebases/CI babysitting rather than fresh implementation.
+- `bk-buildkite`: inspect Buildkite builds, jobs, and logs when CI status is too coarse from `gh pr checks`.
+- `github:gh-fix-ci`: diagnose GitHub Actions failures when CI repair becomes the primary task. Use intentionally; do not let watchdog retries become an unbounded fix loop.
+- `reviewing-branch-changes`: borrow review heuristics and output shape for the separate Claude reviewer. Do not substitute it for the required separate Agent invocation.
+- `nex`: split panes for the dev-server and demo-recording handoff steps; `cxd` alias delegates a task to a live codex CLI pane.
+- `yadm-sync`: sync dotfiles when this skill itself, memory entries, or other `~/.claude`/`~/.config` content is updated. It usually does not belong in product-repo dispatch work.
 
 ## What lives where
 
 | Where                                                 | What                                                                                                                   |
 | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| This skill                                            | Universal pattern: roles, pipeline, EPERM fallback, watchdog template, briefing checklists.                            |
+| This skill                                            | Universal pattern: roles, pipeline, EPERM fallback, watchdog template, briefing requirements.                          |
 | Per-project memory (`~/.claude/projects/.../memory/`) | Branch naming, CHANGELOG conventions, required PR labels, dev paths, project-specific "do this / don't do that" rules. |
 | `CLAUDE.md`                                           | Project-specific guardrails the project author wants every assistant to see.                                           |
-
-## Briefing checklists
-
-### Codex prompt must include
-
-- [ ] Working dir, branch, latest commit SHA, today's date
-- [ ] Base branch/diff base and expected PR target
-- [ ] Task/ticket/PR link or the relevant user ask copied verbatim
-- [ ] Scope (in / out)
-- [ ] Acceptance criteria and non-goals
-- [ ] Existing dirty files or user-owned changes to preserve
-- [ ] Project rules/memory/`CLAUDE.md` constraints that matter
-- [ ] "Use your own subagents + self-critique pass"
-- [ ] Specific files to touch
-- [ ] Exact test/lint/format/build commands, or instruction to map generic checks to repo scripts
-- [ ] Commit message subject or instruction to propose one (HEREDOC body OK)
-- [ ] EPERM fallback note ("orchestrator will commit if git is blocked")
-- [ ] "Don't push"
-- [ ] Handoff report format: commit SHA/EPERM status, changed files, verification results, risks
-
-### Reviewer prompt must include
-
-- [ ] Commit SHA + diff base
-- [ ] Codex's claimed scope (copied verbatim)
-- [ ] "Be adversarial; don't rubber-stamp"
-- [ ] Specific risks for this change
-- [ ] Exact verification commands to run independently
-- [ ] Files intentionally out of scope, so review does not invent scope creep
-- [ ] Report format requirement (verdict + blockers + nitpicks + verification + what was checked)
 
 ## Stop conditions
 
@@ -325,7 +289,7 @@ End the dispatch session when:
 - Push complete and CI is green (or queued and reasonable to leave).
 - User explicitly stops the work. Delete the watchdog first, then report any background agents that may still be running and the current worktree state.
 - User asks to switch tasks. Pause or end the current dispatch cleanly: `CronDelete`, summarise branch/stage/commit/PR/uncommitted state, and start a fresh dispatch session only after the old loop cannot tick again.
-- Stage stuck >20 minutes after multiple unsuccessful retries — escalate to user, then stop.
+- Stage stuck >20 minutes after multiple unsuccessful retries: escalate to user, then stop.
 - Worktree collision: user changes or another agent modifies files in the codex-owned set and ownership is unclear.
 - Remote branch drift: someone else pushed to the same branch after dispatch started. Re-read state and ask before force-pushing or overwriting.
 - Verification cannot run because the local environment is missing required services/secrets/dependencies and codex cannot provide a deterministic fix.

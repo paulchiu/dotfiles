@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: check-agent-standards
-description: "Audits current branch changes against local main for AGENTS.md conformance, writes a report, and auto-fixes violations. Use to enforce standards or check conformance."
+description: "Audits current branch changes against local main for AGENTS.md conformance, reports violations inline (written report on request), and auto-fixes them. Use when asked to check agent standards, audit the branch against AGENTS.md, run a conformance check, or enforce project standards."
 ---
 
 # Check Agent Standards
@@ -25,7 +25,7 @@ Automatically audit the current branch's changes against `AGENTS.md` project sta
 
 ### Step 2: Audit Changes
 
-Check every changed file against all applicable rules from `AGENTS.md`. The audit must cover every section of `AGENTS.md` that applies to the changed files. Common checks include (but are not limited to — always derive checks from the actual `AGENTS.md`):
+Check every changed file against all applicable rules from `AGENTS.md`. The audit must cover every section of `AGENTS.md` that applies to the changed files. The categories below are examples of common checks; always derive the actual checklist from the project's `AGENTS.md`, not from this list:
 
 **File & Naming Conventions:**
 - File naming matches conventions (PascalCase for components, camelCase for hooks/utils)
@@ -34,7 +34,7 @@ Check every changed file against all applicable rules from `AGENTS.md`. The audi
 
 **Code Standards:**
 - Formatting matches Prettier config (semi, quotes, trailing commas, print width, tab width)
-- No `any` types — `unknown` with narrowing instead
+- No `any` types: `unknown` with narrowing instead
 - Props interfaces defined above components with `Props` suffix
 - Type-only imports use `import type { ... }`
 - Explicit return types on all exported functions
@@ -42,7 +42,7 @@ Check every changed file against all applicable rules from `AGENTS.md`. The audi
 - No class components
 - No `console.log`
 - No React namespace imports (`import React from 'react'`)
-- Immutability — `const` by default, no mutation
+- Immutability: `const` by default, no mutation
 
 **Architecture:**
 - Pure functions extracted to `/utils` where possible
@@ -100,17 +100,15 @@ The report (whether inline or written) should follow this structure:
 
 ### Step 4: Auto-Fix Violations
 
-Fix all violations that can be safely auto-fixed:
+Apply the safe code-level fixes here. Formatting and lint auto-fixes are handled by the tool runs in Step 5, so do not run them separately in this step.
 
-1. **Formatting:** Run the project formatter (e.g., `npm run format`) if available.
-2. **Linting:** Run the project linter with auto-fix (e.g., `npm run lint -- --fix`) if available.
-3. **Missing return types:** Add explicit return types to exported functions.
-4. **Missing JSDoc:** Add JSDoc stubs with `@param` and `@returns`.
-5. **Type imports:** Convert type-only imports to `import type { ... }`.
-6. **`any` types:** Replace with `unknown` where safe (flag complex cases for manual review).
-7. **`console.log`:** Remove from non-test files.
-8. **React namespace imports:** Convert to named imports.
-9. **Missing tests:** Create test file stubs for new utility functions.
+1. **Missing return types:** Add explicit return types to exported functions.
+2. **Missing JSDoc:** Add JSDoc stubs with `@param` and `@returns`.
+3. **Type imports:** Convert type-only imports to `import type { ... }`.
+4. **`any` types:** Replace with `unknown` where safe (flag complex cases for manual review).
+5. **`console.log`:** Remove from non-test files.
+6. **React namespace imports:** Convert to named imports.
+7. **Missing tests:** Create test file stubs for new utility functions.
 
 ### Step 5: Run All Checks and Fix Issues
 
@@ -118,7 +116,7 @@ Run each check category in order below. After each run, if there are failures, f
 
 1. **Formatting:** Run the project formatter and verify no files changed.
    - Look in `package.json` scripts for a format command (e.g., `npm run format`, `npx prettier --write .`).
-   - If files were reformatted, that counts as a fix — note it in the report.
+   - If files were reformatted, that counts as a fix; note it in the report.
 
 2. **Linting:** Run the project linter and fix all errors and warnings.
    - Look in `package.json` scripts for a lint command (e.g., `npm run lint`).
@@ -127,14 +125,14 @@ Run each check category in order below. After each run, if there are failures, f
 
 3. **Unit Tests:** Run the project unit test suite and fix all failures.
    - Look in `package.json` scripts for a test command (e.g., `npm test`, `npm run test:unit`, `npx vitest run`, `npx jest`).
-   - Read failing test output carefully — fix the **source code**, not the test expectations.
+   - Read failing test output carefully. Fix the **source code**, not the test expectations.
    - Re-run until all unit tests pass.
 
 4. **E2E Tests:** Run the project E2E test suite and fix all failures.
    - Look in `package.json` scripts for an E2E command (e.g., `npm run test:e2e`, `npx playwright test`, `npx cypress run`).
    - If no E2E script exists, check for a `playwright.config.*` or `cypress.config.*` and run the appropriate CLI command.
    - If no E2E tests exist in the project, skip this step and note it in the report.
-   - Read failing test output carefully — fix the **source code**, not the test expectations.
+   - Read failing test output carefully. Fix the **source code**, not the test expectations.
    - Re-run until all E2E tests pass.
 
 If any check cannot be made to pass after reasonable attempts, revert the offending changes and flag the issue for manual review in the report.
@@ -146,7 +144,7 @@ If a written report was requested, update it to reflect which fixes were applied
 ## Important Rules
 
 - **Never leave the codebase broken.** If a fix causes lint or test failures, revert it and mark as manual review.
-- **Do not modify test expectations** to make tests pass — fix the source code instead.
+- **Do not modify test expectations** to make tests pass; fix the source code instead.
 - **Do not touch files outside the branch diff** unless running project-wide formatters.
-- **Be conservative with type changes** — prefer flagging complex `any` replacements for manual review over introducing type errors.
-- If a report file is written, add `*Conformance Report.md` to `.gitignore` if not already covered — it is a transient artifact.
+- **Be conservative with type changes:** prefer flagging complex `any` replacements for manual review over introducing type errors.
+- If a report file is written, add `*Conformance Report.md` to `.gitignore` if not already covered (it is a transient artifact).

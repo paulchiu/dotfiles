@@ -8,14 +8,12 @@ description: "End-to-end PR review: create a worktree, run a principal-engineer 
 Unified review workflow. Triggered by a PR URL, number, or (no arg) the current branch's open PR.
 
 1. Resolve PR, create worktree.
-2. **Round 1** — principal-engineer branch review.
-3. **Round 2** — hostile adversarial second pass (once).
-4. **Round 2.5 (optional)** — persona focus-lens re-rank.
-5. **Round 3 (optional)** — Codex outside view via Nex `cxd` pane.
+2. **Round 1**: principal-engineer branch review.
+3. **Round 2**: hostile adversarial second pass (once).
+4. **Round 2.5 (optional)**: persona focus-lens re-rank.
+5. **Round 3 (optional)**: Codex outside view via Nex `cxd` pane.
 6. Write decision doc to `~/dev/sandbox/`.
 7. Offer action checklist inline. Only post to GitHub when user explicitly ticks actions in the current turn.
-
-This skill replaces the old `adversarial-review` and `reviewing-branch-changes` skills.
 
 ## Inputs
 
@@ -56,7 +54,7 @@ No auto-cleanup; the user runs their own cleanup scripts. If the worktree path a
 
 `cd "$WORKTREE"` before running diff / log / lint commands. The base ref for diffs is `origin/$BASE_REF`.
 
-## Step 2: Round 1 — branch review (principal-engineer)
+## Step 2: Round 1 (principal-engineer branch review)
 
 Load review guidance, in this order:
 
@@ -81,7 +79,7 @@ Apply the GPT-5.3 reasoning loop from `severity-and-ids.md` per finding. Collect
 
 Build a risk map: mark security, payment, migration, infra, and user-visible behavior as high attention. Validate that tests cover behavioral changes; missing tests need explicit justification.
 
-## Step 3: Round 2 — adversarial pass (self)
+## Step 3: Round 2 (adversarial self-pass)
 
 Treat round-1 findings as a draft to attack, not a finished list. Apply the adversarial lenses from `references/review-lenses.md` (bugs, regressions, missing edge cases, security, data integrity, test quality, build/CI supply chain). For each lens:
 
@@ -92,7 +90,7 @@ Treat round-1 findings as a draft to attack, not a finished list. Apply the adve
 
 Round 2 runs exactly once. Don't loop.
 
-## Step 4: Round 2.5 (optional) — persona focus-lens
+## Step 4: Round 2.5 (optional persona focus-lens)
 
 Only if the user named a persona in the prompt.
 
@@ -105,9 +103,9 @@ Load `references/persona-lens.md` and apply:
 
 The persona is **lens, not voice**. Posted comments are always drafted in the user's voice using the wrapper in `references/posting.md`. See `persona-lens.md` for the full rule, push-back behavior, and self-check.
 
-## Step 5: Round 3 — Codex outside view via Nex
+## Step 5: Round 3 (Codex outside view via Nex)
 
-**MUST ask before writing the decision doc, unless one of the skip conditions below applies.** Round 3 is the most reliable round at catching findings the self-passes miss (verified in practice: cxd surfaced two AC violations and one boundary leak that rounds 1, 2, and 2.5 all missed on PR #3708). Skipping silently is the bug. Asking is mandatory.
+**Ask before writing the decision doc, unless a skip condition below applies.** Round 3 is the most reliable round at catching findings the self-passes miss (on PR #3708, cxd surfaced two AC violations and a boundary leak that rounds 1, 2, and 2.5 all missed). Skipping silently is the bug.
 
 Ask the user once, before drafting the decision doc:
 
@@ -116,7 +114,7 @@ Ask the user once, before drafting the decision doc:
 Skip the ask only when:
 
 - The user opted out explicitly in the original prompt ("skip round 3", "no cxd", "branch-review only", "rounds 1-2 only").
-- The user opted in explicitly in the original prompt ("include cxd outside view", "do all three rounds", "full review with codex") — proceed without asking.
+- The user opted in explicitly in the original prompt ("include cxd outside view", "do all three rounds", "full review with codex"): proceed without asking.
 - Auto-mode is active AND the user opted out in this session or a recent one; otherwise even in auto-mode, ask.
 
 If yes, use the `nex` skill to spawn a pane running `cxd`, hand it:

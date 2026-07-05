@@ -12,16 +12,9 @@ The pup CLI provides comprehensive access to Datadog's API for querying metrics,
 
 ## Agent Mode (Auto-Detected)
 
-Pup **automatically detects AI coding agents** (including Claude Code, Codex, OpenCode, Cursor, and others) and enables **agent mode** with these benefits:
+Pup auto-detects AI coding agents (Claude Code, Codex, OpenCode, Cursor, and others) via environment variables and enables agent mode: no confirmation prompts, responses wrapped in a JSON envelope (`status`, `data`, `metadata`), structured errors with `error_code` and `suggestions`, and `pup --help` returning a JSON schema instead of text. Force it with `pup --agent` if detection fails.
 
-- **No confirmation prompts** - Commands auto-approve without interactive input
-- **Structured JSON output** - All responses wrapped in metadata envelopes with `status`, `data`, and `metadata` fields
-- **Enhanced error messages** - JSON errors include `error_code`, `error_message`, and `suggestions` for remediation
-- **Schema discovery** - `pup --help` returns structured JSON schema instead of text
-
-Agent mode is triggered automatically via environment variables (`CLAUDE_CODE=1`, `OPENCODE=1`, `CODEX=1`, etc.) or explicitly with `pup --agent` flag.
-
-See [references/llm-guide.md](references/llm-guide.md) for complete LLM agent documentation.
+Practical implication: extract results from `.data`, not the top level (e.g. `pup monitors list | jq '.data'`). See [references/llm-guide.md](references/llm-guide.md) for the full envelope format and error code reference.
 
 ## Quick Start
 
@@ -89,22 +82,13 @@ See [references/query-syntax.md](references/query-syntax.md) for detailed query 
 
 ## Best Practices
 
-1. **Always specify `--from`** to set explicit time ranges
-2. **Start narrow, then widen** - begin with 1h ranges for faster results
-3. **Filter by service first** when investigating issues
-4. **Use `--limit`** to control result size (defaults vary: 50-200)
-5. **APM durations are in NANOSECONDS** - 1 second = 1000000000
-6. **Use `pup logs aggregate`** for counts instead of fetching all logs
-7. **Prefer JSON output** (default) for parsing; use `--output=table` for human display
-
-## Anti-Patterns to Avoid
-
-- Don't omit `--from` on time-series queries
-- Don't use `--limit=1000` as a first step; start small
-- Don't fetch raw logs just to count them - use aggregate
-- Don't assume APM durations are in seconds/milliseconds (they're nanoseconds!)
-- Don't retry failed requests without checking the error code
-- Don't pipe large JSON through multiple jq transforms
+1. **Always specify `--from`**; never rely on default time ranges for time-series queries
+2. **Start narrow, then widen**: begin with 1h ranges and small limits (`--limit=20`), expand only if needed
+3. **Filter by service first** when investigating issues; filter at the API level (`--query`, `--tags`), not by post-processing output
+4. **Use `pup logs aggregate --compute=count`** for counts; never fetch raw logs just to count them
+5. **APM durations are in NANOSECONDS**: 1 second = 1000000000, 100ms = 100000000
+6. **Check the error code before retrying**: 401/403 means re-authenticate or fix permissions, only 429/5xx warrant retries
+7. **Prefer JSON output** (default) for parsing; use `--output=table` for human display; avoid piping large JSON through multiple jq transforms
 
 ## Command Categories
 

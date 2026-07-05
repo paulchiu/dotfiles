@@ -88,9 +88,4 @@ For Spotify Wrapped/Rewind-style presentation videos:
 
 ## Source Links
 
-Consult these if connector access is available:
-
-- Notion color/reference board: `https://www.notion.so/meandu/d530f2871cdc47f28c910ef4bfb07bea?v=7f03b3638dff4142a2ea5655811ddbe1`
-- Google Slides reference deck: `https://docs.google.com/presentation/d/1JYo-7I_e3ULw12Z4mstwFkBc-grMq6V6J5uIIE-d5wY/edit?slide=id.p#slide=id.p`
-- Frosted tile reference slide: `https://docs.google.com/presentation/d/1JYo-7I_e3ULw12Z4mstwFkBc-grMq6V6J5uIIE-d5wY/edit?slide=id.g3c4f2c75670_0_19#slide=id.g3c4f2c75670_0_19`
-- Font/style reference slide: `https://docs.google.com/presentation/d/1JYo-7I_e3ULw12Z4mstwFkBc-grMq6V6J5uIIE-d5wY/edit?slide=id.g3c6d0725964_4_166#slide=id.g3c6d0725964_4_166`
+Live Notion and Google Slides references are listed in SKILL.md (Brand References). Consult them when connector access is available.
