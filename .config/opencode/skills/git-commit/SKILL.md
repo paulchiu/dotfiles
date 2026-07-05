@@ -20,6 +20,7 @@ Generate a conventional commit message from the current branch's changes and cre
 3. ELSE run `git diff`.
    - IF this output is non-empty: use it as the source for the commit message. Remember `STAGED = no`.
    - ELSE (both diffs empty): stop and report: "No changes detected."
+4. Read the diff and check for mixed purposes. IF the changes serve two unrelated goals (example: a bug fix in `src/` plus an unrelated dependency bump in `package.json`), stop and ask the user whether to split into two commits. A single purpose with its supporting changes (a feature plus its tests and docs) is ONE commit; do not ask.
 
 ## Step 3: Determine the Issue Code Prefix
 
@@ -36,11 +37,25 @@ Write a conventional commit message from the diff gathered in Step 2.
 
 **Format:** `type(scope): Short description` (with the `[ISSUE-123] ` prefix from Step 3 if one applies).
 
+**Choosing the type (go down this list, first matching rule wins):**
+
+1. Every changed file is a test file → `test`
+2. Every changed file is documentation (`.md` files, `docs/`) → `docs`
+3. Every changed file is CI or pipeline config (`.github/`, `.buildkite/`) → `ci`
+4. The change corrects wrong behaviour (wrong output, crash, regression; changed conditionals or corrected values are the usual sign) → `fix`
+5. The change adds a capability, option, endpoint, or command that did not exist → `feat`
+6. Behaviour is unchanged and code is restructured, renamed, or moved → `refactor`
+7. None of the above (dependency bumps, config, housekeeping) → `chore`
+
+Use `style`, `perf`, or `build` only when the change is purely that and nothing above matched first.
+
+**Choosing the scope:** run `git log --oneline -15` and reuse a scope name already in use when one fits the changed files. Otherwise use the directory or module that dominates the diff (e.g. `cart` for changes under `src/cart/`).
+
 **Rules:**
-- Valid types, use exactly one of: `feat`, `fix`, `refactor`, `test`, `chore`, `docs`, `style`, `perf`, `build`, `ci`
 - Use sentence case and imperative tone ("Add feature", not "Added feature")
 - Keep the subject line under 72 characters
-- IF the diff touches more than one file: after the subject line, add a blank line, then a bullet list with one bullet per file summarizing its change
+- The subject states the outcome, not the edit. IF your draft subject contains a file name, a function or variable name, or a vague verb ("update", "change", "modify") without saying what it accomplishes, rewrite it. Example: `fix(cart): Prevent duplicate order submission`, NOT `fix(cart): Update submit handler`.
+- IF the diff touches more than one file: after the subject line, add a blank line, then a bullet list with one bullet per file summarizing its change. Each bullet states what the change does ("Add retry logic to the payment client"), never "Modified <file>" or "Updated <file>".
 - IF the diff touches one file: the subject line alone is enough
 
 ## Step 5: Stage Changes (only if STAGED = no)

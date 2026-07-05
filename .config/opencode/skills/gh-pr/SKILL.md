@@ -22,6 +22,8 @@ Generate a pull request description from the current branch's changes compared t
 3. Check if `.github/pull_request_template.md` exists in the project root. If it does, read it as the template.
 4. If no changes are found, report "No changes detected" and stop.
 
+The diff is the ground truth; commit messages and ticket text are hints only. Base every claim in the body on what the diff actually implements, and when they disagree, trust the diff.
+
 ### Step 2: Generate the PR Description
 
 Output exactly this structure: no wrapping code fences, no preamble, no commentary.
@@ -41,7 +43,7 @@ Valid types: `feat`, `fix`, `refactor`, `test`, `chore`, `docs`, `style`, `perf`
 - Use sentence case (capitalise first word only)
 - Use imperative mood ("Add feature" not "Added feature")
 - Keep under 72 characters
-- **Issue code prefix**: Extract the issue code from the current branch name (e.g., `feature/cad-1438-...` yields `CAD-1438`, `fix/PAY-3080-...` yields `PAY-3080`). Always prefix the PR title with it in brackets: `[CAD-1438] type(scope): Description`. PR titles should always have the issue code prefix.
+- **Issue code prefix**: Extract the issue code from the current branch name (e.g., `feature/cad-1438-...` yields `CAD-1438`, `fix/PAY-3080-...` yields `PAY-3080`). Always prefix the PR title with it in brackets: `[CAD-1438] type(scope): Description`. PR titles should always have the issue code prefix. If the branch name contains no issue code, ask the user for the ticket ID; never invent one.
 
 #### Line 2: Separator
 
@@ -51,7 +53,8 @@ Write exactly four dashes: `----`
 
 **If a PR template was found:**
 - Fill in every section of the template with specific details from the diff
-- Keep all original markdown formatting, checkboxes, and HTML elements intact
+- Keep all original markdown formatting, checkboxes, and HTML elements intact. Never remove or reword the template's checkboxes; edit content around them, not the structure.
+- Tick a checkbox only for something actually done and verifiable from the diff or this session; leave the rest unticked rather than optimistically ticking.
 - Replace all placeholder text, leave nothing unfilled
 - Be specific: reference actual file names, function names, and changes
 
@@ -78,6 +81,7 @@ When in doubt, round up. "None" should only be used when there is truly zero pos
 ### Writing Rules
 
 - **Feature overview, not changelog.** Ask "what capability does this add?" not "what files did I touch?". Avoid implementation details like file paths or function names unless essential.
+- **Claim only what ships.** If the diff implements something partially or behind a flag, say so ("initial", "behind `flag-name`, off by default") rather than describing the finished capability.
 - **Inline code** for technical references: key names, environment variables, config values, keyboard shortcuts, CLI commands, symbols.
 - **Australian spelling** throughout (e.g., "colour", "organisation", "behaviour", "authorise").
 
