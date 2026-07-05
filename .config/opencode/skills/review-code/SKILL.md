@@ -73,18 +73,22 @@ git log origin/${BASE_REF}..HEAD --oneline
 git diff --name-only origin/${BASE_REF}...HEAD
 ```
 
-Run targeted `rg` scans on changed files for feature-flag style, `any`, non-null assertions, logging patterns, etc. Run lint/type checks for touched paths when available.
+Run targeted `rg` scans on changed files for feature-flag style, `any`, non-null assertions, logging patterns, etc. (batch these in parallel, not serially). Run lint/type checks for touched paths when available.
+
+For wide diffs spanning several modules, fan the context work out: parallel Explore subagents check call sites and local conventions for each changed area while the main thread reads the diff. Carry forward their conclusions, not file dumps.
 
 Apply the GPT-5.3 reasoning loop from `severity-and-ids.md` per finding. Collect findings with stable `REV-N` IDs and severities.
 
 Build a risk map: mark security, payment, migration, infra, and user-visible behavior as high attention. Validate that tests cover behavioral changes; missing tests need explicit justification.
 
-## Step 3: Round 2 (adversarial self-pass)
+## Step 3: Round 2 (adversarial pass)
 
-Treat round-1 findings as a draft to attack, not a finished list. Apply the adversarial lenses from `references/review-lenses.md` (bugs, regressions, missing edge cases, security, data integrity, test quality, build/CI supply chain). For each lens:
+Treat round-1 findings as a draft to attack, not a finished list. Run this round as a fork, not a self-pass: attacking your own findings from inside the context that produced them inherits round 1's blind spots, and a cold reader does not. Spawn a subagent given only the artifacts (the worktree path, the diff refs, and the bare REV-N list: statement, file:line, severity, no round-1 reasoning) plus `references/review-lenses.md`, framed to refute. It applies each lens (bugs, regressions, missing edge cases, security, data integrity, test quality, build/CI supply chain) to:
 
 - Add findings round 1 missed.
-- Contest weak round-1 findings: is the impact realistic? Is there a clear rule? Drop or downgrade if not.
+- Contest weak round-1 findings: is the impact realistic? Is there a clear rule? Recommend drop or downgrade if not.
+
+Merge its output back; you keep final judgment on severity via the false-positive gate in `severity-and-ids.md`.
 
 **Opportunistic AC trace.** If acceptance criteria are findable (PR body section `## Acceptance criteria` / `## ACs` / `## Requirements`; linked Linear ticket via `mcp__claude_ai_Linear__get_issue`; checkbox lists `- [ ]` / `- [x]`), trace each one against the diff and note only the ones **not met**. If no ACs are findable, skip the AC section entirely. Don't stop, don't ask.
 
@@ -134,6 +138,8 @@ Pull the response back in. Resolve disagreements:
 If skipped (user opted out), round 2 (and 2.5 if run) output is final. Note "Round 3 skipped per user preference" in the decision doc.
 
 ## Step 6: Write decision doc
+
+Before writing, re-verify every `blocking` finding against the worktree code (open the surrounding file, not just the diff hunk). Plausible-but-wrong findings are the main failure mode of model reviews; a dropped false blocking beats a defended one.
 
 Default location: `~/dev/sandbox/`. Filename: `yyyy-mm-dd PR <num> <short title>.md` (preserve acronym casing; run `date +%Y-%m-%d` if today's date isn't in context).
 
@@ -239,6 +245,15 @@ Quick summary of the wrapper (full rules in `posting.md`):
 - `LLM note: <short>` first line.
 - Plain opening paragraph after `<summary>` (no severity label).
 - `(ref: REV-N)` as the last line outside `</details>`.
+
+## Fable notes
+
+Written for Fable 5; lean on its strengths:
+
+- Delegate breadth (call-site checks, convention scans, persona history mining) to subagents; the main thread holds the diff and the judgment.
+- Reviewers you spawn get artifacts only (diff, worktree path, bare findings list), never your reasoning, and are asked to refute rather than confirm. That applies to the round-2 fork and the cxd hand-off alike.
+- Batch independent work in parallel: reference loads, `rg` scans, `gh` metadata calls.
+- Thoroughness is measured by verified findings, not finding count; the false-positive gate outranks completeness.
 
 ## Notes
 
