@@ -246,14 +246,15 @@ Quick summary of the wrapper (full rules in `posting.md`):
 - Plain opening paragraph after `<summary>` (no severity label).
 - `(ref: REV-N)` as the last line outside `</details>`.
 
-## Fable notes
+## Judgment notes
 
-Written for Fable 5; lean on its strengths:
+These encode what a strong reviewer does by default. Follow them regardless of which model is running the skill:
 
+- Spend lens time where bugs actually live: state mutation, boundaries (serialisation, API contracts, null/undefined edges), ordering and time, and the interaction between changed and unchanged code. Read the call sites the diff did not touch; a correct-looking hunk with a stale caller is still a bug.
+- Zero blocking findings after a real search is a valid outcome. Do not manufacture severity to look thorough; thoroughness is measured by verified findings, not finding count, and the false-positive gate outranks completeness.
 - Delegate breadth (call-site checks, convention scans, persona history mining) to subagents; the main thread holds the diff and the judgment.
 - Reviewers you spawn get artifacts only (diff, worktree path, bare findings list), never your reasoning, and are asked to refute rather than confirm. That applies to the round-2 fork and the cxd hand-off alike.
 - Batch independent work in parallel: reference loads, `rg` scans, `gh` metadata calls.
-- Thoroughness is measured by verified findings, not finding count; the false-positive gate outranks completeness.
 
 ## Notes
 

@@ -96,14 +96,15 @@ Exit when an approving review lands AND CI is green, or 30 minutes elapse.
 2. After merge confirms, `git worktree remove ../<repo>-<issue-id-lowercase>`.
 3. Move the Linear ticket to the team's Done state. For Clean Kitchen task force, use the state IDs in MEMORY.md (`Linear CKTF Team State IDs`); for other teams, look up via `mcp__claude_ai_Linear__get_team`.
 
-## Fable notes
+## Execution notes
 
-Written for Fable 5; lean on its strengths rather than walking the phases mechanically:
+These encode the judgment calls a strong engineer makes by default. Follow them regardless of which model is running the skill; they are what separates a good run from a mechanical one:
 
 - Delegate context-heavy reading (repo exploration, long CI logs) to subagents and keep the main thread for decisions and code; a bk job log pasted into main context is budget spent on noise.
 - Batch independent calls in parallel: issue fetch + repo exploration, multi-file reads, `gh pr checks` + comment fetches in Phase 8.
-- Verification is adversarial by default: reviewers get the artifact (diff, AC list), never your reasoning, and are asked to refute rather than confirm.
-- When your judgment and the ticket conflict mid-implementation, escalate with a recommendation; do not silently follow either.
+- Verification is adversarial: reviewers get the artifact (diff, AC list), never your reasoning, and are asked to refute rather than confirm. Asking for confirmation gets you confirmation; it measures nothing.
+- The ticket describes intent; the code is the ground truth. When implementation guidance conflicts with what the code actually shows, follow the code, log the decision, and escalate with a recommendation if the difference changes scope.
+- Done means the AC is observably met, not that the steps were walked. If every phase passed but an AC is only plausibly satisfied, that is a 4b failure, not a success.
 
 ## Decision log (autonomous runs only)
 
