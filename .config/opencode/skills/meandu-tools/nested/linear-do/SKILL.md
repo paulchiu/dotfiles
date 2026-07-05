@@ -18,7 +18,7 @@ Input: a Linear issue URL or identifier (e.g. `https://linear.app/mr-yum/issue/C
 
 ### Phase 1: Understand
 
-1. Fetch the issue via `mcp__claude_ai_Linear__get_issue` (preferred) or `linear issue view <ID>`. Read the description, acceptance criteria, implementation guidance, and comments.
+1. Fetch the issue via `mcp__claude_ai_Linear__get_issue` (preferred) or `linear issue view <ID>`. Read the description, acceptance criteria, implementation guidance, and comments. In an unfamiliar repo, hand the breadth pass (entry points, conventions, test layout) to an Explore subagent in parallel with the ticket read, and carry forward only its conclusions.
 2. **Capture the git branch name returned by the Linear API** (e.g. `feature/cusm-642-remove-db-schema-compat-matrix`). That is the branch name for Phase 3. If the API returned none, fall back to `feature/<issue-id-lowercase>-short-description` or `fix/...`.
 
 ### Phase 2: Ask questions
@@ -68,7 +68,7 @@ Deltas to the workflow above. These defaults replace the interactive choices.
 2. Write or update at least one test per AC. If an AC is fundamentally untestable ("looks better"), log that decision and skip it.
 3. Run tests plus the ticket's verification commands until all pass. **Iteration cap: 5 failed runs**, then escalate with failing test names, fix attempts, and your blocker hypothesis.
 
-**Phase 5b (new): self-audit before PR.** Spawn a `general-purpose` subagent to audit the diff against gh-pr's requirements:
+**Phase 5b (new): self-audit before PR.** Spawn a `general-purpose` subagent and frame it to refute, not confirm: give it only the diff and the AC list (not your working context) and ask it to disprove the claim "this diff satisfies every AC and is PR-ready". A fresh reader's objections are the signal; your own review is biased by having written the code. It also checks gh-pr's requirements:
 
 - Branch name carries the issue code in parseable form (`feature/<id>-...` or `fix/<id>-...`).
 - If `.github/pull_request_template.md` exists, note sections the PR description must fill.
@@ -95,6 +95,15 @@ Exit when an approving review lands AND CI is green, or 30 minutes elapse.
 1. `gh pr checks <number>` to verify, then `gh pr merge <number> --auto --squash`.
 2. After merge confirms, `git worktree remove ../<repo>-<issue-id-lowercase>`.
 3. Move the Linear ticket to the team's Done state. For Clean Kitchen task force, use the state IDs in MEMORY.md (`Linear CKTF Team State IDs`); for other teams, look up via `mcp__claude_ai_Linear__get_team`.
+
+## Fable notes
+
+Written for Fable 5; lean on its strengths rather than walking the phases mechanically:
+
+- Delegate context-heavy reading (repo exploration, long CI logs) to subagents and keep the main thread for decisions and code; a bk job log pasted into main context is budget spent on noise.
+- Batch independent calls in parallel: issue fetch + repo exploration, multi-file reads, `gh pr checks` + comment fetches in Phase 8.
+- Verification is adversarial by default: reviewers get the artifact (diff, AC list), never your reasoning, and are asked to refute rather than confirm.
+- When your judgment and the ticket conflict mid-implementation, escalate with a recommendation; do not silently follow either.
 
 ## Decision log (autonomous runs only)
 

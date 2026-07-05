@@ -113,7 +113,7 @@ Add the conditional gates that apply (see source): existing DB data checked agai
 
 ### Writing the implementation guidance section
 
-Research the codebase as part of drafting; don't wait to be asked. Locate the primary entry point, read the surrounding pattern the agent must match, find at least one alternative or reference pattern elsewhere in the repo, and note binding constraints (transactions, feature flags, dependency boundaries, utilities to reuse). If you have no repo access, say so in the draft and flag the section as best-effort.
+Research the codebase as part of drafting; don't wait to be asked. Locate the primary entry point, read the surrounding pattern the agent must match, find at least one alternative or reference pattern elsewhere in the repo, and note binding constraints (transactions, feature flags, dependency boundaries, utilities to reuse). In a large or unfamiliar repo, fan this out to parallel Explore subagents (entry point, reference patterns, call sites for the 'how is it used' gate) and carry forward only their conclusions; the main thread stays clean for drafting, and real call-site evidence beats the ticket's claim of how something is used. If you have no repo access, say so in the draft and flag the section as best-effort.
 
 Structure notes beyond the template:
 
@@ -164,10 +164,10 @@ If a card lands in "high ambiguity", propose a spike instead of trying to write 
 Applies to both creating and rewriting. Steps flagged **[rewrite]** only apply when rewriting an existing issue.
 
 1. **[rewrite] Fetch and read.** Extract the Linear issue ID (`CAD-1295` or a `linear.app` URL), fetch via `mcp__claude_ai_Linear__get_issue`, and identify the core goal, listed items, open questions from the original author, and any scope/exclusion context.
-2. **Clarify before drafting.** Ask the questions needed to fill every section of the template. Common gaps: team/project/labels/assignee, scope boundaries, acceptance criteria, verification commands, risk tier and justification, sub-issue grouping, and (on rewrites) answers to the original author's open questions.
+2. **Clarify before drafting.** Batch the metadata lookups (teams, projects, labels, users) as parallel MCP calls rather than serially, then ask the questions needed to fill every section of the template. Common gaps: team/project/labels/assignee, scope boundaries, acceptance criteria, verification commands, risk tier and justification, sub-issue grouping, and (on rewrites) answers to the original author's open questions.
 3. **Research the codebase** to fill in implementation guidance. Default to doing this whenever you have repo access (current working directory, a repo the user has opened, or GitHub search); do not wait for the user to prompt you. Follow the research checklist above. If you have no repo access, state that explicitly and mark the section best-effort.
    - For non-spike cards, work the change due diligence checklist in the same pass (see 'Due diligence: understand first, then change'). Fill the Due diligence section with the universal gates plus any conditional gate the research surfaced. If the core 'how is it used' gate can't be answered, propose telemetry-first two-phase work or a spike instead of a direct-change card.
-4. **Draft the full issue** using the template. Present the draft to the user and wait for approval before writing to Linear.
+4. **Draft the full issue** using the template, then run the cold-read test before presenting: fork a subagent given ONLY the card text (no conversation context) and ask it to state its implementation plan and list every assumption it had to make. Each assumption is a coin flip the card failed to pin; fix those gaps. Present the draft to the user and wait for approval before writing to Linear.
 5. **Create or update the issue** via `mcp__claude_ai_Linear__save_issue` (pass the existing id on a rewrite) or, as fallback, `linear issue create ...` / `linear issue update <ID> ...`.
 6. **Return the URL and identifier** (e.g. `CAD-1234`).
 7. **Create sub-issues** if requested. Each follows the same template, references the parent, and uses the same team/project/labels.

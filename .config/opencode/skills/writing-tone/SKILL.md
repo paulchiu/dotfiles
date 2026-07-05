@@ -263,7 +263,8 @@ For longer-form posts, load `references/style-examples.md` and find the matching
    - **Other longer-form posts** (broadcast, recognition, sentiment-share, blockquote DM reply, retro card, consolidated thread reply, meeting-outcome update): read `references/style-examples.md` and find the matching example.
    - **Short messages** (FYI, brief reply, single-sentence ack): the anchors above are enough.
 2. If no context is provided, ask: "What would you like me to rewrite? Share a rough draft or ideas to develop."
-3. Output ONLY the rewritten message. No meta-commentary ("a couple of style notes", "options not taken", "let me know if you'd like a different angle"). Exception: a brief inline `[citation needed]`-style flag for facts you couldn't verify; keep it minimal and inline.
+3. Review as a skeptic before delivering. Re-read the draft cold against the pre-flight checklist and 'Signs of AI writing to avoid'; the model's default voice is the failure mode, and it reads as normal from the inside. For high-stakes messages (sensitive 1:1s, broad announcements, exec-facing posts), fork a subagent given only the draft and the matching reference example, no conversation context, to flag voice mismatches and AI tells; revise once on what it finds.
+4. Output ONLY the rewritten message. No meta-commentary ("a couple of style notes", "options not taken", "let me know if you'd like a different angle"). Exception: a brief inline `[citation needed]`-style flag for facts you couldn't verify; keep it minimal and inline.
 
 ## Maintaining this skill
 
