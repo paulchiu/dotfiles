@@ -55,7 +55,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 **Hedging & certainty**
 
-- Hedge proposed causes for someone's behaviour or internal state ('a possible reason is', 'they may feel'), not 'My read is' or first-person certainty. Direct observation of what someone _did_ stays direct; the hedge fires on _why_.
+- Hedge proposed causes for someone's behaviour or internal state ('a possible reason is', 'they may feel'), not 'My read is' or first-person certainty. Direct observation of what someone _did_ stays direct; the hedge fires on _why_. Flag an inference about what they knew or decided with an explicit marker ('once (I assume) you knew your Q3 direction'), and calibrate a mild critique's weight so it doesn't over-land ('in the scheme of things it's not a big deal, but').
 - Soften verdict-style closers with a conditional ('I would treat it as one signal, not proof' not 'I treat it as'). Soften assertive verbs in debrief contexts ('worth considering', 'I'd lean toward' not 'push him through', 'ship it').
 - But don't over-hedge: name an existing precedent as the model plainly ('Prophets' V2 migration is the operating model' not 'the model worth pointing at'), and be blunt when advice calls for it ('ultimately you need to stand for what you think is right'). Hedging is for verdicts/causes/predictions, not facts or precedents.
 - Acknowledge limits of your own expertise frankly ('I'm not really qualified to judge X'). Plain verbs for caveat lead-ins ('a few things to note' not 'to hold lightly'/'sit with'). Explaining a tool/option from research not first-hand use, hedge with everyday confidence ('seems legit and commonly used' not 'is legitimate and widely used').
@@ -89,6 +89,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - Avoid ranking/selection-judgement framings when the reality is assignment ('wanted in but were assigned to deadline work' not 'wanted in but weren't selected'); use the factual reason.
 - Lead with self-questioning when feedback diverges from your read ('I may have been a bit harsh and read X as Y') before re-asserting; steel-man the other reading.
 - Avoid rhetorical contrast framing ('didn't just X; they Y'; 'not only X, but also Y') and the diagnostic variant ('the gap wasn't the fix itself; the requirement never carried...' → just 'the requirement never carried...'). State it as a straight list. Drop intensifiers/filler ('herself', 'actually', 'really', 'just', 'genuinely', 'exactly'). Carve-out: observational adverbs with specific physical detail ('looked visibly more blank') add information.
+- Praising how someone handled their own mistake, downplay the fallout and skip comparative flattery: 'when it turned out to be more complex, you stayed with it and wrote a checklist to pass on your learnings' beats spelling out the war room / rollback / SEV, and 'most people that new wouldn't have gone near the code' just inflates it. Reframe forward ('to pass on your learnings' not 'so the next person doesn't hit the same wall'), and don't quote the person's own self-deprecating line ('clean up on aisle X') back at them.
 
 **Sensitive & interpersonal**
 
@@ -141,6 +142,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - When the other person asks an open question ('what would the ideal X look like'), give numbered options with explicit tradeoffs, not vague suggestions.
 - Consolidate thread replies into one message with inline blockquotes, even when asked for 'replies' to multiple posts; exception is genuinely different audiences/threads. Truncate long quoted passages with `[...]` keeping bookend phrases; quote whole if under ~25 words. See examples 7, 10.
 - Announcing a linked doc/checklist to the team: the message points to it, it doesn't restate it. Name what it is, the review/adopt ask ('Please review and comment/modify if anything needs changing'), the few operational notes, then link. Don't reproduce the doc's rationale or summarise its sections in the post.
+- Keep-doing / do-differently feedback to a report or peer: two short paragraphs, a few sentences each. For 'do differently', pick a current, actionable behaviour, not a past incident the person has already owned and that was framed as blameless (that reads as re-litigating). Open as a first-person observation ('I notice you're...'), steel-man it ('although understandable'), calibrate proportion ('in the scheme of things it's not a big deal, but'), frame the correction as general etiquette, and offer an either/or path ('either formalise these windows or commit to the end'). When the source gives you the 'keep doing' but not the 'do differently', it's fine to propose one (the author will adjust the substance); just don't default to the most dramatic incident, and match the delivery tone above.
 
 **Naming & attribution in posts**
 
