@@ -88,11 +88,11 @@ Fix any blockers (spelling/comment-only nits may be accepted and logged), then c
 
 Draft **any human-facing reply** via the `writing-tone` skill before posting. Default to a blockquote-led inline reply (writing-tone example 7): quote the relevant line, then respond. No freeform paragraphs that paraphrase the comment.
 
-Exit when an approving review lands AND CI is green, or 30 minutes elapse.
+Exit when CI is green AND an approving review has landed AND no human reviewer has outstanding nitpicks, or 30 minutes elapse. An approval does not clear the approver's nitpicks: if a **human** (non-bot) reviewer left any actionable nit, suggestion, or change request you have not resolved, treat it as outstanding even when the review state is `APPROVED`. Determine human vs bot by author (a `[bot]` login or `user.type == "Bot"` — e.g. `coderabbitai[bot]` — is a bot; its nits are advisory and never block). "Resolved" means fixed in a pushed commit, or (for a deferred nit) filed as a follow-up issue AND acknowledged in a reply with the link. When human nits remain outstanding, do NOT proceed to Phase 9; escalate to the user with the list and let them choose (fix now / file follow-up / merge anyway).
 
 **Phase 9 (new): merge and archive.** Once approved and green:
 
-1. `gh pr checks <number>` to verify, then `gh pr merge <number> --auto --squash`.
+1. Merge preconditions (all required): CI green, an approving human review, and **no outstanding human-reviewer nitpicks** (per Phase 8). Only attempt the merge when all three hold, or when the user has explicitly said to merge despite the nits. Then `gh pr checks <number>` to verify the gates, then merge directly with `gh pr merge <number> --squash`. Do NOT enable GitHub auto-merge (no `--auto`); merge only at this point. If the merge is rejected because a gate is not yet satisfied, do not fall back to `--auto`; return to the Phase 8 poll and retry once the gate clears. Never merge over an unresolved human nit without an explicit user go-ahead.
 2. After merge confirms, `git worktree remove ../<repo>-<issue-id-lowercase>`.
 3. Move the Linear ticket to the team's Done state. For Clean Kitchen task force, use the state IDs in MEMORY.md (`Linear CKTF Team State IDs`); for other teams, look up via `mcp__claude_ai_Linear__get_team`.
 
@@ -118,6 +118,6 @@ At the end of the run, print the log's absolute path so it is clickable in Nex.
 
 ## Escalation
 
-Stop the autonomous flow and report when: a Phase 2 blocker appears (ticket-vs-repo mismatch, contradictory AC, missing repo); the test loop (4b) or CI loop (7) hits its 5-iteration cap; the self-audit (5b) finds unfixable blockers; a reviewer raises substantive disagreement; or the 30-minute review window elapses without approval.
+Stop the autonomous flow and report when: a Phase 2 blocker appears (ticket-vs-repo mismatch, contradictory AC, missing repo); the test loop (4b) or CI loop (7) hits its 5-iteration cap; the self-audit (5b) finds unfixable blockers; a reviewer raises substantive disagreement; a human reviewer leaves outstanding nitpicks (even on an approval) that you have not resolved; or the 30-minute review window elapses without approval.
 
 The escalation message must include: where you stopped, what you tried, your blocker hypothesis, and the absolute path to the decision log. Take no further action (especially no merge) until the user responds.

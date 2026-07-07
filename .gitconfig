@@ -93,3 +93,5 @@
 	userFingerprint = 2e32b9cda02749ab5d095a8575a77fd353d5fb51
 [coderabbit]
 	machineId = cli/43e0f7e7378f4e379e70a8253b82eab6
+[rerere]
+	enabled = true
