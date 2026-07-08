@@ -34,7 +34,7 @@ Confirm the working tree is clean; if not, ask how to handle uncommitted changes
 
 ### Phase 4: Implement
 
-Make the changes, following existing repo conventions. Keep scope to exactly what the ticket describes; no opportunistic refactors. Run the verification commands listed in the issue (typecheck, lint, tests) and fix failures before proceeding.
+Make the changes, following existing repo conventions. Keep scope to exactly what the ticket describes; no opportunistic refactors. Run the verification commands listed in the issue (typecheck, lint, tests) and fix failures before proceeding. In manage-api, run test suites per the "Test execution" guard in Phase 4b (background, stop on the pass summary, hard-cap the wait): these suites hang after passing, so a foreground wait will stall the run.
 
 ### Phase 5: Commit
 
@@ -66,7 +66,15 @@ Deltas to the workflow above. These defaults replace the interactive choices.
 
 1. Use the test framework already in the repo; never introduce a new one.
 2. Write or update at least one test per AC. If an AC is fundamentally untestable ("looks better"), log that decision and skip it.
-3. Run tests plus the ticket's verification commands until all pass. **Iteration cap: 5 failed runs**, then escalate with failing test names, fix attempts, and your blocker hypothesis.
+3. Run tests plus the ticket's verification commands until all pass. **Iteration cap: 5 failed runs**, then escalate with failing test names, fix attempts, and your blocker hypothesis. In manage-api, run tests per the "Test execution" guard below; a post-pass hang is not a failed run and does not count toward this cap.
+
+**Test execution (manage-api, and any jest-under-Docker repo).** At time of writing (2026-07), these suites print the pass summary (`Test Suites: N passed` / `Tests: N passed`) and then hang on unclosed async handles instead of exiting cleanly. This hits unit and integration alike; integration adds Docker bring-up latency on top. Guard against waiting too long:
+
+- Never run a suite in the foreground during a ship run: launch it backgrounded (Bash `run_in_background`) and poll the output file. A foreground run that hangs blocks the whole ship loop.
+- Do not pipe through `tail` (it buffers until EOF, which never comes).
+- Treat the run as green the moment `Test Suites: N passed` / `Tests: N passed` appears; `TaskStop` the process rather than waiting for a clean exit. Do not retry or investigate the hang unless the user asks.
+- Integration: run only the jest pattern for the files you touched (the targeted `docker compose ... run tests ... <pattern>` form in AGENTS.md), not the full suite. Defer the full integration suite to CI (`buildkite/manage`), which Phase 7 already monitors and Phase 9 requires green before merge.
+- Hard-cap any local test wait at ~15 minutes. On timeout, stop waiting, push, and let CI run it rather than blocking the run. If integration Docker itself stalls (e.g. `Cannot find module` from a stale `node_modules` volume), that is the AGENTS.md reset+rebuild footgun, not a code failure.
 
 **Phase 5b (new): self-audit before PR.** Spawn a `general-purpose` subagent and frame it to refute, not confirm: give it only the diff and the AC list (not your working context) and ask it to disprove the claim "this diff satisfies every AC and is PR-ready". A fresh reader's objections are the signal; your own review is biased by having written the code. It also checks gh-pr's requirements:
 
