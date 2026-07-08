@@ -31,3 +31,13 @@ Pass `--base <parent-branch>` on `gh pr create` for every PR except PR 1. PR 1 t
 ## Numbering
 
 PR numbers are assigned at `gh pr create` time. Create PRs 1 → M first (bodies can omit the numbered list initially), then edit each body with the final numbers once the whole stack exists.
+
+## Draft state
+
+Create every PR in the stack as a draft (`gh pr create --draft`, per Step 3). Then:
+
+- **Ready only the bottom PR** (PR 1, base `main`) when it is ready for review.
+- **Keep PRs 2..M as drafts** until each one's base (the PR below it) merges. An upper PR cannot merge or be meaningfully reviewed against `main` while its base is an unmerged branch, so readying it invites premature review and misrepresents it as mergeable.
+- When PR N merges, GitHub auto-retargets PR N+1's base to `main`. Only then `gh pr ready` PR N+1.
+
+A caller that marks every stacked PR ready at once (e.g. a blanket `gh pr ready` loop after CI goes green) is a defect — ready is per-PR and gated on the base having merged.

@@ -42,13 +42,22 @@ Use the **git-commit** skill. Stage the relevant files; the branch name carries 
 
 ### Phase 6: Create PR
 
-Use the **gh-pr** skill (pushes the branch, creates a draft PR). Note the PR number.
+**Invoke the gh-pr skill via the Skill tool — do not hand-write the body or call
+`gh pr create` directly.** Shelling out to `gh` skips gh-pr's title format,
+template discipline, and (for stacks) the `> [!NOTE]` admonition, which is
+exactly how those conventions get silently dropped. gh-pr pushes the branch and
+creates a **draft** PR; note the PR number.
+
+**Stacked series (each PR's base is the previous PR's branch, not `main`):**
+create every PR as a draft (gh-pr does this). Do **not** ready the upper PRs
+here — see the draft rule in Phase 7/9. gh-pr's `references/stacked-prs.md` owns
+the `--base` flag, the admonition, and the numbering; follow it.
 
 ### Phase 7: Monitor CI
 
 1. `gh pr checks <number>`. If pending, use `/loop` to poll every 3 minutes.
 2. On failure, use the **bk-buildkite** skill: `bk use mryum`, then `bk build view <build-number> -p <pipeline> -s failed,broken` to find the failed job, then `bk job log <job-uuid> -p <pipeline> --no-timestamps` for logs. Fix, commit (git-commit skill), push, keep monitoring.
-3. Once green, ask the user whether to mark ready (`gh pr ready <number>`), request reviewers, enable auto-merge, or update the Linear issue status.
+3. Once green, ask the user whether to mark ready (`gh pr ready <number>`), request reviewers, enable auto-merge, or update the Linear issue status. **In a stacked series, only ready the bottom PR (the one whose base is `main`); keep every N+1 PR a draft until its base merges** (it cannot be reviewed against `main` or merged yet, and readying it invites premature review). Ready each upper PR only once it retargets to `main` after its base lands.
 
 ## Autonomous mode
 
@@ -86,7 +95,7 @@ Deltas to the workflow above. These defaults replace the interactive choices.
 
 Fix any blockers (spelling/comment-only nits may be accepted and logged), then create the PR.
 
-**Phase 7:** once green, do not ask; run `gh pr ready <number>` and continue. CI fix-loop cap: 5 failed runs, then escalate.
+**Phase 7:** once green, do not ask; run `gh pr ready <number>` and continue. CI fix-loop cap: 5 failed runs, then escalate. **Stacked series: ready only the bottom PR (base `main`); leave every N+1 PR a draft** (`gh pr create --draft`, never `gh pr ready`) until its base merges and it retargets to `main`. Readying an upper stacked PR is a defect — it can't merge yet and invites premature review.
 
 **Phase 8 (new): review feedback loop.** Poll every 5 minutes via `/loop`, max 30 minutes. Each iteration read `gh pr view <number> --comments` (CodeRabbit posts here) and `gh pr view <number> --json reviews`. For each new comment:
 
@@ -101,8 +110,9 @@ Exit when CI is green AND an approving review has landed AND no human reviewer h
 **Phase 9 (new): merge and archive.** Once approved and green:
 
 1. Merge preconditions (all required): CI green, an approving human review, and **no outstanding human-reviewer nitpicks** (per Phase 8). Only attempt the merge when all three hold, or when the user has explicitly said to merge despite the nits. Then `gh pr checks <number>` to verify the gates, then merge directly with `gh pr merge <number> --squash`. Do NOT enable GitHub auto-merge (no `--auto`); merge only at this point. If the merge is rejected because a gate is not yet satisfied, do not fall back to `--auto`; return to the Phase 8 poll and retry once the gate clears. Never merge over an unresolved human nit without an explicit user go-ahead.
-2. After merge confirms, `git worktree remove ../<repo>-<issue-id-lowercase>`.
-3. Move the Linear ticket to the team's Done state. For Clean Kitchen task force, use the state IDs in MEMORY.md (`Linear CKTF Team State IDs`); for other teams, look up via `mcp__claude_ai_Linear__get_team`.
+2. **Stacked series: merge bottom-up, one PR at a time.** Merge only the bottom PR (base `main`) per step 1. GitHub auto-retargets the next PR's base to `main` once its parent merges; after that lands, `gh pr ready <next-number>`, rebase it onto the updated `main` if needed, and repeat Phase 8 (review) + step 1 (merge) for it. Never `--auto`-merge or ready an upper PR before its base has merged.
+3. After the final PR merges, `git worktree remove ../<repo>-<issue-id-lowercase>`.
+4. Move the Linear ticket to the team's Done state. For Clean Kitchen task force, use the state IDs in MEMORY.md (`Linear CKTF Team State IDs`); for other teams, look up via `mcp__claude_ai_Linear__get_team`.
 
 ## Execution notes
 
