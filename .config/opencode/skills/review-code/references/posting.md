@@ -127,9 +127,9 @@ Examples (casual abbreviations like "LGTM" are fine):
 - `LGTM, just one change requested and a nit pick.`
 - `Looks good, two nit picks inline.`
 - `One blocker inline, see REV-1.`
-- `Ship it.` (for `--approve` with nothing to flag)
+- `Looks good, nothing to flag.` (for `--approve` with nothing to flag)
 
-Tone: no em dashes; Australian spelling; "nit pick" as two words.
+Tone: no em dashes; Australian spelling; "nit pick" as two words. **Never** use "ship it" (or "ship it!") in a posted review body; Paul does not use that phrase. Prefer plain approvals like "LGTM" or "Looks good, nothing to flag."
 
 Verify the review was recorded:
 
