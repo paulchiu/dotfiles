@@ -41,3 +41,34 @@ Create every PR in the stack as a draft (`gh pr create --draft`, per Step 3). Th
 - When PR N merges, GitHub auto-retargets PR N+1's base to `main`. Only then `gh pr ready` PR N+1.
 
 A caller that marks every stacked PR ready at once (e.g. a blanket `gh pr ready` loop after CI goes green) is a defect — ready is per-PR and gated on the base having merged.
+
+## Keeping the stack in sync
+
+Creation is only half the job. Once the stack exists, two events force a local rebase. In both cases the branches move locally and must then be force-pushed with `--force-with-lease` (never bare `--force`).
+
+### `main` moved under the whole stack
+
+Rebase every branch in the stack in one pass. Check out the **top** branch and rebase onto `main` with `--update-refs`:
+
+```bash
+git checkout <top-branch>
+git rebase main --update-refs
+```
+
+Git recognises the intermediate refs and updates them all — `pr-2` onto the new `main`, `pr-3` onto the new `pr-2`, and so on — so you don't rebase each branch by hand. Then push each updated branch:
+
+```bash
+git push --force-with-lease origin pr-1 pr-2 pr-3   # every branch the rebase moved
+```
+
+`--update-refs` moves the local refs but does not push them; each branch still needs its own force-push. (You can set `rebase.updateRefs = true` in git config to make `--update-refs` the default.)
+
+### A lower PR merged
+
+When `pr-1` merges, GitHub auto-retargets `pr-2`'s **remote** base to `main`, but the local `pr-2` branch still contains `pr-1`'s now-merged commits on top of the old base. Reparent it onto `main`, dropping the merged commits, with `git rebase --onto`:
+
+```bash
+git rebase --onto main pr-1 pr-2
+```
+
+Read this as "take the commits after `pr-1` on `pr-2`, and replant them onto `main`." Then `git push --force-with-lease` `pr-2`, and repeat up the stack for any branch whose parent just merged. Only after this reparent-and-push should you `gh pr ready` `pr-2` (per the Draft state rules above).

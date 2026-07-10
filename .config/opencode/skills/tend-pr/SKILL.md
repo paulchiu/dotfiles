@@ -74,8 +74,10 @@ current=$(git rev-parse --abbrev-ref HEAD)
 If either assertion fails, stop the loop and ask the user: something has switched the worktree off the PR head, and blindly rebasing would be destructive. Only once the preflight passes:
 
 ```bash
-git rebase origin/<base>
+git rebase origin/<base> --update-refs
 ```
+
+`--update-refs` is a safe default even for a solo PR (it's a no-op when there are no intermediate refs). When the tended PR is the **bottom of a stack**, it is required: a plain `git rebase origin/<base>` rebases only this branch and silently leaves the descendant branches pointing at the pre-rebase commits, desyncing the stack. With `--update-refs`, every stacked ref moves along in one shot.
 
 Resolve conflicts if safely resolvable (obvious one-side-only changes, auto-merge-able imports). If conflicts require human judgment, stop the loop and ask the user. After a clean rebase, push with `--force-with-lease`:
 
@@ -145,6 +147,7 @@ When `now >= stop_epoch`, do NOT reschedule. Post a short summary: total iterati
 ## Notes
 
 - This skill is for **one PR at a time**. If the user wants to tend several, start separate loops, and name them distinctly so the collision check in Step 1 works.
+- **Stacked PRs**: `--update-refs` moves the descendant branches locally, but `git push --force-with-lease` only pushes the current (bottom) branch. The descendant branches are pushed by their own `tend-pr` loops, or must be force-pushed manually (`git push --force-with-lease origin <descendant-branch>`) after the bottom loop rebases. See `gh-pr/references/stacked-prs.md` for the full sync workflow.
 - Terminal conditions other than merge: the PR closed without merging, the branch was deleted, the base branch changed out from under us. Any of these stops the loop and reports back.
 - If the repo's pre-commit hooks require `node_modules` or similar locally-materialised deps and the worktree doesn't have them, symlink from the main checkout at loop setup time rather than disabling hooks.
 - If global gitignore hides `.claude/`, `.config/`, or similar tracked directories during commit, override with `GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.excludesFile GIT_CONFIG_VALUE_0=/dev/null` for the single commit. Do not skip hooks to work around it.
