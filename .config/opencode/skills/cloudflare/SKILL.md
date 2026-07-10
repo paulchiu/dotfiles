@@ -1,6 +1,6 @@
 ---
 name: cloudflare
-description: Router for ALL Cloudflare platform work. Covers Workers, Pages, storage (KV/D1/R2), AI (Workers AI/Vectorize), feature flags (Flagship), networking (Tunnel/Spectrum), security (WAF/DDoS), IaC (Terraform/Pulumi), plus deep-dive sub-skills for the Agents SDK (stateful agents, durable workflows, MCP servers, chat/voice), Durable Objects (stateful coordination, RPC, SQLite, alarms, WebSockets), the Sandbox SDK (secure code execution, code interpreters), Cloudflare Email Service (transactional sending/routing, SPF/DKIM/DMARC), the Wrangler CLI (deploy/dev/manage), and Workers production best-practices review. Use for any Cloudflare development, deployment, or code-review task. Biases towards retrieval from Cloudflare docs over pre-trained knowledge.
+description: Router for Cloudflare platform work — Workers, Pages, KV/D1/R2, Workers AI/Vectorize, WAF, Wrangler, Agents SDK, Durable Objects, Sandbox SDK, Email. Use for any Cloudflare build/deploy/review; retrieves from CF docs.
 references:
   - workers
   - pages

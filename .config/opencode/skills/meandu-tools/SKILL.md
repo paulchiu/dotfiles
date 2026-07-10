@@ -1,6 +1,6 @@
 ---
 name: meandu-tools
-description: 'Router for me&u work-tool wrappers. Use when: implementing/shipping a Linear issue end-to-end (ticket, code, commit, PR, CI; ship-it/auto/autonomous on a Linear URL or ID); creating or rewriting Linear issues with the agent-ready card template (incl. spikes); querying Buildkite builds/jobs/logs/pipelines/agents via bk CLI, or releasing/unblocking/promoting blocked Buildkite builds from URLs; querying Datadog metrics/logs/monitors/traces/APM via pup CLI; multi-perspective PR review orchestrator (security/performance/AC/style fan-out via codex or Claude subagents); generating the daily brief (Slack/Linear/Calendar/Drive/Obsidian) into today''s journal note; morning brief triage; regenerating GraphQL schema.gql in a NestJS Tiltfile worktree (after @Field changes); fixing Redis port 6379 / "port already allocated" conflicts (Docker or OrbStack).'
+description: 'Router for me&u work tools. Ship a Linear issue end-to-end (ship-it/auto/autonomous on a Linear URL or ID); create/rewrite agent-ready Linear cards & spikes; query/release Buildkite via bk; query Datadog via pup; orchestrate multi-perspective PR review; generate the daily brief; morning brief triage; regenerate GraphQL schema.gql; fix Redis 6379 "port already allocated" conflicts.'
 ---
 
 # meandu-tools (router)

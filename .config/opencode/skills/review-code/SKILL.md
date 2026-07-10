@@ -1,6 +1,6 @@
 ---
 name: review-code
-description: "End-to-end PR review: create a worktree, run a principal-engineer branch review, run a hostile adversarial second pass, optionally apply a persona focus-lens, optionally delegate an outside-view round to a Codex/cxd Nex pane, archive a decision doc to ~/dev/sandbox, and only post inline comments / approve / request changes when the user explicitly ticks actions. Use on `/review-code`, 'review this PR', 'review the branch', 'branch review', 'reviewing branch changes', 'adversarial review', 'hostile review', 'review as <name>', 'persona-based review', or when given a PR number/URL."
+description: "End-to-end PR/branch review: principal-engineer pass, hostile adversarial second pass, optional persona lens and Codex outside-view round, decision doc, opt-in inline comments/approve. Use on `/review-code` or 'review this PR/branch'."
 ---
 
 # Code Review Skill

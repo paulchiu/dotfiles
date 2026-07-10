@@ -1,15 +1,10 @@
 ---
 name: nex
 description: >
-  Manage Nex terminal workflows with the nex CLI. Use when asked to split,
-  create, close, move, rename, capture, or send to panes; manage workspaces,
-  groups, layouts, file opening, or diffs; show Codex progress/status in Nex;
-  broadcast a command to all panes in a group; or delegate work to live Nex
-  panes using cxd/ccd agent aliases. Trigger phrases include "delegate to Nex
-  pane", "Codex pane", "Claude pane", "ccd", "cxd", "split pane", "send to
-  pane", "send to group", "broadcast to panes", "broadcast to <group>", "nex
-  broadcast", "all panes in group", "capture pane", "open in Nex", "Nex
-  indicator", or "Nex status".
+  Manage Nex terminal panes via the nex CLI: split/create/close/move/rename/capture
+  panes, workspaces, groups, layouts, diffs; broadcast to a group; show Codex/Claude
+  status; delegate to live panes with cxd/ccd. Triggers: "split pane", "send to
+  pane/group", "broadcast to <group>", "Codex/Claude pane", "ccd/cxd", "open in Nex".
 model: haiku
 ---
 

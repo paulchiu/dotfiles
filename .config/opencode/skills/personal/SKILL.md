@@ -1,6 +1,6 @@
 ---
 name: personal
-description: Router for personal-life tasks and tools. Use when asked to convert a workout/gym log into Dataview-compatible fitness logs; prepare Dad's monthly family money report from ANZ exports and journal details; archive monthly Obsidian vault items from Area/Projects to Archive (with attachments); audit current branch changes for AGENTS.md conformance and auto-fix violations; clean up stale Codex/ChatGPT desktop state (dead project picker entries, invalid env refs, obsolete worktrees); refine an aichat role prompt (committer, pr-writer, etc.) based on output feedback; or translate text into Taiwan Traditional Chinese for a non-technical 70-year-old parent ("for my mum/dad", "繁體中文", "正體中文").
+description: Router for personal tasks — gym log → Dataview fitness logs; Dad's monthly ANZ money report; monthly Obsidian Area/Projects → Archive; AGENTS.md conformance audit/fix; clean stale Codex desktop state; refine an aichat role prompt; translate to Taiwan Traditional Chinese ("for my mum/dad", 繁體中文, 正體中文).
 ---
 
 # personal (router)
