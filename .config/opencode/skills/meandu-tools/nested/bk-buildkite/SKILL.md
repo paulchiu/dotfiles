@@ -69,6 +69,16 @@ bk build create -p mr-yum --branch main --commit HEAD --message "Manual rebuild"
 
 Use when Paul gives one or more Buildkite URLs and says "release these", "unblock these", "promote to prod", "push to prod", or similar. Each build typically has ONE gating manual step (e.g. ":rocket: Deploy to production", "Push to production"); once that is unblocked the rest of the blocked jobs proceed automatically, so you only need to unblock the gating job per build.
 
+**Green-CI gate (do this FIRST, before any unblock).** Before deploying or unblocking any prod gate, confirm all builds and CI checks are green and report their status; do not proceed if anything is red. For each build, inspect every job (not just the gating manual step) and check for anything that is `failed`, `broken`, or still `running`/`scheduled`:
+
+```bash
+# Report non-green jobs per build; empty output means the build is clean up to the gate.
+bk build view <number> -p <pipeline> --json | \
+  jq -r '.jobs[] | select(.state=="failed" or .state=="broken" or .state=="running" or .state=="scheduled") | "\(.state)\t\(.label)"'
+```
+
+Report the status of every build in the batch. If any build has a red (`failed`/`broken`) or still-running job, STOP: do not unblock that build. Surface the red/pending jobs to Paul and let him decide, rather than unblocking over a failing pipeline. Only builds that are green up to their gating manual step are eligible to proceed to the confirmation + unblock steps below.
+
 **Parse each URL** to get pipeline slug and build number:
 - `https://buildkite.com/mryum/<pipeline>/builds/<number>/...` → `-p <pipeline>` and build `<number>`
 - Note pipelines are NOT always `mr-yum`: use the exact slug from the URL (e.g. `cloudflare-workers`, `manage`, `manage-frontend`, `mr-yum-deploy`, `stable-api`).
