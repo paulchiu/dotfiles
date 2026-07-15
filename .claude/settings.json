@@ -175,5 +175,6 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  }
+  },
+  "skipWorkflowUsageWarning": true
 }

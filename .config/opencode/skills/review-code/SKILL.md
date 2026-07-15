@@ -94,6 +94,23 @@ Merge its output back; you keep final judgment on severity via the false-positiv
 
 Round 2 runs exactly once. Don't loop.
 
+### Workflow mode: dedupe at the barrier, never after verify
+
+Everything above describes round 2 as **one** fork. If the user asks for a workflow ("use workflow", "fan out agents", ultracode), you scale the finder pool and verify each finding independently. That is sanctioned, but it has one mandatory shape. Get it wrong and the agent count roughly doubles for zero extra signal:
+
+**Findings must meet each other behind a hard barrier, before a single verifier is spawned.**
+
+1. `parallel()` (never `pipeline()`) across the finder lenses, so all findings land together. `pipeline()` fires verifiers per-lens as each lens returns, which makes cross-lens duplicates structurally invisible: there is no barrier to merge at.
+2. Merge the pooled findings in plain code: group by `file:line`, then a cheap semantic pass for near-dupes (the same defect reported at `854` and `865`, or the same claim split across `685` and `699`).
+3. Spawn **one verifier per distinct finding**, not per raw finding. Pass the convergence count into it: "3 independent lenses raised this." Convergence is a **prior for the one verifier**, not a reason to run three.
+4. Only then synthesize. By synthesis, dedupe is already done.
+
+Convergence is not corroboration. N lenses agreeing is one finding with a strong prior, not N findings. Writing "four independent lenses converged on this, which is strong signal" in a decision doc while having paid for four separate verifiers of a one-word fix is the exact failure this rule exists to prevent: it reframes waste as rigour, so the problem never gets named.
+
+Measured on two real runs (PR 4292, PR 4296): a 5-lens fan-out yielded 32 raw findings over 19 distinct targets (13 redundant verifiers, 41% waste; one line drew 5 verifiers, another 4). Deduping at the barrier cuts 40 agents to ~27 with identical output.
+
+Sanity check before launching any review workflow: **verifier count must equal distinct-finding count.** If verifiers outnumber distinct findings, the dedupe is in the wrong place. State the fan-out shape (finders → distinct findings → verifiers) when reporting, so the ratio is visible rather than buried.
+
 ## Step 4: Round 2.5 (optional persona focus-lens)
 
 Only if the user named a persona in the prompt.
