@@ -13,7 +13,7 @@
 #   to_timezone --help    # Shows available timezones and usage
 function to_timezone() {
   # Define timezone constants
-  local TZ_TEAM="Australia/Melbourne,Australia/Brisbane,Asia/Manila,Africa/Johannesburg"
+  local TZ_TEAM="Australia/Melbourne,Australia/Brisbane,Africa/Johannesburg"
   local TZ_AU="Australia/Melbourne,Australia/Brisbane"
   local TZ_APPS="Australia/Melbourne,Europe/London,America/Chicago"
   local TZ_REGIONS="Australia/Melbourne,Europe/London,America/Chicago"
@@ -32,7 +32,7 @@ USAGE:
   to_timezone [shortcode] [time]
 
 SHORTCODES:
-  team  - Australia/Melbourne, Australia/Brisbane, Asia/Manila, Africa/Johannesburg (DEFAULT)
+  team  - Australia/Melbourne, Australia/Brisbane, Africa/Johannesburg (DEFAULT)
   au    - Australia/Melbourne, Australia/Brisbane
   apps  - Australia/Melbourne, Europe/London, America/Chicago
   regions - Melbourne (Australia/Melbourne), London (Europe/London), Austin (America/Chicago)
