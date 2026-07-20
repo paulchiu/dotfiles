@@ -160,7 +160,9 @@ Before writing, re-verify every `blocking` finding against the worktree code (op
 
 Default location: `~/dev/sandbox/`. Filename: `yyyy-mm-dd PR <num> <short title>.md` (preserve acronym casing; run `date +%Y-%m-%d` if today's date isn't in context).
 
-After writing, **print the absolute path** so the nex terminal renders the click-to-open preview.
+**Mandatory sections — the doc is incomplete without all of these, in this order:** `Verdict` → `Risk Assessment` → **`## Possible actions`** → (optional persona/AC sections) → `Findings` → `Open questions` → `Notes`. The `## Possible actions` checklist is the decision section: it is what the user ticks, and it is REQUIRED in **every** decision doc, even for a clean Approve with zero findings (it still carries the `Approve the PR` / `No action` boxes). It is not a chat-only artifact — Step 7 mirrors it into chat, it does not replace it. The single most common defect in past docs is this section being dropped; do not let the length of the template below cause you to skip it.
+
+After writing, **verify before printing the path**: grep the file you just wrote for `## Possible actions` (or `## Actions taken` if you are recording an already-executed run). If it is absent, the doc is not done — add it, then continue. Only then **print the absolute path** so the nex terminal renders the click-to-open preview.
 
 Template:
 
@@ -238,7 +240,7 @@ Recommended change:
 
 ## Step 7: Offer the action checklist inline
 
-After writing the file, surface the same Possible-actions list in chat so the user can tick without opening the file. Single question:
+This step **mirrors** the `## Possible actions` section already written into the doc (Step 6) — it never substitutes for it. If you are drafting this chat checklist and the doc has no `## Possible actions` section, stop and fix the doc first. Surface the same list in chat so the user can tick without opening the file. Single question:
 
 > "Verdict: `<verdict>`. Risk: `<risk>`. <N> blocking, <M> suggestions, <K> questions, <L> nitpicks. Decision doc at `<absolute path>`. Which actions should I take?"
 >
