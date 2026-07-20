@@ -7,9 +7,11 @@
 #   nf-fa-microchip   U+F2DB
 #   nf-fa-folder      U+F07B
 #   nf-dev-git_branch U+E725
+#   nf-fa-code_fork   U+F126  (marks a linked worktree)
 ICON_MODEL=$(printf '\xef\x8b\x9b')
 ICON_DIR=$(printf '\xef\x81\xbb')
 ICON_GIT=$(printf '\xee\x9c\xa5')
+ICON_WT=$(printf '\xef\x84\xa6')
 
 input=$(cat)
 
@@ -48,9 +50,26 @@ fi
 RESET=$'\033[0m'
 DIM=$'\033[2m'
 
+# Worktree name. workspace.git_worktree covers any linked worktree; worktree.name
+# only appears in --worktree sessions, so fall back to it.
+WT=$(echo "$input" | jq -r '.workspace.git_worktree // .worktree.name // empty')
+
+# Branch is read from the live cwd rather than the session JSON, so it stays correct
+# after a mid-session cd into a worktree.
 BRANCH=$(git -C "${DIR:-.}" rev-parse --abbrev-ref HEAD 2>/dev/null)
+if [ "$BRANCH" = "HEAD" ]; then  # detached: show the short sha instead
+  BRANCH=$(git -C "${DIR:-.}" rev-parse --short HEAD 2>/dev/null)
+fi
+
+# In a worktree, mark the branch with the fork glyph instead of the branch glyph.
 GIT_SEG=""
-[ -n "$BRANCH" ] && GIT_SEG=" ${ICON_GIT} ${BRANCH}"
+if [ -n "$BRANCH" ]; then
+  if [ -n "$WT" ]; then
+    GIT_SEG=" ${ICON_WT} ${BRANCH}"
+  else
+    GIT_SEG=" ${ICON_GIT} ${BRANCH}"
+  fi
+fi
 
 printf '%s%s %s %s %s%s%s %s%s%s %s%% %s(%s/%s)%s\n' \
   "$DIM" "$ICON_MODEL" "$MODEL" "$ICON_DIR" "${DIR##*/}" "$GIT_SEG" "$RESET" \
