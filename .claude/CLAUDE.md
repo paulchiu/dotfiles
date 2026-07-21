@@ -10,7 +10,6 @@
 
 My interactive shell (`~/.aliases`) redirects several common commands to modern replacements, and the Bash tool inherits them. Do NOT pass the old tool's flags to these; call the replacement with ITS own syntax.
 
-- `sed` is blocked (prints "Use sd instead"). Use `sd 'pattern' 'replacement' file` (regex by default, edits in place; pipe via stdin to preview). It is NOT sed-compatible: no `s///`, `-i`, `-e`, or address ranges.
 - `du` → `dust`, `df` → `duf` (different output/flags; don't pass classic `du`/`df` flags).
 - `ls`/`l`/`la`/`ll` → `eza` (use eza flags, e.g. `--icons -l -a`).
 - `grep` → `grep --color=auto …` and `diff` → `diff --color`: same underlying tools, all normal options work.
