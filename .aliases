@@ -106,7 +106,6 @@ alias ms="mryum shell"
 alias ac="echo 'Use oc instead'"
 alias aedt="echo 'Use to_timezone instead'"
 alias pst="echo 'Use to_timezone instead'"
-alias sed="echo 'Use sd instead'"
 
 # --------------
 
