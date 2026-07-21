@@ -74,7 +74,7 @@ Deltas to the workflow above. These defaults replace the interactive choices.
 **Phase 4b (new): AC test loop.** Before commit:
 
 1. Use the test framework already in the repo; never introduce a new one.
-2. Write or update at least one test per AC. If an AC is fundamentally untestable ("looks better"), log that decision and skip it.
+2. Write or update at least one test per AC. If an AC is fundamentally untestable ("looks better"), log that decision and skip it. Do not put the issue ref in the test description or in code comments (the branch/PR carry it); a `TODO`/`FIXME` follow-up marker is the only place a ref belongs.
 3. Run tests plus the ticket's verification commands until all pass. **Iteration cap: 5 failed runs**, then escalate with failing test names, fix attempts, and your blocker hypothesis. In manage-api, run tests per the "Test execution" guard below; a post-pass hang is not a failed run and does not count toward this cap.
 
 **Test execution (manage-api, and any jest-under-Docker repo).** At time of writing (2026-07), these suites print the pass summary (`Test Suites: N passed` / `Tests: N passed`) and then hang on unclosed async handles instead of exiting cleanly. This hits unit and integration alike; integration adds Docker bring-up latency on top. Guard against waiting too long:
@@ -91,6 +91,7 @@ Deltas to the workflow above. These defaults replace the interactive choices.
 - If `.github/pull_request_template.md` exists, note sections the PR description must fill.
 - Every commit on the branch is conventional-commit format.
 - No leftover placeholders (TODO, FIXME, `xxx`, lorem ipsum) in the diff.
+- No issue/ticket refs (`RR-82`, `PAY-3452`, etc.) in code comments or test descriptions; strip the ref, keep the explanatory text. A `TODO`/`FIXME` follow-up marker may keep its ref (that's its purpose).
 - Australian spelling in comments and user-facing strings.
 
 Fix any blockers (spelling/comment-only nits may be accepted and logged), then create the PR.
