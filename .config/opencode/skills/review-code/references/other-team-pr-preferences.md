@@ -36,6 +36,7 @@
 - Use `applyUtmToUrl` for UTM handling.
 - In Serve Frontend, `/v2/` is considered the active current path as of November 20, 2025; duplicated components may be legacy v1.
 - Do not use default Tailwind classes where design tokens should be used.
+- Keep code comments concise: explain what isn't obvious from the code, don't restate it or justify every choice. Flag verbose/defensive comment blocks as a `suggestion` to trim. Evidence: https://github.com/mr-yum/manage/pull/4350#discussion_r3620130878 (yflander).
 
 ## Terraform
 
