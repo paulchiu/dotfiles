@@ -52,6 +52,7 @@ Write exactly four dashes: `----`
 #### Line 3+: Body
 
 **If a PR template was found:**
+
 - Fill in every section of the template with specific details from the diff
 - Keep all original markdown formatting, checkboxes, and HTML elements intact. Never remove or reword the template's checkboxes; edit content around them, not the structure.
 - Tick a checkbox only for something actually done and verifiable from the diff or this session; leave the rest unticked rather than optimistically ticking.
@@ -59,6 +60,7 @@ Write exactly four dashes: `----`
 - Be specific: reference actual file names, function names, and changes
 
 **If no template was found (personal projects):**
+
 - Open with 1–2 sentences stating what the PR does (not the problem). Use footnotes to provide supplementary context such as root cause or technical detail.
 - Follow with bullet points describing **what the user/developer can now do**, not what code changed.
 - End each bullet point with a full stop (period).
@@ -72,7 +74,7 @@ Only include risk classification when the PR template has a "Risks" section. Do 
 When the template has a "Risks" section, classify using these levels:
 
 - **None**: Pure logging, documentation, or test-only changes with zero runtime impact.
-- **Low**: Removing dead code, removing feature-flagged code paths, config changes, or UI-only changes with no data/payment impact. Even if the code being removed is unused or superseded, if it *could* affect a user's experience (e.g., a venue still on an old flag), classify as Low, not None.
+- **Low**: Removing dead code, removing feature-flagged code paths, config changes, or UI-only changes with no data/payment impact. Even if the code being removed is unused or superseded, if it _could_ affect a user's experience (e.g., a venue still on an old flag), classify as Low, not None.
 - **Medium**: Changes to request handling, API behaviour, data queries, or performance-sensitive paths.
 - **High**: Changes to payment flows, order totals, financial calculations, or data integrity.
 
@@ -86,10 +88,12 @@ When in doubt, round up. "None" should only be used when there is truly zero pos
 - **Australian spelling** throughout (e.g., "colour", "organisation", "behaviour", "authorise").
 
 Bad (too granular):
+
 - Add `handleOAuth` function to auth module.
 - Update login component to render new button.
 
 Good (feature-focused):
+
 - Users can now sign in with their GitHub account.
 - GitHub profile data is automatically linked to user profiles.
 
@@ -115,14 +119,20 @@ PR reviewers don't have access to the adversarial / persona-lens / Codex / Claud
 **If a "what was considered but not implemented" rollup is genuinely useful** (e.g., reviewers might wonder why X wasn't done), add it as a plain "Scope" or "Considered, not implemented" section written in the author's voice, framed as the author's own design decisions. Each line states the choice and the reason, with no reference to which review round raised it. Default: no such section; most deferrals belong in follow-up tickets, not PR bodies.
 
 Bad:
+
 - `## Review consensus (cxd adversarial + Ben Thompson lens)`
 - `Addresses adversarial review on PR #2391: ...`
 - `Deferred per BT-1: shared AlertDialog helper extraction.`
 
 Good (when a scope rollup is warranted):
+
 - `## Considered, not implemented`
 - `- Shared AlertDialog page-object helper: would only have one other call site today; revisit when the third lands.`
 - `- Stronger testName uniqueness: changing only the new tests creates intra-file inconsistency; whole-file refactor is out of scope for this ticket.`
+
+### Replying to review comments
+
+When replying to a reviewer's comment (bot or human) rather than writing the PR body, read [references/replies.md](references/replies.md) for Paul's reply style: terse `Fixed in <sha>.` / `Agree, updated in <sha>.` for agreements and straight fixes; an evidence-based reply that names the observation, states a hedged lean, and invites the counter-argument when disagreeing.
 
 ### Stacked PRs
 
