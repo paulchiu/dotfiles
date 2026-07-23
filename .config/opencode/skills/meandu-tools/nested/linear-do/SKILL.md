@@ -92,6 +92,7 @@ Deltas to the workflow above. These defaults replace the interactive choices.
 - Every commit on the branch is conventional-commit format.
 - No leftover placeholders (TODO, FIXME, `xxx`, lorem ipsum) in the diff.
 - No issue/ticket refs (`RR-82`, `PAY-3452`, etc.) in code comments or test descriptions; strip the ref, keep the explanatory text. A `TODO`/`FIXME` follow-up marker may keep its ref (that's its purpose).
+- Comments state the local concern only. Keep the "why" in one place (usually a well-named function's JSDoc); call sites and sibling comments reference it, they don't restate it. Cut any comment that re-explains the whole feature instead of the line in front of it (the "pasted-clause smell"), or that re-derives what a self-documenting call like `isAlreadyCompletedTransitionError(error)` already says. A concise comment survives review; a paragraph gets a rewrite suggestion.
 - Australian spelling in comments and user-facing strings.
 
 Fix any blockers (spelling/comment-only nits may be accepted and logged), then create the PR.
