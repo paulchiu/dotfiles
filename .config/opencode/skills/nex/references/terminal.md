@@ -110,12 +110,28 @@ Notes:
 - `pane send` typing the slash command lands as agent input when an agent is
   the foreground process. Verify with `nex pane capture --target <id> --lines 20`
   on at least one pane before assuming the broadcast worked.
-- The Enter that `pane send` appends is occasionally swallowed by the Claude
-  Code TUI when the pane is mid-state-transition (e.g., just finishing
-  `/compact` and restoring skills): the text appears in the input box but is
-  not submitted. If `pane capture` shows the message sitting in the prompt
-  with no agent activity, kick it with
-  `nex pane send-key --target <id> Return` to force submission.
+- Text sitting unsubmitted in a pane's input box (the `❯` line) is often a
+  queued draft, not live composer input: Paul (or a prior orchestration) may
+  have typed several messages ahead, and the box shows the next one. Do not
+  assume it is a single un-sent line.
+- `nex pane send-key --target <id> enter` (or `return`) does NOT reliably submit
+  such a draft. On an idle or non-focused pane the keystroke is acked ("sent
+  enter to ...") but no-ops: the draft neither submits nor edits, and even
+  `backspace`/`escape` leave it unchanged. Do not trust a `0` exit here.
+- The reliable submit is `nex pane send --target <id> "<text>"`. It writes the
+  text and Enter together into the composer and submits. Crucially it REPLACES
+  the drafted message with `<text>` (it does not append), so pass the exact full
+  instruction you want run, and do NOT pre-write with `--bare` first (a prior
+  `--bare` write stays in the composer and gets prefixed onto your text).
+- After submitting, verify with `nex pane capture`: the `❯` box should clear and
+  the agent should show activity. Note that submitting one draft surfaces the
+  next queued message in the box, so re-capture before deciding you are done; do
+  not blindly re-fire, which would consume a queue the user built.
+- Valid `send-key` keys: `enter, return, tab, escape, esc, space, backspace, up,
+  down, left, right, ctrl-c`.
+- The mid-transition swallow (e.g. a pane just finishing `/compact` and
+  restoring skills) is a real but narrower case; the `nex pane send <text>`
+  re-issue above is the general fix, not `send-key`.
 - For agent detection, `claude_session_id` is the most reliable signal for
   Claude panes. Codex panes do not currently expose an analogous field; fall
   back to the title-prefix filter when targeting any running agent.
