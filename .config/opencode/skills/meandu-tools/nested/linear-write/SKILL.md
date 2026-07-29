@@ -226,6 +226,14 @@ Use bullets, not numbered lists. Linear's renderer silently drops items after th
 
 The spike card itself doesn't carry the full due diligence gates; the investigation is what informs them. When a spike resolves into work, note under Possible Outcomes that any resolution issue or sub-task runs the [change due diligence checklist](https://app.notion.com/p/meandu/Ctrl-alt-delight-Change-Due-Diligence-Checklist-3803c6719946810f8b7edcb94b875130), e.g. add `Create resolution issue / sub-tasks (each runs the change due diligence checklist)` to the outcomes list.
 
+## Technical Design Doc Cards
+
+A card whose deliverable is a technical design doc rather than code. Paul has specific expectations for these: Background is pure context and Instructions brief the author to produce a defined 'baseline' draft, the card points at codebases instead of specifying the implementation, the outline is recommended rather than mandated, open questions are numbered with named owners, and the doc lands in the Notion Technical Design Docs database at `Draft`.
+
+Read [references/tech-design-doc-cards.md](references/tech-design-doc-cards.md) before drafting one. It covers the section structure, the house H1 spine, the uncertainty tiers, how to keep an unresolved architectural decision open without contradicting yourself, and what to preserve when the card supersedes an older issue.
+
+Reach for this shape instead of a spike when the ambiguity is architectural (which model, which platform, what the third party actually does) rather than investigative. A spike answers 'how big is this'; a design doc answers 'what are we building and what has to be signed off first'.
+
 ## Comments
 
 Comments follow the same writing-style rules as issue bodies. Investigation findings, audit results, and out-of-band updates belong in comments; the description is the contract, the comment is the journal.
