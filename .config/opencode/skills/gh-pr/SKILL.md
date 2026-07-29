@@ -86,6 +86,7 @@ When in doubt, round up. "None" should only be used when there is truly zero pos
 - **Claim only what ships.** If the diff implements something partially or behind a flag, say so ("initial", "behind `flag-name`, off by default") rather than describing the finished capability.
 - **Inline code** for technical references: key names, environment variables, config values, keyboard shortcuts, CLI commands, symbols.
 - **Australian spelling** throughout (e.g., "colour", "organisation", "behaviour", "authorise").
+- **Never hard-wrap.** GitHub renders a single newline inside a paragraph as a line break, so wrapping prose at 80 (or any) columns shows up as ragged breaks in the rendered body. Write each paragraph and each bullet as ONE unbroken line, however long, and separate blocks with blank lines. This applies to PR bodies and to review replies.
 
 Bad (too granular):
 
