@@ -95,7 +95,7 @@ HISTSIZE=9999
 # mise - polyglot version manager (replaces nvm)
 eval "$(mise activate zsh)"
 
-export PATH="$HOME/.local/share/mise/shims:/usr/local/bin:/usr/local/sbin:~/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications/WebStorm.app/Contents/MacOS:~/.local/bin:$(go env GOPATH)/bin:$PATH"
+export PATH="$HOME/.local/share/mise/shims:/usr/local/bin:/usr/local/sbin:$HOME/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications/WebStorm.app/Contents/MacOS:$HOME/.local/bin:$(go env GOPATH)/bin:$PATH"
 
 
 # Preferred editor for local and remote sessions
