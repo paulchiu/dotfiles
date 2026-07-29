@@ -40,7 +40,8 @@ Rules apply to issue bodies, comments, and spikes alike:
 - Don't add wrap-up, summary, or evaluative closing sentences; stop when the facts are stated.
 - Single quotes for scare quotes and emphasis ('in theory'), not italics.
 - Lead with the finding or action, not validation or framing.
-- Cite sources APA/Harvard style: a short hyperlinked label in parentheses after the referenced statement, e.g. `data stops flowing once a site is migrated ([Playbook](https://...))`. One-word labels only; hyperlink the label, not surrounding prose. Don't drop raw URLs inline or use numbered footnotes like `[1]` (Linear escapes the brackets).
+- Cite sources APA/Harvard style: a short hyperlinked label in parentheses after the referenced statement. **The label is the source platform, not the document's name**: `([Notion](...))`, `([Slack](...))`, `([GitHub](...))`, `([Linear](...))`, `([Figma](...))`. Name the document in the prose and let the parenthetical carry the platform, e.g. `the Zonal Vouchers PRD says data stops flowing once a site is migrated ([Notion](https://...))`. For an external vendor's own site, the vendor name is the platform (`([Toggle](https://developers...))`). One-word labels only; hyperlink the label, not surrounding prose. Don't drop raw URLs inline or use numbered footnotes like `[1]` (Linear escapes the brackets).
+- Every code reference carries a `([GitHub](...))` citation: backticked `file.ts:line` (or symbol) in the prose, then the parenthetical linking a permalink. Pin the permalink to a commit SHA rather than `blob/main`, so the lines stay correct as the branch moves.
 
 ## The Agent-Ready Card Template
 
