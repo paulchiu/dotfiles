@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+#
+# trackpad-battery - battery level for Apple Bluetooth input devices
+#                    (Magic Trackpad, Magic Keyboard, Magic Mouse).
+#
+# Apple's own peripherals do not report "Battery Level" to system_profiler, so the
+# level is read from the IOKit HID service, which is what System Settings shows.
+# system_profiler is used only to turn a Bluetooth address into a friendly name,
+# and that mapping is cached because the call takes ~1s.
+#
+# Usage:
+#   trackpad-battery                 # e.g. "Paul's Magic Trackpad  69%  charging"
+#   trackpad-battery -n              # "69"  (just the number)
+#   trackpad-battery -a              # every Apple HID device that has a battery
+#   trackpad-battery -d keyboard     # match a different device by name substring
+#   trackpad-battery -m 100          # exit 0 only at/above 100%, for scripting
+#   trackpad-battery -w 100          # poll until 100%, then post a notification
+#   watch -n 60 trackpad-battery     # live view in a pane
+#
+set -uo pipefail
+
+CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/bluetooth-device-names"
+
+match="trackpad"
+number_only=0
+show_all=0
+min=""
+wait_for=""
+interval=60
+
+usage() {
+  awk 'NR > 2 { if ($0 !~ /^#/) exit; sub(/^# ?/, ""); print }' "$0"
+  exit "${1:-0}"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--number) number_only=1 ;;
+    -a|--all)    show_all=1 ;;
+    -d|--device) match="${2:-}"; shift ;;
+    -m|--min)    min="${2:-}"; shift ;;
+    -w|--wait)   wait_for="${2:-100}"; shift ;;
+    -i|--interval) interval="${2:-60}"; shift ;;
+    -r|--refresh) rm -f "$CACHE" ;;
+    -h|--help)   usage 0 ;;
+    *) printf 'unknown option: %s\n\n' "$1" >&2; usage 2 ;;
+  esac
+  shift
+done
+
+# addr -> name, from the Bluetooth profile; rebuilt whenever an address is unknown.
+build_name_cache() {
+  mkdir -p "$(dirname "$CACHE")"
+  system_profiler SPBluetoothDataType 2>/dev/null | awk '
+    /^[[:space:]]+[^[:space:]].*:[[:space:]]*$/ {
+      name = $0; sub(/^[[:space:]]+/, "", name); sub(/:[[:space:]]*$/, "", name); next
+    }
+    /^[[:space:]]+Address:[[:space:]]/ { print toupper($2) "\t" name }
+  ' > "$CACHE"
+}
+
+name_for() {
+  local addr="$1" name=""
+  [ -f "$CACHE" ] && name=$(awk -F'\t' -v a="$addr" '$1 == a { print $2; exit }' "$CACHE")
+  if [ -z "$name" ]; then
+    build_name_cache
+    name=$(awk -F'\t' -v a="$addr" '$1 == a { print $2; exit }' "$CACHE")
+  fi
+  printf '%s' "${name:-$addr}"
+}
+
+# One "addr<TAB>percent<TAB>flags" line per HID service that reports a battery.
+# Fields are emitted at the closing brace because IOKit key order is not stable.
+read_devices() {
+  ioreg -r -c AppleDeviceManagementHIDEventService -l 2>/dev/null | awk '
+    /^\+-o /             { addr = ""; pct = ""; flags = 0; found = 0 }
+    /"DeviceAddress" =/  { v = $0; sub(/^.*= "/, "", v); sub(/".*$/, "", v); gsub(/-/, ":", v); addr = toupper(v) }
+    /"BatteryPercent" =/ { v = $0; sub(/^.*= /, "", v); pct = v + 0; found = 1 }
+    /"BatteryStatusFlags" =/ { v = $0; sub(/^.*= /, "", v); flags = v + 0 }
+    /^[[:space:]]*\}[[:space:]]*$/ { if (found) print addr "\t" pct "\t" flags; found = 0 }
+  '
+}
+
+# Bit 0x2 of BatteryStatusFlags is set while the device is charging (flags == 3 on a
+# plugged-in Magic Trackpad, and the level rises). Verify once by unplugging.
+charge_state() {
+  if [ $(( $1 & 2 )) -ne 0 ]; then printf 'charging'; else printf 'on battery'; fi
+}
+
+report() {
+  local devices found=0 line addr pct flags
+  devices=$(read_devices)
+  [ -z "$devices" ] && return 3
+
+  while IFS=$'\t' read -r addr pct flags; do
+    [ -z "$pct" ] && continue
+    local name
+    name=$(name_for "$addr")
+    if [ "$show_all" -eq 0 ]; then
+      # Match the friendly name, the Bluetooth address, or nothing if -d is empty.
+      case "$(printf '%s %s' "$name" "$addr" | tr '[:upper:]' '[:lower:]')" in
+        *"$(printf '%s' "$match" | tr '[:upper:]' '[:lower:]')"*) ;;
+        *) continue ;;
+      esac
+    fi
+    found=1
+    LEVEL="$pct"
+    if [ "$number_only" -eq 1 ]; then
+      printf '%s\n' "$pct"
+    else
+      printf '%s  %s%%  %s\n' "$name" "$pct" "$(charge_state "$flags")"
+    fi
+  done <<< "$devices"
+
+  [ "$found" -eq 1 ] || return 3
+  return 0
+}
+
+LEVEL=""
+
+if [ -n "$wait_for" ]; then
+  while :; do
+    report
+    status=$?
+    if [ "$status" -eq 3 ]; then
+      printf 'no matching device with a battery (is it connected?)\n' >&2
+    elif [ -n "$LEVEL" ] && [ "$LEVEL" -ge "$wait_for" ]; then
+      osascript -e "display notification \"Now at ${LEVEL}%, safe to unplug.\" with title \"Trackpad charged\" sound name \"Glass\"" >/dev/null 2>&1
+      exit 0
+    fi
+    sleep "$interval"
+  done
+fi
+
+report
+status=$?
+if [ "$status" -eq 3 ]; then
+  printf 'no matching device with a battery (is it connected?)\n' >&2
+  exit 3
+fi
+
+if [ -n "$min" ]; then
+  [ -n "$LEVEL" ] && [ "$LEVEL" -ge "$min" ] && exit 0
+  exit 1
+fi
+
+exit 0
