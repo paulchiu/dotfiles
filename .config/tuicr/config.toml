@@ -1,0 +1,12 @@
+# tuicr config. Reference: https://github.com/agavra/tuicr/blob/v0.19.1/docs/CONFIG.md
+#
+# tuicr renders diffs in-process (syntect + two-face, the same grammar corpus bat
+# and delta use). It has no external diff-engine hook and passes --no-ext-diff on
+# every git call, so delta cannot be plugged in here. delta stays configured in
+# ~/.gitconfig and still handles plain git diff/show/log -p. The settings below
+# mirror the delta setup rather than delegating to it.
+
+appearance = "dark"          # [delta] dark = true
+diff_view = "side-by-side"   # [delta] side-by-side = true
+
+username = "Paul Chiu"       # author stamped on locally authored comments
