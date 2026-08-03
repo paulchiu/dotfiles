@@ -42,11 +42,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "nex event stop"
+            "command": "TELEGRAM_NOTIFY_TITLE='[Claude Code]' /Users/paul/bin/telegram-notify >/dev/null"
           },
           {
             "type": "command",
-            "command": "TELEGRAM_NOTIFY_TITLE='[Claude Code]' /Users/paul/bin/telegram-notify >/dev/null"
+            "command": "nex event stop"
           }
         ]
       }
@@ -97,6 +97,14 @@
             "command": "~/.claude/hooks/cbm-session-reminder"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nex event session-start"
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -136,6 +144,10 @@
           {
             "type": "command",
             "command": "n=$(yadm status --porcelain 2>/dev/null | wc -l | tr -d ' '); [ \"${n:-0}\" -gt 0 ] && echo \"[yadm] $n file(s) drifted, run /yadm-sync to commit\" || true"
+          },
+          {
+            "type": "command",
+            "command": "nex event session-end"
           }
         ]
       }
