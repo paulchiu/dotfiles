@@ -1,0 +1,73 @@
+## blubat configuration, guide v1
+## The commented sections appended below show every key blubat reads with its
+## built-in default. `blubat config validate` checks whatever you uncomment.
+
+[dashboard]
+hidden = ["8c-26-aa-bd-c5-5b", "d3-a5-20-f1-ec-61", "d0-03-4b-0b-e6-4e", "10-7d-c8-97-7b-ce"]
+hide_inactive = true
+
+## How often blubat reads, and how long a silence lasts before a device is
+## stale. Durations are bare seconds or carry an s, m or h suffix.
+[poll]
+foreground_interval = "6s"
+daemon_interval = "30s"
+# foreground_interval = "30s"
+# daemon_interval = "120s"
+# profiler_interval = "5m"
+# profiler_timeout = "10s"
+# stale_after = "10m"
+
+## Which events raise a desktop banner. connect covers connect and disconnect
+## together, and sound is a macOS sound name as osascript knows them.
+[notifications]
+# low = true
+# critical = true
+# charged = true
+# connect = false
+# stale = true
+# sound = "Glass"
+
+## Thresholds for every device without a [[device]] block of its own. An
+## unset key falls through to what the device advertises, then to the
+## built-in numbers shown here.
+[defaults]
+# low = 20
+# critical = 10
+# high = 100
+# rearm_margin = 1
+
+## Colours as #rrggbb hex, each defaulting to the scheme's own colour when
+## unset, and the glyph shown while a device charges.
+[theme]
+# scheme = "dark"
+# accent = "#39c5cf"
+# critical = "#f47067"
+# low = "#c69026"
+# ok = "#57ab5a"
+# charging_glyph = "+"
+
+## Per device overrides, matched case insensitively against the name and the
+## address. The first block a device matches wins.
+# [[device]]
+# match = "trackpad"
+# low = 15
+
+[[device]]
+match = "bose qc"
+low = 30
+
+[[device]]
+match = "mx keys"
+low = 30
+
+[[device]]
+match = "trackpad"
+low = 30
+
+## Commands run on events (low_battery, critical_battery, charged, connected,
+## disconnected, stale) with the BLUBAT_* variables set. debounce is a window
+## or "once", and match filters devices the way --device does.
+# [[hook]]
+# event = "low_battery"
+# command = "~/.config/blubat/hooks/nag.sh"
+# debounce = "30m"
