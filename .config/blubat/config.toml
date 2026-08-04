@@ -9,8 +9,8 @@ hide_inactive = true
 ## How often blubat reads, and how long a silence lasts before a device is
 ## stale. Durations are bare seconds or carry an s, m or h suffix.
 [poll]
-foreground_interval = "6s"
-daemon_interval = "30s"
+foreground_interval = "60s"
+daemon_interval = "60s"
 # foreground_interval = "30s"
 # daemon_interval = "120s"
 # profiler_interval = "5m"
