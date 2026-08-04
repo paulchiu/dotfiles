@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{DOC TITLE}: technical design review</title>
+<style>
+{PASTE assets/review.css HERE}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <div class="eyebrow">Design doc review</div>
+  <h1>{DOC TITLE}</h1>
+  <p class="subtitle">{One sentence: what was reviewed, how many findings, how many change the conclusion.}</p>
+  <div class="meta">
+    <span>{yyyy-mm-dd}</span>
+    <span>Doc author: {name}</span>
+    <span>Reviewer: {name}</span>
+    <span>Doc: <a href="{notion url}">{Doc title} (Notion)</a></span>
+    <span>Card: <a href="{linear url}">{TEAM-NNN}</a></span>
+  </div>
+</header>
+
+<h2>Verdict</h2>
+
+<div class="verdict">
+  <div class="label">Verdict</div>
+  <div class="call">{Ship it | Needs discussion, do not circulate for sign-off yet | Blocked on X}</div>
+  <p>{Two or three sentences. Lead with what is good. Then the single reason for the verdict, in bold.}</p>
+</div>
+
+<div class="risk">
+  <div><span class="k">Risk as an artefact</span>{Low. It is a document at Draft, no production behaviour moves.}</div>
+  <div><span class="k">Risk as a gate</span>{High. It is the sign-off artefact for X, and a wrong D1 propagates into build.}</div>
+  <div><span class="k">Confidence in this review</span>{High on the vendor findings. Medium on the commercial ones.}</div>
+</div>
+
+<h2>Headline</h2>
+<p>{The one finding that changes the conclusion, argued in full before the numbered list starts.}</p>
+
+<h2>Blocking findings</h2>
+
+<!-- Repeat per finding. sev class is blocking | major | minor. -->
+<div class="finding blocking">
+<h3><span class="fid">{PREFIX}-{TOPIC}-{NN}</span><span class="sev blocking">Blocking</span><span class="ftitle">{One-line claim, not a topic label}</span></h3>
+
+<blockquote><p>{Verbatim quote from the doc, trimmed to the load-bearing clause.}</p></blockquote>
+<p class="src">{Section}, <code>{Subsection}</code> (<a href="{notion url}">Notion</a>)</p>
+
+<p>{The finding. Open with the substance, no "The point." prefix. State what is wrong and what the evidence is.}</p>
+
+<div class="why"><span class="k">Why this matters</span>{Consequence, in order of size. What breaks, for whom, and when they find out.}</div>
+
+<div class="rec"><span class="k">Recommended change</span>{Concrete edit. What to write instead, what to cite, what to add.}</div>
+</div>
+<!-- /finding -->
+
+<h2>Major findings</h2>
+<!-- more .finding.major blocks -->
+
+<h2>Citation corrections</h2>
+<!-- .finding.minor blocks; these carry no .why or .rec, often a <ul> body -->
+
+<h2>Where the doc is right</h2>
+<div class="good">
+<p>{Credit, specifically. A review that only lists defects reads as hostile and gets discounted.}</p>
+</div>
+
+<h2>Acceptance criteria</h2>
+<div class="tbl-scroll">
+<table>
+  <thead><tr><th>AC</th><th>Requirement</th><th>Met</th><th>Evidence</th></tr></thead>
+  <tbody>
+    <tr><td>AC1</td><td>{...}</td><td class="yes">Yes</td><td>{...}</td></tr>
+    <tr><td>AC2</td><td>{...}</td><td class="no">No</td><td>{...}</td></tr>
+  </tbody>
+</table>
+</div>
+
+<footer class="shape">
+  <p><strong>Review shape.</strong> {How the review was produced, what was verified against what, and the single finding you most want taken.}</p>
+  <p>{What was not verified, stated plainly.}</p>
+</footer>
+
+</div>
+
+<script>
+{PASTE assets/copy-feedback.js HERE}
+</script>
+</body>
+</html>
