@@ -55,6 +55,7 @@ Rules:
 - `(ref: REV-N)` is the **last line of the comment body**, outside `</details>`. This is mandatory.
 - Severity lives in the decision doc and the inline checklist only, never in the GitHub comment body.
 - If the user supplies their own framing text, prepend `My note: <text>` above the `LLM note:` line, verbatim. The decision doc holds that string in a `> **My note:** ...` blockquote under the finding; copy it from there rather than re-deriving it. See `SKILL.md` Step 8.
+- A finding may instead carry a `> **My note (posting text):** _fill in, or delete this line..._` slot, which is the unfilled placeholder for the above. Treat an unfilled slot as no user text: post the comment unattributed, with no `My note:` line, and never post the placeholder wording itself. If the user has replaced the italic placeholder with real text, that text is their framing; use it exactly.
 - Code snippets must match the target project's style (single vs double quotes, semicolons, formatting). Read at least one nearby file in the changed code before drafting snippets so house style is preserved.
 - Australian spelling. Neutral-professional tone in posted comments, even when the internal reasoning was hostile.
 - No em dashes.

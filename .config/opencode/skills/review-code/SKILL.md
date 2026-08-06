@@ -269,6 +269,8 @@ The output is a **merged** doc, not yours with theirs appended. Rewrite the doc;
 
 This is load-bearing, not decorative: `posting.md` prepends `My note: <text>` above the `LLM note:` line when the comment is posted, so the doc is the source for that string. If a note is ambiguous about file or line, ask; don't guess a location.
 
+**Strip the location from the quoted text.** Users usually paste each note prefixed with the file and line it applies to (`` `src/foo/bar.ts:42` - Should this be ... ``). Drop that prefix, and any trailing separator, from the blockquote: the finding heading directly above already carries `path:line`, and the posted inline comment is anchored to the line, so repeating it is noise in both places. This is the one edit permitted to a user note; everything after the location is still verbatim. Locations stay where they belong — the `### REV-N` heading, the `## Possible actions` entry, and the `Your note` column of the agreement table.
+
 **One REV id per note.** Each user note gets its own id even when it merges with one of yours, because each maps 1:1 to an inline comment. Mark them `(My note)` in the `## Possible actions` checklist, and add a `Post your notes only` bulk option. Group the checklist by theme (correctness / tests / structure / messages / comments) once it exceeds about ten items.
 
 **Their note is the standard.** When a user note and one of your findings cover the same line:
@@ -278,6 +280,23 @@ This is load-bearing, not decorative: `posting.md` prepends `My note: <text>` ab
 - If their note revives something you dropped (including on a round-3 reviewer's advice), reinstate it, name who advised dropping it, and say why their framing is better. A finding dropped as "too small on its own" is often correct as a symptom of a structure worth changing.
 
 **Answer their questions from the code.** A note phrased as a question ("do these need to be in a transaction?", "what's the likelihood of X?") is usually addressed to the author, but it is still a question you can research. Record it verbatim, then answer it beneath from the actual files. An unanswered user question in a decision doc is wasted work.
+
+Some notes are addressed to **you**, not the author. The user may mark them `@cc`, or say outright that they have no comments of their own and want the answer researched. Those still get their own REV id, because the answer is usually the thing that ends up posted. Research it properly: a question like "is there a different pattern we use for this?" is answered by counting the repo's actual usages and naming files and lines, not by reciting what the framework recommends.
+
+**Leave them a posting-text slot.** When a note is a question to you rather than framing you could post as-is, you do not yet have their words for the GitHub comment. Record the question verbatim, answer it beneath, then close the finding with an explicit empty slot:
+
+```md
+> **My note (posting text):** _fill in, or delete this line to have me present the finding unattributed_
+```
+
+So each merged finding carries up to two blockquotes: `> **My note:**` for text they wrote, and `> **My note (posting text):**` for the slot they have not filled yet.
+
+The slot is a decision, not decoration. Filling it means the comment posts with their `My note: <text>` prefix; deleting it means the same finding posts as yours, unattributed. Rules:
+
+- Never post the placeholder line itself, and never write text into it on their behalf.
+- If it is still unfilled when the user ticks the action, post the finding unattributed and say so in one line when reporting.
+- Skip the slot when the note already reads as posting text. `Should this be in a transaction?` does not need a second version of itself; use it directly as the `My note:` prefix.
+- Offer the slot for every `@cc`-style note whose answer produced something worth posting, including ones where your answer is "the current code is fine". Those are the ones the user most often wants to soften or drop, and the slot is where they do it.
 
 **Report the delta honestly.** The doc needs:
 

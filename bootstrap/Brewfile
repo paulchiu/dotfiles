@@ -1,3 +1,4 @@
+tap "agavra/tap"
 tap "buildkite/buildkite", trusted: true
 tap "datadog-labs/pack", trusted: true
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
@@ -7,14 +8,18 @@ tap "nikitabobko/tap", trusted: true
 tap "openclaw/tap", trusted: true
 tap "osx-cross/arm", trusted: true
 tap "osx-cross/avr", trusted: true
+tap "paulchiu/tap"
 tap "qmk/qmk", trusted: true
 tap "schpet/tap", trusted: true
+tap "stablyai/orca"
 tap "steipete/tap", trusted: true
 tap "stripe/stripe-cli", trusted: true
 tap "tilt-dev/tap", trusted: true
-tap "wix-incubator/brew", "https://github.com/wix-incubator/homebrew-brew.git"
+tap "wix-incubator/brew", "https://github.com/wix-incubator/homebrew-brew.git", trusted: true
 tap "xykong/tap", trusted: true
 tap "y3owk1n/tap", trusted: true
+# Asciicast to GIF converter
+brew "agg"
 # All-in-one AI-Powered CLI Chat & Copilot
 brew "aichat"
 # Record and share terminal sessions
@@ -40,7 +45,7 @@ brew "cloudflared"
 # Cross-platform make
 brew "cmake"
 # Powerful, clean, object-oriented scripting language
-brew "ruby", link: false
+brew "ruby"
 # Dependency manager for Cocoa projects
 brew "cocoapods"
 # GNU File, Shell, and Text utilities
@@ -89,12 +94,12 @@ brew "glow"
 brew "p11-kit"
 # GNU Transport Layer Security (TLS) Library
 brew "gnutls"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
 # Asynchronous event library
 brew "libevent"
 # Validating, recursive, caching DNS resolver
 brew "unbound"
-# Open source programming language to build simple/reliable/efficient software
-brew "go"
 # Make JSON greppable
 brew "gron"
 # Like cURL, but for gRPC
@@ -259,6 +264,8 @@ brew "zig@0.15", link: true
 brew "zoxide"
 # Geo-scale, next-generation sharing platform built on top of OpenZiti
 brew "zrok"
+# Terminal UI for Code Reviews - review AI-generated diffs like a GitHub PR
+brew "agavra/tap/tuicr", trusted: true
 # Work with Buildkite from the command-line
 brew "buildkite/buildkite/bk@3"
 # Build runner for use with Buildkite
@@ -271,6 +278,8 @@ brew "felixkratz/formulae/borders"
 brew "hashicorp/tap/terraform"
 # Google CLI for Gmail, Calendar, Drive, Docs, Sheets, and more
 brew "openclaw/tap/gogcli"
+# Bluetooth battery monitor for macOS: one-shot CLI readings, JSON output and a live TUI
+brew "paulchiu/tap/blubat", trusted: true
 # Quantum Mechanical Keyboard (QMK) Firmware
 brew "qmk/qmk/qmk"
 # CLI tool for linear.app that uses git branch names and directory names to open issues and team pages
@@ -279,12 +288,12 @@ brew "schpet/tap/linear"
 brew "stripe/stripe-cli/stripe"
 # A dev environment as code for microservice apps
 brew "tilt-dev/tap/tilt"
+# Apple simulator utilities
+brew "wix-incubator/brew/applesimutils"
 # Enable Windows-like alt-tab
 cask "alt-tab"
 # Securely stores and accesses AWS credentials in a development environment
 cask "aws-vault-binary"
-# Virtual Audio Driver
-cask "blackhole-2ch"
 # OpenAI's official browser with ChatGPT built in
 cask "chatgpt-atlas"
 # AI code review CLI
@@ -323,6 +332,8 @@ cask "neovide-app"
 cask "y3owk1n/tap/neru"
 # Replacement for Docker Desktop
 cask "orbstack"
+# IDE for orchestrating AI coding agents across terminals and worktrees
+cask "stablyai/orca/orca", trusted: true
 # Remote pair programming
 cask "pop-app"
 # Collaboration platform for API development
@@ -420,7 +431,6 @@ go "github.com/idursun/jjui/cmd/jjui"
 go "honnef.co/go/tools/cmd/staticcheck"
 npm "@angular-devkit/schematics-cli"
 npm "@mr-yum/schematics"
-npm "@openacp/cli"
 npm "@playwright/test"
 npm "azure-functions-core-tools"
 npm "playwright"

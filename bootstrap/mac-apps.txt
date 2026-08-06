@@ -3,10 +3,8 @@ Audiobook Builder.app
 Bing Wallpaper.app
 Bitwarden.app
 Caffeine.app
-ChatGPT Atlas.app
 ChatGPT.app
 Claude.app
-Codex.app
 ColorSlurp.app
 DaisyDisk.app
 DBeaver.app
@@ -53,6 +51,7 @@ Nex.app
 Obsidian.app
 OneDrive.app
 OrbStack.app
+Orca.app
 PastePal.app
 PICO-8.app
 Pixelmator Pro.app
