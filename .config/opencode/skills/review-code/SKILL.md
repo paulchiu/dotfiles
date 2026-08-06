@@ -160,7 +160,7 @@ Before writing, re-verify every `blocking` finding against the worktree code (op
 
 Default location: `~/dev/sandbox/`. Filename: `yyyy-mm-dd PR <num> <short title>.md` (preserve acronym casing; run `date +%Y-%m-%d` if today's date isn't in context).
 
-**Mandatory sections — the doc is incomplete without all of these, in this order:** `Verdict` → `Risk Assessment` → **`## Possible actions`** → (optional persona/AC sections) → `Findings` → `Open questions` → `Notes`. The `## Possible actions` checklist is the decision section: it is what the user ticks, and it is REQUIRED in **every** decision doc, even for a clean Approve with zero findings (it still carries the `Approve the PR` / `No action` boxes). It is not a chat-only artifact — Step 7 mirrors it into chat, it does not replace it. The single most common defect in past docs is this section being dropped; do not let the length of the template below cause you to skip it.
+**Mandatory sections — the doc is incomplete without all of these, in this order:** `Verdict` → `Risk Assessment` → **`## Possible actions`** → (optional persona/AC/user-notes sections) → `Findings` → `Open questions` → `Notes`. When the user has supplied their own findings, Step 8 adds a `## Where your notes and mine agreed` section between `## Possible actions` and `## Findings`. The `## Possible actions` checklist is the decision section: it is what the user ticks, and it is REQUIRED in **every** decision doc, even for a clean Approve with zero findings (it still carries the `Approve the PR` / `No action` boxes). It is not a chat-only artifact — Step 7 mirrors it into chat, it does not replace it. The single most common defect in past docs is this section being dropped; do not let the length of the template below cause you to skip it.
 
 After writing, **verify before printing the path**: grep the file you just wrote for `## Possible actions` (or `## Actions taken` if you are recording an already-executed run). If it is absent, the doc is not done — add it, then continue. Only then **print the absolute path** so the nex terminal renders the click-to-open preview.
 
@@ -254,6 +254,38 @@ This step **mirrors** the `## Possible actions` section already written into the
 The user replies with the items to execute (or "all", "blocking only", "approve and post all", etc.).
 
 **Never post or approve / request-changes without explicit user instruction in this turn.** A prior session's approval doesn't carry over.
+
+## Step 8: Merging the user's own review notes
+
+Triggered when the user pastes their own findings, at any point: before the review, alongside the PR link, or after the decision doc exists. They may prefix them `My note:`, or not, or only some of them. Treat all of them the same way.
+
+The output is a **merged** doc, not yours with theirs appended. Rewrite the doc; don't bolt on a section.
+
+**Preserve their text verbatim.** Never reword, tighten, or summarise a user note, even when your own phrasing is clearer. Record it under the finding as a blockquote:
+
+```md
+> **My note:** <their text, exactly as pasted>
+```
+
+This is load-bearing, not decorative: `posting.md` prepends `My note: <text>` above the `LLM note:` line when the comment is posted, so the doc is the source for that string. If a note is ambiguous about file or line, ask; don't guess a location.
+
+**One REV id per note.** Each user note gets its own id even when it merges with one of yours, because each maps 1:1 to an inline comment. Mark them `(My note)` in the `## Possible actions` checklist, and add a `Post your notes only` bulk option. Group the checklist by theme (correctness / tests / structure / messages / comments) once it exceeds about ten items.
+
+**Their note is the standard.** When a user note and one of your findings cover the same line:
+
+- Merge into one finding, with their framing leading and your evidence supporting.
+- If their note implies a different severity than you assigned, move to theirs and say so in one line. You may have discounted something on mixed repo precedent that they are simply stating as the rule.
+- If their note revives something you dropped (including on a round-3 reviewer's advice), reinstate it, name who advised dropping it, and say why their framing is better. A finding dropped as "too small on its own" is often correct as a symptom of a structure worth changing.
+
+**Answer their questions from the code.** A note phrased as a question ("do these need to be in a transaction?", "what's the likelihood of X?") is usually addressed to the author, but it is still a question you can research. Record it verbatim, then answer it beneath from the actual files. An unanswered user question in a decision doc is wasted work.
+
+**Report the delta honestly.** The doc needs:
+
+- A `## Where your notes and mine agreed` table: `| Your note | My finding | Result |`.
+- One line naming which notes were theirs alone and which findings were yours alone. Never silently drop your own unduplicated findings; keep them and mark them as yours, so the user can drop them deliberately.
+- An explicit callout in `## Notes` for any user note that **no** automated round reached. That is the calibration signal for the whole skill: if a human spotted it after five adversarial lenses and a round-3 pass all read the same function, the lens set has a hole worth naming.
+
+Merging notes never implies permission to post them. Step 7's rule stands.
 
 ## Posting, approving, requesting changes
 

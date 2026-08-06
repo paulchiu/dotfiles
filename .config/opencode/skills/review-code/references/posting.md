@@ -54,7 +54,7 @@ Rules:
 - Opening paragraph follows the `<summary>` directly, with no `Suggestion:` / `Blocking:` / `Nitpick:` / `Question:` prefix.
 - `(ref: REV-N)` is the **last line of the comment body**, outside `</details>`. This is mandatory.
 - Severity lives in the decision doc and the inline checklist only, never in the GitHub comment body.
-- If the user supplies their own framing text, prepend `My note: <text>` above the `LLM note:` line.
+- If the user supplies their own framing text, prepend `My note: <text>` above the `LLM note:` line, verbatim. The decision doc holds that string in a `> **My note:** ...` blockquote under the finding; copy it from there rather than re-deriving it. See `SKILL.md` Step 8.
 - Code snippets must match the target project's style (single vs double quotes, semicolons, formatting). Read at least one nearby file in the changed code before drafting snippets so house style is preserved.
 - Australian spelling. Neutral-professional tone in posted comments, even when the internal reasoning was hostile.
 - No em dashes.
