@@ -15,6 +15,10 @@ ICON_WT=$(printf '\xef\x84\xa6')
 
 input=$(cat)
 
+# Claude Code exports COLUMNS before running this script. tput cannot help here:
+# output is captured rather than attached to a TTY.
+COLS=${COLUMNS:-120}
+
 MODEL=$(echo "$input" | jq -r '.model.display_name // "?"')
 DIR=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // ""')
 PCT=$(echo "$input" | jq -r '.context_window.used_percentage // 0' | cut -d. -f1)
@@ -61,6 +65,36 @@ if [ "$BRANCH" = "HEAD" ]; then  # detached: show the short sha instead
   BRANCH=$(git -C "${DIR:-.}" rev-parse --short HEAD 2>/dev/null)
 fi
 
+DIRNAME=${DIR##*/}
+
+# Branch and directory are the elastic segments, and they absorb whatever overflow
+# would otherwise clip the context meter off the right edge. SHADOW is an ASCII
+# stand-in for the rest of the line, one char per rendered column, which makes
+# ${#SHADOW} a column count. MARGIN covers the nerd-font glyphs that some terminals
+# draw double width, and keeps the meter a step in from the edge.
+MARGIN=3
+SHADOW_BAR=$(printf '%*s' "$SEGMENTS" '')
+SHADOW="X ${MODEL} X "
+[ -n "$BRANCH" ] && SHADOW="${SHADOW} X "   # git glyph and its spaces, branch aside
+SHADOW="${SHADOW} ${SHADOW_BAR} ${PCT}% (${USED_H}/${SIZE_H})"
+BUDGET=$((COLS - ${#SHADOW} - MARGIN))      # columns left for directory and branch
+
+# The branch gives way first, since the directory is the shorter, steadier label.
+if [ -n "$BRANCH" ]; then
+  ROOM=$((BUDGET - ${#DIRNAME}))
+  if [ "$ROOM" -lt 8 ]; then
+    BRANCH=""  # too tight for a stub worth reading
+  elif [ "${#BRANCH}" -gt "$ROOM" ]; then
+    BRANCH="${BRANCH:0:$((ROOM - 1))}…"
+  fi
+fi
+
+# Narrow terminals, where dropping the branch alone still is not enough.
+ROOM=$((BUDGET - ${#BRANCH}))
+if [ "${#DIRNAME}" -gt "$ROOM" ]; then
+  if [ "$ROOM" -ge 4 ]; then DIRNAME="${DIRNAME:0:$((ROOM - 1))}…"; else DIRNAME=""; fi
+fi
+
 # In a worktree, mark the branch with the fork glyph instead of the branch glyph.
 GIT_SEG=""
 if [ -n "$BRANCH" ]; then
@@ -72,6 +106,6 @@ if [ -n "$BRANCH" ]; then
 fi
 
 printf '%s%s %s %s %s%s%s %s%s%s %s%% %s(%s/%s)%s\n' \
-  "$DIM" "$ICON_MODEL" "$MODEL" "$ICON_DIR" "${DIR##*/}" "$GIT_SEG" "$RESET" \
+  "$DIM" "$ICON_MODEL" "$MODEL" "$ICON_DIR" "$DIRNAME" "$GIT_SEG" "$RESET" \
   "$COLOR" "$BAR" "$RESET" "$PCT" \
   "$DIM" "$USED_H" "$SIZE_H" "$RESET"
