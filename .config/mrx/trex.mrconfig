@@ -1,0 +1,12 @@
+# Occasional Azure repos. Was ~/.mrconfig.
+[DEFAULT]
+base = ~/
+
+[dev-trex/BulkPriceImport]
+checkout = git clone 'git@ssh.dev.azure.com:v3/meandu/OrderingPlatform/BulkPriceImport' 'BulkPriceImport'
+
+[dev-trex/Cybertron]
+checkout = git clone 'git@ssh.dev.azure.com:v3/meandu/Cybertron/Cybertron' 'Cybertron'
+
+[dev-trex/OrderingPlatform]
+checkout = git clone 'git@ssh.dev.azure.com:v3/meandu/OrderingPlatform/OrderingPlatform' 'OrderingPlatform'

@@ -1,0 +1,132 @@
+# Daily mr-yum repos. Generated from ~/bin/init-dev.sh.
+[DEFAULT]
+base = ~/dev
+update = ~/bin/mrx-sync-repo.sh
+
+[bill-api]
+checkout = git clone 'git@github.com:mr-yum/bill-api.git' 'bill-api'
+
+[bill-db-schema]
+checkout = git clone 'git@github.com:mr-yum/bill-db-schema.git' 'bill-db-schema'
+
+[bill-worker]
+checkout = git clone 'git@github.com:mr-yum/bill-worker.git' 'bill-worker'
+
+[cloudflare-workers]
+checkout = git clone 'git@github.com:mr-yum/cloudflare-workers.git' 'cloudflare-workers'
+
+[crew]
+checkout = git clone 'git@github.com:mr-yum/crew.git' 'crew'
+
+[crew-contract]
+checkout = git clone 'git@github.com:mr-yum/crew-contract.git' 'crew-contract'
+
+[crew-db-schema]
+checkout = git clone 'git@github.com:mr-yum/crew-db-schema.git' 'crew-db-schema'
+
+[crew-frontend]
+checkout = git clone 'git@github.com:mr-yum/crew-frontend.git' 'crew-frontend'
+
+[crew-infra]
+checkout = git clone 'git@github.com:mr-yum/crew-infra.git' 'crew-infra'
+
+[data-analytics]
+checkout = git clone 'git@github.com:mr-yum/data-analytics.git' 'data-analytics'
+
+[db-tasks]
+checkout = git clone 'git@github.com:mr-yum/db-tasks.git' 'db-tasks'
+
+[guest-gateway]
+checkout = git clone 'git@github.com:mr-yum/guest-gateway.git' 'guest-gateway'
+
+[integration-config]
+checkout = git clone 'git@github.com:mr-yum/integration-config.git' 'integration-config'
+
+[loyalty]
+checkout = git clone 'git@github.com:mr-yum/loyalty.git' 'loyalty'
+
+[loyalty-api]
+checkout = git clone 'git@github.com:mr-yum/loyalty-api.git' 'loyalty-api'
+
+[loyalty-contract]
+checkout = git clone 'git@github.com:mr-yum/loyalty-contract.git' 'loyalty-contract'
+
+[loyalty-db-schema]
+checkout = git clone 'git@github.com:mr-yum/loyalty-db-schema.git' 'loyalty-db-schema'
+
+[loyalty-infra]
+checkout = git clone 'git@github.com:mr-yum/loyalty-infra.git' 'loyalty-infra'
+
+[loyalty-integrations]
+checkout = git clone 'git@github.com:mr-yum/loyalty-integrations.git' 'loyalty-integrations'
+
+[loyalty-worker]
+checkout = git clone 'git@github.com:mr-yum/loyalty-worker.git' 'loyalty-worker'
+
+[manage]
+checkout = git clone 'git@github.com:mr-yum/manage.git' 'manage'
+
+[manage-frontend]
+checkout = git clone 'git@github.com:mr-yum/manage-frontend.git' 'manage-frontend'
+
+[menu-api]
+checkout = git clone 'git@github.com:mr-yum/menu-api.git' 'menu-api'
+
+[menu-sync]
+checkout = git clone 'git@github.com:mr-yum/menu-sync.git' 'menu-sync'
+
+[mr-yum-db-schema]
+checkout = git clone 'git@github.com:mr-yum/mr-yum-db-schema.git' 'mr-yum-db-schema'
+
+[mr-yum]
+checkout = git clone 'git@github.com:mr-yum/mr-yum.git' 'mr-yum'
+branch   = master
+reset    = false
+
+[order-api]
+checkout = git clone 'git@github.com:mr-yum/order-api.git' 'order-api'
+
+[order-db-schema]
+checkout = git clone 'git@github.com:mr-yum/order-db-schema.git' 'order-db-schema'
+
+[order-worker]
+checkout = git clone 'git@github.com:mr-yum/order-worker.git' 'order-worker'
+
+[partner-db-schema]
+checkout = git clone 'git@github.com:mr-yum/partner-db-schema.git' 'partner-db-schema'
+
+[payment-api]
+checkout = git clone 'git@github.com:mr-yum/payment-api.git' 'payment-api'
+
+[payment-db-schema]
+checkout = git clone 'git@github.com:mr-yum/payment-db-schema.git' 'payment-db-schema'
+
+[payment-infra]
+checkout = git clone 'git@github.com:mr-yum/payment-infra.git' 'payment-infra'
+
+[payment-worker]
+checkout = git clone 'git@github.com:mr-yum/payment-worker.git' 'payment-worker'
+
+[payout-api]
+checkout = git clone 'git@github.com:mr-yum/payout-api.git' 'payout-api'
+
+[payout-db-schema]
+checkout = git clone 'git@github.com:mr-yum/payout-db-schema.git' 'payout-db-schema'
+
+[payout-infra]
+checkout = git clone 'git@github.com:mr-yum/payout-infra.git' 'payout-infra'
+
+[payout-worker]
+checkout = git clone 'git@github.com:mr-yum/payout-worker.git' 'payout-worker'
+
+[pos-integrations]
+checkout = git clone 'git@github.com:mr-yum/pos-integrations.git' 'pos-integrations'
+
+[serve-api]
+checkout = git clone 'git@github.com:mr-yum/serve-api.git' 'serve-api'
+
+[serve-frontend]
+checkout = git clone 'git@github.com:mr-yum/serve-frontend.git' 'serve-frontend'
+
+[venue-api]
+checkout = git clone 'git@github.com:mr-yum/venue-api.git' 'venue-api'
