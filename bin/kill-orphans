@@ -1,0 +1,189 @@
+#!/bin/zsh
+#
+# kill-orphans - reap dev processes that were reparented to PID 1.
+#
+# Closing a Nex workspace (or any terminal) sends SIGHUP to the pty's foreground
+# process group. Background jobs started with `&` while a foreground job was
+# running can miss that signal, survive their parent, and get reparented to
+# launchd as PID 1. They then run forever with no terminal attached.
+#
+# Orphans are indistinguishable from launchd-managed daemons by ppid, pgid or
+# tty (all show ppid 1 and tty "??"), so this filters on two things instead:
+# PIDs launchd currently owns are excluded, and only commands on an allowlist of
+# interactive dev tooling are considered.
+#
+# Reports by default; pass --kill to actually terminate.
+
+set -euo pipefail
+
+typeset -g MIN_AGE_MIN=10
+typeset -g DO_KILL=0
+typeset -g ASSUME_YES=0
+typeset -g MATCH_ALL=0
+typeset -g EXTRA_PATTERN=''
+
+# Tooling that should never outlive the terminal that launched it.
+typeset -g DEV_PATTERN='(^|/)(zsh|bash|sh) -c|(^|/)(node|npx|npm|yarn|pnpm|bun|deno)( |$)|(^|/)(python3?|ruby|perl)( |$)|(jest|vitest|vite|esbuild|tsc|tsserver|webpack|rollup|turbo|next|storybook|nodemon|eslint|prettier)( |$)|(^|/)(claude|codex|opencode)( |$)|(^|/)(rg|ripgrep|fd|watchman)( |$)'
+
+# Daemon and app-bundle territory. Deliberately excludes /bin and /usr/bin:
+# orphans routinely present as `/bin/zsh -c ...` or `/usr/bin/python3 ...`.
+typeset -g SYSTEM_PATH_PATTERN='^/(System|Applications|Library|usr/libexec|usr/sbin|sbin)/'
+
+usage() {
+  cat <<'EOF'
+Usage: kill-orphans [options]
+
+Finds processes reparented to PID 1 that look like abandoned dev tooling.
+Prints a report and exits unless --kill is given.
+
+Options:
+  -k, --kill            Terminate the matches (SIGTERM, then SIGKILL after 3s)
+  -y, --yes             Skip the confirmation prompt (implies --kill)
+  -a, --age MINUTES     Minimum age to consider, default 10
+  -p, --pattern REGEX   Additional ERE to match against the command line
+  -A, --all             Ignore the allowlist, match any non-system orphan
+  -h, --help            Show this help
+
+Examples:
+  kill-orphans                    # report only
+  kill-orphans --kill             # prompt, then reap
+  kill-orphans -y -a 60           # reap anything orphaned over an hour ago
+  kill-orphans -A                 # report every non-system orphan
+EOF
+}
+
+while (( $# )); do
+  case $1 in
+    -k|--kill)    DO_KILL=1 ;;
+    -y|--yes)     DO_KILL=1; ASSUME_YES=1 ;;
+    -a|--age)     shift; MIN_AGE_MIN=${1:?--age needs a value} ;;
+    -p|--pattern) shift; EXTRA_PATTERN=${1:?--pattern needs a value} ;;
+    -A|--all)     MATCH_ALL=1 ;;
+    -h|--help)    usage; exit 0 ;;
+    *)            print -u2 "kill-orphans: unknown option $1"; usage; exit 2 ;;
+  esac
+  shift
+done
+
+# ps prints etime as [[dd-]hh:]mm:ss; 10# keeps zero-padded fields out of octal.
+etime_to_min() {
+  local e=$1 d=0 h=0 m=0 s=0 parts
+  [[ $e == *-* ]] && { d=${e%%-*}; e=${e#*-} }
+  parts=(${(s.:.)e})
+  case ${#parts} in
+    3) h=$parts[1] m=$parts[2] s=$parts[3] ;;
+    2) m=$parts[1] s=$parts[2] ;;
+    1) s=$parts[1] ;;
+  esac
+  print $(( 10#$d * 1440 + 10#$h * 60 + 10#$m + 10#$s / 60 ))
+}
+
+# PIDs launchd is actively supervising. These have ppid 1 legitimately, so
+# without this a running daily-brief or blubat job would look like an orphan.
+typeset -g LAUNCHD_PIDS=" $(launchctl list 2>/dev/null | awk '$1 ~ /^[0-9]+$/ {print $1}' | tr '\n' ' ') "
+
+typeset -a pids cpus ages cmds
+typeset -g total_cpu=0
+typeset -g me=$(id -u)
+typeset -g pid ppid uid etime cpu cmd age line
+
+while IFS= read -r line; do
+  read -r pid ppid uid etime cpu cmd <<<"$line"
+  [[ -n ${cmd:-} ]] || continue
+  (( ppid == 1 )) || continue
+  (( uid == me )) || continue
+  (( pid > 500 )) || continue
+  [[ $LAUNCHD_PIDS == *" $pid "* ]] && continue
+  [[ $cmd =~ $SYSTEM_PATH_PATTERN ]] && continue
+
+  age=$(etime_to_min $etime)
+  (( age >= MIN_AGE_MIN )) || continue
+
+  if (( ! MATCH_ALL )); then
+    if [[ -n $EXTRA_PATTERN ]]; then
+      [[ $cmd =~ $DEV_PATTERN || $cmd =~ $EXTRA_PATTERN ]] || continue
+    else
+      [[ $cmd =~ $DEV_PATTERN ]] || continue
+    fi
+  fi
+
+  pids+=($pid)
+  cpus+=($cpu)
+  ages+=($age)
+  cmds+=("$cmd")
+  total_cpu=$(( total_cpu + cpu ))
+done < <(ps -axo pid=,ppid=,uid=,etime=,%cpu=,command=)
+
+if (( ${#pids} == 0 )); then
+  print "No orphaned dev processes found (ppid 1, older than ${MIN_AGE_MIN}m)."
+  exit 0
+fi
+
+print "Orphaned dev processes (ppid 1, older than ${MIN_AGE_MIN}m):"
+print ""
+printf "%-8s %6s %8s  %s\n" PID CPU% AGE COMMAND
+typeset -g a label
+for i in {1..${#pids}}; do
+  a=$ages[$i]
+  if (( a >= 1440 )); then
+    label=$(printf "%dd%dh" $(( a / 1440 )) $(( (a % 1440) / 60 )))
+  elif (( a >= 60 )); then
+    label=$(printf "%dh%dm" $(( a / 60 )) $(( a % 60 )))
+  else
+    label="${a}m"
+  fi
+  printf "%-8s %6s %8s  %.90s\n" $pids[$i] $cpus[$i] $label "$cmds[$i]"
+done
+print ""
+printf "%d process(es), %.1f%% cumulative CPU.\n" ${#pids} $total_cpu
+
+if (( ! DO_KILL )); then
+  print "\nReport only. Re-run with --kill to terminate them."
+  exit 0
+fi
+
+if (( ! ASSUME_YES )); then
+  print ""
+  typeset reply=''
+  read -q "reply?Kill these ${#pids} process(es)? [y/N] " </dev/tty || true
+  print ""
+  [[ ${reply:-} == [yY] ]] || { print "Aborted."; exit 1 }
+fi
+
+# Signal the process group where the orphan leads one, so its own children go
+# with it rather than becoming the next generation of orphans.
+kill_target() {
+  local pid=$1 sig=$2 pgid
+  pgid=$(ps -p $pid -o pgid= 2>/dev/null | tr -d ' ') || return 0
+  if [[ -n $pgid && $pgid == $pid ]]; then
+    kill -$sig -- -$pgid 2>/dev/null || kill -$sig $pid 2>/dev/null || true
+  else
+    kill -$sig $pid 2>/dev/null || true
+  fi
+}
+
+for pid in $pids; do kill_target $pid TERM; done
+sleep 3
+
+typeset -a survivors
+for pid in $pids; do
+  kill -0 $pid 2>/dev/null && survivors+=($pid)
+done
+
+if (( ${#survivors} )); then
+  print "SIGKILLing ${#survivors} survivor(s): ${survivors}"
+  for pid in $survivors; do kill_target $pid KILL; done
+  sleep 1
+fi
+
+typeset -a remaining
+for pid in $pids; do
+  kill -0 $pid 2>/dev/null && remaining+=($pid)
+done
+
+if (( ${#remaining} )); then
+  print -u2 "Failed to kill: ${remaining}"
+  exit 1
+fi
+
+printf "Killed %d orphan(s).\n" ${#pids}
