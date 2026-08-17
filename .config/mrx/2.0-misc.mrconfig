@@ -1,0 +1,301 @@
+# Other me&u/mr-yum repos checked out in ~/dev, outside the 2.0 stack.
+[DEFAULT]
+base = ~/dev
+update = ~/bin/mrx-refresh-repo.sh
+
+[admin]
+checkout = git clone 'git@github.com:mr-yum/admin.git' 'admin'
+
+[ai-pril]
+checkout = git clone 'git@github.com:mr-yum/ai-pril.git' 'ai-pril'
+
+[announce-deployment]
+checkout = git clone 'git@github.com:mr-yum/announce-deployment.git' 'announce-deployment'
+
+[api-auth]
+checkout = git clone 'git@github.com:mr-yum/api-auth.git' 'api-auth'
+
+[base-docker-images]
+checkout = git clone 'git@github.com:mr-yum/base-docker-images.git' 'base-docker-images'
+
+[beamer]
+checkout = git clone 'git@github.com:mr-yum/beamer.git' 'beamer'
+
+[bing-tools]
+checkout = git clone 'git@github.com:mr-yum/bing-tools.git' 'bing-tools'
+
+[cache]
+checkout = git clone 'git@github.com:mr-yum/cache.git' 'cache'
+
+[claude-plugins]
+checkout = git clone 'git@github.com:mr-yum/claude-plugins.git' 'claude-plugins'
+
+[cli]
+checkout = git clone 'git@github.com:mr-yum/cli.git' 'cli'
+
+[connect-infrastructure]
+checkout = git clone 'git@github.com:mr-yum/connect-infrastructure.git' 'connect-infrastructure'
+
+[consumer-db-schema]
+checkout = git clone 'git@github.com:mr-yum/consumer-db-schema.git' 'consumer-db-schema'
+
+[consumer-frontend]
+checkout = git clone 'git@github.com:mr-yum/consumer-frontend.git' 'consumer-frontend'
+
+[credentials]
+checkout = git clone 'git@github.com:mr-yum/credentials.git' 'credentials'
+
+[data-infra]
+checkout = git clone 'git@github.com:mr-yum/data-infra.git' 'data-infra'
+
+[db-schema-pipeline]
+checkout = git clone 'git@github.com:mr-yum/db-schema-pipeline.git' 'db-schema-pipeline'
+
+[engineering-metrics]
+checkout = git clone 'git@github.com:mr-yum/engineering-metrics.git' 'engineering-metrics'
+
+[ephemeral-environment]
+checkout = git clone 'git@github.com:mr-yum/ephemeral-environment.git' 'ephemeral-environment'
+
+[error]
+checkout = git clone 'git@github.com:mr-yum/error.git' 'error'
+
+[eslint-config]
+checkout = git clone 'git@github.com:mr-yum/eslint-config.git' 'eslint-config'
+
+[flags]
+checkout = git clone 'git@github.com:mr-yum/flags.git' 'flags'
+
+[frontend-core]
+checkout = git clone 'git@github.com:mr-yum/frontend-core.git' 'frontend-core'
+
+[frontend-server-utils]
+checkout = git clone 'git@github.com:mr-yum/frontend-server-utils.git' 'frontend-server-utils'
+
+[frontend-ui]
+checkout = git clone 'git@github.com:mr-yum/frontend-ui.git' 'frontend-ui'
+
+[graphql-bench]
+checkout = git clone 'git@github.com:mr-yum/manage-api-bench.git' 'graphql-bench'
+
+[graphql-tools]
+checkout = git clone 'git@github.com:mr-yum/graphql-tools.git' 'graphql-tools'
+
+[guest-session]
+checkout = git clone 'git@github.com:mr-yum/guest-session.git' 'guest-session'
+
+[http-client]
+checkout = git clone 'git@github.com:mr-yum/http-client.git' 'http-client'
+
+[hurl]
+checkout = git clone 'git@github.com:mr-yum/serve-hurl.git' 'hurl'
+
+[infrastructure]
+checkout = git clone 'git@github.com:mr-yum/infrastructure.git' 'infrastructure'
+
+[integrations-observer]
+checkout = git clone 'git@github.com:mr-yum/integrations-observer.git' 'integrations-observer'
+
+[legacy-entities]
+checkout = git clone 'git@github.com:mr-yum/legacy-entities.git' 'legacy-entities'
+
+[logger-context]
+checkout = git clone 'git@github.com:mr-yum/logger-context.git' 'logger-context'
+
+[logger]
+checkout = git clone 'git@github.com:mr-yum/logger.git' 'logger'
+
+[loyalty-connector]
+checkout = git clone 'git@github.com:mr-yum/loyalty-connector.git' 'loyalty-connector'
+
+[loyalty-integrations-db-schema]
+checkout = git clone 'ssh://git@github.com/mr-yum/loyalty-integrations-db-schema' 'loyalty-integrations-db-schema'
+
+[manage-infra]
+checkout = git clone 'git@github.com:mr-yum/manage-infra.git' 'manage-infra'
+
+[manage-mcp]
+checkout = git clone 'git@github.com:mr-yum/manage-mcp.git' 'manage-mcp'
+
+[meandu-customer]
+checkout = git clone 'git@github.com:mr-yum/meandu-customer.git' 'meandu-customer'
+
+[meandu-eonx-order-placed-webhook-sample]
+checkout = git clone 'git@github.com:mr-yum/meandu-eonx-order-placed-webhook-sample.git' 'meandu-eonx-order-placed-webhook-sample'
+
+[metrics]
+checkout = git clone 'git@github.com:mr-yum/metrics.git' 'metrics'
+
+[monitoring]
+checkout = git clone 'git@github.com:mr-yum/monitoring.git' 'monitoring'
+
+[nest-app-info]
+checkout = git clone 'git@github.com:mr-yum/nest-app-info.git' 'nest-app-info'
+
+[mr-yum]
+checkout = git clone 'git@github.com:mr-yum/mr-yum.git' 'mr-yum'
+
+[nest-app]
+checkout = git clone 'git@github.com:mr-yum/nest-app.git' 'nest-app'
+
+[nest-auth]
+checkout = git clone 'git@github.com:mr-yum/nest-auth.git' 'nest-auth'
+
+[nest-error]
+checkout = git clone 'git@github.com:mr-yum/nest-error.git' 'nest-error'
+
+[nest-flags]
+checkout = git clone 'git@github.com:mr-yum/nest-flags.git' 'nest-flags'
+
+[nest-graphql]
+checkout = git clone 'git@github.com:mr-yum/nest-graphql.git' 'nest-graphql'
+
+[nest-grpc-auth]
+checkout = git clone 'git@github.com:mr-yum/nest-grpc-auth.git' 'nest-grpc-auth'
+
+[nest-logger]
+checkout = git clone 'git@github.com:mr-yum/nest-logger.git' 'nest-logger'
+
+[nest-metrics]
+checkout = git clone 'git@github.com:mr-yum/nest-metrics.git' 'nest-metrics'
+
+[nest-microservice]
+checkout = git clone 'git@github.com:mr-yum/nest-microservice.git' 'nest-microservice'
+
+[nest-prisma]
+checkout = git clone 'git@github.com:mr-yum/nest-prisma.git' 'nest-prisma'
+
+[nest-probes]
+checkout = git clone 'git@github.com:mr-yum/nest-probes.git' 'nest-probes'
+
+[nest-redis]
+checkout = git clone 'git@github.com:mr-yum/nest-redis.git' 'nest-redis'
+
+[nest-scripts]
+checkout = git clone 'git@github.com:mr-yum/nest-scripts.git' 'nest-scripts'
+
+[nest-tracer]
+checkout = git clone 'git@github.com:mr-yum/nest-tracer.git' 'nest-tracer'
+
+[node-builder]
+checkout = git clone 'git@github.com:mr-yum/node-builder.git' 'node-builder'
+
+[package-example]
+checkout = git clone 'git@github.com:mr-yum/package-example.git' 'package-example'
+
+[package-pipeline]
+checkout = git clone 'git@github.com:mr-yum/package-pipeline.git' 'package-pipeline'
+
+[package-scripts]
+checkout = git clone 'git@github.com:mr-yum/package-scripts.git' 'package-scripts'
+
+[pagerduty-on-call]
+checkout = git clone 'git@github.com:mr-yum/pagerduty-on-call.git' 'pagerduty-on-call'
+
+[pci-dss-page-tampering]
+checkout = git clone 'git@github.com:mr-yum/pci-dss-page-tampering.git' 'pci-dss-page-tampering'
+
+[personalisation]
+checkout = git clone 'ssh://git@github.com/mr-yum/personalisation' 'personalisation'
+
+[pipeline-packages]
+checkout = git clone 'git@github.com:mr-yum/pipeline-packages.git' 'pipeline-packages'
+
+[pipeline-stages]
+checkout = git clone 'git@github.com:mr-yum/pipeline-stages.git' 'pipeline-stages'
+
+[pipeline-utilities]
+checkout = git clone 'git@github.com:mr-yum/pipeline-utilities.git' 'pipeline-utilities'
+
+[pipelines]
+checkout = git clone 'git@github.com:mr-yum/pipelines.git' 'pipelines'
+
+[points]
+checkout = git clone 'git@github.com:mr-yum/points.git' 'points'
+
+[pos-connector]
+checkout = git clone 'git@github.com:mr-yum/pos-connector.git' 'pos-connector'
+
+[pos-data]
+checkout = git clone 'git@github.com:mr-yum/pos-data.git' 'pos-data'
+
+[pos-mirror]
+checkout = git clone 'git@github.com:mr-yum/pos-mirror.git' 'pos-mirror'
+
+[pos]
+checkout = git clone 'git@github.com:mr-yum/pos.git' 'pos'
+
+[prettier-config]
+checkout = git clone 'git@github.com:mr-yum/prettier-config.git' 'prettier-config'
+
+[printing-api]
+checkout = git clone 'git@github.com:mr-yum/printing-api.git' 'printing-api'
+
+[prison-break-gateway-executor]
+checkout = git clone 'git@github.com:mr-yum/prison-break-gateway-executor' 'prison-break-gateway-executor'
+
+[proto]
+checkout = git clone 'git@github.com:mr-yum/proto.git' 'proto'
+
+[renovate-config]
+checkout = git clone 'git@github.com:mr-yum/renovate-config.git' 'renovate-config'
+
+[rest-interface-workshop]
+checkout = git clone 'git@github.com:mr-yum/rest-interface-workshop.git' 'rest-interface-workshop'
+
+[reward]
+checkout = git clone 'git@github.com:mr-yum/reward.git' 'reward'
+
+[safe-settings]
+checkout = git clone 'git@github.com:mr-yum/safe-settings.git' 'safe-settings'
+
+[schematics]
+checkout = git clone 'git@github.com:mr-yum/schematics.git' 'schematics'
+
+[serve-fe-bench]
+checkout = git clone 'git@github.com:mr-yum/serve-frontend-bench.git' 'serve-fe-bench'
+
+[serve-frontend-old-invoice-helper]
+checkout = git clone 'git@github.com:mr-yum/serve-frontend-old-invoice-helper-.git' 'serve-frontend-old-invoice-helper'
+
+[serve-infra]
+checkout = git clone 'git@github.com:mr-yum/serve-infra.git' 'serve-infra'
+
+[service-pipeline]
+checkout = git clone 'git@github.com:mr-yum/service-pipeline.git' 'service-pipeline'
+
+[sisensejs-components]
+checkout = git clone 'git@github.com:mr-yum/sisensejs-components.git' 'sisensejs-components'
+
+[sms]
+checkout = git clone 'git@github.com:mr-yum/sms.git' 'sms'
+
+[squad-metadata]
+checkout = git clone 'git@github.com:mr-yum/squad-metadata.git' 'squad-metadata'
+
+[stable-api-docs]
+checkout = git clone 'git@github.com:mr-yum/stable-api-docs.git' 'stable-api-docs'
+
+[stable-api]
+checkout = git clone 'git@github.com:mr-yum/stable-api.git' 'stable-api'
+
+[technical-interview-codebase]
+checkout = git clone 'git@github.com:mr-yum/technical-interview-codebase.git' 'technical-interview-codebase'
+
+[terraform-modules]
+checkout = git clone 'git@github.com:mr-yum/terraform-modules.git' 'terraform-modules'
+
+[token-store]
+checkout = git clone 'git@github.com:mr-yum/token-store.git' 'token-store'
+
+[transition-ticket-status]
+checkout = git clone 'git@github.com:mr-yum/transition-ticket-status.git' 'transition-ticket-status'
+
+[vim-core-infra]
+checkout = git clone 'git@github.com:mr-yum/vim-core-infra.git' 'vim-core-infra'
+
+[yum-qr-gen]
+checkout = git clone 'git@github.com:mr-yum/yum-qr-gen.git' 'yum-qr-gen'
+
+[yum-ui]
+checkout = git clone 'git@github.com:mr-yum/yum-ui.git' 'yum-ui'

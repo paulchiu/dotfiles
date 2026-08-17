@@ -1,6 +1,7 @@
 #!/bin/zsh
 
-# Per-repo sync, invoked by mrx via `update =` in ~/.config/mrx/work.mrconfig.
+# Per-repo sync, invoked by mrx via `update =` in the ~/.config/mrx/*.mrconfig
+# repo sets.
 # Replaces process_item.sh: mrx supplies the parallelism, the clone, and the
 # output prefixing, so this only has to do the per-repo work.
 #

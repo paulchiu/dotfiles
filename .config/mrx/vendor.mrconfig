@@ -1,0 +1,16 @@
+# Third-party clones: neither mine nor mr-yum's, kept for reference.
+[DEFAULT]
+base = ~/dev
+update = ~/bin/mrx-refresh-repo.sh
+
+[baseweb]
+checkout = git clone 'git@github.com:uber/baseweb.git' 'baseweb'
+
+[buildkite-pipelines]
+checkout = git clone 'git@github.com:jameslnewell/buildkite-pipelines.git' 'buildkite-pipelines'
+
+[hospitality-api-docs]
+checkout = git clone 'git@github.com:oracle/hospitality-api-docs.git' 'hospitality-api-docs'
+
+[sisense-embedsdk-react]
+checkout = git clone 'git@github.com:sisensers/sisense-embedsdk-react.git' 'sisense-embedsdk-react'

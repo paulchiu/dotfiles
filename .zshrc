@@ -214,6 +214,10 @@ export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 export PATH="/opt/homebrew/opt/helm@3/bin:$PATH"
 export GPG_TTY=$(tty)
 
+# Default mrx repo set, so a bare `mrx update` means the 2.0 order-and-pay
+# stack. Other sets are ~/.config/mrx/<name>.mrconfig, via `mrx -s <name>`.
+export MRX_SET=2.0-stack
+
 # Nex: when a pane opens in $HOME, jump to the sandbox dir.
 # Skip if the pane was launched with --path (PWD != $HOME).
 if [[ -n $NEX_PANE_ID && -o interactive && $PWD == $HOME && -d /Users/paul/dev/sandbox ]]; then

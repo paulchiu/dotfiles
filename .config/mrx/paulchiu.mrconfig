@@ -1,0 +1,11 @@
+# My own repos under the paulchiu GitHub org.
+[DEFAULT]
+base = ~/dev
+update = ~/bin/mrx-refresh-repo.sh
+
+[d3-color]
+checkout = git clone 'git@github.com:paulchiu/d3-color.git' 'd3-color'
+
+[messagemedia-messages-nodejs-sdk]
+checkout = git clone 'git@github.com:paulchiu/messagemedia-messages-nodejs-sdk.git' 'messagemedia-messages-nodejs-sdk'
+

@@ -1,4 +1,4 @@
-# Daily mr-yum repos. Generated from ~/bin/init-dev.sh.
+# The me&u 2.0 order-and-pay stack. Synced daily by ~/bin/reset.sh.
 [DEFAULT]
 base = ~/dev
 update = ~/bin/mrx-sync-repo.sh
@@ -29,9 +29,6 @@ checkout = git clone 'git@github.com:mr-yum/crew-frontend.git' 'crew-frontend'
 
 [crew-infra]
 checkout = git clone 'git@github.com:mr-yum/crew-infra.git' 'crew-infra'
-
-[data-analytics]
-checkout = git clone 'git@github.com:mr-yum/data-analytics.git' 'data-analytics'
 
 [db-tasks]
 checkout = git clone 'git@github.com:mr-yum/db-tasks.git' 'db-tasks'
@@ -77,11 +74,6 @@ checkout = git clone 'git@github.com:mr-yum/menu-sync.git' 'menu-sync'
 
 [mr-yum-db-schema]
 checkout = git clone 'git@github.com:mr-yum/mr-yum-db-schema.git' 'mr-yum-db-schema'
-
-[mr-yum]
-checkout = git clone 'git@github.com:mr-yum/mr-yum.git' 'mr-yum'
-branch   = master
-reset    = false
 
 [order-api]
 checkout = git clone 'git@github.com:mr-yum/order-api.git' 'order-api'
