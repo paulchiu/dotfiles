@@ -36,9 +36,23 @@ nex pane id
 Notes:
 
 - `--workspace` and `--current` are mutually exclusive for `pane list`.
+- `pane name <name>` acts on the **current** pane; it accepts no `--target`.
 - `pane send` types text into the target PTY and presses Enter. If a shell is
   running, the text executes as shell input. If an agent is running, the text is
   sent as agent input.
+- `pane send --bare` omits the Enter, but it also **rewrites most control bytes
+  as spaces** (`\x04`, `\x15`, `\x12` and a bare `\x1b` were all observed to
+  arrive as a space; `\x1b[B` loses its `ESC`). It does not error. For anything
+  interactive, read `driving-tuis.md` first.
+- `pane capture` returns the screen as plain text: colour is stripped and
+  trailing blank lines are trimmed. It can also lag the real screen by a redraw,
+  so cross-check anything surprising against a screenshot.
+- `pane resize --ratio` moves a split along its own axis only. A `vertical`
+  (stacked) split changes rows and never columns, so it cannot be used to test
+  behaviour at a narrower width.
+- There is **no workspace-activate command**. A screenshot only shows the
+  window's active workspace, so a pane you need to photograph must live in the
+  workspace already on screen.
 - `pane send` exit `0` is not proof that text reached the PTY. When launching
   delegates, always verify with `pane capture`. If capture does not show the
   command or agent UI, retry once at most, then use the focused-pane fallback in

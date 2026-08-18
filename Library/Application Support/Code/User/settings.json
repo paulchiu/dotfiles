@@ -146,4 +146,5 @@
     "**/.forgejo/workflows/*.yml",
     "**/.forgejo/workflows/*.yaml",
   ],
+  "saucer.linkSource": false,
 }

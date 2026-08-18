@@ -48,6 +48,13 @@ of trusting a zero exit code.
   SQLite-join recipe for broadcasting to every pane in a group (no CLI filter
   exists for this) and the web-view dark-theme gotcha (`prefers-color-scheme`
   is not honoured reliably, so generate HTML with an explicit dark theme).
+- Task is driving an interactive terminal app in a pane (a TUI, an editor, a
+  manual test sweep) or photographing what a pane drew: read
+  `references/driving-tuis.md` **before sending a single key**. `pane send
+  --bare` silently rewrites control bytes as spaces, which corrupts a run
+  rather than failing it, and `screencapture` writes no file on a stale window
+  id, which quietly duplicates one frame across every screenshot. The reference
+  carries the pty-shim workaround for both.
 - Task is showing Codex progress, status indicators, or Nex notifications for
   Codex work: read `references/codex-status.md`.
 
@@ -72,5 +79,12 @@ Do not read a reference the task does not need.
   with `nex pane capture --target <id> --lines 40`. If the capture does not
   show the sent text or the expected agent UI, retry the send once at most,
   then use the focused-pane fallback in `references/delegation.md`.
+- `pane name <name>` renames the **current** pane and takes no `--target`.
+  Running it to label a pane you just created renames your own instead.
+- Never send control bytes with `pane send --bare`. It rewrites most of them as
+  spaces without erroring, so the keystroke lands as something else. Use
+  `pane send-key` for the keys it supports (`enter, return, tab, escape, esc,
+  space, backspace, up, down, left, right, ctrl-c`) and the pty shim in
+  `references/driving-tuis.md` for anything else.
 - If a command fails with an explicit error, stop and report the error and the
   exact command. Do not keep retrying the same failing command.

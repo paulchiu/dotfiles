@@ -23,6 +23,7 @@ _jj() {
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -53,13 +54,14 @@ _arguments "${_arguments_options[@]}" : \
 '--retain-bookmarks[Do not delete bookmarks pointing to the revisions to abandon]' \
 '--restore-descendants[Do not modify the content of the children of the abandoned commits]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::revisions_pos -- The revision(s) to abandon (default\: @):_default' \
+'*::revisions_pos -- The revision(s) to abandon (default\: @) \[aliases\: -r\]:_default' \
 && ret=0
 ;;
 (absorb)
@@ -69,6 +71,30 @@ _arguments "${_arguments_options[@]}" : \
 '*-t+[Destination revisions to absorb into]:REVSETS:_default' \
 '*--into=[Destination revisions to absorb into]:REVSETS:_default' \
 '*--to=[Destination revisions to absorb into]:REVSETS:_default' \
+'--tool=[Specify diff editor to be used (implies --interactive)]:NAME:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'-i[Interactively choose which parts to absorb]' \
+'--interactive[Interactively choose which parts to absorb]' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::paths -- Move only changes to these paths (instead of all paths):_files' \
+&& ret=0
+;;
+(arrange)
+_arguments "${_arguments_options[@]}" : \
+'*-r+[]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -77,13 +103,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::paths -- Move only changes to these paths (instead of all paths):_files' \
+'*::revisions_pos -- The revisions to arrange \[aliases\: -r\]:_default' \
 && ret=0
 ;;
 (bisect)
@@ -96,13 +123,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__bisect_commands" \
+":: :_jj__subcmd__bisect_commands" \
 "*::: :->bisect" \
 && ret=0
 
@@ -114,8 +142,8 @@ _arguments "${_arguments_options[@]}" : \
         case $line[1] in
             (run)
 _arguments "${_arguments_options[@]}" : \
-'*-r+[Range of revisions to bisect]:REVSETS:_default' \
-'*--range=[Range of revisions to bisect]:REVSETS:_default' \
+'*-r+[Range of revisions to bisect (can be repeated)]:REVSETS:_default' \
+'*--range=[Range of revisions to bisect (can be repeated)]:REVSETS:_default' \
 '()--command=[Deprecated. Use positional arguments instead]:COMMAND:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
@@ -124,15 +152,16 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'--find-good[Whether to find the first good revision instead]' \
+'--find-good[Find the first good revision instead]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'::command -- Command to run to determine whether the bug is present:_default' \
+'::command -- Command to run to determine the status of a revision:_default' \
 '*::args -- Arguments to pass to the command:_default' \
 && ret=0
 ;;
@@ -150,13 +179,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__bookmark_commands" \
+":: :_jj__subcmd__bookmark_commands" \
 "*::: :->bookmark" \
 && ret=0
 
@@ -166,7 +196,51 @@ _arguments "${_arguments_options[@]}" : \
         (( CURRENT += 1 ))
         curcontext="${curcontext%:*:*}:jj-bookmark-command-$line[1]:"
         case $line[1] in
-            (create)
+            (advance)
+_arguments "${_arguments_options[@]}" : \
+'-t+[Move bookmarks to this revision]:REVSET:_default' \
+'--to=[Move bookmarks to this revision]:REVSET:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::names -- Move bookmarks matching the given name patterns:_default' \
+&& ret=0
+;;
+(a)
+_arguments "${_arguments_options[@]}" : \
+'-t+[Move bookmarks to this revision]:REVSET:_default' \
+'--to=[Move bookmarks to this revision]:REVSET:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::names -- Move bookmarks matching the given name patterns:_default' \
+&& ret=0
+;;
+(create)
 _arguments "${_arguments_options[@]}" : \
 '-r+[The bookmark'\''s target revision]:REVSET:_default' \
 '--revision=[The bookmark'\''s target revision]:REVSET:_default' \
@@ -179,6 +253,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -201,6 +276,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -220,6 +296,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -239,6 +316,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -259,6 +337,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--include-remotes[When forgetting a local bookmark, also forget any corresponding remote bookmarks]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -279,6 +358,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--include-remotes[When forgetting a local bookmark, also forget any corresponding remote bookmarks]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -290,9 +370,9 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (list)
 _arguments "${_arguments_options[@]}" : \
-'(-a --all-remotes)*--remote=[Show all tracking and non-tracking remote bookmarks belonging to this remote]:REMOTE:_default' \
+'(-a --all-remotes)*--remote=[Show all tracked and untracked remote bookmarks belonging to this remote]:REMOTE:_default' \
 '*-r+[Show bookmarks whose local targets are in the given revisions]:REVSETS:_default' \
-'*--revisions=[Show bookmarks whose local targets are in the given revisions]:REVSETS:_default' \
+'*--revision=[Show bookmarks whose local targets are in the given revisions]:REVSETS:_default' \
 '-T+[Render each bookmark using the given template]:TEMPLATE:_default' \
 '--template=[Render each bookmark using the given template]:TEMPLATE:_default' \
 '*--sort=[Sort bookmarks based on the given key (or multiple keys)]:SORT_KEY:(name name- author-name author-name- author-email author-email- author-date author-date- committer-name committer-name- committer-email committer-email- committer-date committer-date-)' \
@@ -303,13 +383,14 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-a[Show all tracking and non-tracking remote bookmarks including the ones whose targets are synchronized with the local bookmarks]' \
-'--all-remotes[Show all tracking and non-tracking remote bookmarks including the ones whose targets are synchronized with the local bookmarks]' \
-'(-a --all-remotes)-t[Show remote tracked bookmarks only. Omits local Git-tracking bookmarks by default]' \
-'(-a --all-remotes)--tracked[Show remote tracked bookmarks only. Omits local Git-tracking bookmarks by default]' \
+'-a[Show all tracked and untracked remote bookmarks including the ones whose targets are synchronized with the local bookmarks]' \
+'--all-remotes[Show all tracked and untracked remote bookmarks including the ones whose targets are synchronized with the local bookmarks]' \
+'(-a --all-remotes)-t[Show tracked remote bookmarks only]' \
+'(-a --all-remotes)--tracked[Show tracked remote bookmarks only]' \
 '(-a --all-remotes)-c[Show conflicted bookmarks only]' \
 '(-a --all-remotes)--conflicted[Show conflicted bookmarks only]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -321,9 +402,9 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (l)
 _arguments "${_arguments_options[@]}" : \
-'(-a --all-remotes)*--remote=[Show all tracking and non-tracking remote bookmarks belonging to this remote]:REMOTE:_default' \
+'(-a --all-remotes)*--remote=[Show all tracked and untracked remote bookmarks belonging to this remote]:REMOTE:_default' \
 '*-r+[Show bookmarks whose local targets are in the given revisions]:REVSETS:_default' \
-'*--revisions=[Show bookmarks whose local targets are in the given revisions]:REVSETS:_default' \
+'*--revision=[Show bookmarks whose local targets are in the given revisions]:REVSETS:_default' \
 '-T+[Render each bookmark using the given template]:TEMPLATE:_default' \
 '--template=[Render each bookmark using the given template]:TEMPLATE:_default' \
 '*--sort=[Sort bookmarks based on the given key (or multiple keys)]:SORT_KEY:(name name- author-name author-name- author-email author-email- author-date author-date- committer-name committer-name- committer-email committer-email- committer-date committer-date-)' \
@@ -334,13 +415,14 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-a[Show all tracking and non-tracking remote bookmarks including the ones whose targets are synchronized with the local bookmarks]' \
-'--all-remotes[Show all tracking and non-tracking remote bookmarks including the ones whose targets are synchronized with the local bookmarks]' \
-'(-a --all-remotes)-t[Show remote tracked bookmarks only. Omits local Git-tracking bookmarks by default]' \
-'(-a --all-remotes)--tracked[Show remote tracked bookmarks only. Omits local Git-tracking bookmarks by default]' \
+'-a[Show all tracked and untracked remote bookmarks including the ones whose targets are synchronized with the local bookmarks]' \
+'--all-remotes[Show all tracked and untracked remote bookmarks including the ones whose targets are synchronized with the local bookmarks]' \
+'(-a --all-remotes)-t[Show tracked remote bookmarks only]' \
+'(-a --all-remotes)--tracked[Show tracked remote bookmarks only]' \
 '(-a --all-remotes)-c[Show conflicted bookmarks only]' \
 '(-a --all-remotes)--conflicted[Show conflicted bookmarks only]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -366,6 +448,7 @@ _arguments "${_arguments_options[@]}" : \
 '-B[Allow moving bookmarks backwards or sideways]' \
 '--allow-backwards[Allow moving bookmarks backwards or sideways]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -391,6 +474,7 @@ _arguments "${_arguments_options[@]}" : \
 '-B[Allow moving bookmarks backwards or sideways]' \
 '--allow-backwards[Allow moving bookmarks backwards or sideways]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -409,7 +493,9 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--overwrite-existing[Allow renaming even if the new bookmark name already exists]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -429,7 +515,9 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--overwrite-existing[Allow renaming even if the new bookmark name already exists]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -455,6 +543,7 @@ _arguments "${_arguments_options[@]}" : \
 '-B[Allow moving the bookmark backwards or sideways]' \
 '--allow-backwards[Allow moving the bookmark backwards or sideways]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -479,6 +568,7 @@ _arguments "${_arguments_options[@]}" : \
 '-B[Allow moving the bookmark backwards or sideways]' \
 '--allow-backwards[Allow moving the bookmark backwards or sideways]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -490,6 +580,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (track)
 _arguments "${_arguments_options[@]}" : \
+'*--remote=[Remote names to track]:REMOTE:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -498,17 +589,19 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::names -- Remote bookmarks to track:_default' \
+'*::names -- Bookmark name patterns or remote bookmark symbols to track:_default' \
 && ret=0
 ;;
 (t)
 _arguments "${_arguments_options[@]}" : \
+'*--remote=[Remote names to track]:REMOTE:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -517,17 +610,19 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::names -- Remote bookmarks to track:_default' \
+'*::names -- Bookmark name patterns or remote bookmark symbols to track:_default' \
 && ret=0
 ;;
 (untrack)
 _arguments "${_arguments_options[@]}" : \
+'*--remote=[Remote names to untrack]:REMOTE:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -536,13 +631,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::names -- Remote bookmarks to untrack:_default' \
+'*::names -- Bookmark name patterns or remote bookmark symbols to untrack:_default' \
 && ret=0
 ;;
         esac
@@ -554,7 +650,6 @@ _arguments "${_arguments_options[@]}" : \
 '--tool=[Specify diff editor to be used (implies --interactive)]:NAME:_default' \
 '*-m+[The change description to use (don'\''t open editor)]:MESSAGE:_default' \
 '*--message=[The change description to use (don'\''t open editor)]:MESSAGE:_default' \
-'(--reset-author)--author=[Set author to the provided string]:AUTHOR:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -562,17 +657,18 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-i[Interactively choose which changes to include in the first commit]' \
-'--interactive[Interactively choose which changes to include in the first commit]' \
-'--reset-author[Reset the author to the configured user]' \
+'-i[Interactively choose which changes to include in the current commit]' \
+'--interactive[Interactively choose which changes to include in the current commit]' \
+'--editor[Open an editor to edit the change description]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::paths -- Put these paths in the first commit:_files' \
+'*::paths -- Put these paths in the current commit:_files' \
 && ret=0
 ;;
 (config)
@@ -585,13 +681,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__config_commands" \
+":: :_jj__subcmd__config_commands" \
 "*::: :->config" \
 && ret=0
 
@@ -614,6 +711,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -635,6 +733,26 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(gc)
+_arguments "${_arguments_options[@]}" : \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -653,6 +771,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -672,6 +791,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -698,6 +818,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -724,6 +845,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -746,6 +868,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -767,6 +890,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -788,6 +912,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -811,6 +936,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -834,6 +960,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -856,6 +983,7 @@ _arguments "${_arguments_options[@]}" : \
 '--repo[Target the repo-level config]' \
 '--workspace[Target the workspace-level config]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -879,13 +1007,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__debug_commands" \
+":: :_jj__subcmd__debug_commands" \
 "*::: :->debug" \
 && ret=0
 
@@ -905,6 +1034,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -924,6 +1054,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -943,6 +1074,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -963,6 +1095,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -981,6 +1114,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1000,6 +1134,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1018,13 +1153,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__debug__object_commands" \
+":: :_jj__subcmd__debug__subcmd__object_commands" \
 "*::: :->object" \
 && ret=0
 
@@ -1044,6 +1180,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1055,6 +1192,8 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (file)
 _arguments "${_arguments_options[@]}" : \
+'-r+[]:REVISION:_default' \
+'--revision=[]:REVISION:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -1063,6 +1202,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1070,7 +1210,7 @@ _arguments "${_arguments_options[@]}" : \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':path:_files' \
-':id:_default' \
+'::id:_default' \
 && ret=0
 ;;
 (operation)
@@ -1083,6 +1223,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1094,6 +1235,8 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (symlink)
 _arguments "${_arguments_options[@]}" : \
+'-r+[]:REVISION:_default' \
+'--revision=[]:REVISION:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -1102,6 +1245,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1109,7 +1253,7 @@ _arguments "${_arguments_options[@]}" : \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':path:_files' \
-':id:_default' \
+'::id:_default' \
 && ret=0
 ;;
 (tree)
@@ -1124,6 +1268,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1145,6 +1290,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1168,6 +1314,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1188,6 +1335,7 @@ _arguments "${_arguments_options[@]}" : \
 '--no-resolve[Do not resolve and evaluate expression]' \
 '--no-optimize[Do not rewrite expression to optimized form]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1207,12 +1355,35 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(stacked-table)
+_arguments "${_arguments_options[@]}" : \
+'-n+[Key size in bytes]:KEY_SIZE:_default' \
+'--key-size=[Key size in bytes]:KEY_SIZE:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':dir -- Path to table store directory:_files -/' \
 && ret=0
 ;;
 (template)
@@ -1225,6 +1396,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1248,6 +1420,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1267,13 +1440,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__debug__watchman_commands" \
+":: :_jj__subcmd__debug__subcmd__watchman_commands" \
 "*::: :->watchman" \
 && ret=0
 
@@ -1293,6 +1467,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1311,6 +1486,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1329,6 +1505,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1347,6 +1524,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1369,6 +1547,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1386,7 +1565,6 @@ _arguments "${_arguments_options[@]}" : \
 '*-r+[]:REVSETS:_default' \
 '(--stdin)*-m+[The change description to use (don'\''t open editor)]:MESSAGE:_default' \
 '(--stdin)*--message=[The change description to use (don'\''t open editor)]:MESSAGE:_default' \
-'(--reset-author)--author=[Set author to the provided string]:AUTHOR:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -1395,17 +1573,16 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--stdin[Read the change description from stdin]' \
-'(--edit)--no-edit[Don'\''t open an editor]' \
-'--edit[Open an editor]' \
-'--reset-author[Reset the author name, email, and timestamp]' \
+'--editor[Open an editor to edit the change description]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::revisions_pos -- The revision(s) whose description to edit (default\: @):_default' \
+'*::revisions_pos -- The revision(s) whose description to edit (default\: @) \[aliases\: -r\]:_default' \
 && ret=0
 ;;
 (diff)
@@ -1439,6 +1616,7 @@ _arguments "${_arguments_options[@]}" : \
 '(-w --ignore-all-space)-b[Ignore changes in amount of whitespace when comparing lines]' \
 '(-w --ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1466,6 +1644,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--restore-descendants[Preserve the content (not the diff) when rebasing descendants]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1478,14 +1657,16 @@ _arguments "${_arguments_options[@]}" : \
 (duplicate)
 _arguments "${_arguments_options[@]}" : \
 '*-r+[]:REVSETS:_default' \
+'*-o+[The revision(s) to duplicate onto (can be repeated to create a merge commit)]:REVSETS:_default' \
 '*-d+[The revision(s) to duplicate onto (can be repeated to create a merge commit)]:REVSETS:_default' \
+'*--onto=[The revision(s) to duplicate onto (can be repeated to create a merge commit)]:REVSETS:_default' \
 '*--destination=[The revision(s) to duplicate onto (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*-A+[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--insert-after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*-B+[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--insert-before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*-A+[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--insert-after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*-B+[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--insert-before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -1494,17 +1675,19 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::revisions_pos -- The revision(s) to duplicate (default\: @):_default' \
+'*::revisions_pos -- The revision(s) to duplicate (default\: @) \[aliases\: -r\]:_default' \
 && ret=0
 ;;
 (edit)
 _arguments "${_arguments_options[@]}" : \
+'-r+[]:REVSET:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -1512,15 +1695,15 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-r[Ignored (but lets you pass \`-r\` for consistency with other commands)]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-':revision -- The commit to edit:_default' \
+'::revision_pos -- The commit to edit \[aliases\: -r\]:_default' \
 && ret=0
 ;;
 (evolog)
@@ -1555,6 +1738,7 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1595,6 +1779,7 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1613,13 +1798,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__file_commands" \
+":: :_jj__subcmd__file_commands" \
 "*::: :->file" \
 && ret=0
 
@@ -1643,6 +1829,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1664,6 +1851,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1689,6 +1877,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1696,6 +1885,33 @@ _arguments "${_arguments_options[@]}" : \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '*::paths -- Only list files matching these prefixes (instead of all files):_files' \
+&& ret=0
+;;
+(search)
+_arguments "${_arguments_options[@]}" : \
+'-r+[The revision to search files in]:REVSET:_default' \
+'--revision=[The revision to search files in]:REVSET:_default' \
+'-p+[The pattern to search for in a single line]:PATTERN:_default' \
+'--pattern=[The pattern to search for in a single line]:PATTERN:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'(-n --line-number)--name-only[Print only the paths of files that contain a match, not the matched lines]' \
+'-n[Prefix each matched line with its 1-based line number within the file]' \
+'--line-number[Prefix each matched line with its 1-based line number within the file]' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::paths -- Only search files matching these prefixes (instead of all files):_files' \
 && ret=0
 ;;
 (show)
@@ -1712,6 +1928,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1730,7 +1947,9 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--include-ignored[Track paths even if they'\''re ignored or too large]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1750,6 +1969,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1775,7 +1995,10 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--include-unchanged-files[Fix unchanged files in addition to changed ones. If no paths are specified, all files in the repo will be fixed]' \
+'-a[Format all lines instead of only modified lines]' \
+'--all-lines[Format all lines instead of only modified lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1795,13 +2018,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__gerrit_commands" \
+":: :_jj__subcmd__gerrit_commands" \
 "*::: :->gerrit" \
 && ret=0
 
@@ -1813,11 +2037,28 @@ _arguments "${_arguments_options[@]}" : \
         case $line[1] in
             (upload)
 _arguments "${_arguments_options[@]}" : \
-'*-r+[The revset, selecting which revisions are sent in to Gerrit]:REVISIONS:_default' \
-'*--revisions=[The revset, selecting which revisions are sent in to Gerrit]:REVISIONS:_default' \
+'*-r+[The revset, selecting which revisions are sent in to Gerrit]:REVSETS:_default' \
+'*--revision=[The revset, selecting which revisions are sent in to Gerrit]:REVSETS:_default' \
 '-b+[The location where your changes are intended to land]:REMOTE_BRANCH:_default' \
 '--remote-branch=[The location where your changes are intended to land]:REMOTE_BRANCH:_default' \
 '--remote=[The Gerrit remote to push to]:REMOTE:_default' \
+'*--reviewer=[Add these emails as a reviewer (can be repeated)]:REVIEWER:_default' \
+'*--cc=[CC these emails on the change (can be repeated)]:CC:_default' \
+'*-l+[Add the following labels configured by Gerrit (can be repeated)]:LABEL:_default' \
+'*--label=[Add the following labels configured by Gerrit (can be repeated)]:LABEL:_default' \
+'--topic=[Applies a topic to the change]:TOPIC:_default' \
+'*--hashtag=[Applies a hashtag to the change (can be repeated)]:HASHTAG:_default' \
+'-m+[A patch set description for the new patch set]:MESSAGE:_default' \
+'--message=[A patch set description for the new patch set]:MESSAGE:_default' \
+'--notify=[Who to email notifications to (defaults to all)]:NOTIFY:((none\:"No emails"
+owner\:"Only the change owner is notified"
+owner-reviewers\:"Only the change owner and reviewers will be notified"
+all\:"All relevant users, including owner, reviewers, cc'\''d, users that have starred the change, and users who have configured a watch on files in the change"))' \
+'--deadline=[The deadline after which the push should be aborted]:DEADLINE:_default' \
+'*--custom=[Send the following custom keyed values to Gerrit (can be repeated)]:CUSTOM:_default' \
+'*-o+[Send a \`git push -o\` option (can be repeated)]:OPTION:_default' \
+'*--option=[Send a \`git push -o\` option (can be repeated)]:OPTION:_default' \
+'--trace=[For debugging Gerrit]:TRACE:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -1827,7 +2068,19 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '-n[Do not actually push the changes to Gerrit]' \
 '--dry-run[Do not actually push the changes to Gerrit]' \
+'--edit[Push the change as a change edit]' \
+'--wip[Marks the change as WIP (work in progress)]' \
+'--ready[Unmarks the change as WIP (work in progress)]' \
+'--private[Marks the change as private]' \
+'--remove-private[Unmarks the change as private]' \
+'--publish-comments[Publishes any draft comments for the given change]' \
+'--no-publish-comments[Disables publishing of any draft comments for the given change]' \
+'--submit[Directly submit the changes, bypassing code review]' \
+'--skip-validation[When --submit is provided, skip performing validations]' \
+'--merged[Create a new change, even if the change has already been merged]' \
+'--ignore-attention-set[Do not modify the attention set upon uploading]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1850,13 +2103,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__git_commands" \
+":: :_jj__subcmd__git_commands" \
 "*::: :->git" \
 && ret=0
 
@@ -1870,11 +2124,11 @@ _arguments "${_arguments_options[@]}" : \
 _arguments "${_arguments_options[@]}" : \
 '--remote=[Name of the newly created remote]:REMOTE_NAME:_default' \
 '--depth=[Create a shallow clone of the given depth]:DEPTH:_default' \
-'--fetch-tags=[Configure when to fetch tags]:FETCH_TAGS:((all\:"Always fetch all tags"
-included\:"Only fetch tags that point to objects that are already being transmitted"
-none\:"Do not fetch any tags"))' \
-'*-b+[Name of the branch to fetch and use as the parent of the working-copy change]:BRANCH:_default' \
-'*--branch=[Name of the branch to fetch and use as the parent of the working-copy change]:BRANCH:_default' \
+'*-b+[Name of the branch to fetch and use as the parent of the working-copy change (can be repeated)]:BRANCH:_default' \
+'*--branch=[Name of the branch to fetch and use as the parent of the working-copy change (can be repeated)]:BRANCH:_default' \
+'*-t+[Fetch only some of the tags (can be repeated)]:TAG:_default' \
+'*--tag=[Fetch only some of the tags (can be repeated)]:TAG:_default' \
+'--object-hash=[Object hash algorithm for the local Git repository]:OBJECT_HASH:(sha1 sha256)' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -1885,6 +2139,7 @@ none\:"Do not fetch any tags"))' \
 '--colocate[Colocate the Jujutsu repo with the git repo]' \
 '(--colocate)--no-colocate[Disable colocation of the Jujutsu repo with the git repo]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1905,13 +2160,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__git__colocation_commands" \
+":: :_jj__subcmd__git__subcmd__colocation_commands" \
 "*::: :->colocation" \
 && ret=0
 
@@ -1931,6 +2187,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1949,6 +2206,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1967,6 +2225,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1989,6 +2248,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -1999,8 +2259,10 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (fetch)
 _arguments "${_arguments_options[@]}" : \
-'*-b+[Fetch only some of the branches]:BRANCH:_default' \
-'*--branch=[Fetch only some of the branches]:BRANCH:_default' \
+'*-b+[Name of the branch to fetch (can be repeated)]:BRANCH:_default' \
+'*--branch=[Name of the branch to fetch (can be repeated)]:BRANCH:_default' \
+'*-t+[Fetch only some of the tags (can be repeated)]:TAG:_default' \
+'*--tag=[Fetch only some of the tags (can be repeated)]:TAG:_default' \
 '*--remote=[The remote to fetch from (only named remotes are supported, can be repeated)]:REMOTE:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
@@ -2009,9 +2271,10 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'(-b --branch)--tracked[Fetch only tracked bookmarks]' \
+'(-b --branch -t --tag)--tracked[Fetch only tracked bookmarks and tags]' \
 '(--remote)--all-remotes[Fetch from all remotes]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2030,6 +2293,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2040,7 +2304,8 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (init)
 _arguments "${_arguments_options[@]}" : \
-'(--colocate)--git-repo=[Specifies a path to an **existing** git repository to be used as the backing git repo for the newly created \`jj\` repo]:GIT_REPO:_files -/' \
+'(--git-repo)--object-hash=[Object hash algorithm for the newly created Git repository]:OBJECT_HASH:(sha1 sha256)' \
+'(--colocate --object-hash)--git-repo=[Specifies a path to an **existing** git repository to be used as the backing git repo for the newly created \`jj\` repo]:GIT_REPO:_files -/' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2051,6 +2316,7 @@ _arguments "${_arguments_options[@]}" : \
 '(--git-repo)--colocate[Colocate the Jujutsu repo with the git repo]' \
 '(--colocate)--no-colocate[Disable colocation of the Jujutsu repo with the git repo]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2065,11 +2331,15 @@ _arguments "${_arguments_options[@]}" : \
 '--remote=[The remote to push to (only named remotes are supported)]:REMOTE:_default' \
 '*-b+[Push only this bookmark, or bookmarks matching a pattern (can be repeated)]:BOOKMARK:_default' \
 '*--bookmark=[Push only this bookmark, or bookmarks matching a pattern (can be repeated)]:BOOKMARK:_default' \
-'*-r+[Push bookmarks pointing to these commits (can be repeated)]:REVSETS:_default' \
-'*--revisions=[Push bookmarks pointing to these commits (can be repeated)]:REVSETS:_default' \
+'*-t+[Push only this tag, or tags matching a pattern (can be repeated)]:TAG:_default' \
+'*--tag=[Push only this tag, or tags matching a pattern (can be repeated)]:TAG:_default' \
+'*-r+[Push bookmarks and tags pointing to these commits (can be repeated)]:REVSETS:_default' \
+'*--revision=[Push bookmarks and tags pointing to these commits (can be repeated)]:REVSETS:_default' \
 '*-c+[Push this commit by creating a bookmark (can be repeated)]:REVSETS:_default' \
 '*--change=[Push this commit by creating a bookmark (can be repeated)]:REVSETS:_default' \
 '*--named=[Specify a new bookmark name and a revision to push under that name, e.g. '\''--named myfeature=@'\'']:NAME=REVISION:_default' \
+'*-o+[Git push options]:OPTION:_default' \
+'*--option=[Git push options]:OPTION:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2077,15 +2347,15 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'--all[Push all bookmarks (including new bookmarks)]' \
-'--tracked[Push all tracked bookmarks]' \
-'(-b --bookmark -c --change -r --revisions --named)--deleted[Push all deleted bookmarks]' \
-'(--all --tracked)-N[Allow pushing new bookmarks]' \
-'(--all --tracked)--allow-new[Allow pushing new bookmarks]' \
+'--all[Push all bookmarks and tags (including new ones)]' \
+'--tracked[Push all tracked bookmarks and tags]' \
+'(-b --bookmark -t --tag -r --revision -c --change --named)--deleted[Push all deleted bookmarks and tags]' \
 '--allow-empty-description[Allow pushing commits with empty descriptions]' \
 '--allow-private[Allow pushing commits that are private]' \
+'--allow-conflicts[Allow pushing commits that contain conflicts]' \
 '--dry-run[Only display what will change on the remote]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2104,13 +2374,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__git__remote_commands" \
+":: :_jj__subcmd__git__subcmd__remote_commands" \
 "*::: :->remote" \
 && ret=0
 
@@ -2122,9 +2393,7 @@ _arguments "${_arguments_options[@]}" : \
         case $line[1] in
             (add)
 _arguments "${_arguments_options[@]}" : \
-'--fetch-tags=[Configure when to fetch tags]:FETCH_TAGS:((all\:"Always fetch all tags"
-included\:"Only fetch tags that point to objects that are already being transmitted"
-none\:"Do not fetch any tags"))' \
+'--push-url=[The URL used for push]:PUSH_URL:_urls' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2133,6 +2402,7 @@ none\:"Do not fetch any tags"))' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2153,6 +2423,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2171,6 +2442,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2190,6 +2462,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2202,6 +2475,8 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (set-url)
 _arguments "${_arguments_options[@]}" : \
+'--push=[The URL or path to push to]:PUSH:_urls' \
+'()--fetch=[The URL or path to fetch from]:FETCH:_urls' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2210,6 +2485,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2217,7 +2493,7 @@ _arguments "${_arguments_options[@]}" : \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':remote -- The remote'\''s name:_default' \
-':url -- The desired URL or path for `remote`:_urls' \
+'::url -- The URL or path to fetch from:_urls' \
 && ret=0
 ;;
         esac
@@ -2234,6 +2510,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2270,6 +2547,7 @@ tutorial\:"Show a tutorial to get started with jj"))' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2281,10 +2559,10 @@ tutorial\:"Show a tutorial to get started with jj"))' \
 ;;
 (interdiff)
 _arguments "${_arguments_options[@]}" : \
-'-f+[Show changes from this revision]:REVSET:_default' \
-'--from=[Show changes from this revision]:REVSET:_default' \
-'-t+[Show changes to this revision]:REVSET:_default' \
-'--to=[Show changes to this revision]:REVSET:_default' \
+'-f+[The first revision to compare (default\: @)]:REVSET:_default' \
+'--from=[The first revision to compare (default\: @)]:REVSET:_default' \
+'-t+[The second revision to compare (default\: @)]:REVSET:_default' \
+'--to=[The second revision to compare (default\: @)]:REVSET:_default' \
 '--tool=[Generate diff by external command]:TOOL:_default' \
 '--context=[Number of lines of context to show]:CONTEXT:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
@@ -2306,6 +2584,7 @@ _arguments "${_arguments_options[@]}" : \
 '(-w --ignore-all-space)-b[Ignore changes in amount of whitespace when comparing lines]' \
 '(-w --ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2318,7 +2597,7 @@ _arguments "${_arguments_options[@]}" : \
 (log)
 _arguments "${_arguments_options[@]}" : \
 '*-r+[Which revisions to show]:REVSETS:_default' \
-'*--revisions=[Which revisions to show]:REVSETS:_default' \
+'*--revision=[Which revisions to show]:REVSETS:_default' \
 '-n+[Limit number of revisions to show]:LIMIT:_default' \
 '--limit=[Limit number of revisions to show]:LIMIT:_default' \
 '-T+[Render each revision using the given template]:TEMPLATE:_default' \
@@ -2337,6 +2616,7 @@ _arguments "${_arguments_options[@]}" : \
 '--no-graph[Don'\''t show the graph, show a flat list of revisions]' \
 '-p[Show patch]' \
 '--patch[Show patch]' \
+'(-s --summary --stat --types --name-only --git --color-words --tool --context --ignore-all-space --ignore-space-change -G --no-graph -p --patch --reversed -T --template)--count[Print the number of commits instead of showing them]' \
 '-s[For each path, show only whether it was modified, added, or deleted]' \
 '--summary[For each path, show only whether it was modified, added, or deleted]' \
 '--stat[Show a histogram of the changes]' \
@@ -2347,6 +2627,7 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2362,7 +2643,7 @@ _arguments "${_arguments_options[@]}" : \
 '*-m+[Update the change description]:MESSAGE:_default' \
 '*--message=[Update the change description]:MESSAGE:_default' \
 '(--update-author)--author=[Set author to the provided string]:AUTHOR:_default' \
-'(--update-author-timestamp)--author-timestamp=[Set the author date to the given date either human readable, eg Sun, 23 Jan 2000 01\:23\:45 JST) or as a time stamp, eg 2000-01-23T01\:23\:45+09\:00)]:AUTHOR_TIMESTAMP:_default' \
+'(--update-author-timestamp)--author-timestamp=[Set the author date to the given date]:AUTHOR_TIMESTAMP:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2374,27 +2655,28 @@ _arguments "${_arguments_options[@]}" : \
 '--update-author-timestamp[Update the author timestamp]' \
 '--update-author[Update the author to the configured user]' \
 '--force-rewrite[Rewrite the commit, even if no other metadata changed]' \
-'(--force-rewrite)--update-committer-timestamp[Deprecated. Use \`--force-rewrite\` instead]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::revisions_pos -- The revision(s) to modify (default\: @):_default' \
+'*::revisions_pos -- The revision(s) to modify (default\: @) \[aliases\: -r\]:_default' \
 && ret=0
 ;;
 (new)
 _arguments "${_arguments_options[@]}" : \
+'*-o+[]:REVSETS:_default' \
 '*-m+[The change description to use]:MESSAGE:_default' \
 '*--message=[The change description to use]:MESSAGE:_default' \
-'()*-A+[Insert the new change after the given commit(s)]:REVSETS:_default' \
-'()*--insert-after=[Insert the new change after the given commit(s)]:REVSETS:_default' \
-'()*--after=[Insert the new change after the given commit(s)]:REVSETS:_default' \
-'()*-B+[Insert the new change before the given commit(s)]:REVSETS:_default' \
-'()*--insert-before=[Insert the new change before the given commit(s)]:REVSETS:_default' \
-'()*--before=[Insert the new change before the given commit(s)]:REVSETS:_default' \
+'(-o)*-A+[Insert the new change after the given commit(s)]:REVSETS:_default' \
+'(-o)*--insert-after=[Insert the new change after the given commit(s)]:REVSETS:_default' \
+'(-o)*--after=[Insert the new change after the given commit(s)]:REVSETS:_default' \
+'(-o)*-B+[Insert the new change before the given commit(s)]:REVSETS:_default' \
+'(-o)*--insert-before=[Insert the new change before the given commit(s)]:REVSETS:_default' \
+'(-o)*--before=[Insert the new change before the given commit(s)]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2402,17 +2684,17 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'*-d[Ignored (but lets you pass \`-d\`/\`-r\` for consistency with other commands)]' \
 '(--edit)--no-edit[Do not edit the newly created change]' \
 '--edit[No-op flag to pair with --no-edit]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::revisions -- Parent(s) of the new change:_default' \
+'*::revisions_pos -- Parent(s) of the new change \[default\: @\] \[aliases\: -o, -r\]:_default' \
 && ret=0
 ;;
 (next)
@@ -2430,6 +2712,7 @@ _arguments "${_arguments_options[@]}" : \
 '(-e --edit)--no-edit[The inverse of \`--edit\`]' \
 '()--conflict[Jump to the next conflicted descendant]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2449,13 +2732,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__operation_commands" \
+":: :_jj__subcmd__operation_commands" \
 "*::: :->operation" \
 && ret=0
 
@@ -2475,6 +2759,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2494,6 +2779,7 @@ _arguments "${_arguments_options[@]}" : \
 '(--operation)--to=[Show repository changes to this operation]:TO:_default' \
 '--tool=[Generate diff by external command]:TOOL:_default' \
 '--context=[Number of lines of context to show]:CONTEXT:_default' \
+'--show-changes-in=[Show only changed revisions matching the given revset expression]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2515,12 +2801,33 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(integrate)
+_arguments "${_arguments_options[@]}" : \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':operation -- The operation to integrate:_default' \
 && ret=0
 ;;
 (log)
@@ -2531,6 +2838,7 @@ _arguments "${_arguments_options[@]}" : \
 '--template=[Render each operation using the given template]:TEMPLATE:_default' \
 '--tool=[Generate diff by external command]:TOOL:_default' \
 '--context=[Number of lines of context to show]:CONTEXT:_default' \
+'--show-changes-in=[Show only changed revisions matching the given revset expression]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2555,6 +2863,7 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2575,6 +2884,7 @@ remote-tracking\:"The remote-tracking bookmarks. Do not restore these if you'\''
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2596,6 +2906,7 @@ remote-tracking\:"The remote-tracking bookmarks. Do not restore these if you'\''
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2611,6 +2922,7 @@ _arguments "${_arguments_options[@]}" : \
 '--template=[Render the operation using the given template]:TEMPLATE:_default' \
 '--tool=[Generate diff by external command]:TOOL:_default' \
 '--context=[Number of lines of context to show]:CONTEXT:_default' \
+'--show-changes-in=[Show only changed revisions matching the given revset expression]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2633,6 +2945,7 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2640,27 +2953,6 @@ _arguments "${_arguments_options[@]}" : \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::operation -- Show repository changes in this operation, compared to its parent(s):_default' \
-&& ret=0
-;;
-(undo)
-_arguments "${_arguments_options[@]}" : \
-'*--what=[What portions of the local state to restore (can be repeated)]:WHAT:((repo\:"The jj repo state and local bookmarks"
-remote-tracking\:"The remote-tracking bookmarks. Do not restore these if you'\''d like to push after the undo"))' \
-'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
-'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
-'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
-'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
-'--color=[When to colorize output]:WHEN:(always never debug auto)' \
-'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
-'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
-'--ignore-immutable[Allow rewriting immutable commits]' \
-'--debug[Enable debug logging]' \
-'--quiet[Silence non-primary command output]' \
-'--no-pager[Disable the pager]' \
-'-h[Print help (see more with '\''--help'\'')]' \
-'--help[Print help (see more with '\''--help'\'')]' \
-'::operation -- The operation to revert:_default' \
 && ret=0
 ;;
         esac
@@ -2677,13 +2969,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__operation_commands" \
+":: :_jj__subcmd__operation_commands" \
 "*::: :->operation" \
 && ret=0
 
@@ -2703,6 +2996,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2722,6 +3016,7 @@ _arguments "${_arguments_options[@]}" : \
 '(--operation)--to=[Show repository changes to this operation]:TO:_default' \
 '--tool=[Generate diff by external command]:TOOL:_default' \
 '--context=[Number of lines of context to show]:CONTEXT:_default' \
+'--show-changes-in=[Show only changed revisions matching the given revset expression]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2743,12 +3038,33 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(integrate)
+_arguments "${_arguments_options[@]}" : \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':operation -- The operation to integrate:_default' \
 && ret=0
 ;;
 (log)
@@ -2759,6 +3075,7 @@ _arguments "${_arguments_options[@]}" : \
 '--template=[Render each operation using the given template]:TEMPLATE:_default' \
 '--tool=[Generate diff by external command]:TOOL:_default' \
 '--context=[Number of lines of context to show]:CONTEXT:_default' \
+'--show-changes-in=[Show only changed revisions matching the given revset expression]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2783,6 +3100,7 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2803,6 +3121,7 @@ remote-tracking\:"The remote-tracking bookmarks. Do not restore these if you'\''
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2824,6 +3143,7 @@ remote-tracking\:"The remote-tracking bookmarks. Do not restore these if you'\''
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2839,6 +3159,7 @@ _arguments "${_arguments_options[@]}" : \
 '--template=[Render the operation using the given template]:TEMPLATE:_default' \
 '--tool=[Generate diff by external command]:TOOL:_default' \
 '--context=[Number of lines of context to show]:CONTEXT:_default' \
+'--show-changes-in=[Show only changed revisions matching the given revset expression]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2861,6 +3182,7 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-all-space[Ignore whitespace when comparing lines]' \
 '(--ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2870,33 +3192,13 @@ _arguments "${_arguments_options[@]}" : \
 '::operation -- Show repository changes in this operation, compared to its parent(s):_default' \
 && ret=0
 ;;
-(undo)
-_arguments "${_arguments_options[@]}" : \
-'*--what=[What portions of the local state to restore (can be repeated)]:WHAT:((repo\:"The jj repo state and local bookmarks"
-remote-tracking\:"The remote-tracking bookmarks. Do not restore these if you'\''d like to push after the undo"))' \
-'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
-'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
-'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
-'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
-'--color=[When to colorize output]:WHEN:(always never debug auto)' \
-'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
-'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
-'--ignore-immutable[Allow rewriting immutable commits]' \
-'--debug[Enable debug logging]' \
-'--quiet[Silence non-primary command output]' \
-'--no-pager[Disable the pager]' \
-'-h[Print help (see more with '\''--help'\'')]' \
-'--help[Print help (see more with '\''--help'\'')]' \
-'::operation -- The operation to revert:_default' \
-&& ret=0
-;;
         esac
     ;;
 esac
 ;;
 (parallelize)
 _arguments "${_arguments_options[@]}" : \
+'*-r+[]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2905,13 +3207,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'*::revisions -- Revisions to parallelize:_default' \
+'*::revisions_pos -- The revisions to parallelize \[aliases\: -r\]:_default' \
 && ret=0
 ;;
 (prev)
@@ -2929,6 +3232,7 @@ _arguments "${_arguments_options[@]}" : \
 '(-e --edit)--no-edit[The inverse of \`--edit\`]' \
 '()--conflict[Jump to the previous conflicted ancestor]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2945,15 +3249,17 @@ _arguments "${_arguments_options[@]}" : \
 '*-s+[Rebase specified revision(s) together with their trees of descendants (can be repeated)]:REVSETS:_default' \
 '*--source=[Rebase specified revision(s) together with their trees of descendants (can be repeated)]:REVSETS:_default' \
 '*-r+[Rebase the given revisions, rebasing descendants onto this revision'\''s parent(s)]:REVSETS:_default' \
-'*--revisions=[Rebase the given revisions, rebasing descendants onto this revision'\''s parent(s)]:REVSETS:_default' \
+'*--revision=[Rebase the given revisions, rebasing descendants onto this revision'\''s parent(s)]:REVSETS:_default' \
+'*-o+[The revision(s) to rebase onto (can be repeated to create a merge commit)]:REVSETS:_default' \
 '*-d+[The revision(s) to rebase onto (can be repeated to create a merge commit)]:REVSETS:_default' \
+'*--onto=[The revision(s) to rebase onto (can be repeated to create a merge commit)]:REVSETS:_default' \
 '*--destination=[The revision(s) to rebase onto (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*-A+[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--insert-after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*-B+[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--insert-before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*-A+[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--insert-after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*-B+[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--insert-before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -2963,7 +3269,9 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--skip-emptied[If true, when rebasing would produce an empty commit, the commit is abandoned. It will not be abandoned if it was already empty before the rebase. Will never skip merge commits with multiple non-empty parents]' \
 '--keep-divergent[Keep divergent commits while rebasing]' \
+'--simplify-parents[Simplify parents of rebased commits, like \`jj simplify-parents\`, while rebasing them. Any parents that are ancestors of other parents will be removed]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -2982,6 +3290,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3005,6 +3314,7 @@ _arguments "${_arguments_options[@]}" : \
 '-l[Instead of resolving conflicts, list all the conflicts]' \
 '--list[Instead of resolving conflicts, list all the conflicts]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3037,6 +3347,7 @@ _arguments "${_arguments_options[@]}" : \
 '--interactive[Interactively choose which parts to restore]' \
 '--restore-descendants[Preserve the content (not the diff) when rebasing descendants]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3049,15 +3360,17 @@ _arguments "${_arguments_options[@]}" : \
 (revert)
 _arguments "${_arguments_options[@]}" : \
 '*-r+[The revision(s) to apply the reverse of]:REVSETS:_default' \
-'*--revisions=[The revision(s) to apply the reverse of]:REVSETS:_default' \
+'*--revision=[The revision(s) to apply the reverse of]:REVSETS:_default' \
+'*-o+[The revision(s) to apply the reverse changes on top of]:REVSETS:_default' \
 '*-d+[The revision(s) to apply the reverse changes on top of]:REVSETS:_default' \
+'*--onto=[The revision(s) to apply the reverse changes on top of]:REVSETS:_default' \
 '*--destination=[The revision(s) to apply the reverse changes on top of]:REVSETS:_default' \
-'(-d --destination)*-A+[The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--insert-after=[The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--after=[The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*-B+[The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--insert-before=[The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination)*--before=[The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*-A+[The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--insert-after=[The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--after=[The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*-B+[The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--insert-before=[The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto)*--before=[The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3066,6 +3379,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3084,6 +3398,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3095,9 +3410,9 @@ _arguments "${_arguments_options[@]}" : \
 (run)
 _arguments "${_arguments_options[@]}" : \
 '*-r+[The revisions to change]:REVSETS:_default' \
-'*--revisions=[The revisions to change]:REVSETS:_default' \
-'-j+[How many processes should run in parallel, uses by default all cores]:JOBS:_default' \
-'--jobs=[How many processes should run in parallel, uses by default all cores]:JOBS:_default' \
+'*--revision=[The revisions to change]:REVSETS:_default' \
+'-j+[How many processes should run in parallel]:JOBS:_default' \
+'--jobs=[How many processes should run in parallel]:JOBS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3106,20 +3421,29 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '-x[A no-op option to match the interface of \`git rebase -x\`]' \
+'--root[Run the command from the working-copy root in each commit instead of from the subdirectory \`jj run\` was invoked from]' \
+'--clean[Delete each working copy before running the command]' \
+'--restore-descendants[Preserve the content (not the diff) when rebasing descendants]' \
+'--passthrough[Pass through stdout and stderr directly to the terminal]' \
+'(--restore-descendants)--ignore-changes[Run the command without rewriting any commits]' \
+'--ignore-errors[Continue with remaining revisions when a command'\''s exit code indicates failure]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-':shell_command -- The command to run across all selected revisions:_default' \
+':command -- Command to run across all selected revisions:_default' \
+'*::args -- Arguments to pass to the command:_default' \
 && ret=0
 ;;
 (show)
 _arguments "${_arguments_options[@]}" : \
-'-T+[Render a revision using the given template]:TEMPLATE:_default' \
-'--template=[Render a revision using the given template]:TEMPLATE:_default' \
+'*-r+[]:REVSETS:_default' \
+'-T+[Render each revision using the given template]:TEMPLATE:_default' \
+'--template=[Render each revision using the given template]:TEMPLATE:_default' \
 '--tool=[Generate diff by external command]:TOOL:_default' \
 '--context=[Number of lines of context to show]:CONTEXT:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
@@ -3129,7 +3453,7 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-r[Ignored (but lets you pass \`-r\` for consistency with other commands)]' \
+'--reversed[Show revisions in the opposite order (older revisions first)]' \
 '-s[For each path, show only whether it was modified, added, or deleted]' \
 '--summary[For each path, show only whether it was modified, added, or deleted]' \
 '--stat[Show a histogram of the changes]' \
@@ -3143,19 +3467,20 @@ _arguments "${_arguments_options[@]}" : \
 '(-w --ignore-all-space)-b[Ignore changes in amount of whitespace when comparing lines]' \
 '(-w --ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'::revision -- Show changes in this revision, compared to its parent(s):_default' \
+'*::revisions_pos -- Show changes in these revisions, compared to their parent(s) \[default\: @\] \[aliases\: -r\]:_default' \
 && ret=0
 ;;
 (sign)
 _arguments "${_arguments_options[@]}" : \
 '*-r+[What revision(s) to sign]:REVSETS:_default' \
-'*--revisions=[What revision(s) to sign]:REVSETS:_default' \
+'*--revision=[What revision(s) to sign]:REVSETS:_default' \
 '--key=[The key used for signing]:KEY:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
@@ -3165,6 +3490,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3178,7 +3504,7 @@ _arguments "${_arguments_options[@]}" : \
 '*-s+[Simplify specified revision(s) together with their trees of descendants (can be repeated)]:REVSETS:_default' \
 '*--source=[Simplify specified revision(s) together with their trees of descendants (can be repeated)]:REVSETS:_default' \
 '*-r+[Simplify specified revision(s) (can be repeated)]:REVSETS:_default' \
-'*--revisions=[Simplify specified revision(s) (can be repeated)]:REVSETS:_default' \
+'*--revision=[Simplify specified revision(s) (can be repeated)]:REVSETS:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3187,6 +3513,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3205,13 +3532,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__sparse_commands" \
+":: :_jj__subcmd__sparse_commands" \
 "*::: :->sparse" \
 && ret=0
 
@@ -3231,6 +3559,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3249,6 +3578,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3267,6 +3597,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3288,6 +3619,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--clear[Include no files in the working copy (combine with --add)]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3305,16 +3637,18 @@ _arguments "${_arguments_options[@]}" : \
 '--tool=[Specify diff editor to be used (implies --interactive)]:NAME:_default' \
 '-r+[The revision to split]:REVSET:_default' \
 '--revision=[The revision to split]:REVSET:_default' \
-'(-p --parallel)*-d+[The revision(s) to base the new revision onto (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-p --parallel)*--destination=[The revision(s) to base the new revision onto (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -p --parallel)*-A+[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -p --parallel)*--insert-after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -p --parallel)*--after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -p --parallel)*-B+[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -p --parallel)*--insert-before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -p --parallel)*--before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'*-m+[The change description to use (don'\''t open editor)]:MESSAGE:_default' \
-'*--message=[The change description to use (don'\''t open editor)]:MESSAGE:_default' \
+'(-p --parallel)*-o+[The revision(s) to rebase the selected changes onto (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-p --parallel)*-d+[The revision(s) to rebase the selected changes onto (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-p --parallel)*--onto=[The revision(s) to rebase the selected changes onto (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-p --parallel)*--destination=[The revision(s) to rebase the selected changes onto (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -p --parallel)*-A+[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -p --parallel)*--insert-after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -p --parallel)*--after=[The revision(s) to insert after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -p --parallel)*-B+[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -p --parallel)*--insert-before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -p --parallel)*--before=[The revision(s) to insert before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'*-m+[The change description to use for the selected changes (don'\''t open editor)]:MESSAGE:_default' \
+'*--message=[The change description to use for the selected changes (don'\''t open editor)]:MESSAGE:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3324,9 +3658,11 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '-i[Interactively choose which parts to split]' \
 '--interactive[Interactively choose which parts to split]' \
+'--editor[Open an editor to edit the change description(s)]' \
 '-p[Split the revision into two parallel revisions instead of a parent and child]' \
 '--parallel[Split the revision into two parallel revisions instead of a parent and child]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3338,21 +3674,23 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (squash)
 _arguments "${_arguments_options[@]}" : \
-'-r+[Revision to squash into its parent (default\: @). Incompatible with the experimental \`-d\`/\`-A\`/\`-B\` options]:REVSET:_default' \
-'--revision=[Revision to squash into its parent (default\: @). Incompatible with the experimental \`-d\`/\`-A\`/\`-B\` options]:REVSET:_default' \
+'-r+[Revision to squash into its parent (default\: @). Incompatible with the experimental \`-o\`/\`-A\`/\`-B\` options]:REVSET:_default' \
+'--revision=[Revision to squash into its parent (default\: @). Incompatible with the experimental \`-o\`/\`-A\`/\`-B\` options]:REVSET:_default' \
 '(-r --revision)*-f+[Revision(s) to squash from (default\: @)]:REVSETS:_default' \
 '(-r --revision)*--from=[Revision(s) to squash from (default\: @)]:REVSETS:_default' \
 '(-r --revision)-t+[Revision to squash into (default\: @)]:REVSET:_default' \
 '(-r --revision)--into=[Revision to squash into (default\: @)]:REVSET:_default' \
 '(-r --revision)--to=[Revision to squash into (default\: @)]:REVSET:_default' \
+'(-t --into -r --revision)*-o+[(Experimental) The revision(s) to use as parent for the new commit (can be repeated to create a merge commit)]:REVSETS:_default' \
 '(-t --into -r --revision)*-d+[(Experimental) The revision(s) to use as parent for the new commit (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-t --into -r --revision)*--onto=[(Experimental) The revision(s) to use as parent for the new commit (can be repeated to create a merge commit)]:REVSETS:_default' \
 '(-t --into -r --revision)*--destination=[(Experimental) The revision(s) to use as parent for the new commit (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -t --into -r --revision)*-A+[(Experimental) The revision(s) to insert the new commit after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -t --into -r --revision)*--insert-after=[(Experimental) The revision(s) to insert the new commit after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -t --into -r --revision)*--after=[(Experimental) The revision(s) to insert the new commit after (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -t --into -r --revision)*-B+[(Experimental) The revision(s) to insert the new commit before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -t --into -r --revision)*--insert-before=[(Experimental) The revision(s) to insert the new commit before (can be repeated to create a merge commit)]:REVSETS:_default' \
-'(-d --destination -t --into -r --revision)*--before=[(Experimental) The revision(s) to insert the new commit before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -t --into -r --revision)*-A+[(Experimental) The revision(s) to insert the new commit after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -t --into -r --revision)*--insert-after=[(Experimental) The revision(s) to insert the new commit after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -t --into -r --revision)*--after=[(Experimental) The revision(s) to insert the new commit after (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -t --into -r --revision)*-B+[(Experimental) The revision(s) to insert the new commit before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -t --into -r --revision)*--insert-before=[(Experimental) The revision(s) to insert the new commit before (can be repeated to create a merge commit)]:REVSETS:_default' \
+'(-o --onto -t --into -r --revision)*--before=[(Experimental) The revision(s) to insert the new commit before (can be repeated to create a merge commit)]:REVSETS:_default' \
 '*-m+[The description to use for squashed revision (don'\''t open editor)]:MESSAGE:_default' \
 '*--message=[The description to use for squashed revision (don'\''t open editor)]:MESSAGE:_default' \
 '--tool=[Specify diff editor to be used (implies --interactive)]:NAME:_default' \
@@ -3365,11 +3703,13 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '(-m --message)-u[Use the description of the destination revision and discard the description(s) of the source revision(s)]' \
 '(-m --message)--use-destination-message[Use the description of the destination revision and discard the description(s) of the source revision(s)]' \
+'--editor[Open an editor to edit the change description]' \
 '-i[Interactively choose which parts to squash]' \
 '--interactive[Interactively choose which parts to squash]' \
 '-k[The source revision will not be abandoned]' \
 '--keep-emptied[The source revision will not be abandoned]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3389,6 +3729,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3408,13 +3749,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__tag_commands" \
+":: :_jj__subcmd__tag_commands" \
 "*::: :->tag" \
 && ret=0
 
@@ -3434,6 +3776,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3453,6 +3796,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3464,8 +3808,12 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (list)
 _arguments "${_arguments_options[@]}" : \
+'(-a --all-remotes)*--remote=[Show all tracked and untracked remote tags belonging to this remote]:REMOTE:_default' \
+'*-r+[Show tags whose local targets are in the given revisions]:REVSETS:_default' \
+'*--revision=[Show tags whose local targets are in the given revisions]:REVSETS:_default' \
 '-T+[Render each tag using the given template]:TEMPLATE:_default' \
 '--template=[Render each tag using the given template]:TEMPLATE:_default' \
+'*--sort=[Sort tags based on the given key (or multiple keys)]:SORT_KEY:(name name- author-name author-name- author-email author-email- author-date author-date- committer-name committer-name- committer-email committer-email- committer-date committer-date-)' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3473,7 +3821,14 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'-a[Show all tracked and untracked remote tags including the ones whose targets are synchronized with the local tags]' \
+'--all-remotes[Show all tracked and untracked remote tags including the ones whose targets are synchronized with the local tags]' \
+'(-a --all-remotes)-t[Show tracked remote tags only]' \
+'(-a --all-remotes)--tracked[Show tracked remote tags only]' \
+'(-a --all-remotes)-c[Show conflicted tags only]' \
+'(-a --all-remotes)--conflicted[Show conflicted tags only]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3485,8 +3840,12 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (l)
 _arguments "${_arguments_options[@]}" : \
+'(-a --all-remotes)*--remote=[Show all tracked and untracked remote tags belonging to this remote]:REMOTE:_default' \
+'*-r+[Show tags whose local targets are in the given revisions]:REVSETS:_default' \
+'*--revision=[Show tags whose local targets are in the given revisions]:REVSETS:_default' \
 '-T+[Render each tag using the given template]:TEMPLATE:_default' \
 '--template=[Render each tag using the given template]:TEMPLATE:_default' \
+'*--sort=[Sort tags based on the given key (or multiple keys)]:SORT_KEY:(name name- author-name author-name- author-email author-email- author-date author-date- committer-name committer-name- committer-email committer-email- committer-date committer-date-)' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3494,7 +3853,14 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'-a[Show all tracked and untracked remote tags including the ones whose targets are synchronized with the local tags]' \
+'--all-remotes[Show all tracked and untracked remote tags including the ones whose targets are synchronized with the local tags]' \
+'(-a --all-remotes)-t[Show tracked remote tags only]' \
+'(-a --all-remotes)--tracked[Show tracked remote tags only]' \
+'(-a --all-remotes)-c[Show conflicted tags only]' \
+'(-a --all-remotes)--conflicted[Show conflicted tags only]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3518,6 +3884,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--allow-move[Allow moving existing tags]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3541,6 +3908,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--allow-move[Allow moving existing tags]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3550,14 +3918,9 @@ _arguments "${_arguments_options[@]}" : \
 '*::names -- Tag names to create or update:_default' \
 && ret=0
 ;;
-        esac
-    ;;
-esac
-;;
-(undo)
+(track)
 _arguments "${_arguments_options[@]}" : \
-'*--what=[(deprecated, use \`jj op revert --what\`)]:WHAT:((repo\:"The jj repo state and local bookmarks"
-remote-tracking\:"The remote-tracking bookmarks. Do not restore these if you'\''d like to push after the undo"))' \
+'*--remote=[Remote names to track]:REMOTE:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3566,19 +3929,19 @@ remote-tracking\:"The remote-tracking bookmarks. Do not restore these if you'\''
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-'::operation -- (deprecated, use `jj op revert <operation>`):_default' \
+'*::names -- Tag name patterns or remote tag symbols to track:_default' \
 && ret=0
 ;;
-(unsign)
+(untrack)
 _arguments "${_arguments_options[@]}" : \
-'*-r+[What revision(s) to unsign]:REVSETS:_default' \
-'*--revisions=[What revision(s) to unsign]:REVSETS:_default' \
+'*--remote=[Remote names to untrack]:REMOTE:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3587,6 +3950,52 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::names -- Tag name patterns or remote tag symbols to untrack:_default' \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(undo)
+_arguments "${_arguments_options[@]}" : \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(unsign)
+_arguments "${_arguments_options[@]}" : \
+'*-r+[What revision(s) to unsign]:REVSETS:_default' \
+'*--revision=[What revision(s) to unsign]:REVSETS:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3605,13 +4014,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__util_commands" \
+":: :_jj__subcmd__util_commands" \
 "*::: :->util" \
 && ret=0
 
@@ -3621,7 +4031,7 @@ _arguments "${_arguments_options[@]}" : \
         (( CURRENT += 1 ))
         curcontext="${curcontext%:*:*}:jj-util-command-$line[1]:"
         case $line[1] in
-            (completion)
+            (backend)
 _arguments "${_arguments_options[@]}" : \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
@@ -3631,6 +4041,57 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+":: :_jj__subcmd__util__subcmd__backend_commands" \
+"*::: :->backend" \
+&& ret=0
+
+    case $state in
+    (backend)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:jj-util-backend-command-$line[1]:"
+        case $line[1] in
+            (name)
+_arguments "${_arguments_options[@]}" : \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(completion)
+_arguments "${_arguments_options[@]}" : \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3650,6 +4111,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3668,6 +4130,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3689,6 +4152,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3707,6 +4171,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3726,6 +4191,26 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(snapshot)
+_arguments "${_arguments_options[@]}" : \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3748,6 +4233,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3766,13 +4252,14 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
-":: :_jj__workspace_commands" \
+":: :_jj__subcmd__workspace_commands" \
 "*::: :->workspace" \
 && ret=0
 
@@ -3787,6 +4274,8 @@ _arguments "${_arguments_options[@]}" : \
 '--name=[A name for the workspace]:NAME:_default' \
 '*-r+[A list of parent revisions for the working-copy commit of the newly created workspace. You may specify nothing, or any number of parents]:REVSETS:_default' \
 '*--revision=[A list of parent revisions for the working-copy commit of the newly created workspace. You may specify nothing, or any number of parents]:REVSETS:_default' \
+'*-m+[The change description to use]:MESSAGE:_default' \
+'*--message=[The change description to use]:MESSAGE:_default' \
 '--sparse-patterns=[How to handle sparse patterns when creating a new workspace]:SPARSE_PATTERNS:((copy\:"Copy all sparse patterns from the current workspace"
 full\:"Include all files in the new workspace"
 empty\:"Clear all files from the workspace (it will be empty)"))' \
@@ -3798,6 +4287,7 @@ empty\:"Clear all files from the workspace (it will be empty)"))' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3817,6 +4307,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3838,6 +4329,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3856,6 +4348,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3867,6 +4360,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (root)
 _arguments "${_arguments_options[@]}" : \
+'--name=[Name of the workspace (defaults to current)]:NAME:_default' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -3875,6 +4369,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3893,6 +4388,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
 '--debug[Enable debug logging]' \
 '--quiet[Silence non-primary command output]' \
@@ -3915,6 +4411,7 @@ _jj_commands() {
     local commands; commands=(
 'abandon:Abandon a revision' \
 'absorb:Move changes from a revision into the stack of mutable revisions' \
+'arrange:Interactively arrange the commit graph' \
 'bisect:Find a bad revision by bisection' \
 'bookmark:Manage bookmarks \[default alias\: b\]' \
 'commit:Update the description and create a new change on top \[default alias\: ci\]' \
@@ -3932,7 +4429,7 @@ _jj_commands() {
 'gerrit:Interact with Gerrit Code Review' \
 'git:Commands for working with Git remotes and the underlying Git repo' \
 'help:Print this message or the help of the given subcommand(s)' \
-'interdiff:Compare the changes of two commits' \
+'interdiff:Show differences between the diffs of two revisions' \
 'log:Show revision history' \
 'metaedit:Modify the metadata of a revision without changing its content' \
 'new:Create a new, empty change and (by default) edit it in the working copy' \
@@ -3947,8 +4444,8 @@ _jj_commands() {
 'restore:Restore paths from another revision' \
 'revert:Apply the reverse of the given revision(s)' \
 'root:Show the current workspace root directory (shortcut for \`jj workspace root\`)' \
-'run:(**Stub**, does not work yet) Run a command across a set of revisions.' \
-'show:Show commit description and changes in a revision' \
+'run:Run a command across a set of revisions.' \
+'show:Show revision metadata and diff' \
 'sign:Cryptographically sign a revision' \
 'simplify-parents:Simplify parent edges for the specified revision(s)' \
 'sparse:Manage which paths from the working-copy commit are present in the working copy' \
@@ -3964,31 +4461,38 @@ _jj_commands() {
     )
     _describe -t commands 'jj commands' commands "$@"
 }
-(( $+functions[_jj__abandon_commands] )) ||
-_jj__abandon_commands() {
+(( $+functions[_jj__subcmd__abandon_commands] )) ||
+_jj__subcmd__abandon_commands() {
     local commands; commands=()
     _describe -t commands 'jj abandon commands' commands "$@"
 }
-(( $+functions[_jj__absorb_commands] )) ||
-_jj__absorb_commands() {
+(( $+functions[_jj__subcmd__absorb_commands] )) ||
+_jj__subcmd__absorb_commands() {
     local commands; commands=()
     _describe -t commands 'jj absorb commands' commands "$@"
 }
-(( $+functions[_jj__bisect_commands] )) ||
-_jj__bisect_commands() {
+(( $+functions[_jj__subcmd__arrange_commands] )) ||
+_jj__subcmd__arrange_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj arrange commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__bisect_commands] )) ||
+_jj__subcmd__bisect_commands() {
     local commands; commands=(
 'run:Run a given command to find the first bad revision' \
     )
     _describe -t commands 'jj bisect commands' commands "$@"
 }
-(( $+functions[_jj__bisect__run_commands] )) ||
-_jj__bisect__run_commands() {
+(( $+functions[_jj__subcmd__bisect__subcmd__run_commands] )) ||
+_jj__subcmd__bisect__subcmd__run_commands() {
     local commands; commands=()
     _describe -t commands 'jj bisect run commands' commands "$@"
 }
-(( $+functions[_jj__bookmark_commands] )) ||
-_jj__bookmark_commands() {
+(( $+functions[_jj__subcmd__bookmark_commands] )) ||
+_jj__subcmd__bookmark_commands() {
     local commands; commands=(
+'advance:Advance the closest bookmarks to a target revision' \
+'a:Advance the closest bookmarks to a target revision' \
 'create:Create a new bookmark' \
 'c:Create a new bookmark' \
 'delete:Delete an existing bookmark and propagate the deletion to remotes on the next push' \
@@ -4001,69 +4505,75 @@ _jj__bookmark_commands() {
 'm:Move existing bookmarks to target revision' \
 'rename:Rename \`old\` bookmark name to \`new\` bookmark name' \
 'r:Rename \`old\` bookmark name to \`new\` bookmark name' \
-'set:Create or update a bookmark to point to a certain commit' \
-'s:Create or update a bookmark to point to a certain commit' \
+'set:Create a new bookmark, or update an existing one by name' \
+'s:Create a new bookmark, or update an existing one by name' \
 'track:Start tracking given remote bookmarks' \
 't:Start tracking given remote bookmarks' \
 'untrack:Stop tracking given remote bookmarks' \
     )
     _describe -t commands 'jj bookmark commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__create_commands] )) ||
-_jj__bookmark__create_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__advance_commands] )) ||
+_jj__subcmd__bookmark__subcmd__advance_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj bookmark advance commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__bookmark__subcmd__create_commands] )) ||
+_jj__subcmd__bookmark__subcmd__create_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark create commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__delete_commands] )) ||
-_jj__bookmark__delete_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__delete_commands] )) ||
+_jj__subcmd__bookmark__subcmd__delete_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark delete commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__forget_commands] )) ||
-_jj__bookmark__forget_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__forget_commands] )) ||
+_jj__subcmd__bookmark__subcmd__forget_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark forget commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__list_commands] )) ||
-_jj__bookmark__list_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__list_commands] )) ||
+_jj__subcmd__bookmark__subcmd__list_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark list commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__move_commands] )) ||
-_jj__bookmark__move_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__move_commands] )) ||
+_jj__subcmd__bookmark__subcmd__move_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark move commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__rename_commands] )) ||
-_jj__bookmark__rename_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__rename_commands] )) ||
+_jj__subcmd__bookmark__subcmd__rename_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark rename commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__set_commands] )) ||
-_jj__bookmark__set_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__set_commands] )) ||
+_jj__subcmd__bookmark__subcmd__set_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark set commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__track_commands] )) ||
-_jj__bookmark__track_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__track_commands] )) ||
+_jj__subcmd__bookmark__subcmd__track_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark track commands' commands "$@"
 }
-(( $+functions[_jj__bookmark__untrack_commands] )) ||
-_jj__bookmark__untrack_commands() {
+(( $+functions[_jj__subcmd__bookmark__subcmd__untrack_commands] )) ||
+_jj__subcmd__bookmark__subcmd__untrack_commands() {
     local commands; commands=()
     _describe -t commands 'jj bookmark untrack commands' commands "$@"
 }
-(( $+functions[_jj__commit_commands] )) ||
-_jj__commit_commands() {
+(( $+functions[_jj__subcmd__commit_commands] )) ||
+_jj__subcmd__commit_commands() {
     local commands; commands=()
     _describe -t commands 'jj commit commands' commands "$@"
 }
-(( $+functions[_jj__config_commands] )) ||
-_jj__config_commands() {
+(( $+functions[_jj__subcmd__config_commands] )) ||
+_jj__subcmd__config_commands() {
     local commands; commands=(
 'edit:Start an editor on a jj config file' \
 'e:Start an editor on a jj config file' \
+'gc:Find and optionally delete repo-level config directories whose repo path no longer exists' \
 'get:Get the value of a given config option.' \
 'g:Get the value of a given config option.' \
 'list:List variables set in config files, along with their values' \
@@ -4077,38 +4587,43 @@ _jj__config_commands() {
     )
     _describe -t commands 'jj config commands' commands "$@"
 }
-(( $+functions[_jj__config__edit_commands] )) ||
-_jj__config__edit_commands() {
+(( $+functions[_jj__subcmd__config__subcmd__edit_commands] )) ||
+_jj__subcmd__config__subcmd__edit_commands() {
     local commands; commands=()
     _describe -t commands 'jj config edit commands' commands "$@"
 }
-(( $+functions[_jj__config__get_commands] )) ||
-_jj__config__get_commands() {
+(( $+functions[_jj__subcmd__config__subcmd__gc_commands] )) ||
+_jj__subcmd__config__subcmd__gc_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj config gc commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__config__subcmd__get_commands] )) ||
+_jj__subcmd__config__subcmd__get_commands() {
     local commands; commands=()
     _describe -t commands 'jj config get commands' commands "$@"
 }
-(( $+functions[_jj__config__list_commands] )) ||
-_jj__config__list_commands() {
+(( $+functions[_jj__subcmd__config__subcmd__list_commands] )) ||
+_jj__subcmd__config__subcmd__list_commands() {
     local commands; commands=()
     _describe -t commands 'jj config list commands' commands "$@"
 }
-(( $+functions[_jj__config__path_commands] )) ||
-_jj__config__path_commands() {
+(( $+functions[_jj__subcmd__config__subcmd__path_commands] )) ||
+_jj__subcmd__config__subcmd__path_commands() {
     local commands; commands=()
     _describe -t commands 'jj config path commands' commands "$@"
 }
-(( $+functions[_jj__config__set_commands] )) ||
-_jj__config__set_commands() {
+(( $+functions[_jj__subcmd__config__subcmd__set_commands] )) ||
+_jj__subcmd__config__subcmd__set_commands() {
     local commands; commands=()
     _describe -t commands 'jj config set commands' commands "$@"
 }
-(( $+functions[_jj__config__unset_commands] )) ||
-_jj__config__unset_commands() {
+(( $+functions[_jj__subcmd__config__subcmd__unset_commands] )) ||
+_jj__subcmd__config__subcmd__unset_commands() {
     local commands; commands=()
     _describe -t commands 'jj config unset commands' commands "$@"
 }
-(( $+functions[_jj__debug_commands] )) ||
-_jj__debug_commands() {
+(( $+functions[_jj__subcmd__debug_commands] )) ||
+_jj__subcmd__debug_commands() {
     local commands; commands=(
 'copy-detection:Show information about file copies detected' \
 'fileset:Parse fileset expression' \
@@ -4119,7 +4634,8 @@ _jj__debug_commands() {
 'object:Show information about an operation and its view' \
 'reindex:Rebuild commit index' \
 'revset:Evaluate revset to full commit IDs' \
-'snapshot:Trigger a snapshot in the op log' \
+'snapshot:\[DEPRECATED\] Trigger a snapshot in the op log' \
+'stacked-table:Show stats of stacked table' \
 'template:Parse a template' \
 'tree:List the recursive entries of a tree' \
 'watchman:' \
@@ -4127,38 +4643,38 @@ _jj__debug_commands() {
     )
     _describe -t commands 'jj debug commands' commands "$@"
 }
-(( $+functions[_jj__debug__copy-detection_commands] )) ||
-_jj__debug__copy-detection_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__copy-detection_commands] )) ||
+_jj__subcmd__debug__subcmd__copy-detection_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug copy-detection commands' commands "$@"
 }
-(( $+functions[_jj__debug__fileset_commands] )) ||
-_jj__debug__fileset_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__fileset_commands] )) ||
+_jj__subcmd__debug__subcmd__fileset_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug fileset commands' commands "$@"
 }
-(( $+functions[_jj__debug__index_commands] )) ||
-_jj__debug__index_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__index_commands] )) ||
+_jj__subcmd__debug__subcmd__index_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug index commands' commands "$@"
 }
-(( $+functions[_jj__debug__index-changed-paths_commands] )) ||
-_jj__debug__index-changed-paths_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__index-changed-paths_commands] )) ||
+_jj__subcmd__debug__subcmd__index-changed-paths_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug index-changed-paths commands' commands "$@"
 }
-(( $+functions[_jj__debug__init-simple_commands] )) ||
-_jj__debug__init-simple_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__init-simple_commands] )) ||
+_jj__subcmd__debug__subcmd__init-simple_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug init-simple commands' commands "$@"
 }
-(( $+functions[_jj__debug__local-working-copy_commands] )) ||
-_jj__debug__local-working-copy_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__local-working-copy_commands] )) ||
+_jj__subcmd__debug__subcmd__local-working-copy_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug local-working-copy commands' commands "$@"
 }
-(( $+functions[_jj__debug__object_commands] )) ||
-_jj__debug__object_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__object_commands] )) ||
+_jj__subcmd__debug__subcmd__object_commands() {
     local commands; commands=(
 'commit:' \
 'file:' \
@@ -4169,63 +4685,68 @@ _jj__debug__object_commands() {
     )
     _describe -t commands 'jj debug object commands' commands "$@"
 }
-(( $+functions[_jj__debug__object__commit_commands] )) ||
-_jj__debug__object__commit_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__object__subcmd__commit_commands] )) ||
+_jj__subcmd__debug__subcmd__object__subcmd__commit_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug object commit commands' commands "$@"
 }
-(( $+functions[_jj__debug__object__file_commands] )) ||
-_jj__debug__object__file_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__object__subcmd__file_commands] )) ||
+_jj__subcmd__debug__subcmd__object__subcmd__file_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug object file commands' commands "$@"
 }
-(( $+functions[_jj__debug__object__operation_commands] )) ||
-_jj__debug__object__operation_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__object__subcmd__operation_commands] )) ||
+_jj__subcmd__debug__subcmd__object__subcmd__operation_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug object operation commands' commands "$@"
 }
-(( $+functions[_jj__debug__object__symlink_commands] )) ||
-_jj__debug__object__symlink_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__object__subcmd__symlink_commands] )) ||
+_jj__subcmd__debug__subcmd__object__subcmd__symlink_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug object symlink commands' commands "$@"
 }
-(( $+functions[_jj__debug__object__tree_commands] )) ||
-_jj__debug__object__tree_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__object__subcmd__tree_commands] )) ||
+_jj__subcmd__debug__subcmd__object__subcmd__tree_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug object tree commands' commands "$@"
 }
-(( $+functions[_jj__debug__object__view_commands] )) ||
-_jj__debug__object__view_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__object__subcmd__view_commands] )) ||
+_jj__subcmd__debug__subcmd__object__subcmd__view_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug object view commands' commands "$@"
 }
-(( $+functions[_jj__debug__reindex_commands] )) ||
-_jj__debug__reindex_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__reindex_commands] )) ||
+_jj__subcmd__debug__subcmd__reindex_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug reindex commands' commands "$@"
 }
-(( $+functions[_jj__debug__revset_commands] )) ||
-_jj__debug__revset_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__revset_commands] )) ||
+_jj__subcmd__debug__subcmd__revset_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug revset commands' commands "$@"
 }
-(( $+functions[_jj__debug__snapshot_commands] )) ||
-_jj__debug__snapshot_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__snapshot_commands] )) ||
+_jj__subcmd__debug__subcmd__snapshot_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug snapshot commands' commands "$@"
 }
-(( $+functions[_jj__debug__template_commands] )) ||
-_jj__debug__template_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__stacked-table_commands] )) ||
+_jj__subcmd__debug__subcmd__stacked-table_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj debug stacked-table commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__debug__subcmd__template_commands] )) ||
+_jj__subcmd__debug__subcmd__template_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug template commands' commands "$@"
 }
-(( $+functions[_jj__debug__tree_commands] )) ||
-_jj__debug__tree_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__tree_commands] )) ||
+_jj__subcmd__debug__subcmd__tree_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug tree commands' commands "$@"
 }
-(( $+functions[_jj__debug__watchman_commands] )) ||
-_jj__debug__watchman_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__watchman_commands] )) ||
+_jj__subcmd__debug__subcmd__watchman_commands() {
     local commands; commands=(
 'status:Check whether \`watchman\` is enabled and whether it'\''s correctly installed' \
 'query-clock:' \
@@ -4234,122 +4755,128 @@ _jj__debug__watchman_commands() {
     )
     _describe -t commands 'jj debug watchman commands' commands "$@"
 }
-(( $+functions[_jj__debug__watchman__query-changed-files_commands] )) ||
-_jj__debug__watchman__query-changed-files_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__watchman__subcmd__query-changed-files_commands] )) ||
+_jj__subcmd__debug__subcmd__watchman__subcmd__query-changed-files_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug watchman query-changed-files commands' commands "$@"
 }
-(( $+functions[_jj__debug__watchman__query-clock_commands] )) ||
-_jj__debug__watchman__query-clock_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__watchman__subcmd__query-clock_commands] )) ||
+_jj__subcmd__debug__subcmd__watchman__subcmd__query-clock_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug watchman query-clock commands' commands "$@"
 }
-(( $+functions[_jj__debug__watchman__reset-clock_commands] )) ||
-_jj__debug__watchman__reset-clock_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__watchman__subcmd__reset-clock_commands] )) ||
+_jj__subcmd__debug__subcmd__watchman__subcmd__reset-clock_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug watchman reset-clock commands' commands "$@"
 }
-(( $+functions[_jj__debug__watchman__status_commands] )) ||
-_jj__debug__watchman__status_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__watchman__subcmd__status_commands] )) ||
+_jj__subcmd__debug__subcmd__watchman__subcmd__status_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug watchman status commands' commands "$@"
 }
-(( $+functions[_jj__debug__working-copy_commands] )) ||
-_jj__debug__working-copy_commands() {
+(( $+functions[_jj__subcmd__debug__subcmd__working-copy_commands] )) ||
+_jj__subcmd__debug__subcmd__working-copy_commands() {
     local commands; commands=()
     _describe -t commands 'jj debug working-copy commands' commands "$@"
 }
-(( $+functions[_jj__describe_commands] )) ||
-_jj__describe_commands() {
+(( $+functions[_jj__subcmd__describe_commands] )) ||
+_jj__subcmd__describe_commands() {
     local commands; commands=()
     _describe -t commands 'jj describe commands' commands "$@"
 }
-(( $+functions[_jj__diff_commands] )) ||
-_jj__diff_commands() {
+(( $+functions[_jj__subcmd__diff_commands] )) ||
+_jj__subcmd__diff_commands() {
     local commands; commands=()
     _describe -t commands 'jj diff commands' commands "$@"
 }
-(( $+functions[_jj__diffedit_commands] )) ||
-_jj__diffedit_commands() {
+(( $+functions[_jj__subcmd__diffedit_commands] )) ||
+_jj__subcmd__diffedit_commands() {
     local commands; commands=()
     _describe -t commands 'jj diffedit commands' commands "$@"
 }
-(( $+functions[_jj__duplicate_commands] )) ||
-_jj__duplicate_commands() {
+(( $+functions[_jj__subcmd__duplicate_commands] )) ||
+_jj__subcmd__duplicate_commands() {
     local commands; commands=()
     _describe -t commands 'jj duplicate commands' commands "$@"
 }
-(( $+functions[_jj__edit_commands] )) ||
-_jj__edit_commands() {
+(( $+functions[_jj__subcmd__edit_commands] )) ||
+_jj__subcmd__edit_commands() {
     local commands; commands=()
     _describe -t commands 'jj edit commands' commands "$@"
 }
-(( $+functions[_jj__evolog_commands] )) ||
-_jj__evolog_commands() {
+(( $+functions[_jj__subcmd__evolog_commands] )) ||
+_jj__subcmd__evolog_commands() {
     local commands; commands=()
     _describe -t commands 'jj evolog commands' commands "$@"
 }
-(( $+functions[_jj__file_commands] )) ||
-_jj__file_commands() {
+(( $+functions[_jj__subcmd__file_commands] )) ||
+_jj__subcmd__file_commands() {
     local commands; commands=(
 'annotate:Show the source change for each line of the target file' \
 'chmod:Sets or removes the executable bit for paths in the repo' \
 'list:List files in a revision' \
+'search:Search for content in files' \
 'show:Print contents of files in a revision' \
 'track:Start tracking specified paths in the working copy' \
 'untrack:Stop tracking specified paths in the working copy' \
     )
     _describe -t commands 'jj file commands' commands "$@"
 }
-(( $+functions[_jj__file__annotate_commands] )) ||
-_jj__file__annotate_commands() {
+(( $+functions[_jj__subcmd__file__subcmd__annotate_commands] )) ||
+_jj__subcmd__file__subcmd__annotate_commands() {
     local commands; commands=()
     _describe -t commands 'jj file annotate commands' commands "$@"
 }
-(( $+functions[_jj__file__chmod_commands] )) ||
-_jj__file__chmod_commands() {
+(( $+functions[_jj__subcmd__file__subcmd__chmod_commands] )) ||
+_jj__subcmd__file__subcmd__chmod_commands() {
     local commands; commands=()
     _describe -t commands 'jj file chmod commands' commands "$@"
 }
-(( $+functions[_jj__file__list_commands] )) ||
-_jj__file__list_commands() {
+(( $+functions[_jj__subcmd__file__subcmd__list_commands] )) ||
+_jj__subcmd__file__subcmd__list_commands() {
     local commands; commands=()
     _describe -t commands 'jj file list commands' commands "$@"
 }
-(( $+functions[_jj__file__show_commands] )) ||
-_jj__file__show_commands() {
+(( $+functions[_jj__subcmd__file__subcmd__search_commands] )) ||
+_jj__subcmd__file__subcmd__search_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj file search commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__file__subcmd__show_commands] )) ||
+_jj__subcmd__file__subcmd__show_commands() {
     local commands; commands=()
     _describe -t commands 'jj file show commands' commands "$@"
 }
-(( $+functions[_jj__file__track_commands] )) ||
-_jj__file__track_commands() {
+(( $+functions[_jj__subcmd__file__subcmd__track_commands] )) ||
+_jj__subcmd__file__subcmd__track_commands() {
     local commands; commands=()
     _describe -t commands 'jj file track commands' commands "$@"
 }
-(( $+functions[_jj__file__untrack_commands] )) ||
-_jj__file__untrack_commands() {
+(( $+functions[_jj__subcmd__file__subcmd__untrack_commands] )) ||
+_jj__subcmd__file__subcmd__untrack_commands() {
     local commands; commands=()
     _describe -t commands 'jj file untrack commands' commands "$@"
 }
-(( $+functions[_jj__fix_commands] )) ||
-_jj__fix_commands() {
+(( $+functions[_jj__subcmd__fix_commands] )) ||
+_jj__subcmd__fix_commands() {
     local commands; commands=()
     _describe -t commands 'jj fix commands' commands "$@"
 }
-(( $+functions[_jj__gerrit_commands] )) ||
-_jj__gerrit_commands() {
+(( $+functions[_jj__subcmd__gerrit_commands] )) ||
+_jj__subcmd__gerrit_commands() {
     local commands; commands=(
 'upload:Upload changes to Gerrit for code review, or update existing changes' \
     )
     _describe -t commands 'jj gerrit commands' commands "$@"
 }
-(( $+functions[_jj__gerrit__upload_commands] )) ||
-_jj__gerrit__upload_commands() {
+(( $+functions[_jj__subcmd__gerrit__subcmd__upload_commands] )) ||
+_jj__subcmd__gerrit__subcmd__upload_commands() {
     local commands; commands=()
     _describe -t commands 'jj gerrit upload commands' commands "$@"
 }
-(( $+functions[_jj__git_commands] )) ||
-_jj__git_commands() {
+(( $+functions[_jj__subcmd__git_commands] )) ||
+_jj__subcmd__git_commands() {
     local commands; commands=(
 'clone:Create a new repo backed by a clone of a Git repo' \
 'colocation:Manage Jujutsu repository colocation with Git' \
@@ -4363,13 +4890,13 @@ _jj__git_commands() {
     )
     _describe -t commands 'jj git commands' commands "$@"
 }
-(( $+functions[_jj__git__clone_commands] )) ||
-_jj__git__clone_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__clone_commands] )) ||
+_jj__subcmd__git__subcmd__clone_commands() {
     local commands; commands=()
     _describe -t commands 'jj git clone commands' commands "$@"
 }
-(( $+functions[_jj__git__colocation_commands] )) ||
-_jj__git__colocation_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__colocation_commands] )) ||
+_jj__subcmd__git__subcmd__colocation_commands() {
     local commands; commands=(
 'disable:Convert into a non-colocated Jujutsu/Git repository' \
 'enable:Convert into a colocated Jujutsu/Git repository' \
@@ -4377,48 +4904,48 @@ _jj__git__colocation_commands() {
     )
     _describe -t commands 'jj git colocation commands' commands "$@"
 }
-(( $+functions[_jj__git__colocation__disable_commands] )) ||
-_jj__git__colocation__disable_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__colocation__subcmd__disable_commands] )) ||
+_jj__subcmd__git__subcmd__colocation__subcmd__disable_commands() {
     local commands; commands=()
     _describe -t commands 'jj git colocation disable commands' commands "$@"
 }
-(( $+functions[_jj__git__colocation__enable_commands] )) ||
-_jj__git__colocation__enable_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__colocation__subcmd__enable_commands] )) ||
+_jj__subcmd__git__subcmd__colocation__subcmd__enable_commands() {
     local commands; commands=()
     _describe -t commands 'jj git colocation enable commands' commands "$@"
 }
-(( $+functions[_jj__git__colocation__status_commands] )) ||
-_jj__git__colocation__status_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__colocation__subcmd__status_commands] )) ||
+_jj__subcmd__git__subcmd__colocation__subcmd__status_commands() {
     local commands; commands=()
     _describe -t commands 'jj git colocation status commands' commands "$@"
 }
-(( $+functions[_jj__git__export_commands] )) ||
-_jj__git__export_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__export_commands] )) ||
+_jj__subcmd__git__subcmd__export_commands() {
     local commands; commands=()
     _describe -t commands 'jj git export commands' commands "$@"
 }
-(( $+functions[_jj__git__fetch_commands] )) ||
-_jj__git__fetch_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__fetch_commands] )) ||
+_jj__subcmd__git__subcmd__fetch_commands() {
     local commands; commands=()
     _describe -t commands 'jj git fetch commands' commands "$@"
 }
-(( $+functions[_jj__git__import_commands] )) ||
-_jj__git__import_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__import_commands] )) ||
+_jj__subcmd__git__subcmd__import_commands() {
     local commands; commands=()
     _describe -t commands 'jj git import commands' commands "$@"
 }
-(( $+functions[_jj__git__init_commands] )) ||
-_jj__git__init_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__init_commands] )) ||
+_jj__subcmd__git__subcmd__init_commands() {
     local commands; commands=()
     _describe -t commands 'jj git init commands' commands "$@"
 }
-(( $+functions[_jj__git__push_commands] )) ||
-_jj__git__push_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__push_commands] )) ||
+_jj__subcmd__git__subcmd__push_commands() {
     local commands; commands=()
     _describe -t commands 'jj git push commands' commands "$@"
 }
-(( $+functions[_jj__git__remote_commands] )) ||
-_jj__git__remote_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__remote_commands] )) ||
+_jj__subcmd__git__subcmd__remote_commands() {
     local commands; commands=(
 'add:Add a Git remote' \
 'list:List Git remotes' \
@@ -4428,176 +4955,176 @@ _jj__git__remote_commands() {
     )
     _describe -t commands 'jj git remote commands' commands "$@"
 }
-(( $+functions[_jj__git__remote__add_commands] )) ||
-_jj__git__remote__add_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__remote__subcmd__add_commands] )) ||
+_jj__subcmd__git__subcmd__remote__subcmd__add_commands() {
     local commands; commands=()
     _describe -t commands 'jj git remote add commands' commands "$@"
 }
-(( $+functions[_jj__git__remote__list_commands] )) ||
-_jj__git__remote__list_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__remote__subcmd__list_commands] )) ||
+_jj__subcmd__git__subcmd__remote__subcmd__list_commands() {
     local commands; commands=()
     _describe -t commands 'jj git remote list commands' commands "$@"
 }
-(( $+functions[_jj__git__remote__remove_commands] )) ||
-_jj__git__remote__remove_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__remote__subcmd__remove_commands] )) ||
+_jj__subcmd__git__subcmd__remote__subcmd__remove_commands() {
     local commands; commands=()
     _describe -t commands 'jj git remote remove commands' commands "$@"
 }
-(( $+functions[_jj__git__remote__rename_commands] )) ||
-_jj__git__remote__rename_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__remote__subcmd__rename_commands] )) ||
+_jj__subcmd__git__subcmd__remote__subcmd__rename_commands() {
     local commands; commands=()
     _describe -t commands 'jj git remote rename commands' commands "$@"
 }
-(( $+functions[_jj__git__remote__set-url_commands] )) ||
-_jj__git__remote__set-url_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__remote__subcmd__set-url_commands] )) ||
+_jj__subcmd__git__subcmd__remote__subcmd__set-url_commands() {
     local commands; commands=()
     _describe -t commands 'jj git remote set-url commands' commands "$@"
 }
-(( $+functions[_jj__git__root_commands] )) ||
-_jj__git__root_commands() {
+(( $+functions[_jj__subcmd__git__subcmd__root_commands] )) ||
+_jj__subcmd__git__subcmd__root_commands() {
     local commands; commands=()
     _describe -t commands 'jj git root commands' commands "$@"
 }
-(( $+functions[_jj__help_commands] )) ||
-_jj__help_commands() {
+(( $+functions[_jj__subcmd__help_commands] )) ||
+_jj__subcmd__help_commands() {
     local commands; commands=()
     _describe -t commands 'jj help commands' commands "$@"
 }
-(( $+functions[_jj__interdiff_commands] )) ||
-_jj__interdiff_commands() {
+(( $+functions[_jj__subcmd__interdiff_commands] )) ||
+_jj__subcmd__interdiff_commands() {
     local commands; commands=()
     _describe -t commands 'jj interdiff commands' commands "$@"
 }
-(( $+functions[_jj__log_commands] )) ||
-_jj__log_commands() {
+(( $+functions[_jj__subcmd__log_commands] )) ||
+_jj__subcmd__log_commands() {
     local commands; commands=()
     _describe -t commands 'jj log commands' commands "$@"
 }
-(( $+functions[_jj__metaedit_commands] )) ||
-_jj__metaedit_commands() {
+(( $+functions[_jj__subcmd__metaedit_commands] )) ||
+_jj__subcmd__metaedit_commands() {
     local commands; commands=()
     _describe -t commands 'jj metaedit commands' commands "$@"
 }
-(( $+functions[_jj__new_commands] )) ||
-_jj__new_commands() {
+(( $+functions[_jj__subcmd__new_commands] )) ||
+_jj__subcmd__new_commands() {
     local commands; commands=()
     _describe -t commands 'jj new commands' commands "$@"
 }
-(( $+functions[_jj__next_commands] )) ||
-_jj__next_commands() {
+(( $+functions[_jj__subcmd__next_commands] )) ||
+_jj__subcmd__next_commands() {
     local commands; commands=()
     _describe -t commands 'jj next commands' commands "$@"
 }
-(( $+functions[_jj__operation_commands] )) ||
-_jj__operation_commands() {
+(( $+functions[_jj__subcmd__operation_commands] )) ||
+_jj__subcmd__operation_commands() {
     local commands; commands=(
 'abandon:Abandon operation history' \
 'diff:Compare changes to the repository between two operations' \
+'integrate:Make an operation part of the operation log' \
 'log:Show the operation log' \
 'restore:Create a new operation that restores the repo to an earlier state' \
 'revert:Create a new operation that reverts an earlier operation' \
 'show:Show changes to the repository in an operation' \
-'undo:Create a new operation that reverts an earlier operation' \
     )
     _describe -t commands 'jj operation commands' commands "$@"
 }
-(( $+functions[_jj__operation__abandon_commands] )) ||
-_jj__operation__abandon_commands() {
+(( $+functions[_jj__subcmd__operation__subcmd__abandon_commands] )) ||
+_jj__subcmd__operation__subcmd__abandon_commands() {
     local commands; commands=()
     _describe -t commands 'jj operation abandon commands' commands "$@"
 }
-(( $+functions[_jj__operation__diff_commands] )) ||
-_jj__operation__diff_commands() {
+(( $+functions[_jj__subcmd__operation__subcmd__diff_commands] )) ||
+_jj__subcmd__operation__subcmd__diff_commands() {
     local commands; commands=()
     _describe -t commands 'jj operation diff commands' commands "$@"
 }
-(( $+functions[_jj__operation__log_commands] )) ||
-_jj__operation__log_commands() {
+(( $+functions[_jj__subcmd__operation__subcmd__integrate_commands] )) ||
+_jj__subcmd__operation__subcmd__integrate_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj operation integrate commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__operation__subcmd__log_commands] )) ||
+_jj__subcmd__operation__subcmd__log_commands() {
     local commands; commands=()
     _describe -t commands 'jj operation log commands' commands "$@"
 }
-(( $+functions[_jj__operation__restore_commands] )) ||
-_jj__operation__restore_commands() {
+(( $+functions[_jj__subcmd__operation__subcmd__restore_commands] )) ||
+_jj__subcmd__operation__subcmd__restore_commands() {
     local commands; commands=()
     _describe -t commands 'jj operation restore commands' commands "$@"
 }
-(( $+functions[_jj__operation__revert_commands] )) ||
-_jj__operation__revert_commands() {
+(( $+functions[_jj__subcmd__operation__subcmd__revert_commands] )) ||
+_jj__subcmd__operation__subcmd__revert_commands() {
     local commands; commands=()
     _describe -t commands 'jj operation revert commands' commands "$@"
 }
-(( $+functions[_jj__operation__show_commands] )) ||
-_jj__operation__show_commands() {
+(( $+functions[_jj__subcmd__operation__subcmd__show_commands] )) ||
+_jj__subcmd__operation__subcmd__show_commands() {
     local commands; commands=()
     _describe -t commands 'jj operation show commands' commands "$@"
 }
-(( $+functions[_jj__operation__undo_commands] )) ||
-_jj__operation__undo_commands() {
-    local commands; commands=()
-    _describe -t commands 'jj operation undo commands' commands "$@"
-}
-(( $+functions[_jj__parallelize_commands] )) ||
-_jj__parallelize_commands() {
+(( $+functions[_jj__subcmd__parallelize_commands] )) ||
+_jj__subcmd__parallelize_commands() {
     local commands; commands=()
     _describe -t commands 'jj parallelize commands' commands "$@"
 }
-(( $+functions[_jj__prev_commands] )) ||
-_jj__prev_commands() {
+(( $+functions[_jj__subcmd__prev_commands] )) ||
+_jj__subcmd__prev_commands() {
     local commands; commands=()
     _describe -t commands 'jj prev commands' commands "$@"
 }
-(( $+functions[_jj__rebase_commands] )) ||
-_jj__rebase_commands() {
+(( $+functions[_jj__subcmd__rebase_commands] )) ||
+_jj__subcmd__rebase_commands() {
     local commands; commands=()
     _describe -t commands 'jj rebase commands' commands "$@"
 }
-(( $+functions[_jj__redo_commands] )) ||
-_jj__redo_commands() {
+(( $+functions[_jj__subcmd__redo_commands] )) ||
+_jj__subcmd__redo_commands() {
     local commands; commands=()
     _describe -t commands 'jj redo commands' commands "$@"
 }
-(( $+functions[_jj__resolve_commands] )) ||
-_jj__resolve_commands() {
+(( $+functions[_jj__subcmd__resolve_commands] )) ||
+_jj__subcmd__resolve_commands() {
     local commands; commands=()
     _describe -t commands 'jj resolve commands' commands "$@"
 }
-(( $+functions[_jj__restore_commands] )) ||
-_jj__restore_commands() {
+(( $+functions[_jj__subcmd__restore_commands] )) ||
+_jj__subcmd__restore_commands() {
     local commands; commands=()
     _describe -t commands 'jj restore commands' commands "$@"
 }
-(( $+functions[_jj__revert_commands] )) ||
-_jj__revert_commands() {
+(( $+functions[_jj__subcmd__revert_commands] )) ||
+_jj__subcmd__revert_commands() {
     local commands; commands=()
     _describe -t commands 'jj revert commands' commands "$@"
 }
-(( $+functions[_jj__root_commands] )) ||
-_jj__root_commands() {
+(( $+functions[_jj__subcmd__root_commands] )) ||
+_jj__subcmd__root_commands() {
     local commands; commands=()
     _describe -t commands 'jj root commands' commands "$@"
 }
-(( $+functions[_jj__run_commands] )) ||
-_jj__run_commands() {
+(( $+functions[_jj__subcmd__run_commands] )) ||
+_jj__subcmd__run_commands() {
     local commands; commands=()
     _describe -t commands 'jj run commands' commands "$@"
 }
-(( $+functions[_jj__show_commands] )) ||
-_jj__show_commands() {
+(( $+functions[_jj__subcmd__show_commands] )) ||
+_jj__subcmd__show_commands() {
     local commands; commands=()
     _describe -t commands 'jj show commands' commands "$@"
 }
-(( $+functions[_jj__sign_commands] )) ||
-_jj__sign_commands() {
+(( $+functions[_jj__subcmd__sign_commands] )) ||
+_jj__subcmd__sign_commands() {
     local commands; commands=()
     _describe -t commands 'jj sign commands' commands "$@"
 }
-(( $+functions[_jj__simplify-parents_commands] )) ||
-_jj__simplify-parents_commands() {
+(( $+functions[_jj__subcmd__simplify-parents_commands] )) ||
+_jj__subcmd__simplify-parents_commands() {
     local commands; commands=()
     _describe -t commands 'jj simplify-parents commands' commands "$@"
 }
-(( $+functions[_jj__sparse_commands] )) ||
-_jj__sparse_commands() {
+(( $+functions[_jj__subcmd__sparse_commands] )) ||
+_jj__subcmd__sparse_commands() {
     local commands; commands=(
 'edit:Start an editor to update the patterns that are present in the working copy' \
 'list:List the patterns that are currently present in the working copy' \
@@ -4606,164 +5133,195 @@ _jj__sparse_commands() {
     )
     _describe -t commands 'jj sparse commands' commands "$@"
 }
-(( $+functions[_jj__sparse__edit_commands] )) ||
-_jj__sparse__edit_commands() {
+(( $+functions[_jj__subcmd__sparse__subcmd__edit_commands] )) ||
+_jj__subcmd__sparse__subcmd__edit_commands() {
     local commands; commands=()
     _describe -t commands 'jj sparse edit commands' commands "$@"
 }
-(( $+functions[_jj__sparse__list_commands] )) ||
-_jj__sparse__list_commands() {
+(( $+functions[_jj__subcmd__sparse__subcmd__list_commands] )) ||
+_jj__subcmd__sparse__subcmd__list_commands() {
     local commands; commands=()
     _describe -t commands 'jj sparse list commands' commands "$@"
 }
-(( $+functions[_jj__sparse__reset_commands] )) ||
-_jj__sparse__reset_commands() {
+(( $+functions[_jj__subcmd__sparse__subcmd__reset_commands] )) ||
+_jj__subcmd__sparse__subcmd__reset_commands() {
     local commands; commands=()
     _describe -t commands 'jj sparse reset commands' commands "$@"
 }
-(( $+functions[_jj__sparse__set_commands] )) ||
-_jj__sparse__set_commands() {
+(( $+functions[_jj__subcmd__sparse__subcmd__set_commands] )) ||
+_jj__subcmd__sparse__subcmd__set_commands() {
     local commands; commands=()
     _describe -t commands 'jj sparse set commands' commands "$@"
 }
-(( $+functions[_jj__split_commands] )) ||
-_jj__split_commands() {
+(( $+functions[_jj__subcmd__split_commands] )) ||
+_jj__subcmd__split_commands() {
     local commands; commands=()
     _describe -t commands 'jj split commands' commands "$@"
 }
-(( $+functions[_jj__squash_commands] )) ||
-_jj__squash_commands() {
+(( $+functions[_jj__subcmd__squash_commands] )) ||
+_jj__subcmd__squash_commands() {
     local commands; commands=()
     _describe -t commands 'jj squash commands' commands "$@"
 }
-(( $+functions[_jj__status_commands] )) ||
-_jj__status_commands() {
+(( $+functions[_jj__subcmd__status_commands] )) ||
+_jj__subcmd__status_commands() {
     local commands; commands=()
     _describe -t commands 'jj status commands' commands "$@"
 }
-(( $+functions[_jj__tag_commands] )) ||
-_jj__tag_commands() {
+(( $+functions[_jj__subcmd__tag_commands] )) ||
+_jj__subcmd__tag_commands() {
     local commands; commands=(
 'delete:Delete existing tags' \
 'd:Delete existing tags' \
-'list:List tags' \
-'l:List tags' \
+'list:List tags and their targets' \
+'l:List tags and their targets' \
 'set:Create or update tags' \
 's:Create or update tags' \
+'track:Start tracking given remote tags' \
+'untrack:Stop tracking given remote tags' \
     )
     _describe -t commands 'jj tag commands' commands "$@"
 }
-(( $+functions[_jj__tag__delete_commands] )) ||
-_jj__tag__delete_commands() {
+(( $+functions[_jj__subcmd__tag__subcmd__delete_commands] )) ||
+_jj__subcmd__tag__subcmd__delete_commands() {
     local commands; commands=()
     _describe -t commands 'jj tag delete commands' commands "$@"
 }
-(( $+functions[_jj__tag__list_commands] )) ||
-_jj__tag__list_commands() {
+(( $+functions[_jj__subcmd__tag__subcmd__list_commands] )) ||
+_jj__subcmd__tag__subcmd__list_commands() {
     local commands; commands=()
     _describe -t commands 'jj tag list commands' commands "$@"
 }
-(( $+functions[_jj__tag__set_commands] )) ||
-_jj__tag__set_commands() {
+(( $+functions[_jj__subcmd__tag__subcmd__set_commands] )) ||
+_jj__subcmd__tag__subcmd__set_commands() {
     local commands; commands=()
     _describe -t commands 'jj tag set commands' commands "$@"
 }
-(( $+functions[_jj__undo_commands] )) ||
-_jj__undo_commands() {
+(( $+functions[_jj__subcmd__tag__subcmd__track_commands] )) ||
+_jj__subcmd__tag__subcmd__track_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj tag track commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__tag__subcmd__untrack_commands] )) ||
+_jj__subcmd__tag__subcmd__untrack_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj tag untrack commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__undo_commands] )) ||
+_jj__subcmd__undo_commands() {
     local commands; commands=()
     _describe -t commands 'jj undo commands' commands "$@"
 }
-(( $+functions[_jj__unsign_commands] )) ||
-_jj__unsign_commands() {
+(( $+functions[_jj__subcmd__unsign_commands] )) ||
+_jj__subcmd__unsign_commands() {
     local commands; commands=()
     _describe -t commands 'jj unsign commands' commands "$@"
 }
-(( $+functions[_jj__util_commands] )) ||
-_jj__util_commands() {
+(( $+functions[_jj__subcmd__util_commands] )) ||
+_jj__subcmd__util_commands() {
     local commands; commands=(
+'backend:Commands relating to the backend used in the current repo' \
 'completion:Print a command-line-completion script' \
 'config-schema:Print the JSON schema for the jj TOML config format' \
 'exec:Execute an external command via jj' \
 'gc:Run backend-dependent garbage collection' \
 'install-man-pages:Install Jujutsu'\''s manpages to the provided path' \
 'markdown-help:Print the CLI help for all subcommands in Markdown' \
+'snapshot:Snapshot the working copy if needed' \
     )
     _describe -t commands 'jj util commands' commands "$@"
 }
-(( $+functions[_jj__util__completion_commands] )) ||
-_jj__util__completion_commands() {
+(( $+functions[_jj__subcmd__util__subcmd__backend_commands] )) ||
+_jj__subcmd__util__subcmd__backend_commands() {
+    local commands; commands=(
+'name:Print the name of the backend used in the current repo' \
+    )
+    _describe -t commands 'jj util backend commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__util__subcmd__backend__subcmd__name_commands] )) ||
+_jj__subcmd__util__subcmd__backend__subcmd__name_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj util backend name commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__util__subcmd__completion_commands] )) ||
+_jj__subcmd__util__subcmd__completion_commands() {
     local commands; commands=()
     _describe -t commands 'jj util completion commands' commands "$@"
 }
-(( $+functions[_jj__util__config-schema_commands] )) ||
-_jj__util__config-schema_commands() {
+(( $+functions[_jj__subcmd__util__subcmd__config-schema_commands] )) ||
+_jj__subcmd__util__subcmd__config-schema_commands() {
     local commands; commands=()
     _describe -t commands 'jj util config-schema commands' commands "$@"
 }
-(( $+functions[_jj__util__exec_commands] )) ||
-_jj__util__exec_commands() {
+(( $+functions[_jj__subcmd__util__subcmd__exec_commands] )) ||
+_jj__subcmd__util__subcmd__exec_commands() {
     local commands; commands=()
     _describe -t commands 'jj util exec commands' commands "$@"
 }
-(( $+functions[_jj__util__gc_commands] )) ||
-_jj__util__gc_commands() {
+(( $+functions[_jj__subcmd__util__subcmd__gc_commands] )) ||
+_jj__subcmd__util__subcmd__gc_commands() {
     local commands; commands=()
     _describe -t commands 'jj util gc commands' commands "$@"
 }
-(( $+functions[_jj__util__install-man-pages_commands] )) ||
-_jj__util__install-man-pages_commands() {
+(( $+functions[_jj__subcmd__util__subcmd__install-man-pages_commands] )) ||
+_jj__subcmd__util__subcmd__install-man-pages_commands() {
     local commands; commands=()
     _describe -t commands 'jj util install-man-pages commands' commands "$@"
 }
-(( $+functions[_jj__util__markdown-help_commands] )) ||
-_jj__util__markdown-help_commands() {
+(( $+functions[_jj__subcmd__util__subcmd__markdown-help_commands] )) ||
+_jj__subcmd__util__subcmd__markdown-help_commands() {
     local commands; commands=()
     _describe -t commands 'jj util markdown-help commands' commands "$@"
 }
-(( $+functions[_jj__version_commands] )) ||
-_jj__version_commands() {
+(( $+functions[_jj__subcmd__util__subcmd__snapshot_commands] )) ||
+_jj__subcmd__util__subcmd__snapshot_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj util snapshot commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__version_commands] )) ||
+_jj__subcmd__version_commands() {
     local commands; commands=()
     _describe -t commands 'jj version commands' commands "$@"
 }
-(( $+functions[_jj__workspace_commands] )) ||
-_jj__workspace_commands() {
+(( $+functions[_jj__subcmd__workspace_commands] )) ||
+_jj__subcmd__workspace_commands() {
     local commands; commands=(
 'add:Add a workspace' \
 'forget:Stop tracking a workspace'\''s working-copy commit in the repo' \
 'list:List workspaces' \
 'rename:Renames the current workspace' \
-'root:Show the current workspace root directory' \
+'root:Show the workspace root directory' \
 'update-stale:Update a workspace that has become stale' \
     )
     _describe -t commands 'jj workspace commands' commands "$@"
 }
-(( $+functions[_jj__workspace__add_commands] )) ||
-_jj__workspace__add_commands() {
+(( $+functions[_jj__subcmd__workspace__subcmd__add_commands] )) ||
+_jj__subcmd__workspace__subcmd__add_commands() {
     local commands; commands=()
     _describe -t commands 'jj workspace add commands' commands "$@"
 }
-(( $+functions[_jj__workspace__forget_commands] )) ||
-_jj__workspace__forget_commands() {
+(( $+functions[_jj__subcmd__workspace__subcmd__forget_commands] )) ||
+_jj__subcmd__workspace__subcmd__forget_commands() {
     local commands; commands=()
     _describe -t commands 'jj workspace forget commands' commands "$@"
 }
-(( $+functions[_jj__workspace__list_commands] )) ||
-_jj__workspace__list_commands() {
+(( $+functions[_jj__subcmd__workspace__subcmd__list_commands] )) ||
+_jj__subcmd__workspace__subcmd__list_commands() {
     local commands; commands=()
     _describe -t commands 'jj workspace list commands' commands "$@"
 }
-(( $+functions[_jj__workspace__rename_commands] )) ||
-_jj__workspace__rename_commands() {
+(( $+functions[_jj__subcmd__workspace__subcmd__rename_commands] )) ||
+_jj__subcmd__workspace__subcmd__rename_commands() {
     local commands; commands=()
     _describe -t commands 'jj workspace rename commands' commands "$@"
 }
-(( $+functions[_jj__workspace__root_commands] )) ||
-_jj__workspace__root_commands() {
+(( $+functions[_jj__subcmd__workspace__subcmd__root_commands] )) ||
+_jj__subcmd__workspace__subcmd__root_commands() {
     local commands; commands=()
     _describe -t commands 'jj workspace root commands' commands "$@"
 }
-(( $+functions[_jj__workspace__update-stale_commands] )) ||
-_jj__workspace__update-stale_commands() {
+(( $+functions[_jj__subcmd__workspace__subcmd__update-stale_commands] )) ||
+_jj__subcmd__workspace__subcmd__update-stale_commands() {
     local commands; commands=()
     _describe -t commands 'jj workspace update-stale commands' commands "$@"
 }
