@@ -1,6 +1,7 @@
 # Other me&u/mr-yum repos checked out in ~/dev, outside the 2.0 stack.
 [DEFAULT]
 base = ~/dev
+jobs = 10
 update = ~/bin/mrx-refresh-repo.sh
 
 [admin]

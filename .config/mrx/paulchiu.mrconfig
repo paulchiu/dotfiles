@@ -1,6 +1,7 @@
 # My own repos under the paulchiu GitHub org.
 [DEFAULT]
 base = ~/dev
+jobs = 10
 update = ~/bin/mrx-refresh-repo.sh
 
 [d3-color]

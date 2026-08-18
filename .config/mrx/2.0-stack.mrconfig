@@ -1,6 +1,7 @@
 # The me&u 2.0 order-and-pay stack. Synced daily by ~/bin/reset.sh.
 [DEFAULT]
 base = ~/dev
+jobs = 10
 update = ~/bin/mrx-sync-repo.sh
 
 [bill-api]

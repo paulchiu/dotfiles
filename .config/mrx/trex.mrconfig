@@ -1,6 +1,7 @@
 # Occasional Azure repos. Was ~/.mrconfig.
 [DEFAULT]
 base = ~/
+jobs = 10
 
 [dev-trex/BulkPriceImport]
 checkout = git clone 'git@ssh.dev.azure.com:v3/meandu/OrderingPlatform/BulkPriceImport' 'BulkPriceImport'

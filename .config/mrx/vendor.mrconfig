@@ -1,6 +1,7 @@
 # Third-party clones: neither mine nor mr-yum's, kept for reference.
 [DEFAULT]
 base = ~/dev
+jobs = 10
 update = ~/bin/mrx-refresh-repo.sh
 
 [baseweb]
