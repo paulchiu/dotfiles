@@ -2,6 +2,7 @@
 [DEFAULT]
 base = ~/dev
 jobs = 10
+auto_fetch = 6m
 update = ~/bin/mrx-refresh-repo.sh
 
 [baseweb]

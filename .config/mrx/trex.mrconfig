@@ -2,6 +2,7 @@
 [DEFAULT]
 base = ~/
 jobs = 10
+auto_fetch = 6m
 
 [dev-trex/BulkPriceImport]
 checkout = git clone 'git@ssh.dev.azure.com:v3/meandu/OrderingPlatform/BulkPriceImport' 'BulkPriceImport'

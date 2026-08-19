@@ -2,6 +2,7 @@
 [DEFAULT]
 base = ~/dev
 jobs = 10
+auto_fetch = 6m
 update = ~/bin/mrx-refresh-repo.sh
 
 [admin]
@@ -246,6 +247,9 @@ checkout = git clone 'git@github.com:mr-yum/safe-settings.git' 'safe-settings'
 
 [schematics]
 checkout = git clone 'git@github.com:mr-yum/schematics.git' 'schematics'
+
+[serve-devcontainer]
+checkout = git clone 'git@github.com:mr-yum/serve-devcontainer.git' 'serve-devcontainer'
 
 [serve-fe-bench]
 checkout = git clone 'git@github.com:mr-yum/serve-frontend-bench.git' 'serve-fe-bench'
