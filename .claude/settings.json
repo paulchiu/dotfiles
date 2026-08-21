@@ -193,5 +193,6 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  }
+  },
+  "model": "opus[1m]"
 }

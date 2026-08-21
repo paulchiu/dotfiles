@@ -39,7 +39,6 @@ never\:"Never ask for user approval Execution failures are immediately returned 
 '--ask-for-approval=[Configure when the model requires human approval before executing a command]:APPROVAL_POLICY:((untrusted\:"Only run "trusted" commands (e.g. ls, cat, sed) without asking for user approval. Will escalate to the user if the model proposes a command that is not in the "trusted" set"
 on-request\:"The model decides when to ask the user for approval"
 never\:"Never ask for user approval Execution failures are immediately returned to the model"))' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
 '--oss[Use open-source provider]' \
 '--dangerously-bypass-hook-trust[Run enabled hooks without requiring persisted hook trust for this invocation. DANGEROUS. Intended only for automation that already vets hook sources]' \
@@ -93,7 +92,6 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-user-config[Do not load \`\$CODEX_HOME/config.toml\`; auth still uses \`CODEX_HOME\`]' \
 '--ignore-rules[Do not load user or project execpolicy \`.rules\` files]' \
 '--json[Print events to stdout as JSONL]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '-V[Print version]' \
@@ -132,11 +130,37 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-user-config[Do not load \`\$CODEX_HOME/config.toml\`; auth still uses \`CODEX_HOME\`]' \
 '--ignore-rules[Do not load user or project execpolicy \`.rules\` files]' \
 '--json[Print events to stdout as JSONL]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::session_id -- Conversation/session id (UUID) or thread name. UUIDs take precedence if it parses. If omitted, use --last to pick the most recent recorded session:_default' \
 '::prompt -- Prompt to send after resuming the session. If `-` is used, read from stdin:' \
+&& ret=0
+;;
+(fork)
+_arguments "${_arguments_options[@]}" : \
+'*-i+[Optional image(s) to attach to the prompt sent after forking]:FILE:_files' \
+'*--image=[Optional image(s) to attach to the prompt sent after forking]:FILE:_files' \
+'-m+[Model the agent should use]:MODEL:_default' \
+'--model=[Model the agent should use]:MODEL:_default' \
+'--output-schema=[Path to a JSON Schema file describing the model'\''s final response shape]:FILE:_files' \
+'-o+[Specifies file where the last message from the agent should be written]:FILE:_files' \
+'--output-last-message=[Specifies file where the last message from the agent should be written]:FILE:_files' \
+'*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
+'*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
+'--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
+'--dangerously-bypass-approvals-and-sandbox[Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed]' \
+'--dangerously-bypass-hook-trust[Run enabled hooks without requiring persisted hook trust for this invocation. DANGEROUS. Intended only for automation that already vets hook sources]' \
+'--skip-git-repo-check[Allow running Codex outside a Git repository]' \
+'--ephemeral[Run without persisting session files to disk]' \
+'--ignore-user-config[Do not load \`\$CODEX_HOME/config.toml\`; auth still uses \`CODEX_HOME\`]' \
+'--ignore-rules[Do not load user or project execpolicy \`.rules\` files]' \
+'--json[Print events to stdout as JSONL]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':session_id -- Conversation/session id (UUID) or thread name to fork:_default' \
+'::prompt -- Optional prompt to send after forking. If `-` is used, read from stdin:' \
 && ret=0
 ;;
 (review)
@@ -162,7 +186,6 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-user-config[Do not load \`\$CODEX_HOME/config.toml\`; auth still uses \`CODEX_HOME\`]' \
 '--ignore-rules[Do not load user or project execpolicy \`.rules\` files]' \
 '--json[Print events to stdout as JSONL]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::prompt -- Custom review instructions. If `-` is used, read from stdin:' \
@@ -181,6 +204,10 @@ _arguments "${_arguments_options[@]}" : \
         curcontext="${curcontext%:*:*}:codex-exec-help-command-$line[1]:"
         case $line[1] in
             (resume)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(fork)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
@@ -232,7 +259,6 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-user-config[Do not load \`\$CODEX_HOME/config.toml\`; auth still uses \`CODEX_HOME\`]' \
 '--ignore-rules[Do not load user or project execpolicy \`.rules\` files]' \
 '--json[Print events to stdout as JSONL]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '-V[Print version]' \
@@ -271,11 +297,37 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-user-config[Do not load \`\$CODEX_HOME/config.toml\`; auth still uses \`CODEX_HOME\`]' \
 '--ignore-rules[Do not load user or project execpolicy \`.rules\` files]' \
 '--json[Print events to stdout as JSONL]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::session_id -- Conversation/session id (UUID) or thread name. UUIDs take precedence if it parses. If omitted, use --last to pick the most recent recorded session:_default' \
 '::prompt -- Prompt to send after resuming the session. If `-` is used, read from stdin:' \
+&& ret=0
+;;
+(fork)
+_arguments "${_arguments_options[@]}" : \
+'*-i+[Optional image(s) to attach to the prompt sent after forking]:FILE:_files' \
+'*--image=[Optional image(s) to attach to the prompt sent after forking]:FILE:_files' \
+'-m+[Model the agent should use]:MODEL:_default' \
+'--model=[Model the agent should use]:MODEL:_default' \
+'--output-schema=[Path to a JSON Schema file describing the model'\''s final response shape]:FILE:_files' \
+'-o+[Specifies file where the last message from the agent should be written]:FILE:_files' \
+'--output-last-message=[Specifies file where the last message from the agent should be written]:FILE:_files' \
+'*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
+'*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
+'--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
+'--dangerously-bypass-approvals-and-sandbox[Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed]' \
+'--dangerously-bypass-hook-trust[Run enabled hooks without requiring persisted hook trust for this invocation. DANGEROUS. Intended only for automation that already vets hook sources]' \
+'--skip-git-repo-check[Allow running Codex outside a Git repository]' \
+'--ephemeral[Run without persisting session files to disk]' \
+'--ignore-user-config[Do not load \`\$CODEX_HOME/config.toml\`; auth still uses \`CODEX_HOME\`]' \
+'--ignore-rules[Do not load user or project execpolicy \`.rules\` files]' \
+'--json[Print events to stdout as JSONL]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':session_id -- Conversation/session id (UUID) or thread name to fork:_default' \
+'::prompt -- Optional prompt to send after forking. If `-` is used, read from stdin:' \
 && ret=0
 ;;
 (review)
@@ -301,7 +353,6 @@ _arguments "${_arguments_options[@]}" : \
 '--ignore-user-config[Do not load \`\$CODEX_HOME/config.toml\`; auth still uses \`CODEX_HOME\`]' \
 '--ignore-rules[Do not load user or project execpolicy \`.rules\` files]' \
 '--json[Print events to stdout as JSONL]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::prompt -- Custom review instructions. If `-` is used, read from stdin:' \
@@ -320,6 +371,10 @@ _arguments "${_arguments_options[@]}" : \
         curcontext="${curcontext%:*:*}:codex-exec-help-command-$line[1]:"
         case $line[1] in
             (resume)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(fork)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
@@ -350,7 +405,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
 '(--base --commit)--uncommitted[Review staged, unstaged, and untracked changes]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::prompt -- Custom review instructions. If `-` is used, read from stdin:' \
@@ -368,7 +422,6 @@ _arguments "${_arguments_options[@]}" : \
 '--with-api-key[Read the API key from stdin (e.g. \`printenv OPENAI_API_KEY | codex login --with-api-key\`)]' \
 '--with-access-token[Read the access token from stdin (e.g. \`printenv CODEX_ACCESS_TOKEN | codex login --with-access-token\`)]' \
 '--device-auth[]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__login_commands" \
@@ -387,7 +440,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -426,7 +478,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -437,7 +488,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__mcp_commands" \
@@ -457,7 +507,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output the configured servers as JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -469,7 +518,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output the server configuration as JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':name -- Name of the MCP server to display:_default' \
@@ -481,12 +529,12 @@ _arguments "${_arguments_options[@]}" : \
 '--url=[URL for a streamable HTTP MCP server]:URL:_default' \
 '--bearer-token-env-var=[Optional environment variable to read for a bearer token. Only valid with streamable HTTP servers]:ENV_VAR:_default' \
 '--oauth-client-id=[Optional OAuth client identifier to use for this MCP server]:CLIENT_ID:_default' \
+'--oauth-client-registration=[OAuth client-registration strategy for the immediate login only]:AUTO|CIMD|DCR:(auto cimd dcr)' \
 '--oauth-resource=[Optional OAuth resource parameter to include during MCP login]:RESOURCE:_default' \
 '*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':name -- Name for the MCP server configuration:_default' \
@@ -499,7 +547,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':name -- Name of the MCP server configuration to remove:_default' \
@@ -508,11 +555,11 @@ _arguments "${_arguments_options[@]}" : \
 (login)
 _arguments "${_arguments_options[@]}" : \
 '*--scopes=[Comma-separated list of OAuth scopes to request]:SCOPE,SCOPE:_default' \
+'--oauth-client-registration=[OAuth client-registration strategy for this login only]:AUTO|CIMD|DCR:(auto cimd dcr)' \
 '*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':name -- Name of the MCP server to authenticate with oauth:_default' \
@@ -524,7 +571,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':name -- Name of the MCP server to deauthenticate:_default' \
@@ -584,7 +630,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__plugin_commands" \
@@ -606,7 +651,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output install result as JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':plugin -- Plugin selector to install\: either PLUGIN@MARKETPLACE or PLUGIN with --marketplace:_default' \
@@ -622,7 +666,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output plugin list as JSON]' \
 '--available[Include uninstalled marketplace plugins in the JSON output]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -633,7 +676,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__plugin__marketplace_commands" \
@@ -655,7 +697,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output add result as JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':source -- Marketplace source\: a local path, owner/repo\[@ref\], HTTPS Git URL, or SSH Git URL:_default' \
@@ -668,7 +709,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output marketplace list as JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -680,7 +720,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output upgrade result as JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::marketplace_name -- Optional configured marketplace name to upgrade. Omit to upgrade all Git marketplaces:_default' \
@@ -693,7 +732,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output remove result as JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':marketplace_name -- Configured marketplace name to remove:_default' \
@@ -748,7 +786,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Output remove result as JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':plugin -- Plugin selector to remove\: either PLUGIN@MARKETPLACE or PLUGIN with --marketplace:_default' \
@@ -829,14 +866,13 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
 ;;
 (app-server)
 _arguments "${_arguments_options[@]}" : \
-'--code-mode-host=[Connect to a remote code-mode host instead of starting a local host]:WS_URL:_default' \
+'--code-mode-host=[Connect to a remote code-mode host instead of starting a local host]:URL:_default' \
 '--listen=[Transport endpoint URL. Supported values\: \`stdio\://\` (default), \`unix\://\`, \`unix\://PATH\`, \`ws\://IP\:PORT\`, \`off\`]:URL:_default' \
 '--ws-auth=[Websocket auth mode for non-loopback listeners]:MODE:(capability-token signed-bearer-token)' \
 '--ws-token-file=[Absolute path to the capability-token file]:PATH:_files' \
@@ -853,7 +889,6 @@ _arguments "${_arguments_options[@]}" : \
 '(--listen)--stdio[Use stdio as the transport (equivalent to \`--listen stdio\://\`)]' \
 '--remote-control[Enable remote control for this app-server process without changing persistence]' \
 '--analytics-default-enabled[Controls whether analytics are enabled by default]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__app-server_commands" \
@@ -872,7 +907,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__app-server__daemon_commands" \
@@ -892,7 +926,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--remote-control[Launch the managed app-server with remote control enabled]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -903,7 +936,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -914,7 +946,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -925,7 +956,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -936,7 +966,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -947,7 +976,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -958,7 +986,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -969,7 +996,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1037,7 +1063,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1053,7 +1078,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--experimental[Include experimental methods and fields in the generated output]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1067,7 +1091,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--experimental[Include experimental methods and fields in the generated output]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1080,7 +1103,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1180,7 +1202,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Emit machine-readable JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__remote-control_commands" \
@@ -1200,7 +1221,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Emit machine-readable JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1212,7 +1232,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Emit machine-readable JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1224,7 +1243,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Emit machine-readable JSON]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1272,7 +1290,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::path -- Workspace path to open in the Desktop app:_files' \
@@ -1284,7 +1301,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::shell -- Shell to generate completions for:(bash elvish fish powershell zsh)' \
@@ -1296,7 +1312,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1312,7 +1327,6 @@ _arguments "${_arguments_options[@]}" : \
 '--all[Expand long lists in detailed human output]' \
 '--no-color[Disable ANSI color in human output]' \
 '--ascii[Use ASCII status labels and separators in human output]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1335,7 +1349,6 @@ _arguments "${_arguments_options[@]}" : \
 '--sandbox-state-disable-network[Disable direct network access in the supplied sandbox state]' \
 '--include-managed-config[Include managed requirements while resolving an explicit permissions profile]' \
 '--log-denials[While the command runs, capture macOS sandbox denials via \`log stream\` and print them after exit]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '*::command -- Full command args to run under seatbelt:_default' \
@@ -1347,7 +1360,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__debug_commands" \
@@ -1367,7 +1379,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--bundled[Skip refresh and dump only the bundled catalog shipped with this binary]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1378,7 +1389,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__debug__app-server_commands" \
@@ -1397,7 +1407,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':user_message:_default' \
@@ -1439,7 +1448,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::prompt -- Optional user prompt to append after session context:_default' \
@@ -1453,7 +1461,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':trace_bundle -- Trace bundle directory containing manifest.json and trace.jsonl:_files' \
@@ -1465,7 +1472,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1536,7 +1542,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__execpolicy_commands" \
@@ -1559,7 +1564,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--pretty[Pretty-print the JSON output]' \
 '--resolve-host-executables[Resolve absolute program paths against basename rules, gated by any \`host_executable()\` definitions in the loaded policy files]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '*::command -- Command tokens to check against the policy:_default' \
@@ -1599,7 +1603,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':task_id:_default' \
@@ -1611,7 +1614,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':task_id:_default' \
@@ -1653,7 +1655,6 @@ never\:"Never ask for user approval Execution failures are immediately returned 
 '(-s --sandbox --dangerously-bypass-approvals-and-sandbox -a --ask-for-approval)--approve-for-me[Route approval requests through automatic review using the workspace-write sandbox]' \
 '--search[Enable live web search. When enabled, the native Responses \`web_search\` tool is available to the model (no per‑call approval)]' \
 '--no-alt-screen[Disable alternate screen mode]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '-V[Print version]' \
@@ -1687,7 +1688,6 @@ _arguments "${_arguments_options[@]}" : \
 '--dangerously-bypass-approvals-and-sandbox[Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed]' \
 '--dangerously-bypass-hook-trust[Run enabled hooks without requiring persisted hook trust for this invocation. DANGEROUS. Intended only for automation that already vets hook sources]' \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':target -- Session id (UUID) or session name. UUIDs take precedence if it parses:_default' \
@@ -1719,10 +1719,24 @@ _arguments "${_arguments_options[@]}" : \
 '--dangerously-bypass-hook-trust[Run enabled hooks without requiring persisted hook trust for this invocation. DANGEROUS. Intended only for automation that already vets hook sources]' \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
 '--force[Delete without prompting. SESSION must be a UUID]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':target -- Session id (UUID) or session name. UUIDs take precedence if it parses:_default' \
+&& ret=0
+;;
+(migrate-rollouts)
+_arguments "${_arguments_options[@]}" : \
+'*--thread=[Restrict inspection or migration to one or more thread IDs]:THREAD_ID:_default' \
+'--max-mib-per-second=[Limit aggregate rollout read and write throughput, in MiB per second]:MIB:_default' \
+'*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
+'*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
+'--apply[Publish the migration. Without this flag the command only reports eligible sessions]' \
+'--json[Emit the complete per-thread report as JSON]' \
+'--verbose[Print one line for every inspected rollout]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
 ;;
 (unarchive)
@@ -1750,7 +1764,6 @@ _arguments "${_arguments_options[@]}" : \
 '--dangerously-bypass-approvals-and-sandbox[Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed]' \
 '--dangerously-bypass-hook-trust[Run enabled hooks without requiring persisted hook trust for this invocation. DANGEROUS. Intended only for automation that already vets hook sources]' \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':target -- Session id (UUID) or session name. UUIDs take precedence if it parses:_default' \
@@ -1791,7 +1804,6 @@ never\:"Never ask for user approval Execution failures are immediately returned 
 '(-s --sandbox --dangerously-bypass-approvals-and-sandbox -a --ask-for-approval)--approve-for-me[Route approval requests through automatic review using the workspace-write sandbox]' \
 '--search[Enable live web search. When enabled, the native Responses \`web_search\` tool is available to the model (no per‑call approval)]' \
 '--no-alt-screen[Disable alternate screen mode]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '-V[Print version]' \
@@ -1806,7 +1818,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '-V[Print version]' \
@@ -1830,7 +1841,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '::query -- Task prompt to run in Codex Cloud:_default' \
@@ -1842,7 +1852,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':task_id -- Codex Cloud task identifier to inspect:_default' \
@@ -1858,7 +1867,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--json[Emit JSON instead of plain text]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1870,7 +1878,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':task_id -- Codex Cloud task identifier to apply:_default' \
@@ -1883,7 +1890,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':task_id -- Codex Cloud task identifier to display:_default' \
@@ -1944,7 +1950,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--http-shutdown[Enable HTTP shutdown endpoint at GET /shutdown]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1955,7 +1960,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':socket_path -- Path to the Unix domain socket to connect to:_default' \
@@ -1975,7 +1979,6 @@ _arguments "${_arguments_options[@]}" : \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
 '--use-agent-identity-auth[Use Agent Identity auth from CODEX_ACCESS_TOKEN for remote registration]' \
 '--exit-on-stdin-close[Exit when the parent-owned standard-input pipe closes]' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1986,7 +1989,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ":: :_codex__features_commands" \
@@ -2005,7 +2007,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -2016,7 +2017,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':feature -- Feature key to update (for example\: unified_exec):_default' \
@@ -2028,7 +2028,6 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
-'--psp[Enable process-only PSP routing for first-party ChatGPT requests]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':feature -- Feature key to update (for example\: unified_exec):_default' \
@@ -2095,6 +2094,10 @@ _arguments "${_arguments_options[@]}" : \
         curcontext="${curcontext%:*:*}:codex-help-exec-command-$line[1]:"
         case $line[1] in
             (resume)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(fork)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
@@ -2454,6 +2457,10 @@ _arguments "${_arguments_options[@]}" : \
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
+(migrate-rollouts)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
 (unarchive)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
@@ -2576,6 +2583,7 @@ _codex_commands() {
 'resume:Resume a previous interactive session (picker by default; use --last to continue the most recent)' \
 'archive:Archive a saved session by id or session name' \
 'delete:Permanently delete a saved session by id or session name' \
+'migrate-rollouts:Inspect or migrate legacy local sessions to paginated thread history' \
 'unarchive:Unarchive a saved session by id or session name' \
 'fork:Fork a previous interactive session (picker by default; use --last to fork the most recent)' \
 'cloud:\[EXPERIMENTAL\] Browse tasks from Codex Cloud and apply changes locally' \
@@ -3050,19 +3058,31 @@ _codex__doctor_commands() {
 _codex__exec_commands() {
     local commands; commands=(
 'resume:Resume a previous session by id or pick the most recent with --last' \
+'fork:Fork a previous session by id into a new session' \
 'review:Run a code review against the current repository' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'codex exec commands' commands "$@"
 }
+(( $+functions[_codex__exec__fork_commands] )) ||
+_codex__exec__fork_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex exec fork commands' commands "$@"
+}
 (( $+functions[_codex__exec__help_commands] )) ||
 _codex__exec__help_commands() {
     local commands; commands=(
 'resume:Resume a previous session by id or pick the most recent with --last' \
+'fork:Fork a previous session by id into a new session' \
 'review:Run a code review against the current repository' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'codex exec help commands' commands "$@"
+}
+(( $+functions[_codex__exec__help__fork_commands] )) ||
+_codex__exec__help__fork_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex exec help fork commands' commands "$@"
 }
 (( $+functions[_codex__exec__help__help_commands] )) ||
 _codex__exec__help__help_commands() {
@@ -3208,6 +3228,7 @@ _codex__help_commands() {
 'resume:Resume a previous interactive session (picker by default; use --last to continue the most recent)' \
 'archive:Archive a saved session by id or session name' \
 'delete:Permanently delete a saved session by id or session name' \
+'migrate-rollouts:Inspect or migrate legacy local sessions to paginated thread history' \
 'unarchive:Unarchive a saved session by id or session name' \
 'fork:Fork a previous interactive session (picker by default; use --last to fork the most recent)' \
 'cloud:\[EXPERIMENTAL\] Browse tasks from Codex Cloud and apply changes locally' \
@@ -3417,9 +3438,15 @@ _codex__help__doctor_commands() {
 _codex__help__exec_commands() {
     local commands; commands=(
 'resume:Resume a previous session by id or pick the most recent with --last' \
+'fork:Fork a previous session by id into a new session' \
 'review:Run a code review against the current repository' \
     )
     _describe -t commands 'codex help exec commands' commands "$@"
+}
+(( $+functions[_codex__help__exec__fork_commands] )) ||
+_codex__help__exec__fork_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex help exec fork commands' commands "$@"
 }
 (( $+functions[_codex__help__exec__resume_commands] )) ||
 _codex__help__exec__resume_commands() {
@@ -3545,6 +3572,11 @@ _codex__help__mcp__remove_commands() {
 _codex__help__mcp-server_commands() {
     local commands; commands=()
     _describe -t commands 'codex help mcp-server commands' commands "$@"
+}
+(( $+functions[_codex__help__migrate-rollouts_commands] )) ||
+_codex__help__migrate-rollouts_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex help migrate-rollouts commands' commands "$@"
 }
 (( $+functions[_codex__help__plugin_commands] )) ||
 _codex__help__plugin_commands() {
@@ -3791,6 +3823,11 @@ _codex__mcp__remove_commands() {
 _codex__mcp-server_commands() {
     local commands; commands=()
     _describe -t commands 'codex mcp-server commands' commands "$@"
+}
+(( $+functions[_codex__migrate-rollouts_commands] )) ||
+_codex__migrate-rollouts_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex migrate-rollouts commands' commands "$@"
 }
 (( $+functions[_codex__plugin_commands] )) ||
 _codex__plugin_commands() {
