@@ -61,6 +61,8 @@ alias no="nex open --here"
 alias ftx="fzf_to_context"
 alias hs="atuin search -i"
 alias s="~/dev/search.sh"
+# Open null-delimited paths from a pipeline, e.g. `fd -0 <pattern> | xo`
+alias xo="xargs -0 open"
 # Global aliases: `bat F`, `vim F`, `less F` expand F to "$(fzf)" anywhere on the line.
 # Use F1 for the same flow limited to files in the current directory.
 alias -g F='"$(fzf)"'
