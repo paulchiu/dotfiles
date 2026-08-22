@@ -1,11 +1,6 @@
 ---
 name: herdr
-description: >
-  Drive Herdr, the persistent terminal runtime for coding agents, via the herdr CLI:
-  spawn sibling panes, start/prompt/wait on agents (claude, codex, opencode and 18
-  more), read pane output, manage workspaces/tabs/sessions, attach over SSH.
-  Triggers: "herdr", "start an agent in a pane", "ask the reviewer pane", "wait until
-  that agent is blocked", "herdr --remote", "attach to the session".
+description: Herdr CLI for managing panes workspaces and tabs
 ---
 
 # Herdr

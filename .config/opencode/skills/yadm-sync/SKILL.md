@@ -1,7 +1,7 @@
 ---
 model: haiku
 name: yadm-sync
-description: "Add, commit, and push dotfile changes with yadm. Use when asked to update/sync dotfiles, commit dotfile changes, track a new file with yadm, or save changes under ~/.claude or ~/.config."
+description: "yadm sync, or save changes under ~/.claude or ~/.config or dot files."
 ---
 
 # yadm Sync
@@ -47,6 +47,7 @@ Work only from the file path(s) the user named, or that you edited earlier in th
    ```
 
    - If `yadm commit` fails mentioning `index.lock`: follow the "Lock contention" section in [references/troubleshooting.md](references/troubleshooting.md).
+
 7. Decide whether to push:
    - If the user said only "commit": stop here. Report the commit subject and hash. Do NOT push.
    - If the user said "update", "sync", "push", or "add commit and push": run `yadm push`.

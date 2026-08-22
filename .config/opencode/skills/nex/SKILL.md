@@ -1,10 +1,6 @@
 ---
 name: nex
-description: >
-  Manage Nex terminal panes via the nex CLI: split/create/close/move/rename/capture
-  panes, workspaces, groups, layouts, diffs; broadcast to a group; show Codex/Claude
-  status; delegate to live panes with cxd/ccd. Triggers: "split pane", "send to
-  pane/group", "broadcast to <group>", "Codex/Claude pane", "ccd/cxd", "open in Nex".
+description: "nex CLI: split/create/close/move/rename/capture panes, workspaces, groups, delegate to live panes with cxd/ccd.
 model: haiku
 ---
 
@@ -51,7 +47,7 @@ of trusting a zero exit code.
 - Task is driving an interactive terminal app in a pane (a TUI, an editor, a
   manual test sweep) or photographing what a pane drew: read
   `references/driving-tuis.md` **before sending a single key**. `pane send
-  --bare` silently rewrites control bytes as spaces, which corrupts a run
+--bare` silently rewrites control bytes as spaces, which corrupts a run
   rather than failing it, and `screencapture` writes no file on a stale window
   id, which quietly duplicates one frame across every screenshot. The reference
   carries the pty-shim workaround for both.
@@ -84,7 +80,7 @@ Do not read a reference the task does not need.
 - Never send control bytes with `pane send --bare`. It rewrites most of them as
   spaces without erroring, so the keystroke lands as something else. Use
   `pane send-key` for the keys it supports (`enter, return, tab, escape, esc,
-  space, backspace, up, down, left, right, ctrl-c`) and the pty shim in
+space, backspace, up, down, left, right, ctrl-c`) and the pty shim in
   `references/driving-tuis.md` for anything else.
 - If a command fails with an explicit error, stop and report the error and the
   exact command. Do not keep retrying the same failing command.

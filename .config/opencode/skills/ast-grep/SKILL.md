@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: ast-grep
-description: "Write and test ast-grep rules for structural (AST) code search — patterns that grep/text search cannot express (e.g. \"async functions without error handling\", \"calls with a specific argument shape\", \"write an ast-grep rule\")."
+description: "ast-grep is used for structural (AST) code search"
 ---
 
 # ast-grep Code Search

@@ -1,6 +1,6 @@
 ---
 name: personal
-description: Router for personal tasks — gym log → Dataview fitness logs; Dad's monthly ANZ money report; monthly Obsidian Area/Projects → Archive; AGENTS.md conformance audit/fix; clean stale Codex desktop state; refine an aichat role prompt; translate to Taiwan Traditional Chinese ("for my mum/dad", 繁體中文, 正體中文).
+description: Router for dad's monthly ANZ money report; monthly Obsidian Area/Projects → Archive; translate to Taiwan Traditional Chinese ("for my mum/dad", 繁體中文, 正體中文).
 ---
 
 # personal (router)

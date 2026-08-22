@@ -1,7 +1,6 @@
 ---
-model: sonnet
 name: notion-doc-review
-description: "Review a Notion design doc or RFC and produce a dated, self-contained HTML review with quoted sections, verified findings, and a per-finding Copy feedback button that puts the comment on the clipboard ready to paste into Notion. Use when asked to review a Notion doc, critique an RFC, or turn review findings into something commentable."
+description: "review a Notion doc or other types of documents."
 ---
 
 # Notion Doc Review

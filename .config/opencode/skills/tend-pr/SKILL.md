@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: tend-pr
-description: "Maintain one open PR until merge or timeout: rebase onto main, diagnose CI/build failures, push fixes. Use for tend, caretake, babysit, shepherd, monitor, watch, keep alive, or keep green/mergeable."
+description: "Maintain, tend, monitor, or watch one open PR until merge or timeout."
 ---
 
 # Tend a Pull Request

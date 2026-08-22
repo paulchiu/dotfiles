@@ -1,6 +1,6 @@
 ---
 name: tuicr
-description: "Open a pull request in the tuicr review TUI, or drive tuicr's non-interactive review CLI. Use for 'open PR in tui', 'open this in tuicr', 'review this PR in the TUI', 'add a tuicr comment', or any tuicr config/keybinding question."
+description: "Open a pull request (pr) in the tuicr review TUI"
 ---
 
 # tuicr
@@ -182,15 +182,15 @@ tuicr --stdout > review.md     # then press y in the TUI to write markdown out
 
 tuicr does its own highlighting with syntect + two-face, the same extended grammar corpus bat and delta ship, so quality is comparable. Map delta settings across instead:
 
-| delta | tuicr |
-|---|---|
-| `side-by-side = true` | `diff_view = "side-by-side"` (toggle in-app with `:diff`) |
+| delta                     | tuicr                                                                     |
+| ------------------------- | ------------------------------------------------------------------------- |
+| `side-by-side = true`     | `diff_view = "side-by-side"` (toggle in-app with `:diff`)                 |
 | `dark = true` / `--light` | `appearance = "dark"\|"light"\|"system"`, or `theme_dark` + `theme_light` |
-| `syntax-theme` | `theme = "<name>"`, or `syntax_theme` inside a local theme file |
-| whitespace flags | `ignore_whitespace = true` (local diffs only, not PR diffs) |
-| `wrap-max-lines` | `wrap` (toggle `:set wrap!`) |
-| `line-numbers` | always on, not configurable |
-| `navigate` | native vim motions |
+| `syntax-theme`            | `theme = "<name>"`, or `syntax_theme` inside a local theme file           |
+| whitespace flags          | `ignore_whitespace = true` (local diffs only, not PR diffs)               |
+| `wrap-max-lines`          | `wrap` (toggle `:set wrap!`)                                              |
+| `line-numbers`            | always on, not configurable                                               |
+| `navigate`                | native vim motions                                                        |
 
 delta remains configured in `~/.gitconfig` and still handles plain `git diff` / `show` / `log -p`. The two tools coexist; they do not compose.
 
@@ -198,30 +198,30 @@ delta remains configured in `~/.gitconfig` and still handles plain `git diff` / 
 
 23 keys. Anything else is dropped.
 
-| Key | Type | Default | Notes |
-|---|---|---|---|
-| `theme` | string  | (none) | Bundled or local theme name, not a path |
-| `theme_dark` / `theme_light` | string  | (none) | Per-appearance themes |
-| `appearance` | `dark`\|`light`\|`system` | `system` | Ignored when `theme` is set |
-| `diff_view` | `unified`\|`side-by-side` | `unified` | Toggle `:diff` |
-| `backend` | `libgit2`\|`cli` | `libgit2` | Sparse checkouts auto-route to `cli` |
-| `ignore_whitespace` | bool | `false` | Local diffs only |
-| `wrap` | bool | `false` | Toggle `:set wrap!` |
-| `show_file_list` | bool | `true` | Toggle `<leader>e` |
-| `cursor_line` | bool | `true` | |
-| `mouse` | bool | `true` | |
-| `transparent_background` | bool | `true` | `false` paints `panel_bg` |
-| `comment_vim` | bool | `false` | Vim editing in the comment box; `:vim` |
-| `comment_tab_width` | int | `4` | |
-| `leader` | **single char** | `;` | Multi-char values are rejected |
-| `scroll_offset` | int | `0` | vim `scrolloff` |
-| `review_watch_interval_ms` | int | `1000` | `0` disables live pickup of agent comments |
-| `no_update_check` | bool | `false` | |
-| `export_legend` | bool | `true` | Undocumented upstream |
-| `single_file_view` | bool | `false` | Undocumented upstream |
-| `username` | string | `"user"` | Undocumented upstream |
-| `comment_types` | array of tables  | (none) | See below |
-| `forge` | table  | (none) | Only key: `comment_type_prefix` (bool, default `true`) |
+| Key                          | Type                      | Default   | Notes                                                  |
+| ---------------------------- | ------------------------- | --------- | ------------------------------------------------------ |
+| `theme`                      | string                    | (none)    | Bundled or local theme name, not a path                |
+| `theme_dark` / `theme_light` | string                    | (none)    | Per-appearance themes                                  |
+| `appearance`                 | `dark`\|`light`\|`system` | `system`  | Ignored when `theme` is set                            |
+| `diff_view`                  | `unified`\|`side-by-side` | `unified` | Toggle `:diff`                                         |
+| `backend`                    | `libgit2`\|`cli`          | `libgit2` | Sparse checkouts auto-route to `cli`                   |
+| `ignore_whitespace`          | bool                      | `false`   | Local diffs only                                       |
+| `wrap`                       | bool                      | `false`   | Toggle `:set wrap!`                                    |
+| `show_file_list`             | bool                      | `true`    | Toggle `<leader>e`                                     |
+| `cursor_line`                | bool                      | `true`    |                                                        |
+| `mouse`                      | bool                      | `true`    |                                                        |
+| `transparent_background`     | bool                      | `true`    | `false` paints `panel_bg`                              |
+| `comment_vim`                | bool                      | `false`   | Vim editing in the comment box; `:vim`                 |
+| `comment_tab_width`          | int                       | `4`       |                                                        |
+| `leader`                     | **single char**           | `;`       | Multi-char values are rejected                         |
+| `scroll_offset`              | int                       | `0`       | vim `scrolloff`                                        |
+| `review_watch_interval_ms`   | int                       | `1000`    | `0` disables live pickup of agent comments             |
+| `no_update_check`            | bool                      | `false`   |                                                        |
+| `export_legend`              | bool                      | `true`    | Undocumented upstream                                  |
+| `single_file_view`           | bool                      | `false`   | Undocumented upstream                                  |
+| `username`                   | string                    | `"user"`  | Undocumented upstream                                  |
+| `comment_types`              | array of tables           | (none)    | See below                                              |
+| `forge`                      | table                     | (none)    | Only key: `comment_type_prefix` (bool, default `true`) |
 
 `commit_order`, `initial_commit_selection`, and `show_commits` appear in upstream docs but are **rejected** by 0.19.1. Toggle the commit selector at runtime with `:set commits!` instead.
 

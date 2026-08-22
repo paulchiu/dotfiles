@@ -1,7 +1,7 @@
 ---
 model: haiku
 name: git-commit
-description: "Generate a conventional commit message from current-branch changes against main and create the commit. Use when asked to commit, write a commit message, or generate a commit."
+description: "Write conventional commit message from current-branch changes against main and create the commit."
 ---
 
 # Commit Message Generator
@@ -52,6 +52,7 @@ Use `style`, `perf`, or `build` only when the change is purely that and nothing 
 **Choosing the scope:** run `git log --oneline -15` and reuse a scope name already in use when one fits the changed files. Otherwise use the directory or module that dominates the diff (e.g. `cart` for changes under `src/cart/`).
 
 **Rules:**
+
 - Use sentence case and imperative tone ("Add feature", not "Added feature")
 - Keep the subject line under 72 characters
 - The subject states the outcome, not the edit. IF your draft subject contains a file name, a function or variable name, or a vague verb ("update", "change", "modify") without saying what it accomplishes, rewrite it. Example: `fix(cart): Prevent duplicate order submission`, NOT `fix(cart): Update submit handler`.

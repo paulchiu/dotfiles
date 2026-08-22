@@ -1,6 +1,6 @@
 ---
 name: writing-tone
-description: "Rewrite drafts and raw notes into polished non-code communication in the user's voice. Trigger for write/draft/rewrite/summarise/share Slack, email, updates, FYIs, or 'my tone/style/voice'. Skip commits, PRs, technical docs."
+description: "write/draft/rewrite/summarise/share Slack, email, updates, in my voice, writing tone"
 ---
 
 # Rewriting for Tone & Style

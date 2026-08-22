@@ -1,7 +1,7 @@
 ---
 model: haiku
 name: dated-doc-renamer
-description: "Renames notes/docs to `yyyy-mm-dd Title.md` and adds reproducibility front matter (summary prompt, conversation archive pointer). Use when normalising filenames, preserving created-at dates, or converting slugs to sentence-case titles."
+description: "Names documents as 'dated docs' with format `yyyy-mm-dd Title.md`"
 ---
 
 # Dated Doc Renamer
@@ -39,6 +39,7 @@ Do the steps in this exact order. Each step lists what to run, what to expect, a
    ```
 
    If `rg` is not installed, use `find <directory> -name '*.md' -type f` instead. Expected output: one file path per line.
+
 2. Run `git status --short` in the target directory. Expected output: status lines such as `M file.md` or `?? file.md`, or nothing when the tree is clean.
    - If it prints `fatal: not a git repository`: that is fine. Note it, use plain `mv` in Step 5, and skip the git checks in Step 6.
 3. Fix the scope: only the files the user named, or files matching the pattern the user described. Do NOT add other files to the batch.
@@ -56,6 +57,7 @@ Do the steps in this exact order. Each step lists what to run, what to expect, a
    ```
 
    Expected output: a single line like `2026-04-21`. Use that as the prefix date.
+
 3. If the `stat` command fails, or the output is not in `yyyy-mm-dd` shape: stop and ask the user whether to fall back to modification time. Do NOT silently use modification time.
 
 ### Step 3: Derive the title (per file)
@@ -133,6 +135,7 @@ Conversation archive pattern (only when a conversation was the source and an arc
    ```
 
    If it prints `EXISTS`: stop, do not rename this file, and report the collision to the user. Never overwrite an existing file.
+
 3. Check whether the file is tracked:
 
    ```bash
@@ -140,6 +143,7 @@ Conversation archive pattern (only when a conversation was the source and an arc
    ```
 
    Exit code 0 means tracked; any error means untracked (or not a repo).
+
 4. If tracked: `git mv "<old-name>" "<new-name>"`. If untracked or not a repo: `mv "<old-name>" "<new-name>"`. Always quote both paths (they contain spaces).
 5. If the rename command fails for any reason: stop, report the exact error message, and do not retry with a different command or continue to the next file until the user responds.
 6. Never double-prefix the date (a name like `2026-04-21 2026-04-21 ...` is always a bug).

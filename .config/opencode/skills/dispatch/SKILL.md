@@ -1,6 +1,6 @@
 ---
 name: dispatch
-description: "Orchestrator-only main thread for coding work: delegate to codex, require separate Claude adversarial review, run a /loop watchdog, handle git/gh plumbing. Use for engineering-manager delegation of coding work."
+description: "Orchestrator that delegates to codex, require separate Claude adversarial review."
 ---
 
 # /dispatch: engineering-manager orchestration

@@ -1,6 +1,6 @@
 ---
 name: review-code
-description: "End-to-end PR/branch review: principal-engineer pass, hostile adversarial second pass, optional persona lens and Codex outside-view round, decision doc, opt-in inline comments/approve. Use on `/review-code` or 'review this PR/branch'."
+description: "End-to-end PR/branch review: principal-engineer pass, hostile adversarial second pass, optional persona lens and Codex outside-view round, decision doc."
 ---
 
 # Code Review Skill

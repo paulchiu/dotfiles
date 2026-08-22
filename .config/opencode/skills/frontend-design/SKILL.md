@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: "Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, or apps; generates polished code that avoids generic AI aesthetics."
+description: "Create frontend interfaces with high design quality. Use when asked to build web components, pages, or apps."
 license: Complete terms in LICENSE.txt
 ---
 

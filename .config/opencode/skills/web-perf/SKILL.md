@@ -1,6 +1,6 @@
 ---
 name: web-perf
-description: Audit web performance via Chrome DevTools MCP — Core Web Vitals (LCP/INP/CLS), render-blocking resources, network chains, layout shifts, caching. Use to audit/profile/optimize page load, Lighthouse scores, or site speed.
+description: "analyze web performance"
 ---
 
 # Web Performance Audit
@@ -57,15 +57,16 @@ Extract metrics with `performance_analyze_insight(insightSetId: "<id-from-trace>
 
 Insight names vary across Chrome DevTools versions. If a name doesn't work, inspect the trace response to list the available insights. Common names:
 
-| Insight Name | What to Look For |
-|--------------|------------------|
-| `LCPBreakdown` | LCP split into TTFB, resource load, render delay |
-| `CLSCulprits` | Shifting elements (unsized images, injected content, font swaps) |
-| `RenderBlocking` | CSS/JS blocking first paint |
-| `DocumentLatency` | Server response time issues |
-| `NetworkRequestsDepGraph` | Request chains delaying critical resources |
+| Insight Name              | What to Look For                                                 |
+| ------------------------- | ---------------------------------------------------------------- |
+| `LCPBreakdown`            | LCP split into TTFB, resource load, render delay                 |
+| `CLSCulprits`             | Shifting elements (unsized images, injected content, font swaps) |
+| `RenderBlocking`          | CSS/JS blocking first paint                                      |
+| `DocumentLatency`         | Server response time issues                                      |
+| `NetworkRequestsDepGraph` | Request chains delaying critical resources                       |
 
 **Thresholds (good / needs-improvement / poor):**
+
 - TTFB: < 800ms / < 1.8s / > 1.8s
 - FCP: < 1.8s / < 3s / > 3s
 - LCP: < 2.5s / < 4s / > 4s
