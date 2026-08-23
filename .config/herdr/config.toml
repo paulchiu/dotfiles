@@ -16,3 +16,9 @@ key = "prefix+t"
 type = "plugin_action"
 command = "herdr-navigator.open"
 description = "jump to anything"
+
+[[keys.command]]
+key = "prefix+shift+b"
+type = "shell"
+command = "herdr pane move \"$HERDR_PANE_ID\" --new-tab --focus"
+description = "break pane into tab"
