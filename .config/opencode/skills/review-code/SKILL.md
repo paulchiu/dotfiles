@@ -11,7 +11,7 @@ Unified review workflow. Triggered by a PR URL, number, or (no arg) the current 
 2. **Round 1**: principal-engineer branch review.
 3. **Round 2**: hostile adversarial second pass (once).
 4. **Round 2.5 (optional)**: persona focus-lens re-rank.
-5. **Round 3 (optional)**: Codex outside view via Nex `cxd` pane.
+5. **Round 3 (off by default)**: Codex outside view via a `cxd` pane. Opt-in only.
 6. Write decision doc to `~/dev/sandbox/`.
 7. Offer action checklist inline. Only post to GitHub when user explicitly ticks actions in the current turn.
 
@@ -25,6 +25,7 @@ Parse the user's prompt for optional flags:
 
 - **Persona**: phrases like "review as <name>", "persona-based review by <name>", "hostile <name> review" → trigger Round 2.5 with that persona.
 - **Skip rounds**: phrases like "skip adversarial", "branch-review only" → run round 1 only.
+- **Round 3 opt-in**: "include cxd outside view", "do all three rounds", "full review with codex" → run Step 5. Without one of these, Step 5 does not run and is not offered.
 
 Resolve PR data at the start:
 
@@ -124,35 +125,44 @@ Load `references/persona-lens.md` and apply:
 
 The persona is **lens, not voice**. Posted comments are always drafted in the user's voice using the wrapper in `references/posting.md`. See `persona-lens.md` for the full rule, push-back behavior, and self-check.
 
-## Step 5: Round 3 (Codex outside view via Nex)
+## Step 5: Round 3 (Codex outside view, off by default)
 
-**Ask before writing the decision doc, unless a skip condition below applies.** Round 3 is the most reliable round at catching findings the self-passes miss (on PR #3708, cxd surfaced two AC violations and a boundary leak that rounds 1, 2, and 2.5 all missed). Skipping silently is the bug.
+**Round 3 is off. Do not run it, and do not ask.** Rounds 1 and 2 (plus 2.5 if a persona was
+requested) are the whole review unless the user explicitly asks for the Codex pass in their own
+prompt. Paul turned this off on 2026-08-14 and has restated it since; asking each time is itself
+the annoyance he turned off.
 
-Ask the user once, before drafting the decision doc:
+Run it **only** on an explicit opt-in phrase in the original prompt: "include cxd outside view",
+"do all three rounds", "full review with codex", "round 3". Anything less than an explicit ask,
+including silence, means skip. Never infer an opt-in from the PR looking hard, from rounds 1 and 2
+disagreeing, or from a blocking finding you are unsure about; re-verify against the code instead.
 
-> "Send to a `cxd` Nex pane for an outside-view review? (round 3)"
+Phrases like "skip round 3", "no cxd", "branch-review only" and "rounds 1-2 only" are therefore
+redundant, but they are still honoured and still worth recognising, because callers (the
+review-autopilot kickoff among them) send them defensively.
 
-Skip the ask only when:
+When it is skipped, which is the normal case, round 2 output is final and the decision doc needs
+no note about it. Only say "Round 3 skipped" if the user asked for it and something stopped it
+running.
 
-- The user opted out explicitly in the original prompt ("skip round 3", "no cxd", "branch-review only", "rounds 1-2 only").
-- The user opted in explicitly in the original prompt ("include cxd outside view", "do all three rounds", "full review with codex"): proceed without asking.
-- Auto-mode is active AND the user opted out in this session or a recent one; otherwise even in auto-mode, ask.
-
-If yes, use the `nex` skill to spawn a pane running `cxd`, hand it:
+**If, and only if, the user opted in**, spawn a pane running `cxd` and hand it:
 
 - The in-progress decision doc draft.
 - The diff and worktree path.
-- A short prompt: "Adversarially review _this review_. What did I miss? Which findings would you drop or downgrade?"
+- A short prompt: "Adversarially review _this review_. What did I miss? Which findings would you
+  drop or downgrade?"
 
-cxd's response often scrolls past the visible pane viewport. Ask cxd to write its full response (REV-N re-rank + missed findings) to a file like `/tmp/cxd-<pr-num>-review.md`, then Read that file. Don't try to reconstruct from `pane capture` alone.
+cxd's response often scrolls past the visible pane viewport. Ask cxd to write its full response
+(REV-N re-rank + missed findings) to a file, then read that file. Don't try to reconstruct it from
+a pane capture alone.
 
 Pull the response back in. Resolve disagreements:
 
-- Codex flags a new issue not yet captured → verify against the diff first (don't take the claim at face value), then add as the next `REV-N`.
-- Codex contests one of mine → re-evaluate against the false-positive gate in `severity-and-ids.md`; keep, downgrade, or drop.
+- Codex flags a new issue not yet captured -> verify against the diff first (don't take the claim
+  at face value), then add as the next `REV-N`.
+- Codex contests one of mine -> re-evaluate against the false-positive gate in
+  `severity-and-ids.md`; keep, downgrade, or drop.
 - **Consensus** = no new findings added and none contested after this round.
-
-If skipped (user opted out), round 2 (and 2.5 if run) output is final. Note "Round 3 skipped per user preference" in the decision doc.
 
 ## Step 6: Write decision doc
 
