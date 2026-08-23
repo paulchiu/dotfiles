@@ -1,0 +1,18 @@
+onboarding = false
+
+[theme]
+name = "dracula"
+auto_switch = false
+
+[ui]
+status_indicators = "symbols"
+show_agent_labels_on_pane_borders = true
+
+[terminal]
+new_cwd = "~/dev/sandbox"
+
+[[keys.command]]
+key = "prefix+t"
+type = "plugin_action"
+command = "herdr-navigator.open"
+description = "jump to anything"
