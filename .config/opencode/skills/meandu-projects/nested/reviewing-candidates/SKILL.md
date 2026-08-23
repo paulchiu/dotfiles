@@ -1,6 +1,6 @@
 ---
 name: reviewing-candidates
-description: "Analyses resumes and interview transcripts, then crafts professional recruiter feedback. Use when reviewing a candidate's resume, writing interview feedback, or drafting hiring decisions."
+description: "Analyses resumes and interview transcripts for recruiter feedback."
 ---
 
 # Reviewing Candidates

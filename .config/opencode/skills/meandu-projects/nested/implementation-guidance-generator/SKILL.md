@@ -1,6 +1,6 @@
 ---
 name: implementation-guidance-generator
-description: "Generates Obsidian-style implementation guidance docs for technical issues, bug fixes, and features with file refs, code locations, and step-by-step plans. Trigger phrases: 'implementation guidance', 'guidance doc', 'write up how to fix', or turning a Linear issue into an Obsidian implementation doc."
+description: "Generates implementation guidance docs for technical issues, bug fixes."
 ---
 
 # Implementation Guidance Generator
@@ -27,14 +27,14 @@ Turn a Linear issue into an Obsidian-ready implementation guidance doc: file ref
 
 ## Implementation guidance
 
-* The culprit for this is most likely `FunctionName.methodName` ([GitHub](https://github.com/org/repo/blob/main/path/file.ts#L123)), which has the query:
+- The culprit for this is most likely `FunctionName.methodName` ([GitHub](https://github.com/org/repo/blob/main/path/file.ts#L123)), which has the query:
 
 ```typescript
 [problematic code]
 ```
 
-* Alternative approach: modify `OtherService.method` ([GitHub](https://github.com/org/repo/blob/main/path/other.ts#L42))
-* [Additional context: constraints, performance/security implications, breaking changes, testing notes]
+- Alternative approach: modify `OtherService.method` ([GitHub](https://github.com/org/repo/blob/main/path/other.ts#L42))
+- [Additional context: constraints, performance/security implications, breaking changes, testing notes]
 ````
 
 Hard rules:

@@ -1,6 +1,6 @@
 ---
 name: branded-deck-builder
-description: Create polished branded decks, presentation slides, bento promo slides, and short shareable presentation videos in the me&u engineering visual style. Use when asked to make or modify a branded deck, PowerPoint, Google Slides-inspired presentation, executive/update deck, bento summary slide, Spotify Wrapped/Rewind-style animation, or team-shareable promo asset using the referenced me&u brand colors, typography, frosted tiles, and diagonal-background style.
+description: Create branded decks, presentation slides.
 ---
 
 # Branded Deck Builder
