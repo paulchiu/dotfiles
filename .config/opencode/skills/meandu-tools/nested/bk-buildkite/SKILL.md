@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: bk-buildkite
-description: "Query Buildkite builds, jobs, logs, pipelines, and agents via the bk CLI, and release blocked builds by unblocking their production gate jobs. Use when investigating CI failures, reading build logs, retrying or rebuilding builds, watching build status, or when given Buildkite URLs with 'release these', 'unblock these', 'promote to prod', or 'push to prod'."
+description: "Manage Buildkite builds, jobs, logs, pipelines, and agents, unblock or release builds to prod, production via the bk CLI."
 ---
 
 # Buildkite (bk CLI)
@@ -80,6 +80,7 @@ bk build view <number> -p <pipeline> --json | \
 Report the status of every build in the batch. If any build has a red (`failed`/`broken`) or still-running job, STOP: do not unblock that build. Surface the red/pending jobs to Paul and let him decide, rather than unblocking over a failing pipeline. Only builds that are green up to their gating manual step are eligible to proceed to the confirmation + unblock steps below.
 
 **Parse each URL** to get pipeline slug and build number:
+
 - `https://buildkite.com/mryum/<pipeline>/builds/<number>/...` → `-p <pipeline>` and build `<number>`
 - Note pipelines are NOT always `mr-yum`: use the exact slug from the URL (e.g. `cloudflare-workers`, `manage`, `manage-frontend`, `mr-yum-deploy`, `stable-api`).
 
@@ -127,6 +128,7 @@ bk api --method PUT /pipelines/<pipeline-2>/builds/<n2>/jobs/<job-id-2>/unblock 
 ```
 
 Notes:
+
 - The other `state: "blocked"` jobs in the build are downstream `script` jobs gated on the manual step. Leave them alone.
 - If `unblockable` is `false` on the manual job, the user may not have permission, or a prior step is still running. Surface this rather than retrying.
 - For builds that have already passed the gate (state: `passed`, `blocked: false`), report "already released" rather than erroring.
@@ -151,6 +153,7 @@ bk build watch <build-number> -p mr-yum
 ## Key Concepts
 
 ### Build States
+
 - `running` - Build is currently executing
 - `scheduled` - Build is queued but not started
 - `passed` - All jobs passed
@@ -159,6 +162,7 @@ bk build watch <build-number> -p mr-yum
 - `blocked` - Build is waiting for manual unblock
 
 ### Job States
+
 - `passed` - Job completed successfully
 - `failed` - Job exited with non-zero status (actual failure)
 - `broken` - Job was not run because a dependency failed (cascading)
@@ -181,6 +185,7 @@ Job UUIDs are found in the `id` field of job objects in build view output. They 
 ## Build View Output (JSON)
 
 When using `bk build view`, the JSON output contains:
+
 - `number` - Build number
 - `state` - Build state (passed, failed, etc.)
 - `commit` - Git commit SHA

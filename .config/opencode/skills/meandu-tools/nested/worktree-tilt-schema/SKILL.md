@@ -1,7 +1,7 @@
 ---
 model: haiku
 name: worktree-tilt-schema
-description: "Temporarily modifies a Tiltfile in a git worktree so the NestJS app can boot and regenerate schema.gql, then reverts the Tiltfile. Use when the user says to regenerate schema.gql, when schema.gql is stale after @Field decorator changes, when CI's schemaDiff smoke test fails, or when tilt up in a worktree fails with 'local_resource named X already exists'."
+description: "Temporarily modifies a Tiltfile in a git worktree so the NestJS app can boot and regenerate schema.gql."
 ---
 
 # Worktree Tilt Schema Regeneration
@@ -49,6 +49,7 @@ Expected output: `git worktree list` prints one line per checkout. The FIRST lin
 4. Do NOT modify any `include('./tiltfile.d/...')` lines. Those define the actual service resources (manage-api, manage-worker, etc.) and must stay active.
 
 **Before:**
+
 ```python
 mryum_v1.include_upstream("../menu-api/Tiltfile")
 mryum_v1.include_upstream("../mr-yum/dev-env/Tiltfile")
@@ -57,6 +58,7 @@ include('./tiltfile.d/manage-worker.star')
 ```
 
 **After:**
+
 ```python
 # TEMPORARY: upstream includes disabled for worktree schema generation
 # mryum_v1.include_upstream("../menu-api/Tiltfile")

@@ -1,6 +1,6 @@
 ---
 name: linear-write
-description: "Create or rewrite Linear issues using the agent-ready card template. Use when asked to create/rewrite a Linear issue, write a spike, post an investigation-finding comment on an issue, or clean up an issue from a URL/ID."
+description: "Create or rewrite Linear issues using the agent-ready card template. Use when asked to create/rewrite a Linear issue, spike, post a comment on an issue, or clean up an issue from a URL/ID."
 ---
 
 # Linear Write Skill
@@ -127,7 +127,7 @@ Structure notes beyond the template:
 
 - Symbol links follow APA/Harvard-style citation: `` `Class.method` ([GitHub](https://github.com/org/repo/blob/main/path/to/file.ext#L123)) ``. Symbol in backticks, then a parenthetical `[GitHub]` label hyperlinked to the exact line. Use `#L123-L145` for ranges. Don't wrap the backticked symbol inside the link text.
 - Backtick all code identifiers, filenames, config keys, and CLI commands; preserve on-disk casing.
-- Use fenced code blocks tagged by language (```typescript, ```python, ```sql).
+- Use fenced code blocks tagged by language (`typescript, `python, ```sql).
 - Mark edit sites inside snippets with emoji comment arrows:
   - `// 👇 ...` on the line above when the target line is long.
   - `// 👈 ...` as a trailing inline comment when the target line is short.
@@ -200,14 +200,14 @@ A spike is a time-boxed investigation, used when ambiguity is too high to write 
 **Description template.** Pick Spike Questions (investigating an unknown) or Action Items (enumerating known work):
 
 ```markdown
-# Spike Questions to Address  ← use for exploratory spikes
+# Spike Questions to Address ← use for exploratory spikes
 
 - What is the size and scale of the problem?
 - What is the root cause?
 - What are the potential solutions or fixes?
 - Is it worth fixing? (effort vs impact)
 
-# Action Items  ← use for enumeration spikes
+# Action Items ← use for enumeration spikes
 
 - Review scope and identify specific items that need work
 - Note constraints or special considerations for each item

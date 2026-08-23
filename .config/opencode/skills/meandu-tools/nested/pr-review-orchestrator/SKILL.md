@@ -1,6 +1,6 @@
 ---
 name: pr-review-orchestrator
-description: "Multi-perspective PR review orchestrator. Runs the review-code skill as a baseline, then fans out 4 specialised perspectives (security, performance, acceptance-criteria, style) in parallel via codex or Claude subagents (user picks at invocation), aggregates findings into a single verdict, and posts inline comments via gh. Use for: multi-perspective review, fan-out review, orchestrated PR review, review with all perspectives."
+description: "Multi-perspective PR review orchestrator. Runs the review-code skill, fans out 4 specialised perspectives (security, performance, acceptance-criteria, style) in parallel via codex or Claude subagents (user picks at invocation)."
 ---
 
 # PR Review Orchestrator
@@ -94,15 +94,19 @@ Diff is pasted below; read individual files via:
 Append exactly one per agent:
 
 **security-reviewer (`01-security`)**
+
 > Focus: authn/authz, input validation, injection (SQL/HTML/shell), secrets handling, PII exposure, payment safety, SSRF, deserialisation, dependency CVEs introduced by package changes, CSRF, race conditions in security-critical paths, log injection. Treat payment/PII/auth changes as high-risk and require very high confidence. Ignore non-security issues unless they enable a security one.
 
 **performance-reviewer (`02-performance`)**
+
 > Focus: N+1 queries, missing indexes / migration safety, unnecessary `Promise.all` over serial work, blocking CPU work in request handlers, large payloads, memoisation gaps, render thrash on the FE, list virtualisation, bundle-size hits from new deps, Tailwind class explosion, expensive regexes. Quote concrete evidence (line + caller). Ignore non-perf issues.
 
 **acceptance-criteria-reviewer (`03-acceptance-criteria`)**
+
 > Focus: trace each AC from the linked Linear ticket against the diff. Map AC to the file:line that fulfils it, or flag as MISSING. Also flag scope drift (changes not justified by an AC) and behaviour changes that contradict ACs. If no Linear ticket exists, derive ACs from the PR description and flag the absence of a ticket as a `question`. Be explicit: "AC1 fulfilled at <file:line>", "AC3 MISSING: no implementation found".
 
 **style-reviewer (`04-style`)**
+
 > Focus: team conventions in `references/team-pr-references.md` and `references/other-team-pr-preferences.md` from the review-code skill: naming, logging strings, feature flag style, Promise handling, money math, DAO patterns, FE conventions, Tailwind tokens, TypeScript `any`/non-null assertions, comment hygiene per Paul's CLAUDE.md (no em dashes, JSDoc blocks). Ignore correctness/security/perf issues unless they violate a written convention.
 
 ### CodeRabbit (optional, parallel)
@@ -141,18 +145,25 @@ Write the canonical doc to `outputs/pr-reviews/<key>/<date>/decisions.md`:
 - Verdict: <verdict>
 
 ## Per-reviewer reasoning
+
 ### security
+
 <1 paragraph: what they looked at, ruled out, flagged>
+
 ### performance / acceptance-criteria / style / coderabbit (if run)
+
 ...
 
 ## Disagreements
+
 <list, or "None">
 
 ## Final findings
+
 <from aggregate.md>
 
 ## Action
+
 - [ ] Comments posted to GitHub: <yes/no, list URLs>
 - [ ] User ping required: <yes/no, only yes if BLOCK or disagreements>
 ```

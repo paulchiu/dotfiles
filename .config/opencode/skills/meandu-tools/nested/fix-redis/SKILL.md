@@ -1,7 +1,7 @@
 ---
 model: haiku
 name: fix-redis
-description: "Fix Redis 'port is already allocated' / port 6379 conflicts for Docker or OrbStack. Use when container startup fails on 6379, when 'docker compose up' reports 'Bind for 0.0.0.0:6379 failed: port is already allocated', or when asked to fix Redis or free port 6379."
+description: "Fix Redis 'port is already allocated' / port 6379 conflicts for Docker or OrbStack."
 ---
 
 # Fix Redis Port Conflict

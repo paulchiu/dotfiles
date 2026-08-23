@@ -1,6 +1,6 @@
 ---
 name: linear-do
-description: "Implement a Linear issue end-to-end: read the ticket, code, commit, open a PR, monitor CI. Use for do/implement/work on a Linear issue, or when given a Linear URL/ID with intent to implement. Includes an autonomous 'ship' mode that runs to merge without checkpoints (triggered by 'ship', 'ship the ticket', 'autonomously', '--auto')."
+description: "Implement a Linear issue end-to-end."
 ---
 
 # Linear Do

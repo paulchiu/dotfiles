@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: pup-datadog
-description: "Query Datadog metrics, logs, monitors, traces, and 30+ API domains via the pup CLI. Use when searching logs, querying metrics, checking monitors, investigating APM traces, or any Datadog API interaction."
+description: "Query Datadog metrics, logs, monitors, traces, and 30+ API domains via the pup CLI."
 ---
 
 # Datadog (Pup CLI)
@@ -21,11 +21,13 @@ Practical implication: extract results from `.data`, not the top level (e.g. `pu
 ### Authentication
 
 **OAuth2 (Recommended for interactive use):**
+
 ```bash
 pup auth login
 ```
 
 **API Keys (for automation):**
+
 ```bash
 export DD_API_KEY="your-api-key"
 export DD_APP_KEY="your-app-key"
@@ -35,6 +37,7 @@ export DD_SITE="datadoghq.com"  # or datadoghq.eu, etc.
 ### Common Workflows
 
 **1. Investigate Errors**
+
 ```bash
 # Search recent error logs
 pup logs search --query="status:error" --from=1h --limit=20
@@ -47,6 +50,7 @@ pup monitors list --tags="env:production" --limit=50
 ```
 
 **2. Performance Investigation**
+
 ```bash
 # Query service latency metrics
 pup metrics query --query="avg:trace.servlet.request.duration{env:prod} by {service}" --from=1h
@@ -59,6 +63,7 @@ pup apm services list
 ```
 
 **3. Security Audit**
+
 ```bash
 # Search audit logs
 pup audit-logs search --query="*" --from=1d --limit=100
@@ -93,22 +98,26 @@ See [references/query-syntax.md](references/query-syntax.md) for detailed query 
 ## Command Categories
 
 ### Core Observability
+
 - `pup logs search|aggregate` - Query and aggregate logs
 - `pup metrics query` - Query time-series metrics
 - `pup monitors list|search|get` - Manage monitors
 - `pup apm services|traces|dependencies` - APM data
 
 ### Security & Compliance
+
 - `pup security signals|rules` - Security monitoring
 - `pup audit-logs search` - Audit trail queries
 - `pup compliance` - Compliance frameworks
 
 ### Infrastructure & Cloud
+
 - `pup cloud aws|azure|gcp` - Cloud integrations
 - `pup hosts list` - Infrastructure monitoring
 - `pup containers` - Container observability
 
 ### Platform & Management
+
 - `pup dashboards` - Dashboard management
 - `pup slos` - Service Level Objectives
 - `pup incidents` - Incident management
@@ -116,11 +125,13 @@ See [references/query-syntax.md](references/query-syntax.md) for detailed query 
 - `pup notebooks` - Notebooks and documentation
 
 ### CI/CD & Developer Experience
+
 - `pup cicd pipelines|tests|events` - CI/CD visibility
 - `pup code-coverage` - Test coverage data
 - `pup software` - Software catalog and SBOM
 
 ### Cost & Usage
+
 - `pup cost attribution|by-org|projected` - Cost analysis
 - `pup usage` - API and feature usage
 
@@ -156,6 +167,7 @@ pup logs search --help        # Subcommand help
 ## Reference Documentation
 
 For detailed information about specific command categories, see:
+
 - [references/query-syntax.md](references/query-syntax.md) - Query syntax for all data types
 - [references/workflows.md](references/workflows.md) - Common investigation workflows
 - [references/llm-guide.md](references/llm-guide.md) - LLM agent features, agent mode, and structured output
