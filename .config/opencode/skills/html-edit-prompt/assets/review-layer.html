@@ -1,0 +1,373 @@
+<!-- RC:REVIEW-LAYER v4 — in-document review/correction tooling (neo-brutalist). Keep this whole block (through /RC:REVIEW-LAYER) when regenerating the document so iteration keeps working. Injected by the html-edit-prompt skill. -->
+<style id="rc-style">
+  :root {
+    --rc-ink:#111111; --rc-paper:#ffffff;
+    --rc-accent:#ffd400;   /* primary yellow */
+    --rc-hi:#ffe74d;       /* commented-passage highlight */
+    --rc-hover:#c9f7ff;    /* hover cyan */
+    --rc-pink:#ff5da2;     /* destructive / secondary */
+    --rc-accent-ink:#111111; /* text sitting on a saturated fill (accent/hi/hover/pink) — stays dark in both themes */
+    --rc-muted:#555555;    /* secondary text: quoted anchors, empty state */
+    --rc-shadow:4px 4px 0 var(--rc-ink);
+    --rc-mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    --rc-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  /* Dark theme: applied by the script when the host document renders dark (see
+     applyTheme). Only the structural ink/paper/muted flip; the saturated accents
+     stay put and --rc-accent-ink keeps text on them dark for contrast. The
+     hard-offset shadow reads as a light halo on the dark surface, which suits
+     the neo-brutalist look. */
+  body.rc-dark {
+    --rc-ink:#f4f4f4; --rc-paper:#1e1e1e; --rc-muted:#9a9a9a;
+  }
+  .rc-commentable { transition: background .08s; }
+  /* Reserve a left gutter so the bar/highlight never touches the text. The
+     negative margin cancels the padding, so at-rest layout does not shift. */
+  p.rc-commentable, li.rc-commentable { padding-left: 16px; margin-left: -16px; }
+  body.rc-on .rc-commentable { cursor: pointer; }
+  body.rc-on .rc-commentable:hover { background: var(--rc-hover); color: var(--rc-accent-ink); box-shadow: inset 4px 0 0 0 var(--rc-ink); }
+  body.rc-on tr.rc-commentable:hover td { background: var(--rc-hover); color: var(--rc-accent-ink); }
+  .rc-has-comment { background: var(--rc-hi); color: var(--rc-accent-ink); box-shadow: inset 5px 0 0 0 var(--rc-ink); }
+  tr.rc-has-comment td { background: var(--rc-hi); color: var(--rc-accent-ink); }
+  tr.rc-has-comment td:first-child { box-shadow: inset 5px 0 0 0 var(--rc-ink); }
+  /* Mode off: the page reads as itself again. Commented passages keep a thin
+     margin bar so the record of what you marked survives, but the fill (which
+     recolours the host's own text) goes. */
+  body:not(.rc-on) .rc-has-comment,
+  body:not(.rc-on) tr.rc-has-comment td { background: transparent; color: inherit; box-shadow: none; }
+  body:not(.rc-on) p.rc-has-comment, body:not(.rc-on) li.rc-has-comment,
+  body:not(.rc-on) tr.rc-has-comment td:first-child { box-shadow: inset 3px 0 0 0 var(--rc-hi); }
+
+  #rc-dock { position: fixed; right: 22px; bottom: 22px; z-index: 9999; display: flex; align-items: stretch; gap: 8px; }
+  #rc-dock button { border: 3px solid var(--rc-ink); border-radius: 0; box-shadow: var(--rc-shadow); cursor: pointer;
+    font: 800 13px/1 var(--rc-mono); text-transform: uppercase; letter-spacing: .06em;
+    background: var(--rc-paper); color: var(--rc-ink); }
+  #rc-dock button:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--rc-ink); }
+  #rc-dock button:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--rc-ink); }
+  #rc-power { width: 42px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  #rc-power[aria-pressed="true"] { background: var(--rc-accent); color: var(--rc-accent-ink); }
+  #rc-fab { padding: 12px 18px; display: flex; align-items: center; gap: 9px; }
+  body.rc-on #rc-fab { background: var(--rc-accent); color: var(--rc-accent-ink); }
+  #rc-fab .rc-count { background: var(--rc-ink); color: var(--rc-paper); border-radius: 0; padding: 2px 8px; font-size: 12px; }
+  body.rc-on #rc-fab .rc-count { background: var(--rc-accent-ink); color: var(--rc-accent); }
+
+  #rc-panel { position: fixed; right: 22px; bottom: 78px; z-index: 9999; width: 356px; max-width: calc(100vw - 24px);
+    max-height: 74vh; display: none; flex-direction: column; background: var(--rc-paper); color: var(--rc-ink);
+    border: 3px solid var(--rc-ink); border-radius: 0; box-shadow: 8px 8px 0 var(--rc-ink);
+    font: 13px/1.5 var(--rc-sans); overflow: hidden; }
+  #rc-panel.rc-open { display: flex; }
+  #rc-panel > header { padding: 11px 14px; border-bottom: 3px solid var(--rc-ink); background: var(--rc-accent);
+    display: flex; align-items: center; justify-content: space-between; }
+  #rc-panel > header h3 { margin: 0; color: var(--rc-accent-ink); font: 800 13px/1 var(--rc-mono); text-transform: uppercase; letter-spacing: .06em; }
+  #rc-close { border: 2px solid var(--rc-ink); background: var(--rc-paper); color: var(--rc-ink); cursor: pointer; font: 800 13px/1 var(--rc-mono);
+    width: 24px; height: 24px; border-radius: 0; box-shadow: 2px 2px 0 var(--rc-ink); }
+  #rc-close:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--rc-ink); }
+  #rc-panel .rc-body { padding: 12px 14px; overflow: auto; }
+  #rc-panel label.rc-toggle { display: flex; align-items: center; gap: 8px; font: 700 11.5px/1.4 var(--rc-mono);
+    text-transform: uppercase; letter-spacing: .04em; margin-bottom: 12px; }
+  #rc-panel label.rc-toggle input { width: 15px; height: 15px; accent-color: var(--rc-ink); }
+  #rc-genlabel { display: block; font: 700 10.5px/1.4 var(--rc-mono); text-transform: uppercase; letter-spacing: .05em;
+    margin: 2px 0 5px; }
+  #rc-panel textarea { width: 100%; box-sizing: border-box; border: 2px solid var(--rc-ink); border-radius: 0;
+    padding: 8px; font: 13px/1.5 var(--rc-sans); resize: vertical; background: var(--rc-paper); color: var(--rc-ink); }
+  #rc-panel textarea:focus { outline: none; box-shadow: var(--rc-shadow); }
+  #rc-list { list-style: none; margin: 12px 0 0; padding: 0; }
+  #rc-list li { border: 2px solid var(--rc-ink); border-radius: 0; padding: 8px 9px; margin-bottom: 9px; cursor: pointer; background: var(--rc-paper); }
+  #rc-list li:hover { box-shadow: var(--rc-shadow); transform: translate(-1px,-1px); }
+  #rc-list .rc-sec { display: inline-block; background: var(--rc-accent); color: var(--rc-accent-ink); border: 2px solid var(--rc-ink);
+    padding: 1px 6px; font: 800 10px/1.4 var(--rc-mono); text-transform: uppercase; letter-spacing: .03em; }
+  #rc-list .rc-q { color: var(--rc-muted); font-style: italic; margin: 5px 0 3px; }
+  #rc-list .rc-c { color: var(--rc-ink); white-space: pre-wrap; }
+  #rc-list .rc-del { float: right; border: 2px solid var(--rc-ink); background: var(--rc-pink); color: var(--rc-accent-ink); cursor: pointer;
+    font: 800 11px/1 var(--rc-mono); width: 20px; height: 20px; border-radius: 0; }
+  #rc-empty { color: var(--rc-muted); font-style: italic; }
+  #rc-panel > footer { padding: 10px 14px; border-top: 3px solid var(--rc-ink); display: flex; gap: 9px; }
+  #rc-panel > footer button { flex: 1; border: 2.5px solid var(--rc-ink); border-radius: 0; padding: 9px;
+    font: 800 12px/1 var(--rc-mono); text-transform: uppercase; letter-spacing: .04em; cursor: pointer;
+    background: var(--rc-paper); color: var(--rc-ink); box-shadow: 3px 3px 0 var(--rc-ink); }
+  #rc-panel > footer button:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--rc-ink); }
+  #rc-panel > footer button:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--rc-ink); }
+  #rc-copy { background: var(--rc-accent) !important; color: var(--rc-accent-ink) !important; }
+  #rc-clear { background: var(--rc-pink) !important; color: var(--rc-accent-ink) !important; }
+
+  #rc-editor { position: absolute; z-index: 10000; width: 430px; max-width: calc(100vw - 24px);
+    background: var(--rc-paper); color: var(--rc-ink); border: 3px solid var(--rc-ink); border-radius: 0; box-shadow: 8px 8px 0 var(--rc-ink);
+    padding: 12px; font: 13px/1.5 var(--rc-sans); }
+  #rc-editor .rc-anchor { display: inline-block; background: var(--rc-hi); color: var(--rc-accent-ink); border: 2px solid var(--rc-ink);
+    padding: 2px 7px; font: 700 11px/1.4 var(--rc-mono); margin-bottom: 9px; }
+  #rc-editor textarea { width: 100%; box-sizing: border-box; min-height: 82px; border: 2px solid var(--rc-ink);
+    border-radius: 0; padding: 8px; font: 13px/1.5 var(--rc-sans); resize: vertical; background: var(--rc-paper); color: var(--rc-ink); }
+  #rc-editor textarea:focus { outline: none; box-shadow: var(--rc-shadow); }
+  #rc-editor .rc-row { display: flex; gap: 8px; margin-top: 9px; }
+  #rc-editor button { border: 2.5px solid var(--rc-ink); border-radius: 0; padding: 8px 13px;
+    font: 800 12px/1 var(--rc-mono); text-transform: uppercase; letter-spacing: .04em; cursor: pointer;
+    background: var(--rc-paper); color: var(--rc-ink); box-shadow: 3px 3px 0 var(--rc-ink); }
+  #rc-editor button:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--rc-ink); }
+  #rc-editor button:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--rc-ink); }
+  #rc-editor .rc-save { background: var(--rc-accent); color: var(--rc-accent-ink); }
+  #rc-editor .rc-del2 { background: var(--rc-pink); color: var(--rc-accent-ink); margin-left: auto; }
+  @media print { #rc-dock,#rc-panel,#rc-editor { display: none !important; } .rc-has-comment { box-shadow: none; background: transparent; color: inherit; } }
+</style>
+<div id="rc-dock">
+  <button id="rc-power" type="button" aria-pressed="true" title="Comment mode">&#9211;</button>
+  <button id="rc-fab" type="button">Review <span class="rc-count">0</span></button>
+</div>
+<aside id="rc-panel">
+  <header><h3>Document Review</h3><button id="rc-close" type="button">&times;</button></header>
+  <div class="rc-body">
+    <label class="rc-toggle"><input type="checkbox" id="rc-mode" checked> Comment mode (&#8997;R)</label>
+    <span id="rc-genlabel">General note (whole document)</span>
+    <textarea id="rc-gen" rows="3" placeholder="Optional overall instruction&hellip;"></textarea>
+    <ul id="rc-list"></ul>
+    <p id="rc-empty">No comments yet. With comment mode on, click any paragraph, list item, table row, or heading — or highlight the exact words you mean — to attach a correction. Switch it off (&#8997;R) to use the page normally.</p>
+  </div>
+  <footer>
+    <button id="rc-copy" type="button">Copy prompt</button>
+    <button id="rc-clear" type="button">Clear all</button>
+  </footer>
+</aside>
+<div id="rc-editor" hidden>
+  <div class="rc-anchor"></div>
+  <textarea placeholder="Your correction or comment for this passage&hellip; (&#8984;&#9166; / Ctrl&#9166; to save)"></textarea>
+  <div class="rc-row">
+    <button class="rc-save" type="button">Save</button>
+    <button class="rc-cancel" type="button">Cancel</button>
+    <button class="rc-del2" type="button">Delete</button>
+  </div>
+</div>
+<script id="rc-script">
+(function(){
+  var DOC_PATH = __RC_DOC_PATH__;
+  var TITLE = document.title || 'doc';
+  var K = 'rc:v1:'+TITLE, KG = 'rc:v1:gen:'+TITLE, KM = 'rc:v1:mode:'+TITLE;
+  var SEL = 'header.doc h1, header.doc .subtitle, .intro p, section > h2, section p, section li, section tbody tr,'
+    + 'header.hero h1, header.mast h1, header.mast .standfirst,'
+    + 'main > p, main > h2.sec, main .note, main .bad-note, main .good-note,'
+    + 'main .card p, main .card li, main tbody tr';
+  var els = [].slice.call(document.querySelectorAll(SEL));
+  els.forEach(function(el,i){ el.setAttribute('data-rc-id', i); el.classList.add('rc-commentable'); });
+
+  function ls(k,v){ try { if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); } catch(e){ return null; } }
+  function load(){ try { return JSON.parse(ls(K)||'{}'); } catch(e){ return {}; } }
+  function save(o){ ls(K, JSON.stringify(o)); }
+  function norm(s){ return (s||'').replace(/\s+/g,' ').trim(); }
+  function short(s,n){ s=norm(s); return s.length>n ? s.slice(0,n-1)+'…' : s; }
+
+  /* Match the host document's theme. Read the first opaque background colour up
+     the tree; if it is dark, run the layer dark. Falls back to the OS preference
+     only when the host background is transparent/unknown. Re-checked when the
+     panel opens so a host with its own light/dark toggle stays in sync. */
+  function bgLuminance(node){
+    var m = getComputedStyle(node).backgroundColor.match(/rgba?\(([^)]+)\)/);
+    if(!m) return null;
+    var p = m[1].split(',').map(function(x){ return parseFloat(x); });
+    if(p.length>=4 && p[3]===0) return null; /* fully transparent: keep looking */
+    return (0.2126*p[0] + 0.7152*p[1] + 0.0722*p[2]) / 255;
+  }
+  function hostIsDark(){
+    var nodes=[document.body, document.documentElement], i, l;
+    for(i=0;i<nodes.length;i++){ if(nodes[i]){ l=bgLuminance(nodes[i]); if(l!=null) return l<0.5; } }
+    return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+  function applyTheme(){ document.body.classList.toggle('rc-dark', hostIsDark()); }
+  applyTheme();
+
+  /* A comment record is {c: text, q: optional exact quote from a highlight}.
+     Legacy records were bare comment strings; toRec upgrades them on read. */
+  function toRec(v){ return v==null ? null : (typeof v==='string' ? {c:v} : v); }
+
+  /* A concise, locatable reference to a passage — the minimum an agent needs to
+     find the block in the file, not its whole text. Table rows join their cells
+     (so an ambiguous cell still identifies its row); prose uses its opening
+     words. When the reader highlighted text, that exact quote is used instead. */
+  function autoQuote(el){
+    if (el.tagName==='TR'){ return [].map.call(el.cells,function(c){return norm(c.innerText);}).filter(Boolean).join(' | '); }
+    var s = norm(el.innerText), w = s.split(' ');
+    return w.length>14 ? w.slice(0,14).join(' ')+' …' : s;
+  }
+  function anchorOf(el, rec){ return (rec && rec.q) ? rec.q : autoQuote(el); }
+
+  function section(el){
+    if (el.closest('header.doc')) return 'Header';
+    if (el.closest('.intro')) return 'Intro';
+    var s = el.closest('section'); if(s){ var h=s.querySelector('h2'); if(h) return norm(h.innerText); }
+    return 'Document';
+  }
+  function byId(id){ return els[+id]; }
+
+  var editor = document.getElementById('rc-editor');
+  var anchorEl = editor.querySelector('.rc-anchor');
+  var ta = editor.querySelector('textarea');
+  var curEl = null, curQuote = '';
+  function openEditor(el, selText){
+    curEl = el; var id = el.getAttribute('data-rc-id'); var store = load();
+    var rec = toRec(store[id]) || {};
+    /* A fresh highlight wins; otherwise keep any quote saved earlier. */
+    curQuote = norm(selText) || rec.q || '';
+    ta.value = rec.c || '';
+    anchorEl.textContent = section(el)+' — “'+short(curQuote || autoQuote(el),80)+'”';
+    editor.hidden = false;
+    var r = el.getBoundingClientRect();
+    var w = editor.offsetWidth || 430;
+    var h = editor.offsetHeight || 210;
+    /* Anchor under the passage, but clamp into the viewport first. A tall passage
+       (or one already scrolled past) would otherwise put the editor far down the
+       page, and focusing it would drag the reader along with it. */
+    var top = Math.max(12, Math.min(r.bottom + 6, window.innerHeight - h - 12));
+    var left = Math.max(12, Math.min(r.left, document.documentElement.clientWidth - w - 12));
+    editor.style.top = (top + window.scrollY)+'px';
+    editor.style.left = (left + window.scrollX)+'px';
+    /* preventScroll: the editor is already positioned in view, and letting focus
+       scroll would undo the clamp above. */
+    ta.focus({ preventScroll: true });
+  }
+  function closeEditor(){ editor.hidden = true; curEl = null; curQuote = ''; }
+  function saveComment(){
+    if(!curEl) return; var id=curEl.getAttribute('data-rc-id'); var store=load();
+    var v = ta.value.trim();
+    if(v){ var rec={c:v}; if(curQuote) rec.q=curQuote; store[id]=rec; } else delete store[id];
+    save(store); closeEditor(); refresh();
+  }
+  editor.querySelector('.rc-save').addEventListener('click', saveComment);
+  ta.addEventListener('keydown', function(e){ if((e.metaKey||e.ctrlKey) && e.key==='Enter'){ e.preventDefault(); saveComment(); } });
+  editor.querySelector('.rc-cancel').addEventListener('click', closeEditor);
+  editor.querySelector('.rc-del2').addEventListener('click', function(){
+    if(!curEl) return; var id=curEl.getAttribute('data-rc-id'); var store=load(); delete store[id]; save(store); closeEditor(); refresh();
+  });
+
+  /* Open on mouseup (not click) so a drag-highlight is captured: highlighting is
+     a drag gesture that frequently emits no click event. A non-collapsed
+     selection inside the passage becomes the quoted anchor; a plain click leaves
+     the selection collapsed and anchors the whole passage, as before. */
+  document.addEventListener('mouseup', function(e){
+    if (!document.body.classList.contains('rc-on')) return;
+    if (e.target.closest('#rc-panel,#rc-editor,#rc-fab')) return;
+    /* Code blocks stay selectable. Readers copy queries and snippets out of these,
+       which is a drag gesture indistinguishable from a highlight-to-quote, so the
+       popover would fight every copy. Comment on the prose around them instead. */
+    if (e.target.closest('pre, code')) return;
+    var el = e.target.closest('.rc-commentable'); if(!el) return;
+    var sel = window.getSelection(), selText = '';
+    if (sel && !sel.isCollapsed && el.contains(sel.anchorNode)) selText = sel.toString();
+    /* Defer so focusing the textarea doesn't fight the browser settling the
+       selection on this same gesture. selText was already read synchronously. */
+    setTimeout(function(){ openEditor(el, selText); }, 0);
+  });
+  /* Stop in-passage links from navigating away while review mode is on, without
+     blocking text selection (so mousedown/drag stays free to highlight). */
+  document.addEventListener('click', function(e){
+    if (!document.body.classList.contains('rc-on')) return;
+    if (e.target.closest('#rc-panel,#rc-editor,#rc-fab')) return;
+    if (e.target.closest('a') && e.target.closest('.rc-commentable')) e.preventDefault();
+  });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeEditor(); });
+  /* Alt/Option+R toggles comment mode from anywhere, so the page can be handed
+     back to normal interaction without opening the panel. Guarded off text
+     inputs so it never eats a keystroke meant for a comment. e.code, not e.key:
+     on macOS Option+R emits '®'. */
+  document.addEventListener('keydown', function(e){
+    if(!e.altKey || e.metaKey || e.ctrlKey || e.code!=='KeyR') return;
+    if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+    e.preventDefault(); setMode(!document.body.classList.contains('rc-on'));
+  });
+
+  var fab = document.getElementById('rc-fab');
+  var panel = document.getElementById('rc-panel');
+  var listEl = document.getElementById('rc-list');
+  var emptyEl = document.getElementById('rc-empty');
+  var countEl = fab.querySelector('.rc-count');
+  var genEl = document.getElementById('rc-gen');
+  var modeEl = document.getElementById('rc-mode');
+  var powerEl = document.getElementById('rc-power');
+
+  fab.addEventListener('click', function(){ applyTheme(); panel.classList.toggle('rc-open'); });
+  document.getElementById('rc-close').addEventListener('click', function(){ panel.classList.remove('rc-open'); });
+
+  genEl.value = ls(KG)||'';
+  genEl.addEventListener('input', function(){ ls(KG, genEl.value); });
+
+  /* The single source of truth for comment mode. Off means the layer stops
+     intercepting the page entirely (no popover, links and selection behave
+     normally); the Review panel stays reachable so comments can still be read,
+     copied, or cleared. Both controls (dock power button, panel checkbox) and
+     localStorage are written here so they can never drift apart. */
+  function setMode(on){
+    document.body.classList.toggle('rc-on', on);
+    ls(KM, on?'1':'0');
+    modeEl.checked = on;
+    powerEl.setAttribute('aria-pressed', on?'true':'false');
+    powerEl.title = 'Comment mode: '+(on?'on':'off')+' (⌥R)';
+    if(!on) closeEditor();
+  }
+  modeEl.addEventListener('change', function(){ setMode(modeEl.checked); });
+  powerEl.addEventListener('click', function(){ setMode(!document.body.classList.contains('rc-on')); });
+  setMode(ls(KM)==null ? true : ls(KM)==='1');
+
+  function refresh(){
+    var store = load(); var n=0;
+    els.forEach(function(el){ var id=el.getAttribute('data-rc-id');
+      if(store[id]){ el.classList.add('rc-has-comment'); n++; } else el.classList.remove('rc-has-comment'); });
+    countEl.textContent = n;
+    listEl.innerHTML='';
+    var ids = Object.keys(store).filter(function(id){ return byId(id); }).sort(function(a,b){ return a-b; });
+    emptyEl.style.display = ids.length ? 'none':'block';
+    ids.forEach(function(id){
+      var el = byId(id); var rec = toRec(store[id]);
+      var li = document.createElement('li');
+      var del = document.createElement('button'); del.className='rc-del'; del.textContent='×'; del.title='Delete';
+      del.addEventListener('click', function(ev){ ev.stopPropagation(); var s=load(); delete s[id]; save(s); refresh(); });
+      var sec = document.createElement('div'); sec.className='rc-sec'; sec.textContent=section(el);
+      var q = document.createElement('div'); q.className='rc-q'; q.textContent='“'+short(anchorOf(el,rec),70)+'”';
+      var c = document.createElement('div'); c.className='rc-c'; c.textContent=rec.c;
+      li.appendChild(del); li.appendChild(sec); li.appendChild(q); li.appendChild(c);
+      li.addEventListener('click', function(){ el.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(function(){ openEditor(el); }, 260); });
+      listEl.appendChild(li);
+    });
+  }
+
+  function buildPrompt(){
+    var store=load(); var gen=(ls(KG)||'').trim();
+    var items = els.filter(function(el){ return store[el.getAttribute('data-rc-id')]; });
+    var L=[];
+    L.push('You previously generated this HTML file:');
+    L.push('`'+DOC_PATH+'`');
+    L.push('');
+    L.push('Produce an updated version that applies the corrections below and overwrite the file in place. Preserve the existing visual design, and keep the in-document review tooling (the block marked RC:REVIEW-LAYER) intact so I can keep iterating. Each correction gives a short anchor to locate its passage in the file — my exact highlight when I made one, otherwise the passage\'s opening words — not the full text, which is already in the file.');
+    if(gen){ L.push(''); L.push('## General notes'); L.push(gen); }
+    L.push(''); L.push('## Corrections ('+items.length+')');
+    if(!items.length){ L.push('(none yet)'); }
+    items.forEach(function(el,i){
+      var id=el.getAttribute('data-rc-id'); var rec=toRec(store[id]);
+      L.push('');
+      L.push((i+1)+'. ['+section(el)+']');
+      if(rec.q){ L.push('   Highlighted: "'+short(rec.q,200)+'"'); }
+      else { L.push('   Passage: "'+short(autoQuote(el),160)+'"'); }
+      L.push('   Change: '+(rec.c||'').trim());
+    });
+    L.push(''); L.push('When done, save the file so I can reload it in the Nex web pane. Leave my comments in place; I will clear them once the changes look right.');
+    return L.join('\n');
+  }
+
+  function flash(btn,msg){ var t=btn.getAttribute('data-label')||btn.textContent; btn.setAttribute('data-label',t); btn.textContent=msg; setTimeout(function(){ btn.textContent=t; },1400); }
+  function fallbackCopy(text,btn){ var t=document.createElement('textarea'); t.value=text; t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.select();
+    try{ document.execCommand('copy'); flash(btn,'Copied ✓'); }catch(e){ flash(btn,'Copy failed'); } document.body.removeChild(t); }
+  document.getElementById('rc-copy').addEventListener('click', function(){
+    var text=buildPrompt(); var btn=this;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ flash(btn,'Copied ✓'); }, function(){ fallbackCopy(text,btn); });
+    } else fallbackCopy(text,btn);
+  });
+
+  var clearArmed=false, clearTimer=null;
+  document.getElementById('rc-clear').addEventListener('click', function(){
+    var btn=this;
+    if(!clearArmed){ clearArmed=true; btn.textContent='Confirm?'; clearTimer=setTimeout(function(){ clearArmed=false; btn.textContent='Clear all'; },3000); return; }
+    clearTimeout(clearTimer); clearArmed=false; btn.textContent='Clear all';
+    save({}); ls(KG,''); genEl.value=''; refresh();
+    panel.classList.remove('rc-open');
+  });
+
+  refresh();
+})();
+</script>
+<!-- /RC:REVIEW-LAYER -->
