@@ -36,6 +36,7 @@
     "deny": [],
     "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "hooks": {
     "Stop": [
       {
@@ -188,15 +189,15 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "tui": "default",
+  "tui": "fullscreen",
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "agentPushNotifEnabled": true,
   "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true,
   "allowedDirectories": [
@@ -204,6 +205,5 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  },
-  "model": "opus[1m]"
+  }
 }
