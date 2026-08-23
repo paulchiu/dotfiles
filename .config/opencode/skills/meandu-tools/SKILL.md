@@ -1,6 +1,6 @@
 ---
 name: meandu-tools
-description: 'Router for me&u work tools. Ship a Linear issue end-to-end (ship-it/auto/autonomous on a Linear URL or ID); create/rewrite agent-ready Linear cards & spikes; query/release Buildkite via bk; query Datadog via pup; orchestrate multi-perspective PR review; generate the daily brief; morning brief triage; regenerate GraphQL schema.gql; fix Redis 6379 "port already allocated" conflicts; generate the monthly Engineering On Call report.'
+description: 'Router for me&u work tools. Ship a Linear issue end-to-end (ship-it/auto/autonomous on a Linear URL or ID); create/rewrite agent-ready Linear cards & spikes; query/release Buildkite via bk; query Datadog via pup; orchestrate multi-perspective PR review; generate the daily brief; regenerate GraphQL schema.gql; fix Redis 6379 "port already allocated" conflicts; generate the monthly Engineering On Call report.'
 ---
 
 # meandu-tools (router)
@@ -16,7 +16,6 @@ Progressive-disclosure router. The actual instructions live in `nested/<task>/SK
 - **Datadog** via the `pup` CLI: search logs, query metrics, check monitors, investigate APM traces → `nested/pup-datadog/SKILL.md`.
 - **Multi-perspective PR review orchestration**: given a PR number/URL, run the `review-code` baseline, fan out security / performance / acceptance-criteria / style perspectives in parallel (codex or Claude subagents, user picks), aggregate, post inline comments → `nested/pr-review-orchestrator/SKILL.md`.
 - **Daily brief generation**: pull overnight signal from Slack, Linear, Google Calendar, Google Drive, and the Obsidian vault; write a lean brief to `Area/Journal/YYYY-MM-DD.md`, plus detailed deep-prep notes in `Area/Journal/Daily Prep/` when today has a retro or monthly-ish 1:1 (Kim, Tal, Adrian). Triggers: `/daily-brief`, "run daily brief", "regenerate today's brief", "deep prep for <meeting>", or the 3am cron → `nested/daily-brief/SKILL.md`.
-- **Morning triage**: walk through today's brief item by item (file ticket / mark done / defer / draft Slack reply / discuss). Triggers: `/morning`, "morning", "let's triage", "walk me through today" → `nested/morning/SKILL.md`.
 - **Tiltfile modification in a git worktree**, NestJS `schema.gql` regeneration after `@Field` changes → `nested/worktree-tilt-schema/SKILL.md`.
 - **Redis port 6379 conflict** ("port is already allocated", free port 6379; Docker or OrbStack) → `nested/fix-redis/SKILL.md`.
 - **Monthly Engineering On Call report**, usually from the monthly Slack reminder or the Engineering On Call Notion runbook: run the GitHub report workflow for the previous month, check the CSV, prepare the Excel attachment, return plain email copy → `nested/generate-engineering-on-call-report/SKILL.md`.

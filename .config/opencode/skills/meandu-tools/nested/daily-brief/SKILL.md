@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: daily-brief
-description: "Generate a lean daily brief from Slack, Linear, Google Calendar, Google Drive, and the Obsidian vault, then write it to today's journal note (`Area/Journal/YYYY-MM-DD.md`). When today has a retro or a long-gap (monthly-ish) 1:1 (Kim, Tal, Adrian), also write a detailed prep note to `Area/Journal/Daily Prep/` covering everything since the last occurrence. Use when invoked at 3am via cron, or manually as `/daily-brief`, 'run daily brief', or 'regenerate today's brief'."
+description: "Generate a lean daily brief for work."
 ---
 
 # Daily Brief
@@ -76,28 +76,33 @@ Cap: at most **2 deep preps per run**. If more qualify, prioritise 1:1s over ret
 Run all five fetches in parallel. If any single source errors, append `<source>: <error>` to `$LOG` and continue. Never abort the whole brief because one source is down.
 
 **1a. Slack: unread mentions + threads I'm in (last 24h)**
+
 - Resolve Paul's Slack user ID once: `mcp__claude_ai_Slack__slack_search_users` with `query: "paul@meandu.com"`. Cache the ID for the rest of this run.
 - Mentions of Paul: `mcp__claude_ai_Slack__slack_search_public_and_private` with `query: "<@PAUL_ID> after:${YESTERDAY}"`.
 - Threads Paul posted in: same tool with `query: "from:<@PAUL_ID> after:${YESTERDAY}"`. Read parent threads via `slack_read_thread` for at most the **8 most recent** hits; for the rest, rely on the search snippet.
 - Capture per item: channel name, ts, snippet (≤200 chars), permalink, whether anyone is waiting on Paul's reply (last message in thread is from someone else, addressed to Paul or with a `?`).
 
 **1b. Linear: assigned + subscribed + overnight changes**
+
 - `mcp__claude_ai_Linear__list_issues` with `assignee: me`, exclude Done/Cancelled, `limit: 25`.
 - `mcp__claude_ai_Linear__list_issues` with `subscriber: me`, `updatedAfter: ${WINDOW_START_ISO}`, `limit: 25`; catches mentions on subscribed tickets and overnight status changes.
 - For each issue: capture id, title, team, state, updatedAt, last comment author (use `list_comments` only when the title alone isn't enough to know what changed).
 
 **1c. Google Calendar: today's events**
+
 - `mcp__claude_ai_Google_Calendar__list_calendars` once; identify the primary calendar.
 - `mcp__claude_ai_Google_Calendar__list_events` for primary, `timeMin: ${TODAY}T00:00:00+10:00`, `timeMax: ${TODAY}T23:59:59+10:00` (Paul is AEST, see MEMORY).
 - Capture per event: title, start/end, attendees (names only), description, conferencing link, any attachments.
 - Classify each event per **Meeting classification** above. For each DEEP-PREP event, also find the **previous occurrence** of the same series: `list_events` with `fullText: <event title>` over the past 10 weeks, take the most recent occurrence strictly before today. Its date is `SINCE` (the deep-prep window start). Fallback if the calendar lookup fails: the date prefix of the most recent matching Granola filename. Last resort: 28 days ago for a 1:1, 14 days for a retro.
 
 **1d. Google Drive: docs shared with me in last 24h**
+
 - `mcp__claude_ai_Google_Drive__list_recent_files` with `pageSize: 25`.
 - Keep entries whose `sharedWithMeTime` (or fallback `modifiedTime`) is within the last 24h **and** owner is not Paul.
 - Capture: name, owner, mime type, webViewLink.
 
 **1e. Obsidian: open action items**
+
 - Read `/Users/paul/meandu/Area/Tasks.md` directly with `Read`.
 - Parse every line starting `- [ ]`. Extract:
   - `📅 YYYY-MM-DD` → due date
@@ -151,6 +156,7 @@ Important: `<X> x me&u` (e.g. `Treetop Golf x me&u`) and `me&u _ <X>` are **cust
 **2d. Action items tied to today's meeting attendees**
 
 For each unique attendee on today's calendar:
+
 - Map name → first-name lowercase tag (e.g. "Dom Smith" → `#dom`).
 - Filter Tasks.md open items with that tag.
 - These feed the Meeting Prep section, not the general Action Items list.
@@ -199,17 +205,18 @@ Render in this exact order. **Skip a section entirely if it would be empty** (do
 
 ```markdown
 <!-- daily-brief:start -->
+
 # Daily Brief — ${TODAY}
 
-*Generated ${NOW_ISO}. Sources: Slack ✅/❌ · Linear ✅/❌ · Calendar ✅/❌ · Drive ✅/❌ · Vault ✅. Errors: `[[${LOG}]]` (only if non-empty)*
+_Generated ${NOW_ISO}. Sources: Slack ✅/❌ · Linear ✅/❌ · Calendar ✅/❌ · Drive ✅/❌ · Vault ✅. Errors: `[[${LOG}]]` (only if non-empty)_
 
 ## Decisions Needed
 
 For each: one bold line stating the call to make, then 1–2 supporting bullets and a copy-paste prompt.
 
 - **<topic, ≤80 chars>** — <one-line context>
-  - Source: [<channel/issue>](<link>)
-  - Suggested next: `<copy-paste prompt for /morning, /linear-write, etc.>`
+  - Source: [<channel/issue>](link)
+  - Suggested next: `<copy-paste prompt for /linear-write, /linear-do, etc.>`
 
 What lands here: Slack threads where someone is awaiting Paul's call; Linear tickets where Paul is assigned in `Triage` or where a reviewer requested changes; calendar invites awaiting RSVP; conflicts.
 
@@ -218,13 +225,16 @@ What lands here: Slack threads where someone is awaiting Paul's call; Linear tic
 Render every bullet in this section as plain markdown (no surrounding backticks), so `#name` person tags and `[[wikilinks]]` resolve to live links in Obsidian.
 
 ### Overdue / due today
-- [YYYY-MM-DD] <verbatim task text from Tasks.md> *(link to source)*
+
+- [YYYY-MM-DD] <verbatim task text from Tasks.md> _(link to source)_
 
 ### Tied to today's meetings
-- [#name] <task text> *(link to source)*, for each open task tagged with a person on today's calendar.
+
+- [#name] <task text> _(link to source)_, for each open task tagged with a person on today's calendar.
 
 ### Surfaced from recent 1:1s
-- [<person>, 1:1 on YYYY-MM-DD] <action item from Granola>, *still open in Tasks.md*. Link to `[[<Granola filename without .md>]]`.
+
+- [<person>, 1:1 on YYYY-MM-DD] <action item from Granola>, _still open in Tasks.md_. Link to `[[<Granola filename without .md>]]`.
 
 ## Suggested Linear Tickets to Create
 
@@ -247,21 +257,23 @@ DEEP-PREP events first (they're why Paul opens the brief), then LIGHT-PREP, chro
 For each DEEP-PREP event:
 
 ### HH:MM — <title> 🔍
+
 - Prep: [[<prep note filename without .md>]]
 - <top 3 talking points lifted from the prep note, one bullet each>
 
 For each LIGHT-PREP event (max 3 bullets, omit any that are empty):
 
 ### HH:MM — <title>
+
 - Attendees: <comma list of first names>
-- Last touchpoint: [[<Granola filename>]] (YYYY-MM-DD) *or* "no prior notes in vault"
-- Open commitments: <inline list from 2b/2d> *or* "none tracked"
+- Last touchpoint: [[<Granola filename>]] (YYYY-MM-DD) _or_ "no prior notes in vault"
+- Open commitments: <inline list from 2b/2d> _or_ "none tracked"
 
 ## Drive activity
 
-*Only render if non-empty.*
+_Only render if non-empty._
 
-- [<doc name>](<link>) — shared by <owner>, <relative time>, <mime type>
+- [<doc name>](link) — shared by <owner>, <relative time>, <mime type>
 
 <!-- daily-brief:end -->
 ```
