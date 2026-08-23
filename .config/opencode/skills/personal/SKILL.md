@@ -1,6 +1,6 @@
 ---
 name: personal
-description: Router for dad's monthly ANZ money report; monthly Obsidian Area/Projects → Archive; translate to Taiwan Traditional Chinese ("for my mum/dad", 繁體中文, 正體中文).
+description: Router for dad's monthly ANZ money report; PocketSmith API work (transactions, categorisation, budgets, reporting); monthly Obsidian Area/Projects → Archive; translate to Taiwan Traditional Chinese ("for my mum/dad", 繁體中文, 正體中文).
 ---
 
 # personal (router)
@@ -16,5 +16,6 @@ Progressive-disclosure router for personal-life tasks and tools. The actual inst
 - **Refine an aichat role prompt** (committer, pr-writer, etc.) based on output-quality feedback → Read `nested/refine-aichat-role/SKILL.md`.
 - **Translate to Taiwan Traditional Chinese** for a non-technical 70-year-old parent / "for my mum/dad" / 繁體中文 / 正體中文 → Read `nested/translate-to-taiwan-chinese/SKILL.md`.
 - **Prepare Dad's monthly family money report** from ANZ exports, prior Excel report, and journal account details → Read `nested/prepare-dad-money-report/SKILL.md`.
+- **PocketSmith API work**: pull or categorise transactions, category rules and splits, budget vs actual reporting, savings rate, or setting budgets via scenario events → Read `nested/pocketsmith/SKILL.md`.
 
 If the request matches more than one, pick the most specific match. If none match cleanly, ask the user which task they want.
