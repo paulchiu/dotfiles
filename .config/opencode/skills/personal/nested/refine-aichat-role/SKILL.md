@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: refine-aichat-role
-description: "Refines aichat role prompts (committer, pr-writer, etc.) based on user feedback about output quality. Use when asked to fix, adjust, tune, or improve an aichat role's generation, e.g. 'wcm keeps getting the scope wrong', 'wpr broke the PR template', 'fix the committer role', or 'refine my aichat role'."
+description: "Refines aichat role prompts."
 ---
 
 # Refining aichat Roles
@@ -16,10 +16,10 @@ Adjust an aichat role file so that its CLI output matches the user's expectation
 
 ### Known roles and their aliases
 
-| Role | Alias | Pipeline |
-|------|-------|----------|
-| `committer` | `wcm` | `git dc \| wcm` (stages and commits with generated message) |
-| `pr-writer` | `wpr` / `gpr` | `git diff main.. \| wpr` (generates PR description) |
+| Role        | Alias         | Pipeline                                                    |
+| ----------- | ------------- | ----------------------------------------------------------- |
+| `committer` | `wcm`         | `git dc \| wcm` (stages and commits with generated message) |
+| `pr-writer` | `wpr` / `gpr` | `git diff main.. \| wpr` (generates PR description)         |
 
 When the user mentions a specific alias or role, target that role file. If unclear, ask which role to refine.
 
@@ -56,11 +56,13 @@ House content rules the roles must enforce (keep these intact when editing):
 Run the role against the current repo's diff to verify.
 
 **For `committer`:**
+
 ```bash
 git diff HEAD~1 -- . ':!package-lock.json' | aichat --role committer
 ```
 
 **For `pr-writer`:**
+
 ```bash
 git_root=$(git rev-parse --show-toplevel 2>/dev/null)
 template_file="${git_root:-.}/.github/pull_request_template.md"
@@ -77,15 +79,18 @@ fi
 Check the output against the relevant checklist:
 
 #### Common checks (all roles)
+
 - [ ] Title has `type(scope): Description` format (scope present).
 - [ ] Content is feature-focused, not file-focused.
 - [ ] All file names, package names, and version numbers are in backticks.
 
 #### committer-specific
+
 - [ ] Type reflects the primary source code change, not docs or tests.
 - [ ] Output is raw text only: no markdown formatting, no code blocks.
 
 #### pr-writer-specific
+
 - [ ] `----` separator on the line after the title.
 - [ ] If a template was provided, every heading and checkbox line from the template appears verbatim.
 - [ ] Checklist items are untouched (not checked, reworded, or removed).

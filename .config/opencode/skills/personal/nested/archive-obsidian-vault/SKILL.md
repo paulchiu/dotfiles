@@ -1,7 +1,7 @@
 ---
 model: haiku
 name: archive-obsidian-vault
-description: "Archives monthly Obsidian vault items from Area/ and Projects/ to Archive/ with year-level grouping: combines daily journals into a monthly file, moves discussions, drawings (plus attachments), and project folders, and tucks past-month workouts into subfolders in place. Use when the user says 'archive the vault', 'archive last month', 'monthly archive', 'archive my journal', 'archive workouts', or asks to archive completed monthly work."
+description: "Archives monthly Obsidian vault items from Area/ and Projects/ to Archive/ with year-level grouping."
 ---
 
 # Archive Obsidian Vault
@@ -30,16 +30,17 @@ Archive/
 
 Only create the year folders that have items to archive this run. Not every vault uses all categories.
 
-| Category       | Source                | Example archive path                          |
-| -------------- | --------------------- | --------------------------------------------- |
-| Journals       | `Area/Journal/`       | `Archive/2026 Journals/2026-03 Journal.md`    |
-| Projects       | `Projects/`           | `Archive/2026 Projects/2026-03 AI tips.md`    |
-| Drawings       | `Area/Drawings/`      | `Archive/2026 Drawings/2026-01-15 Design.md`  |
-| Discussions    | `Area/Discussions/`   | `Archive/2026 Discussions/2026-02-10 Sync.md` |
+| Category    | Source              | Example archive path                          |
+| ----------- | ------------------- | --------------------------------------------- |
+| Journals    | `Area/Journal/`     | `Archive/2026 Journals/2026-03 Journal.md`    |
+| Projects    | `Projects/`         | `Archive/2026 Projects/2026-03 AI tips.md`    |
+| Drawings    | `Area/Drawings/`    | `Archive/2026 Drawings/2026-01-15 Design.md`  |
+| Discussions | `Area/Discussions/` | `Archive/2026 Discussions/2026-02-10 Sync.md` |
 
 ### Standalone items
 
 Items that don't fit a recurring category stay at the Archive root with a datestamp prefix at the coarsest granularity that fits:
+
 - `Archive/2025 Bonnie/`
 - `Archive/2025-10 On-call training/`
 - `Archive/2024 Links.md`
