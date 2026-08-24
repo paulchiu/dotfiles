@@ -221,7 +221,7 @@ Each tick:
 Use CronList to find this loop's job ID when ready to CronDelete.
 ```
 
-End the loop (`CronDelete`) when push completes and CI is green or queued, when the user signals stop, or when a stage has been stuck >20 min after multiple unsuccessful retries (escalate to user, then stop). Do not start `tend-pr` or another dispatch watchdog for the same PR until this loop is deleted.
+End the loop (`CronDelete`) when push completes and CI is green or queued, when the user signals stop, or when a stage has been stuck >20 min after multiple unsuccessful retries (escalate to user, then stop). Do not start another dispatch watchdog for the same PR until this loop is deleted.
 
 ## Surfacing to the user
 
@@ -267,8 +267,7 @@ If the recording fails or the user takes over manually, drop the autopolling and
 
 - `git-commit`: generate a conventional commit message from the diff. Useful when codex EPERMs and its report doesn't include a message.
 - `gh-pr`: generate a PR description when opening a new PR.
-- `tend-pr`: keep a single PR green until merge. Complementary to dispatch when the work is rebases/CI babysitting rather than fresh implementation.
-- `bk-buildkite`: inspect Buildkite builds, jobs, and logs when CI status is too coarse from `gh pr checks`.
+- `bk-buildkite`: inspect Buildkite builds, jobs, and logs when CI status is too coarse from `gh pr checks`. Its `references/buildkite-failures.md` classifies flake vs real failure before you retry.
 - `github:gh-fix-ci`: diagnose GitHub Actions failures when CI repair becomes the primary task. Use intentionally; do not let watchdog retries become an unbounded fix loop.
 - `reviewing-branch-changes`: borrow review heuristics and output shape for the separate Claude reviewer. Do not substitute it for the required separate Agent invocation.
 - `nex`: split panes for the dev-server and demo-recording handoff steps; `cxd` alias delegates a task to a live codex CLI pane.

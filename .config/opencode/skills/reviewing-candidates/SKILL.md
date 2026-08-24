@@ -1,6 +1,6 @@
 ---
 name: reviewing-candidates
-description: "Analyses resumes and interview transcripts for recruiter feedback."
+description: "Review candidate resumes or interview transcripts and draft hiring feedback."
 ---
 
 # Reviewing Candidates

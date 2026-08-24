@@ -6,6 +6,10 @@ description: "Manage Buildkite builds, jobs, logs, pipelines, and agents, unbloc
 
 # Buildkite (bk CLI)
 
+## Diagnosing failures
+
+Before retrying or fixing any failing job, classify it as flake vs real using `references/buildkite-failures.md` (infra signals, real-failure signals, and the once-only per-job retry quota).
+
 ## Overview
 
 The `bk` CLI provides access to Buildkite for managing builds, viewing job logs, investigating CI failures, and interacting with pipelines. Authenticated via OAuth with org `mryum` pre-configured.

@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: daily-brief
-description: "Generate a lean daily brief for work."
+description: "Generate the lean daily brief from overnight Slack, Linear, Calendar, Drive and Obsidian signal, plus deep-prep notes for retros and 1:1s. Triggers 'run daily brief', 'regenerate today's brief', 'deep prep for <meeting>', and the 3am cron."
 ---
 
 # Daily Brief
@@ -216,7 +216,7 @@ For each: one bold line stating the call to make, then 1–2 supporting bullets 
 
 - **<topic, ≤80 chars>** — <one-line context>
   - Source: [<channel/issue>](link)
-  - Suggested next: `<copy-paste prompt for /linear-write, /linear-do, etc.>`
+  - Suggested next: `<copy-paste prompt for /linear-write, /ship, etc.>`
 
 What lands here: Slack threads where someone is awaiting Paul's call; Linear tickets where Paul is assigned in `Triage` or where a reviewer requested changes; calendar invites awaiting RSVP; conflicts.
 

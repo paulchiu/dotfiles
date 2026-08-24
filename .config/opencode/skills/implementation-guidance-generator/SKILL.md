@@ -1,6 +1,6 @@
 ---
 name: implementation-guidance-generator
-description: "Generates implementation guidance docs for technical issues, bug fixes."
+description: "Generate Obsidian-style implementation guidance docs for technical issues, bug fixes, or features."
 ---
 
 # Implementation Guidance Generator

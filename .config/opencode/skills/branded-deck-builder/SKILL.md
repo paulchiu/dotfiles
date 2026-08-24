@@ -1,6 +1,6 @@
 ---
 name: branded-deck-builder
-description: Create branded decks, presentation slides.
+description: "Build branded decks, presentations, bento slides, or Spotify Wrapped-style animations in the me&u engineering visual style."
 ---
 
 # Branded Deck Builder

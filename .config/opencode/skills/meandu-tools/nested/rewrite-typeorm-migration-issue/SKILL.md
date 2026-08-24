@@ -8,7 +8,7 @@ description: "Rewrite a manage-api TypeORM-to-Prisma migration Linear issue."
 
 Rewrite a manage-api Phase 2 TypeORM-to-Prisma card (swap Store internals from TypeORM to Prisma) into a specification an autonomous agent executes correctly on the first pass.
 
-> **Scope:** it operates on the manage repo at `/Users/paul/dev/manage` (read-only research) and writes to Linear. It **extends** the general skill at `/Users/paul/.claude/skills/meandu-tools/nested/linear-write/SKILL.md`; read that first for the base template, writing style, MCP tooling, and Linear save gotchas. This file only adds what migration cards need beyond it.
+> **Scope:** it operates on the manage repo at `/Users/paul/dev/manage` (read-only research) and writes to Linear. It **extends** the general skill at `/Users/paul/.claude/skills/linear-write/SKILL.md`; read that first for the base template, writing style, MCP tooling, and Linear save gotchas. This file only adds what migration cards need beyond it.
 
 ## Why this skill exists
 

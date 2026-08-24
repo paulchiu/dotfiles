@@ -1,9 +1,9 @@
 ---
-name: linear-do
-description: "Implement a Linear issue end-to-end."
+name: ship
+description: "Ship a Linear issue end-to-end, ticket to merge: worktree, plan, AC tests, self-audit, commit, PR, CI. Triggers 'ship <linear url or id>', 'ship-it', 'autonomously work X', '--auto'. Interactive by default, autonomous on opt-in."
 ---
 
-# Linear Do
+# Ship
 
 Implement a Linear issue end-to-end: read the ticket, make the changes, commit, open a PR, and monitor CI until green.
 
