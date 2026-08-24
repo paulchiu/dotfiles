@@ -62,17 +62,19 @@ Use `"${repo}#${num}"` rather than the bare number. The bare form needs a local 
 
 `tuicr pr` **cannot run headless**. Without a TTY it fetches everything, prints its `tuicr-session:` line, then dies with `Error: Device not configured (os error 6)`. `--stdout` does not change this (it moves the TUI to `/dev/tty` and frees stdout, so it still needs a terminal). Never run the TUI as a plain Bash tool call.
 
-**If `$NEX_PANE_ID` is set** (Paul's normal environment), split a pane and send the command. Capture the new pane's UUID from `--json` and target that, rather than a label, because a label needs workspace scope to resolve and can route to the wrong pane:
+**If `$HERDR_PANE_ID` is set** (Paul's normal environment), split the current pane and run the command there. Parse the pane ID out of the JSON response rather than predicting it, and stay in the current tab:
 
 ```bash
-pane=$(nex pane split --direction vertical --name tuicr \
-         --path "$(git rev-parse --show-toplevel)" --json | jq -r .pane_id)
-nex pane send --target "$pane" "tuicr pr 'owner/repo#123'"
+pane=$(herdr pane split --current --direction right --cwd "$(git rev-parse --show-toplevel)" --focus \
+        | jq -r '.result.pane.pane_id')
+herdr pane run "$pane" "tuicr pr 'owner/repo#123'"
 ```
 
-Then tell Paul the pane is open and which PR it holds. Do not try to read or drive the TUI afterwards; it is his to operate.
+`--focus` is deliberate here and overrides the usual background-work default: this is an interactive TUI Paul is about to drive, not a watcher. Splits do not inherit cwd, hence the explicit `--cwd`.
 
-**If `$NEX_PANE_ID` is not set**, do not attempt a PTY workaround. Print the command and tell him to run it himself with the `!` prefix:
+Then tell Paul the pane is open and which PR it holds. Do not try to read or drive the TUI afterwards, and do not close the pane; it is his to operate.
+
+**If `$HERDR_PANE_ID` is not set**, do not attempt a PTY workaround. Print the command and tell him to run it himself with the `!` prefix:
 
 ```
 ! tuicr pr 'owner/repo#123'
@@ -363,7 +365,7 @@ So GitHub is the only forge that works on this machine today. If PR operations f
 
 ## Gotchas
 
-- The TUI needs a TTY. Launch it in a nex pane; never as a plain Bash call. It still prints `tuicr-session: <slug>` before dying, which is a cheap way to compute a slug.
+- The TUI needs a TTY. Launch it in a herdr pane; never as a plain Bash call. It still prints `tuicr-session: <slug>` before dying, which is a cheap way to compute a slug.
 - Quote targets containing `#`.
 - Malformed TOML in `config.toml` now surfaces `Failed to load config: <err>` at startup (0.19.1 was silent), but the whole file is still discarded and every setting reverts to default. Validate after editing:
   ```bash
