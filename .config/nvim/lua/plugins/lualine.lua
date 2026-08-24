@@ -7,7 +7,7 @@ return {
     opts = {
       options = {
         theme = "dracula",
-        globalstatus = false, -- one statusline per window, as laststatus=2 gave
+        globalstatus = true,
       },
     },
   },

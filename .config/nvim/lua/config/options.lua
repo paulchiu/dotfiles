@@ -24,7 +24,9 @@ opt.showmatch = true
 opt.wrap = false
 opt.textwidth = 0
 opt.wrapmargin = 0
-opt.laststatus = 2
+-- Global statusline. laststatus=2 draws one per window, and an orphaned row
+-- survives a pane resize or a closed split as a stale mode indicator.
+opt.laststatus = 3
 opt.termguicolors = true -- required by the modern colorscheme/statusline
 
 -- Search
