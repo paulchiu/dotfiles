@@ -11,9 +11,11 @@ diff_view = "side-by-side"   # [delta] side-by-side = true
 
 username = "Paul Chiu"       # author stamped on locally authored comments
 
-# Never fetch PR review comments. Deliberate: an unbiased first pass, not just a
-# tidier yank. Also the only way to keep remote threads out of the export, which
-# has no [export] key of its own.
+# Drop the PR conversation timeline, for an unbiased first pass.
+# Narrower than the name suggests: it only removes the `comments` field from
+# `gh pr view --json`. Inline review threads (CodeRabbit et al) come from a
+# separate ungated GraphQL call, so they still appear in the diff and the yank.
+# Hide those per session with `:comments hide`; nothing keeps them out of the yank.
 show_pr_comments = false
 
 # Yank/:clip export: comment lines only, no preamble or headings.
@@ -23,4 +25,4 @@ scope_line = false
 pr_metadata = false
 comments_header = ""
 legend = false
-remote_comments_header = "## Existing GitHub Comments"   # moot while show_pr_comments = false; labels them if that is ever flipped back
+remote_comments_header = "## Existing GitHub Comments"   # keep: review threads still export, better labelled than loose

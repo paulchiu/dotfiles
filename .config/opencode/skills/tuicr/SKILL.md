@@ -222,7 +222,7 @@ remote_comments_header = "## Existing GitHub Comments"
 
 The `[export]` block trims the yank down to bare numbered comment lines. See [Export shape](#export-shape).
 
-`show_pr_comments = false` is deliberate and should not be flipped back without asking. Paul wants an unbiased first pass, so existing CodeRabbit and human threads are never fetched and never appear in the TUI or the yank. It doubles as the only way to keep remote threads out of the export. Consequences to remember: `:comments unresolved|all` reports nothing to show, and `remote_comments_header` is dead config while this is off.
+`show_pr_comments = false` is deliberate (Paul wants an unbiased first pass) and should not be flipped back without asking. **It is narrower than its name.** It only drops the `comments` field from `gh pr view --json`, i.e. the PR conversation timeline (`issue_comments` in `src/forge/github/pr_info.rs`). Inline review threads come from `list_review_threads`, a separate GraphQL call invoked unconditionally in `src/app/pr.rs`, so CodeRabbit and human review comments still appear in the diff and in the yank. Do not tell Paul this key hides them.
 
 ### delta is not available, and never will be via config
 
@@ -262,7 +262,7 @@ delta remains configured in `~/.gitconfig` and still handles plain `git diff` / 
 | `show_commits`               | bool                          | `true`       | Toggle `<leader>s` (**new**, was rejected in 0.19)          |
 | `show_reviewed`              | bool                          | `true`       | `false` starts with reviewed files hidden (**new**)         |
 | `show_pr_checks`             | bool                          | `false`      | Fetch GitHub check rollups (**new**)                        |
-| `show_pr_comments`           | bool                          | `true`       | Fetch PR review threads; Paul sets `false` (**new**)        |
+| `show_pr_comments`           | bool                          | `true`       | PR conversation timeline only, not review threads (**new**) |
 | `single_file_view`           | bool                          | `false`      | Now documented upstream                                     |
 | `cursor_line`                | bool                          | `true`       |                                                             |
 | `search_highlight`           | bool                          | `true`       | Highlight `/` matches (**new**)                             |
@@ -316,7 +316,9 @@ Setting a string key to `""` drops that line and its trailing blank.
 
 **The `## Session: <slug>` heading is not configurable.** `src/output/markdown.rs` writes it unconditionally whenever a slug can be derived, gated only on `session_slug: Option<&str>` being `Some`, with no key behind it (same on upstream `main`). Do not offer a shell wrapper or clipboard post-processing to strip it. Paul prefers stock tool behaviour plus a little manual work over custom glue, because glue makes problems harder to debug. Say it cannot be done, name the limit, and offer the manual delete or an upstream feature request.
 
-**No `[export]` key excludes remote forge threads.** The block is gated only on PR mode plus a non-empty unresolved-thread list (`src/output/markdown.rs`), and the filter is hardcoded to `PrCommentsVisibility::Unresolved`, so the in-TUI `:comments hide` toggle does not change the export either. `remote_comments_header = ""` drops only the heading and leaves the thread bodies, which is worse than leaving it labelled. The only real lever is top-level `show_pr_comments = false`, which changes the `gh pr view --json` field list so the threads are never fetched. That is what Paul runs.
+**Nothing keeps remote review threads out of the export.** The block is gated only on PR mode plus a non-empty unresolved-thread list (`src/output/markdown.rs`), and the filter is hardcoded to `PrCommentsVisibility::Unresolved`, so the in-TUI `:comments hide` toggle does not reach it. `remote_comments_header = ""` drops only the heading and leaves the thread bodies, which is worse than leaving them labelled. `show_pr_comments = false` does not help either; see the config note above for why. Say this plainly rather than reaching for a `--stdout | sed` pipeline: the manual delete or an upstream feature request is the honest answer.
+
+To review blind to existing threads, the lever is the ex-command `:comments hide`, which writes `remote_comments_visibility` to the persisted session so it sticks for that PR. There is no config key for its initial value (it defaults to `Unresolved` in `src/model/review.rs`), so it is per-PR typing.
 
 Three export routes, all triggered from inside the TUI:
 
