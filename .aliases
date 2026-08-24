@@ -69,7 +69,7 @@ alias xo="xargs -0 open"
 alias -g F='"$(fzf)"'
 alias -g F1='"$(fd --type f --hidden --follow --exclude .git --max-depth 1 | fzf)"'
 ## Development Tools
-alias sf="swift-format --recursive -i ."
+alias sf="spf"
 alias tf="terraform"
 alias p="pnpm"
 ## System/Utility
