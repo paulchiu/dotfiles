@@ -3,7 +3,7 @@ font-family = "FiraCode Nerd Font"
 font-size = 14
 cursor-style = block
 shell-integration-features = no-cursor
-background-opacity = 0.9
+background-opacity = 1
 background-blur-radius = 12
 macos-option-as-alt = left
 keybind = alt+left=unbind
