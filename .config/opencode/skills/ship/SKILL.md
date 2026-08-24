@@ -1,6 +1,6 @@
 ---
 name: ship
-description: "Ship a Linear issue end-to-end, ticket to merge: worktree, plan, AC tests, self-audit, commit, PR, CI. Triggers 'ship <linear url or id>', 'ship-it', 'autonomously work X', '--auto'. Interactive by default, autonomous on opt-in."
+description: "Ship, or do, a Linear issue."
 ---
 
 # Ship

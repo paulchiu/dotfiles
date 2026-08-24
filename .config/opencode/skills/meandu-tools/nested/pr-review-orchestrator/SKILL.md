@@ -1,6 +1,6 @@
 ---
 name: pr-review-orchestrator
-description: "Multi-perspective PR review orchestrator. Runs the review-code skill, fans out 4 specialised perspectives (security, performance, acceptance-criteria, style) in parallel via codex or Claude subagents (user picks at invocation)."
+description: "PR review orchestrator. Runs the review-code skill, fans out to different perspectives."
 ---
 
 # PR Review Orchestrator

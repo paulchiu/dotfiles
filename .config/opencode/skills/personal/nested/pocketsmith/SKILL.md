@@ -1,6 +1,6 @@
 ---
 name: pocketsmith
-description: "Work with the PocketSmith API: pull transactions, categorise them (rules, splits, labels), read budget and trend reports, and set budgets via scenario events. Use when asked about PocketSmith, household budget data, savings rate, spending by category or payee, uncategorised transactions, or the budget vs actual variance for a month."
+description: "Work with the PocketSmith API to get financial data."
 ---
 
 # PocketSmith API

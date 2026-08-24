@@ -1,6 +1,6 @@
 ---
 name: linear-write
-description: "Create or rewrite Linear issues using the agent-ready card template. Use when asked to create/rewrite a Linear issue, spike, post a comment on an issue, or clean up an issue from a URL/ID."
+description: "Create or rewrite Linear issues."
 ---
 
 # Linear Write Skill

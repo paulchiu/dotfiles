@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: daily-brief
-description: "Generate the lean daily brief from overnight Slack, Linear, Calendar, Drive and Obsidian signal, plus deep-prep notes for retros and 1:1s. Triggers 'run daily brief', 'regenerate today's brief', 'deep prep for <meeting>', and the 3am cron."
+description: "Generate daily brief for work."
 ---
 
 # Daily Brief

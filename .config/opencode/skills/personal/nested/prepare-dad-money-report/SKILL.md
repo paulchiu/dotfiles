@@ -1,7 +1,7 @@
 ---
 model: sonnet
 name: prepare-dad-money-report
-description: "Prepare Paul's monthly family money report email for his dad from ANZ credit card exports, the prior Excel format, and the current Obsidian journal account details. Use when asked to prepare Dad's monthly family finances, family money report, ANZ report, credit card bill email, or the recurring Gmail draft for Dad/Mom/Nicole."
+description: "Prepare monthly family money report email for his dad."
 ---
 
 # Prepare Dad Money Report
