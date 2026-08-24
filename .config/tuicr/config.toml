@@ -1,4 +1,4 @@
-# tuicr config. Reference: https://github.com/agavra/tuicr/blob/v0.19.1/docs/CONFIG.md
+# tuicr config. Reference: https://github.com/agavra/tuicr/blob/v0.23.1/docs/CONFIG.md
 #
 # tuicr renders diffs in-process (syntect + two-face, the same grammar corpus bat
 # and delta use). It has no external diff-engine hook and passes --no-ext-diff on
@@ -10,3 +10,17 @@ appearance = "dark"          # [delta] dark = true
 diff_view = "side-by-side"   # [delta] side-by-side = true
 
 username = "Paul Chiu"       # author stamped on locally authored comments
+
+# Never fetch PR review comments. Deliberate: an unbiased first pass, not just a
+# tidier yank. Also the only way to keep remote threads out of the export, which
+# has no [export] key of its own.
+show_pr_comments = false
+
+# Yank/:clip export: comment lines only, no preamble or headings.
+[export]
+intro = ""
+scope_line = false
+pr_metadata = false
+comments_header = ""
+legend = false
+remote_comments_header = "## Existing GitHub Comments"   # moot while show_pr_comments = false; labels them if that is ever flipped back
