@@ -1,6 +1,6 @@
 ---
 name: nex
-description: "nex CLI: split/create/close/move/rename/capture panes, workspaces, groups, delegate to live panes with cxd/ccd.
+description: "nex CLI: split/create/close/move/rename/capture panes, workspaces, groups, delegate to live panes with cxd/ccd."
 model: haiku
 ---
 
