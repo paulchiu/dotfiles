@@ -33,7 +33,6 @@ alias cup="cd_up_parent"
 alias pd="pushd"
 alias zt="zellij action go-to-tab-name"
 alias zmt="zellij action move-tab"
-alias yz="yazi"
 alias rp="realpath"
 
 # Editors and Shell Utilities
@@ -42,8 +41,6 @@ alias l="eza -l --icons"
 alias la="eza -a --icons"
 alias ll="eza"
 alias ls="eza --icons"
-alias ranger="yazi"
-alias yi="yazi"
 alias eject="diskutil eject"
 ## Disk Usage
 alias df="duf"
@@ -123,4 +120,6 @@ if [[ ${PLATFORM} == "Linux" ]]; then
     alias open=xdg-open
     alias sc="scrot -d 3 -e 'mv \$f ~/Pictures/screenshots/'"
 fi
-alias c="pbcopy"
+
+# Clipboard copy; strips trailing newlines so `rp foo | c` pastes clean
+c() { printf %s "$(cat)" | pbcopy; }
