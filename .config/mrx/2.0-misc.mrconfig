@@ -98,6 +98,9 @@ checkout = git clone 'git@github.com:mr-yum/integrations-observer.git' 'integrat
 [legacy-entities]
 checkout = git clone 'git@github.com:mr-yum/legacy-entities.git' 'legacy-entities'
 
+[local-loyalty-provider]
+checkout = git clone 'git@github.com:mr-yum/local-loyalty-provider.git' 'local-loyalty-provider'
+
 [logger-context]
 checkout = git clone 'git@github.com:mr-yum/logger-context.git' 'logger-context'
 
