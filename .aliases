@@ -55,10 +55,12 @@ alias tmux="zellij"
 alias zc="zellij --layout compact"
 alias no="nex open --here"
 alias h="herdr"
+alias t="tuicr"
 ## Search and Navigation
 alias ftx="fzf_to_context"
 alias hs="atuin search -i"
 alias s="~/dev/search.sh"
+alias o="open"
 # Open null-delimited paths from a pipeline, e.g. `fd -0 <pattern> | xo`
 alias xo="xargs -0 open"
 # Global aliases: `bat F`, `vim F`, `less F` expand F to "$(fzf)" anywhere on the line.
