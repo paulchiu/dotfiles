@@ -12,9 +12,11 @@ Two interfaces, and they are not interchangeable:
 - **The TUI** (`tuicr`, `tuicr pr`) is where a **human** reviews. It requires a TTY.
 - **`tuicr review`** (`list` / `comments` / `add`) is the **agent** interface. It is non-interactive, prints JSON, and is the only part you can drive directly.
 
-Verified against tuicr **0.23.1**, installed from **homebrew-core** (`brew install tuicr`).
+Verified against tuicr **0.24.0**, installed from **homebrew-core** (`brew install tuicr`).
 
-> The `agavra/tap` formula is stale at 0.19.1 and was superseded when tuicr landed in core. If `tuicr --version` reports 0.19.x, the old tap is shadowing core: `brew uninstall agavra/tap/tuicr && brew install tuicr && brew untap agavra/tap`. Upgrades are `brew upgrade tuicr`; `tuicr update` (and `:update`) also exist in 0.23.1 but let Homebrew own the binary.
+Source of truth for CLI syntax is the installed binary, not this skill. 0.24.0 is a bug-fix release over 0.23.1: `src/config/mod.rs` is byte-identical between the two tags, so the 33 config keys and the export shape below carry over unchanged, and `--help` on every subcommand matches what is documented here.
+
+> The `agavra/tap` formula is stale at 0.19.1 and was superseded when tuicr landed in core. If `tuicr --version` reports 0.19.x, the old tap is shadowing core: `brew uninstall agavra/tap/tuicr && brew install tuicr && brew untap agavra/tap`. Upgrades are `brew upgrade tuicr`; `tuicr update` (and `:update`) also exist but let Homebrew own the binary.
 
 ---
 
@@ -172,7 +174,7 @@ Type semantics when `comment_types` is configured: `issue` = blocking, `suggesti
 
 ---
 
-## Command surface (0.23.1)
+## Command surface (0.24.0)
 
 Four subcommands: `tui`, `pr` (alias `mr`), `review`, `update`. Bare `tuicr` opens the target selector. `tuicr pr N` and `tuicr tui pr N` are the same code path.
 
@@ -242,9 +244,9 @@ tuicr does its own highlighting with syntect + two-face, the same extended gramm
 
 delta remains configured in `~/.gitconfig` and still handles plain `git diff` / `show` / `log -p`. The two tools coexist; they do not compose.
 
-### Every valid top-level key in 0.23.1
+### Every valid top-level key in 0.24.0
 
-33 keys, from `KNOWN_KEYS` in `src/config/mod.rs`. Anything else warns and is dropped.
+33 keys, from `KNOWN_KEYS` in `src/config/mod.rs` (unchanged since 0.23.1). Anything else warns and is dropped.
 
 | Key                          | Type                          | Default      | Notes                                                       |
 | ---------------------------- | ----------------------------- | ------------ | ----------------------------------------------------------- |
@@ -340,7 +342,7 @@ Press `?` in the app, or read `docs/KEYBINDINGS.md`. `<leader>` is `;`.
 
 **Panels**: `Tab`/`Shift-Tab` cycle focus · `<leader>e` toggle file list · `<leader>s` toggle commit selector · `<leader>h` file list · `<leader>l` diff · `<leader>j`/`<leader>k` focus down/up.
 
-**Comment box** (default readline mode): `Tab` cycles comment type · `Enter` / `Ctrl-Enter` / `Ctrl-s` saves · `Shift-Enter` or `Ctrl-j` newline · `Ctrl-w` delete word · `Ctrl-u` clear line · `Esc` cancels. With `comment_vim = true` it is edtui modal editing, where `Alt-Enter` accepts and `Alt-Esc` discards without the double-press.
+**Comment box** (default readline mode): `Tab` cycles comment type · `Enter` / `Ctrl-Enter` / `Ctrl-s` saves · `Shift-Enter`, `Alt-Enter`, or `Ctrl-j` newline (all three always work; since 0.24.0 the panel hint shows `Shift-Enter` only when the terminal supports the keyboard enhancement protocol, otherwise `Alt-Enter`, which is the honest hint under tmux without `extended-keys on`) · `Ctrl-w` delete word · `Ctrl-u` clear line · `Esc` cancels. With `comment_vim = true` it is edtui modal editing, where `Alt-Enter` accepts and `Alt-Esc` discards without the double-press.
 
 **Ex commands** (from the `CommandSpec` registry in `src/handler.rs`, which is authoritative over the docs):
 
@@ -379,4 +381,4 @@ So GitHub is the only forge that works on this machine today. If PR operations f
 - `--type` accepts anything and stores typos verbatim as custom types.
 - Local session slugs carry a short head SHA that upstream docs omit. Read the slug from `review list` or the startup line; do not build it by hand.
 - `.tuicrignore` at the repo root excludes files from review diffs, gitignore-style with `!` negation. `.gitignore` is honoured automatically.
-- Pin doc reads to the installed tag: `https://raw.githubusercontent.com/agavra/tuicr/v0.23.1/<path>`. Upstream `main` documents unreleased behaviour.
+- Pin doc reads to the installed tag: `https://raw.githubusercontent.com/agavra/tuicr/v0.24.0/<path>`. Upstream `main` documents unreleased behaviour.
