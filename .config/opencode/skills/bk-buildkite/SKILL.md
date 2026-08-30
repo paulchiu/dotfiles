@@ -6,6 +6,10 @@ description: "Manage Buildkite builds, jobs, logs, pipelines, and agents, unbloc
 
 # Buildkite (bk CLI)
 
+Source of truth for CLI syntax is the installed binary, not this skill. This
+skill was written against bk `3.56.0` (Homebrew, `/opt/homebrew/bin/bk`).
+Authentication is the CLI's own stored login, not a Buildkite API token.
+
 ## Diagnosing failures
 
 Before retrying or fixing any failing job, classify it as flake vs real using `references/buildkite-failures.md` (infra signals, real-failure signals, and the once-only per-job retry quota).

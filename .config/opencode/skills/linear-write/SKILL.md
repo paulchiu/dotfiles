@@ -11,6 +11,12 @@ Create new Linear issues, or rewrite existing ones, following an agent-ready car
 
 Always prefer the Linear MCP tools. Fall back to the `linear` CLI only when MCP is unavailable or the task needs something MCP cannot do.
 
+Source of truth for both surfaces is what is installed, not this skill. The
+table below was written against the `linear` CLI `2.5.0` (Homebrew,
+`/opt/homebrew/bin/linear`) and the Linear MCP server's tool list at that time.
+MCP tool names move: when one is missing, list the available tools and match by
+description rather than assuming the CLI fallback is required.
+
 | Action          | Preferred (MCP)                               | Fallback (CLI)                 |
 | --------------- | --------------------------------------------- | ------------------------------ |
 | Fetch an issue  | `mcp__claude_ai_Linear__get_issue`            | `linear issue view <ID>`       |

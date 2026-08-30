@@ -8,6 +8,11 @@ description: "Convert files to Markdown; supports PDF, Word, PowerPoint, Excel, 
 
 Convert a source file to Markdown using the installed `markitdown` CLI. Follow the steps below in order. Do not skip steps.
 
+Source of truth for CLI syntax is the installed binary, not this skill. This
+skill was written against markitdown `0.1.6b2` (`~/.local/bin/markitdown`). That
+is a beta build, so flags are likelier than usual to move under you: on any
+unexpected usage error, run `markitdown --help` before working around it.
+
 ## When To Use
 
 Use this skill when the user wants to:

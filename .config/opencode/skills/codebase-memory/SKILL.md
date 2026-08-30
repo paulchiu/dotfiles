@@ -1,11 +1,17 @@
 ---
 name: codebase-memory
-description: Query the codebase knowledge graph for structure — callers, call chains, dependencies, dead code, impact analysis, Cypher/search_graph syntax.
+description: "Query the codebase knowledge graph for structure: callers, call chains, dependencies, dead code, impact analysis, Cypher/search_graph syntax."
 ---
 
 # Codebase Memory: Knowledge Graph Tools
 
 Graph tools return precise structural results in ~500 tokens vs ~80K for grep.
+
+Source of truth for tool names and arguments is the live MCP server, not this
+skill: these are `mcp__codebase-memory-mcp__*` tools, and the server ships no
+version string to pin. Read the tool schemas when a call is rejected, and
+confirm the repo is indexed with `index_status` before trusting an empty result,
+since an unindexed project answers every query with nothing.
 
 ## Quick Decision Matrix
 

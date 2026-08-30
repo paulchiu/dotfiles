@@ -6,6 +6,12 @@ description: "ast-grep is used for structural (AST) code search"
 
 # ast-grep Code Search
 
+Source of truth for CLI syntax is the installed binary, not this skill. This
+skill was written against ast-grep `0.45.2` (Homebrew,
+`/opt/homebrew/bin/ast-grep`). Invoke it as `ast-grep`: the `sg` alias still
+resolves to the same binary but prints a deprecation banner ahead of its output,
+which corrupts anything you parse.
+
 Translate natural language queries into ast-grep rules. ast-grep matches code by AST structure rather than text, so it can express queries like "async functions that lack try-catch" that grep cannot.
 
 ## When to Use
