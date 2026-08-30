@@ -251,13 +251,21 @@ Sometimes the user wants a video demo of the user-visible change ("record a vide
 
 Two paths, pick the one that matches the demo:
 
-**Path A: Programmatic via Playwright.** When the demo is deterministic and headless-safe (paste content, wait, screenshot/record), write a self-contained `.mjs` that imports `chromium` from the repo's `playwright` install, opens a `recordVideo` context, drives the dev server, then renames the resulting webm into `~/Downloads/<feature>-demo.webm`. Spin up a separate nex pane for `npm run dev:app` (the dev-server pane) so the recording pane is free to run `node /tmp/<script>.mjs`. Wait for `curl -fsS http://localhost:5173` to return 200 before recording. Foot-gun: zsh has read-only shell variables (`$status`, `$RANDOM`, `$SECONDS`, `$EUID`), use `http_code`, `ready`, etc. instead.
+**Path A: Programmatic via Playwright.** When the demo is deterministic and headless-safe (paste content, wait, screenshot/record), write a self-contained `.mjs` that imports `chromium` from the repo's `playwright` install, opens a `recordVideo` context, drives the dev server, then renames the resulting webm into `~/Downloads/<feature>-demo.webm`. Spin up a separate Herdr pane for `npm run dev:app` (the dev-server pane) so the recording pane is free to run `node /tmp/<script>.mjs`. Wait for `curl -fsS http://localhost:5173` to return 200 before recording. Foot-gun: zsh has read-only shell variables (`$status`, `$RANDOM`, `$SECONDS`, `$EUID`), use `http_code`, `ready`, etc. instead.
 
-**Path B: Codex desktop handoff.** When the demo needs real computer-use (theme toggles, real cursor movement, region selection, OS-level recording tools), the CLI codex agent in a nex pane is too restricted. Stop the pane task, then hand the user a self-contained prompt to paste into the Codex desktop app, which has computer-control tools. Brief codex desktop like a fresh subagent: working dir, branch, dev-server URL (already running in your dev-server pane), exact content to paste, the visual outcome to verify, and the absolute output path under `~/Downloads`. State explicitly "do not modify the repo, the dev server, or the branch state".
+**Path B: Codex desktop handoff.** When the demo needs real computer-use (theme toggles, real cursor movement, region selection, OS-level recording tools), the CLI codex agent in a Herdr pane is too restricted. Stop the pane task, then hand the user a self-contained prompt to paste into the Codex desktop app, which has computer-control tools. Brief codex desktop like a fresh subagent: working dir, branch, dev-server URL (already running in your dev-server pane), exact content to paste, the visual outcome to verify, and the absolute output path under `~/Downloads`. State explicitly "do not modify the repo, the dev server, or the branch state".
 
 In both paths:
 
-- Always start the dev server in its OWN nex pane, not in the recording pane. The recording pane needs a free prompt.
+- Always start the dev server in its OWN Herdr pane, not in the recording pane. The recording pane needs a free prompt. Call the Skill tool with "herdr" for the pane mechanics; the shape is a split that keeps the cwd and leaves focus alone, then a `pane run` on the returned id:
+
+  ```bash
+  split=$(herdr pane split --current --direction right --cwd "$PWD" --no-focus)
+  dev=$(printf '%s\n' "$split" | jq -r '.result.pane.pane_id')
+  herdr pane run "$dev" "npm run dev:app"
+  ```
+
+  Wait on the server with `herdr pane wait-output "$dev" --regex "ready|localhost:5173" --timeout 120000` rather than sleeping. Leave the pane open once the recording is verified so the user can read the server log.
 - Keep the worktree in place until the recording is verified saved (`ls -la <path>` non-empty); don't `git worktree remove` early.
 - Print the absolute path and size of the resulting file in your final summary so the user can click through.
 
@@ -270,7 +278,7 @@ If the recording fails or the user takes over manually, drop the autopolling and
 - `bk-buildkite`: inspect Buildkite builds, jobs, and logs when CI status is too coarse from `gh pr checks`. Its `references/buildkite-failures.md` classifies flake vs real failure before you retry.
 - `github:gh-fix-ci`: diagnose GitHub Actions failures when CI repair becomes the primary task. Use intentionally; do not let watchdog retries become an unbounded fix loop.
 - `reviewing-branch-changes`: borrow review heuristics and output shape for the separate Claude reviewer. Do not substitute it for the required separate Agent invocation.
-- `nex`: split panes for the dev-server and demo-recording handoff steps; `cxd` alias delegates a task to a live codex CLI pane.
+- `herdr`: split panes for the dev-server and demo-recording handoff steps, and delegate to a live codex CLI pane via `herdr agent start <name> --kind codex --pane <id>` then `herdr agent prompt`. Its `references/panes.md` covers layout and ordinary commands; `references/delegation.md` covers the agent flow. Prefer the `codex:codex-rescue` Agent call above for the implementation stage; reach for a live pane only when you need a codex session the user can watch and type into.
 - `yadm-sync`: sync dotfiles when this skill itself, memory entries, or other `~/.claude`/`~/.config` content is updated. It usually does not belong in product-repo dispatch work.
 
 ## What lives where
