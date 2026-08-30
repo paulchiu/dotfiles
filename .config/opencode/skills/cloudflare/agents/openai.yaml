@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cloudflare"
+  short_description: "Router for Workers, Pages, KV/D1/R2, and the wider platform"
+  default_prompt: "Use $cloudflare to build this on Workers."

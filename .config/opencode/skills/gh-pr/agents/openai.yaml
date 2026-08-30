@@ -1,0 +1,4 @@
+interface:
+  display_name: "GH PR"
+  short_description: "Write a PR description and open the draft PR"
+  default_prompt: "Use $gh-pr to open a draft PR for this branch."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reviewing Candidates"
+  short_description: "Review resumes and transcripts, draft hiring feedback"
+  default_prompt: "Use $reviewing-candidates to review this candidate."

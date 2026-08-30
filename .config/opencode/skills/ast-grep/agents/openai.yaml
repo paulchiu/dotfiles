@@ -1,0 +1,4 @@
+interface:
+  display_name: "ast-grep"
+  short_description: "Structural AST code search and rewrite"
+  default_prompt: "Use $ast-grep to find or rewrite this pattern structurally rather than with regex."

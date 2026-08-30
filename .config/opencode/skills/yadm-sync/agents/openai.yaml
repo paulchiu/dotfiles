@@ -1,0 +1,4 @@
+interface:
+  display_name: "yadm Sync"
+  short_description: "Commit and push dotfile changes with yadm"
+  default_prompt: "Use $yadm-sync to sync my dotfiles."

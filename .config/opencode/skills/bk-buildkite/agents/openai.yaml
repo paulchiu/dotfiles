@@ -1,0 +1,4 @@
+interface:
+  display_name: "Buildkite"
+  short_description: "Inspect builds, jobs, and logs; unblock releases"
+  default_prompt: "Use $bk-buildkite to check why this Buildkite build failed."

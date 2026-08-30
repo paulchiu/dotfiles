@@ -1,0 +1,4 @@
+interface:
+  display_name: "Writing Tone"
+  short_description: "Write and rewrite in Paul's voice"
+  default_prompt: "Use $writing-tone to rewrite this in my voice."

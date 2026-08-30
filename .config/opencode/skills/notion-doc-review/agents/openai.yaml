@@ -1,0 +1,4 @@
+interface:
+  display_name: "Notion Doc Review"
+  short_description: "Review a Notion or other prose document"
+  default_prompt: "Use $notion-doc-review to review this doc."

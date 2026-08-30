@@ -1,0 +1,4 @@
+interface:
+  display_name: "HTML Edit Prompt"
+  short_description: "Add an annotation and comment layer to an HTML file"
+  default_prompt: "Use $html-edit-prompt to make this HTML file reviewable."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "me&u Tools"
+  short_description: "Router for me&u work tools and runbooks"
+  default_prompt: "Use $meandu-tools for this me&u task."

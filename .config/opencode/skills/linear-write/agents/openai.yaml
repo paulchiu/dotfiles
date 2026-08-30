@@ -1,0 +1,4 @@
+interface:
+  display_name: "Linear Write"
+  short_description: "Create or rewrite agent-ready Linear issues"
+  default_prompt: "Use $linear-write to turn these notes into a Linear issue."

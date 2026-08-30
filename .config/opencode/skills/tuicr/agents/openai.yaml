@@ -1,0 +1,4 @@
+interface:
+  display_name: "tuicr"
+  short_description: "Open a PR or local diff in the tuicr review TUI"
+  default_prompt: "Use $tuicr to open this PR for review."

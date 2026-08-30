@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship"
+  short_description: "Ship a Linear issue end to end"
+  default_prompt: "Use $ship to ship this Linear issue."

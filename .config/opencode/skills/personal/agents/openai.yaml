@@ -1,0 +1,4 @@
+interface:
+  display_name: "Personal"
+  short_description: "Router for personal finance, Obsidian, and household tasks"
+  default_prompt: "Use $personal for this personal task."

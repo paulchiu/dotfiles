@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implementation Guidance"
+  short_description: "Generate Obsidian-style implementation guidance docs"
+  default_prompt: "Use $implementation-guidance-generator to write guidance for this issue."

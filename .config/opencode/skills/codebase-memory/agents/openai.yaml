@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Memory"
+  short_description: "Query the codebase knowledge graph for structure and impact"
+  default_prompt: "Use $codebase-memory to find every caller of this function."

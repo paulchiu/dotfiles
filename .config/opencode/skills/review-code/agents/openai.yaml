@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Code"
+  short_description: "Multi-round PR review producing a decision doc"
+  default_prompt: "Use $review-code to review this PR."

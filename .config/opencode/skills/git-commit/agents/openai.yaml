@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Commit"
+  short_description: "Write a conventional commit and create it"
+  default_prompt: "Use $git-commit to commit the current changes."

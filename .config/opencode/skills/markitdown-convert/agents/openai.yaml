@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markitdown Convert"
+  short_description: "Convert PDF, Office, image, and audio files to Markdown"
+  default_prompt: "Use $markitdown-convert to convert this file to Markdown."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dispatch"
+  short_description: "Orchestrate codex implementation with adversarial Claude review"
+  default_prompt: "Use $dispatch to implement this ticket end to end."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Herdr"
+  short_description: "Manage Herdr panes, workspaces, and agent delegation"
+  default_prompt: "Use $herdr to split a pane and run this."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Daily Brief"
+  short_description: "Generate the work daily brief"
+  default_prompt: "Use $daily-brief to generate today's brief."
