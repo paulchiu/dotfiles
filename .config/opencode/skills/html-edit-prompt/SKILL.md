@@ -36,7 +36,7 @@ Injection is **idempotent**: the block is delimited by `<!-- RC:REVIEW-LAYER ...
 
 ## Comment mode on/off
 
-The layer intercepts clicks on the document, so it needs to get out of the way when you just want to read or use the page. The **power button** on the dock (left of the **Review** button, bottom-right) turns comment mode on and off, as does <kbd>⌥R</kbd> and the checkbox in the panel — all three drive the same state, so they can't drift apart.
+The layer intercepts clicks on the document, so it needs to get out of the way when you just want to read or use the page. The **power button** on the dock (left of the **Review** button, bottom-right) turns comment mode on and off, as does <kbd>⌥R</kbd> and the checkbox in the panel. All three drive the same state, so they can't drift apart.
 
 - **On**: the dock lights up yellow, passages highlight on hover, clicking one opens the popover, and in-passage links are suppressed so a click means "comment", not "navigate".
 - **Off**: the page is entirely itself again. No popover, links navigate, text selects and copies freely. Commented passages drop their yellow fill and keep only a thin margin bar, so the marks stay visible as a record without recolouring the document. The Review panel still opens, so you can read, **Copy prompt**, or **Clear all** with the mode off.

@@ -11,7 +11,7 @@ workflow for the previous calendar month, validate the CSV it emits, build a cle
 attachment, and hand back plain email copy the requester can paste and send themselves.
 
 > **Scope:** sandbox-only skill, run roughly once a month off the Slack reminder. Because it
-> runs infrequently, treat each run as fresh — re-check the current recipients and the roster
+> runs infrequently, treat each run as fresh: re-check the current recipients and the roster
 > rather than trusting anything hard-coded here.
 
 ## Core rules
@@ -55,7 +55,7 @@ attachment, and hand back plain email copy the requester can paste and send them
    and report the failure instead of drafting an email.
 5. **Extract the CSV.** Fetch the successful run log and pull the report CSV from the
    `---ALLQUIET---` section. Ignore setup logs, dependency downloads, and post-job cleanup.
-   `sed` is blocked in this shell — save the log to a file and slice it with `awk`/Read.
+   `sed` is blocked in this shell, so save the log to a file and slice it with `awk`/Read.
    ```bash
    gh run view <run-id> --repo mr-yum/pagerduty-on-call --log > run.log
    ```
@@ -82,7 +82,7 @@ The report buckets every on-call hour into exactly **one** category via `bucketF
 `Total = Weekday + Weekend + Public Holiday` holds by construction with **no overlap**. A
 public holiday hour is reclassified _into_ the Holiday column (out of Weekday/Weekend), not
 added on top. This is intentional and matches the older PagerDuty implementation. Do **not**
-re-flag a plausible Total as suspicious on double-counting grounds — the buckets are mutually
+re-flag a plausible Total as suspicious on double-counting grounds, because the buckets are mutually
 exclusive.
 
 ## Building the `.xlsx`
@@ -139,7 +139,7 @@ Please see below and attached for the engineering on call hours served report.
 
 ## Gmail behaviour
 
-If the requester asks for a Gmail draft, create a **draft only** — never send it.
+If the requester asks for a Gmail draft, create a **draft only**, never send it.
 
 - **Do not attach the `.xlsx` to the draft.** Leave the `[attach Excel version of the table]`
   placeholder in the body and hand back the file path so the requester attaches it manually.

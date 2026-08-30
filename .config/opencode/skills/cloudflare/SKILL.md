@@ -1,6 +1,6 @@
 ---
 name: cloudflare
-description: Router for Cloudflare platform work — Workers, Pages, KV/D1/R2, Workers AI/Vectorize, WAF, Wrangler, Agents SDK, Durable Objects, Sandbox SDK, Email.
+description: "Router for Cloudflare platform work: Workers, Pages, KV/D1/R2, Workers AI/Vectorize, WAF, Wrangler, Agents SDK, Durable Objects, Sandbox SDK, Email."
 references:
   - workers
   - pages

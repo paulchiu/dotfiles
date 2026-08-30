@@ -40,7 +40,7 @@ Create every PR in the stack as a draft (`gh pr create --draft`, per Step 3). Th
 - **Keep PRs 2..M as drafts** until each one's base (the PR below it) merges. An upper PR cannot merge or be meaningfully reviewed against `main` while its base is an unmerged branch, so readying it invites premature review and misrepresents it as mergeable.
 - When PR N merges, GitHub auto-retargets PR N+1's base to `main`. Only then `gh pr ready` PR N+1.
 
-A caller that marks every stacked PR ready at once (e.g. a blanket `gh pr ready` loop after CI goes green) is a defect — ready is per-PR and gated on the base having merged.
+A caller that marks every stacked PR ready at once (e.g. a blanket `gh pr ready` loop after CI goes green) is a defect: ready is per-PR and gated on the base having merged.
 
 ## Keeping the stack in sync
 
@@ -55,7 +55,7 @@ git checkout <top-branch>
 git rebase main --update-refs
 ```
 
-Git recognises the intermediate refs and updates them all — `pr-2` onto the new `main`, `pr-3` onto the new `pr-2`, and so on — so you don't rebase each branch by hand. Then push each updated branch:
+Git recognises the intermediate refs and updates them all (`pr-2` onto the new `main`, `pr-3` onto the new `pr-2`, and so on), so you don't rebase each branch by hand. Then push each updated branch:
 
 ```bash
 git push --force-with-lease origin pr-1 pr-2 pr-3   # every branch the rebase moved
