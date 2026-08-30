@@ -42,7 +42,7 @@ Use the **git-commit** skill. Stage the relevant files; the branch name carries 
 
 ### Phase 6: Create PR
 
-**Invoke the gh-pr skill via the Skill tool — do not hand-write the body or call
+**Invoke the gh-pr skill via the Skill tool. Do not hand-write the body or call
 `gh pr create` directly.** Shelling out to `gh` skips gh-pr's title format,
 template discipline, and (for stacks) the `> [!NOTE]` admonition, which is
 exactly how those conventions get silently dropped. gh-pr pushes the branch and
@@ -50,7 +50,7 @@ creates a **draft** PR; note the PR number.
 
 **Stacked series (each PR's base is the previous PR's branch, not `main`):**
 create every PR as a draft (gh-pr does this). Do **not** ready the upper PRs
-here — see the draft rule in Phase 7/9. gh-pr's `references/stacked-prs.md` owns
+here (see the draft rule in Phase 7/9). gh-pr's `references/stacked-prs.md` owns
 the `--base` flag, the admonition, and the numbering; follow it.
 
 ### Phase 7: Monitor CI
@@ -97,7 +97,7 @@ Deltas to the workflow above. These defaults replace the interactive choices.
 
 Fix any blockers (spelling/comment-only nits may be accepted and logged), then create the PR.
 
-**Phase 7:** once green, do not ask; run `gh pr ready <number>` and continue. CI fix-loop cap: 5 failed runs, then escalate. **Stacked series: ready only the bottom PR (base `main`); leave every N+1 PR a draft** (`gh pr create --draft`, never `gh pr ready`) until its base merges and it retargets to `main`. Readying an upper stacked PR is a defect — it can't merge yet and invites premature review.
+**Phase 7:** once green, do not ask; run `gh pr ready <number>` and continue. CI fix-loop cap: 5 failed runs, then escalate. **Stacked series: ready only the bottom PR (base `main`); leave every N+1 PR a draft** (`gh pr create --draft`, never `gh pr ready`) until its base merges and it retargets to `main`. Readying an upper stacked PR is a defect: it can't merge yet and invites premature review.
 
 **Phase 8 (new): review feedback loop.** Poll every 5 minutes via `/loop`, max 30 minutes. Each iteration read `gh pr view <number> --comments` (CodeRabbit posts here) and `gh pr view <number> --json reviews`. For each new comment:
 
@@ -107,7 +107,7 @@ Fix any blockers (spelling/comment-only nits may be accepted and logged), then c
 
 Draft **any human-facing reply** via the `writing-tone` skill before posting. Default to a blockquote-led inline reply (writing-tone example 7): quote the relevant line, then respond. No freeform paragraphs that paraphrase the comment.
 
-Exit when CI is green AND an approving review has landed AND no human reviewer has outstanding nitpicks, or 30 minutes elapse. An approval does not clear the approver's nitpicks: if a **human** (non-bot) reviewer left any actionable nit, suggestion, or change request you have not resolved, treat it as outstanding even when the review state is `APPROVED`. Determine human vs bot by author (a `[bot]` login or `user.type == "Bot"` — e.g. `coderabbitai[bot]` — is a bot; its nits are advisory and never block). "Resolved" means fixed in a pushed commit, or (for a deferred nit) filed as a follow-up issue AND acknowledged in a reply with the link. When human nits remain outstanding, do NOT proceed to Phase 9; escalate to the user with the list and let them choose (fix now / file follow-up / merge anyway).
+Exit when CI is green AND an approving review has landed AND no human reviewer has outstanding nitpicks, or 30 minutes elapse. An approval does not clear the approver's nitpicks: if a **human** (non-bot) reviewer left any actionable nit, suggestion, or change request you have not resolved, treat it as outstanding even when the review state is `APPROVED`. Determine human vs bot by author (a `[bot]` login or `user.type == "Bot"`, e.g. `coderabbitai[bot]`, is a bot; its nits are advisory and never block). "Resolved" means fixed in a pushed commit, or (for a deferred nit) filed as a follow-up issue AND acknowledged in a reply with the link. When human nits remain outstanding, do NOT proceed to Phase 9; escalate to the user with the list and let them choose (fix now / file follow-up / merge anyway).
 
 **Phase 9 (new): merge and archive.** Once approved and green:
 
@@ -141,3 +141,15 @@ At the end of the run, print the log's absolute path so it is clickable in Nex.
 Stop the autonomous flow and report when: a Phase 2 blocker appears (ticket-vs-repo mismatch, contradictory AC, missing repo); the test loop (4b) or CI loop (7) hits its 5-iteration cap; the self-audit (5b) finds unfixable blockers; a reviewer raises substantive disagreement; a human reviewer leaves outstanding nitpicks (even on an approval) that you have not resolved; or the 30-minute review window elapses without approval.
 
 The escalation message must include: where you stopped, what you tried, your blocker hypothesis, and the absolute path to the decision log. Take no further action (especially no merge) until the user responds.
+
+## Done when
+
+Escalation above is the negative bound: when to stop badly. This is the positive one. A run is finished only when every line holds:
+
+- Every acceptance criterion on the ticket is covered by a test, or waived with the reason recorded in the decision log. An AC that is neither is an unfinished run, not a judgement call.
+- CI is green on the pushed branch, not merely queued.
+- Every reviewer comment is resolved, actioned, or answered with a rationale. An unaddressed nitpick counts.
+- The Linear issue is moved to its done state and carries the PR link.
+- The decision log is written and its absolute path printed.
+
+If you cannot satisfy one of these, escalate against it by name rather than reporting the run as complete.

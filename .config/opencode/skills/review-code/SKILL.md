@@ -170,11 +170,11 @@ Before writing, re-verify every `blocking` finding against the worktree code (op
 
 Default location: `~/dev/sandbox/`. Filename: `yyyy-mm-dd PR <num> <short title>.md` (preserve acronym casing; run `date +%Y-%m-%d` if today's date isn't in context).
 
-**Mandatory sections — the doc is incomplete without all of these, in this order:** `Verdict` → `Risk Assessment` → **`## Possible actions`** → (optional persona/AC/user-notes sections) → `Findings` → `Open questions` → `Notes`. When the user has supplied their own findings, Step 8 adds a `## Where your notes and mine agreed` section between `## Possible actions` and `## Findings`. The `## Possible actions` checklist is the decision section: it is what the user ticks, and it is REQUIRED in **every** decision doc, even for a clean Approve with zero findings (it still carries the `Approve the PR` / `No action` boxes). It is not a chat-only artifact — Step 7 mirrors it into chat, it does not replace it. The single most common defect in past docs is this section being dropped; do not let the length of the template below cause you to skip it.
+**Mandatory sections, and the doc is incomplete without all of these, in this order:** `Verdict` → `Risk Assessment` → **`## Possible actions`** → (optional persona/AC/user-notes sections) → `Findings` → `Open questions` → `Notes`. When the user has supplied their own findings, Step 8 adds a `## Where your notes and mine agreed` section between `## Possible actions` and `## Findings`. The `## Possible actions` checklist is the decision section: it is what the user ticks, and it is REQUIRED in **every** decision doc, even for a clean Approve with zero findings (it still carries the `Approve the PR` / `No action` boxes). It is not a chat-only artifact: Step 7 mirrors it into chat, it does not replace it. The single most common defect in past docs is this section being dropped; do not let the length of the template below cause you to skip it.
 
 **Never hard-wrap prose.** One paragraph is one line, however long. Obsidian renders a single newline as a visible break, so a paragraph wrapped at some column arrives broken mid-sentence for the reader. This applies to every prose line in the doc: `Verdict`, `Risk Assessment`, finding bodies, `Notes`, and the `- Rounds run:` metadata bullet. Wrap only where markdown needs a real break: between list items, table rows, and headings. Do not reflow to 80, 100, or 120 columns, and do not indent continuation text under a bullet.
 
-After writing, **verify before printing the path**: grep the file you just wrote for `## Possible actions` (or `## Actions taken` if you are recording an already-executed run). If it is absent, the doc is not done — add it, then continue. Only then **print the absolute path** so the nex terminal renders the click-to-open preview.
+After writing, **verify before printing the path**: grep the file you just wrote for `## Possible actions` (or `## Actions taken` if you are recording an already-executed run). If it is absent, the doc is not done. Add it, then continue. Only then **print the absolute path** so the nex terminal renders the click-to-open preview.
 
 Template:
 
@@ -252,7 +252,7 @@ Recommended change:
 
 ## Step 7: Offer the action checklist inline
 
-This step **mirrors** the `## Possible actions` section already written into the doc (Step 6) — it never substitutes for it. If you are drafting this chat checklist and the doc has no `## Possible actions` section, stop and fix the doc first. Surface the same list in chat so the user can tick without opening the file. Single question:
+This step **mirrors** the `## Possible actions` section already written into the doc (Step 6); it never substitutes for it. If you are drafting this chat checklist and the doc has no `## Possible actions` section, stop and fix the doc first. Surface the same list in chat so the user can tick without opening the file. Single question:
 
 > "Verdict: `<verdict>`. Risk: `<risk>`. <N> blocking, <M> suggestions, <K> questions, <L> nitpicks. Decision doc at `<absolute path>`. Which actions should I take?"
 >
@@ -281,7 +281,7 @@ The output is a **merged** doc, not yours with theirs appended. Rewrite the doc;
 
 This is load-bearing, not decorative: `posting.md` prepends `My note: <text>` above the `LLM note:` line when the comment is posted, so the doc is the source for that string. If a note is ambiguous about file or line, ask; don't guess a location.
 
-**Strip the location from the quoted text.** Users usually paste each note prefixed with the file and line it applies to (`` `src/foo/bar.ts:42` - Should this be ... ``). Drop that prefix, and any trailing separator, from the blockquote: the finding heading directly above already carries `path:line`, and the posted inline comment is anchored to the line, so repeating it is noise in both places. This is the one edit permitted to a user note; everything after the location is still verbatim. Locations stay where they belong — the `### REV-N` heading, the `## Possible actions` entry, and the `Your note` column of the agreement table.
+**Strip the location from the quoted text.** Users usually paste each note prefixed with the file and line it applies to (`` `src/foo/bar.ts:42` - Should this be ... ``). Drop that prefix, and any trailing separator, from the blockquote: the finding heading directly above already carries `path:line`, and the posted inline comment is anchored to the line, so repeating it is noise in both places. This is the one edit permitted to a user note; everything after the location is still verbatim. Locations stay where they belong: the `### REV-N` heading, the `## Possible actions` entry, and the `Your note` column of the agreement table.
 
 **One REV id per note.** Each user note gets its own id even when it merges with one of yours, because each maps 1:1 to an inline comment. Mark them `(My note)` in the `## Possible actions` checklist, and add a `Post your notes only` bulk option. Group the checklist by theme (correctness / tests / structure / messages / comments) once it exceeds about ten items.
 
@@ -345,3 +345,15 @@ These encode what a strong reviewer does by default. Follow them regardless of w
 - Australian spelling. No em dashes.
 - The decision doc is the source of truth. If the user later asks "what did we find on PR 42?", read the archived file rather than re-running the review.
 - This skill consolidates the previous `adversarial-review` and `reviewing-branch-changes` skills; their triggers route here via the description above.
+
+## Done when
+
+A review is finished only when every line holds:
+
+- Every file in the diff has been read, including the ones that produced no finding. Coverage is the claim the verdict rests on.
+- Every finding carries a severity, a `path:line`, and a concrete failure scenario. A finding you cannot state a failure for is a preference; move it or drop it.
+- Every round-2 finding is either confirmed against the code or dropped with the reason recorded.
+- The decision doc has a Verdict, a Risk Assessment, and a Possible actions section, and every unmet AC is listed or the section is explicitly omitted as not applicable.
+- The doc's absolute path is printed.
+
+A review that ran every round but skipped files is not complete. Say which files you read.

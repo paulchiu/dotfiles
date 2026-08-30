@@ -318,3 +318,14 @@ Useful for validating prompt changes without clobbering today's note.
 - Don't paraphrase Slack/Linear content beyond the snippet; quote directly so attribution is preserved.
 - Channel names (not IDs) in the rendered output. Resolve via the Slack search/read response.
 - Times in AEST (UTC+10) when shown to the user; use ISO UTC only in metadata.
+
+## Done when
+
+Failure modes above cover the sources that break. This covers the brief itself. It is finished only when every line holds:
+
+- Every source either contributed to the brief or is named in the log with its failure reason. Silent omission is the failure this rules out.
+- Every meeting in today's schedule is classified, and every one flagged for prep has a prep note.
+- Every action item carries an owner and a due state (overdue, today, or upcoming).
+- The brief is written atomically to the vault path and its absolute path is printed.
+
+A brief missing a source without saying so reads as complete and is not. Name the gap in the brief, not just the log.
