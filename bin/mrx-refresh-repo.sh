@@ -3,7 +3,7 @@
 # Per-repo refresh, invoked by mrx via `update =` in the repo sets that are
 # checked out but not in daily rotation (2.0-misc, paulchiu, vendor).
 #
-# The counterpart to mrx-sync-repo.sh, minus everything destructive: no reset,
+# The counterpart to sync-meandu-repo.sh, minus everything destructive: no reset,
 # no clean, no branch switch, no dependency install. A dormant repo's working
 # tree is wherever its last session left it, and that state is worth more than
 # a guaranteed-pristine checkout.

@@ -700,6 +700,7 @@ _arguments "${_arguments_options[@]}" : \
         case $line[1] in
             (edit)
 _arguments "${_arguments_options[@]}" : \
+'--file=[Target the config file specified by the given path]:PATH:_files' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -722,6 +723,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (e)
 _arguments "${_arguments_options[@]}" : \
+'--file=[Target the config file specified by the given path]:PATH:_files' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -901,6 +903,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (set)
 _arguments "${_arguments_options[@]}" : \
+'--file=[Target the config file specified by the given path]:PATH:_files' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -925,6 +928,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (s)
 _arguments "${_arguments_options[@]}" : \
+'--file=[Target the config file specified by the given path]:PATH:_files' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -949,6 +953,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (unset)
 _arguments "${_arguments_options[@]}" : \
+'--file=[Target the config file specified by the given path]:PATH:_files' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -972,6 +977,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (u)
 _arguments "${_arguments_options[@]}" : \
+'--file=[Target the config file specified by the given path]:PATH:_files' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -996,6 +1002,30 @@ _arguments "${_arguments_options[@]}" : \
         esac
     ;;
 esac
+;;
+(converge)
+_arguments "${_arguments_options[@]}" : \
+'*-r+[The search space to look for divergent revisions]:REVSETS:_default' \
+'*--revision=[The search space to look for divergent revisions]:REVSETS:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'(-i --interactive)--no-interactive[Do not prompt the user for help resolving divergence]' \
+'-i[No-op flag to pair with --no-interactive]' \
+'--interactive[No-op flag to pair with --no-interactive]' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
 ;;
 (debug)
 _arguments "${_arguments_options[@]}" : \
@@ -1724,8 +1754,8 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--reversed[Show revisions in the opposite order (older revisions first)]' \
-'-G[Don'\''t show the graph, show a flat list of revisions]' \
-'--no-graph[Don'\''t show the graph, show a flat list of revisions]' \
+'-G[Show a flat list of revisions instead of a graph]' \
+'--no-graph[Show a flat list of revisions instead of a graph]' \
 '-p[Show patch compared to the previous version of this change]' \
 '--patch[Show patch compared to the previous version of this change]' \
 '-s[For each path, show only whether it was modified, added, or deleted]' \
@@ -1765,8 +1795,8 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--reversed[Show revisions in the opposite order (older revisions first)]' \
-'-G[Don'\''t show the graph, show a flat list of revisions]' \
-'--no-graph[Don'\''t show the graph, show a flat list of revisions]' \
+'-G[Show a flat list of revisions instead of a graph]' \
+'--no-graph[Show a flat list of revisions instead of a graph]' \
 '-p[Show patch compared to the previous version of this change]' \
 '--patch[Show patch compared to the previous version of this change]' \
 '-s[For each path, show only whether it was modified, added, or deleted]' \
@@ -2037,8 +2067,8 @@ _arguments "${_arguments_options[@]}" : \
         case $line[1] in
             (upload)
 _arguments "${_arguments_options[@]}" : \
-'*-r+[The revset, selecting which revisions are sent in to Gerrit]:REVSETS:_default' \
-'*--revision=[The revset, selecting which revisions are sent in to Gerrit]:REVSETS:_default' \
+'*-r+[The revisions to upload to Gerrit]:REVSETS:_default' \
+'*--revision=[The revisions to upload to Gerrit]:REVSETS:_default' \
 '-b+[The location where your changes are intended to land]:REMOTE_BRANCH:_default' \
 '--remote-branch=[The location where your changes are intended to land]:REMOTE_BRANCH:_default' \
 '--remote=[The Gerrit remote to push to]:REMOTE:_default' \
@@ -2046,10 +2076,10 @@ _arguments "${_arguments_options[@]}" : \
 '*--cc=[CC these emails on the change (can be repeated)]:CC:_default' \
 '*-l+[Add the following labels configured by Gerrit (can be repeated)]:LABEL:_default' \
 '*--label=[Add the following labels configured by Gerrit (can be repeated)]:LABEL:_default' \
-'--topic=[Applies a topic to the change]:TOPIC:_default' \
-'*--hashtag=[Applies a hashtag to the change (can be repeated)]:HASHTAG:_default' \
-'-m+[A patch set description for the new patch set]:MESSAGE:_default' \
-'--message=[A patch set description for the new patch set]:MESSAGE:_default' \
+'--topic=[Apply a topic to the change]:TOPIC:_default' \
+'*--hashtag=[Apply a hashtag to the change (can be repeated)]:HASHTAG:_default' \
+'-m+[The description for the patch set]:MESSAGE:_default' \
+'--message=[The description for the patch set]:MESSAGE:_default' \
 '--notify=[Who to email notifications to (defaults to all)]:NOTIFY:((none\:"No emails"
 owner\:"Only the change owner is notified"
 owner-reviewers\:"Only the change owner and reviewers will be notified"
@@ -2066,15 +2096,15 @@ all\:"All relevant users, including owner, reviewers, cc'\''d, users that have s
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-n[Do not actually push the changes to Gerrit]' \
-'--dry-run[Do not actually push the changes to Gerrit]' \
+'-n[Only display what will change on the remote; do not push changes to Gerrit]' \
+'--dry-run[Only display what will change on the remote; do not push changes to Gerrit]' \
 '--edit[Push the change as a change edit]' \
-'--wip[Marks the change as WIP (work in progress)]' \
-'--ready[Unmarks the change as WIP (work in progress)]' \
-'--private[Marks the change as private]' \
-'--remove-private[Unmarks the change as private]' \
-'--publish-comments[Publishes any draft comments for the given change]' \
-'--no-publish-comments[Disables publishing of any draft comments for the given change]' \
+'--wip[Mark the change as WIP (work in progress)]' \
+'--ready[Mark the change as ready (no longer work in progress)]' \
+'--private[Mark the change as private]' \
+'--remove-private[Unmark the change as private]' \
+'--publish-comments[Publish draft comments for the given change]' \
+'--no-publish-comments[Do not publish draft comments for the given change]' \
 '--submit[Directly submit the changes, bypassing code review]' \
 '--skip-validation[When --submit is provided, skip performing validations]' \
 '--merged[Create a new change, even if the change has already been merged]' \
@@ -2612,8 +2642,8 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--reversed[Show revisions in the opposite order (older revisions first)]' \
-'-G[Don'\''t show the graph, show a flat list of revisions]' \
-'--no-graph[Don'\''t show the graph, show a flat list of revisions]' \
+'-G[Show a flat list of revisions instead of a graph]' \
+'--no-graph[Show a flat list of revisions instead of a graph]' \
 '-p[Show patch]' \
 '--patch[Show patch]' \
 '(-s --summary --stat --types --name-only --git --color-words --tool --context --ignore-all-space --ignore-space-change -G --no-graph -p --patch --reversed -T --template)--count[Print the number of commits instead of showing them]' \
@@ -2787,8 +2817,8 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-G[Don'\''t show the graph, show a flat list of modified changes]' \
-'--no-graph[Don'\''t show the graph, show a flat list of modified changes]' \
+'-G[Show a flat list of modified changes instead of a graph]' \
+'--no-graph[Show a flat list of modified changes instead of a graph]' \
 '-p[Show patch of modifications to changes]' \
 '--patch[Show patch of modifications to changes]' \
 '-s[For each path, show only whether it was modified, added, or deleted]' \
@@ -2847,8 +2877,8 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--reversed[Show operations in the opposite order (older operations first)]' \
-'-G[Don'\''t show the graph, show a flat list of operations]' \
-'--no-graph[Don'\''t show the graph, show a flat list of operations]' \
+'-G[Show a flat list of operations instead of a graph]' \
+'--no-graph[Show a flat list of operations instead of a graph]' \
 '-d[Show changes to the repository at each operation]' \
 '--op-diff[Show changes to the repository at each operation]' \
 '-p[Show patch of modifications to changes (implies --op-diff)]' \
@@ -2930,8 +2960,8 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-G[Don'\''t show the graph, show a flat list of modified changes]' \
-'--no-graph[Don'\''t show the graph, show a flat list of modified changes]' \
+'-G[Show a flat list of modified changes instead of a graph]' \
+'--no-graph[Show a flat list of modified changes instead of a graph]' \
 '-p[Show patch of modifications to changes]' \
 '--patch[Show patch of modifications to changes]' \
 '(-p --patch -s --summary --stat --types --name-only --git --color-words --tool --context --ignore-all-space --ignore-space-change)--no-op-diff[Do not show operation diff]' \
@@ -3024,8 +3054,8 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-G[Don'\''t show the graph, show a flat list of modified changes]' \
-'--no-graph[Don'\''t show the graph, show a flat list of modified changes]' \
+'-G[Show a flat list of modified changes instead of a graph]' \
+'--no-graph[Show a flat list of modified changes instead of a graph]' \
 '-p[Show patch of modifications to changes]' \
 '--patch[Show patch of modifications to changes]' \
 '-s[For each path, show only whether it was modified, added, or deleted]' \
@@ -3084,8 +3114,8 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--reversed[Show operations in the opposite order (older operations first)]' \
-'-G[Don'\''t show the graph, show a flat list of operations]' \
-'--no-graph[Don'\''t show the graph, show a flat list of operations]' \
+'-G[Show a flat list of operations instead of a graph]' \
+'--no-graph[Show a flat list of operations instead of a graph]' \
 '-d[Show changes to the repository at each operation]' \
 '--op-diff[Show changes to the repository at each operation]' \
 '-p[Show patch of modifications to changes (implies --op-diff)]' \
@@ -3167,8 +3197,8 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'-G[Don'\''t show the graph, show a flat list of modified changes]' \
-'--no-graph[Don'\''t show the graph, show a flat list of modified changes]' \
+'-G[Show a flat list of modified changes instead of a graph]' \
+'--no-graph[Show a flat list of modified changes instead of a graph]' \
 '-p[Show patch of modifications to changes]' \
 '--patch[Show patch of modifications to changes]' \
 '(-p --patch -s --summary --stat --types --name-only --git --color-words --tool --context --ignore-all-space --ignore-space-change)--no-op-diff[Do not show operation diff]' \
@@ -4416,6 +4446,7 @@ _jj_commands() {
 'bookmark:Manage bookmarks \[default alias\: b\]' \
 'commit:Update the description and create a new change on top \[default alias\: ci\]' \
 'config:Manage config options' \
+'converge:Converge divergent changes' \
 'debug:Low-level commands not intended for users' \
 'describe:Update the change description or other metadata \[default alias\: desc\]' \
 'diff:Compare file contents between two revisions' \
@@ -4621,6 +4652,11 @@ _jj__subcmd__config__subcmd__set_commands() {
 _jj__subcmd__config__subcmd__unset_commands() {
     local commands; commands=()
     _describe -t commands 'jj config unset commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__converge_commands] )) ||
+_jj__subcmd__converge_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj converge commands' commands "$@"
 }
 (( $+functions[_jj__subcmd__debug_commands] )) ||
 _jj__subcmd__debug_commands() {

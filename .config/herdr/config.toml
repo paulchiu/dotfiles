@@ -15,6 +15,10 @@ new_cwd = "~/dev/sandbox"
 
 [keys]
 prefix = "ctrl+space"
+swap_pane_left = "prefix+shift+h"
+swap_pane_down = "prefix+shift+j"
+swap_pane_up = "prefix+shift+k"
+swap_pane_right = "prefix+shift+l"
 
 [[keys.command]]
 key = "prefix+t"

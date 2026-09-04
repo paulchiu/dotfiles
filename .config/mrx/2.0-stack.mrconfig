@@ -3,7 +3,7 @@
 base = ~/dev
 jobs = 10
 auto_fetch = 6m
-update = ~/bin/mrx-sync-repo.sh
+update = ~/bin/sync-meandu-repo.sh
 
 [bill-api]
 checkout = git clone 'git@github.com:mr-yum/bill-api.git' 'bill-api'
