@@ -281,3 +281,4 @@ esac
 
 # Added by codebase-memory-mcp install
 export PATH="/Users/paul/.local/bin:$PATH"
+export PATH=$PATH:$HOME/.maestro/bin
