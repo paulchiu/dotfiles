@@ -31,6 +31,11 @@ return {
         function() require("telescope.builtin").live_grep({ cwd = project_root() }) end,
         desc = "Live grep (project root)",
       },
+      {
+        "<leader>fw",
+        function() require("telescope.builtin").grep_string({ cwd = project_root() }) end,
+        desc = "Grep word under cursor (project root)",
+      },
       { "<leader>fb", "<Cmd>Telescope buffers<CR>", desc = "Buffers" },
       { "<leader>fh", "<Cmd>Telescope help_tags<CR>", desc = "Help tags" },
     },
