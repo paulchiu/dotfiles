@@ -9,8 +9,9 @@ without a plugin spec: ~/.config/nvim is already on the runtimepath.
 local M = {}
 
 local config = {
-  --- Attach a git permalink to the copied reference.
-  link = true,
+  --- Attach a git permalink to the copied reference. Off by default because
+  --- resolving one costs three git calls; <leader>sl forces it per call.
+  link = false,
   --- Format name to use without prompting; nil shows the picker.
   default = nil,
   --- Remote to build permalinks from.
@@ -142,8 +143,9 @@ local function symbol_path(bufnr, pos)
   return nil
 end
 
---- Everything the formats below are built from.
-local function gather(line1, line2)
+--- Everything the formats below are built from. `link` decides whether the
+--- permalink is resolved at all, since that costs three git calls.
+local function gather(line1, line2, link)
   local bufnr = vim.api.nvim_get_current_buf()
   local absolute = vim.api.nvim_buf_get_name(bufnr)
   local root = git(vim.fs.dirname(absolute), "rev-parse", "--show-toplevel")
@@ -156,7 +158,7 @@ local function gather(line1, line2)
     first = line1,
     last = line2,
     symbol = symbol_path(bufnr, { line = cursor[1] - 1, character = cursor[2] }),
-    url = config.link and root and permalink(root, relative, line1, line2) or nil,
+    url = link and root and permalink(root, relative, line1, line2) or nil,
   }
 end
 
@@ -213,8 +215,12 @@ local function choices_for(ctx)
 end
 
 --- Copies a reference for lines line1..line2 (defaulting to the cursor line).
-function M.copy(line1, line2)
-  local ctx = gather(line1 or vim.fn.line("."), line2 or vim.fn.line("."))
+--- `link` overrides config.link for this one call.
+function M.copy(line1, line2, link)
+  if link == nil then
+    link = config.link
+  end
+  local ctx = gather(line1 or vim.fn.line("."), line2 or vim.fn.line("."), link)
   local choices = choices_for(ctx)
 
   if config.default then
@@ -240,11 +246,16 @@ end
 function M.setup(opts)
   config = vim.tbl_extend("force", config, opts or {})
 
+  -- The bang forces a permalink on, whatever config.link says.
   vim.api.nvim_create_user_command("SaucerCopy", function(args)
-    M.copy(args.line1, args.line2)
-  end, { range = true, desc = "Copy a markdown code reference" })
+    M.copy(args.line1, args.line2, args.bang or nil)
+  end, { range = true, bang = true, desc = "Copy a markdown code reference" })
 
-  vim.keymap.set({ "n", "x" }, "<leader>ss", ":SaucerCopy<CR>", { silent = true, desc = "Copy code reference" })
+  local keymap = { silent = true }
+  vim.keymap.set({ "n", "x" }, "<leader>ss", ":SaucerCopy<CR>",
+    vim.tbl_extend("force", keymap, { desc = "Copy code reference" }))
+  vim.keymap.set({ "n", "x" }, "<leader>sl", ":SaucerCopy!<CR>",
+    vim.tbl_extend("force", keymap, { desc = "Copy code reference with permalink" }))
 end
 
 return M
