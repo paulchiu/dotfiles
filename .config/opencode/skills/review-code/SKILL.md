@@ -174,7 +174,7 @@ Default location: `~/dev/sandbox/`. Filename: `yyyy-mm-dd PR <num> <short title>
 
 **Never hard-wrap prose.** One paragraph is one line, however long. Obsidian renders a single newline as a visible break, so a paragraph wrapped at some column arrives broken mid-sentence for the reader. This applies to every prose line in the doc: `Verdict`, `Risk Assessment`, finding bodies, `Notes`, and the `- Rounds run:` metadata bullet. Wrap only where markdown needs a real break: between list items, table rows, and headings. Do not reflow to 80, 100, or 120 columns, and do not indent continuation text under a bullet.
 
-After writing, **verify before printing the path**: grep the file you just wrote for `## Possible actions` (or `## Actions taken` if you are recording an already-executed run). If it is absent, the doc is not done. Add it, then continue. Only then **print the absolute path** so the nex terminal renders the click-to-open preview.
+After writing, **verify before printing the path**: grep the file you just wrote for `## Possible actions` (or `## Actions taken` if you are recording an already-executed run). If it is absent, the doc is not done. Add it, then continue. Only then **print the absolute path** so the terminal renders the click-to-open preview.
 
 Template:
 

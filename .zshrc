@@ -282,3 +282,10 @@ esac
 # Added by codebase-memory-mcp install
 export PATH="/Users/paul/.local/bin:$PATH"
 export PATH=$PATH:$HOME/.maestro/bin
+
+# Android SDK (brew: android-commandlinetools) + JDK 17.
+# crew-frontend's Android build requires Java 17; newer JDKs are unsupported.
+export JAVA_HOME="/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
+export ANDROID_HOME="/opt/homebrew/share/android-commandlinetools"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export PATH="$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"

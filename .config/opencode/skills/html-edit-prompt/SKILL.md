@@ -13,11 +13,11 @@ This is the _input_ side of document review: it produces an editing prompt, not 
 
 ## The iterate loop
 
-1. Inject the layer into the target HTML (see below), then open it: `nex web open "file://..."`.
+1. Inject the layer into the target HTML (see below), then open it: `open "path/to/page.html"`.
 2. With comment mode on, click a passage (anchors the whole block) or highlight the exact words you mean (anchors just that quote); type a correction into the popover for each. Optionally fill the **General note** for document-wide instructions.
 3. Press **Copy prompt** in the Review panel (bottom-right), paste the result back to the agent.
 4. The agent applies the corrections and overwrites the file, preserving the `RC:REVIEW-LAYER` block.
-5. `nex web reload --hard` the pane. When a round looks right, press **Clear all** to reset.
+5. Hard-reload the page (<kbd>⇧⌘R</kbd>) to pick up the rewrite. When a round looks right, press **Clear all** to reset.
 
 ## Running it
 

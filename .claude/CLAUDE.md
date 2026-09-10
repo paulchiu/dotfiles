@@ -3,9 +3,10 @@
 - No em dashes. Use commas, parentheses, colons, or separate sentences.
 - JS/TS: prefer JSDoc block comments (`/** ... */`) over stacked `//` lines.
 - Keep code comments concise. Explain what isn't obvious from the code; don't restate it or justify every choice. Prefer one tight sentence over a defensive paragraph. A comment covers the local concern of the line in front of it, not the whole feature. Keep the "why" in one place (usually a well-named function's JSDoc); call sites and sibling comments reference it, they don't restate it. Don't re-derive what a self-documenting call already says (`if (isAlreadyCompletedTransitionError(error))` needs no comment on how the check works). Cut any comment that re-explains context lifted from elsewhere (the "pasted-clause smell"). Never write long-winded comments: one sentence stating the contract, plus at most one short "why". Anything longer belongs in a design doc. Describe what the code does, not what it used to do.
+- In OOP/MVC-style codebases, prefer slim controllers and fat service classes. A controller handles the transport concern only: decode the request, run the identity/auth checks that need the framework context, call one service method, map the result to the response shape. Everything else (loading entities, feature gates, business rules, persistence, metrics) belongs in a service, with its own module and its own spec. When a handler starts growing branches, extract rather than let it accumulate, and follow whatever service shape the codebase already uses.
 - Don't put issue/ticket references (`RR-82`, `PAY-3452`, etc.) in code comments or test descriptions. Keep the explanatory text, drop the ref (the branch, commit, and PR already carry it). Exception: `TODO`/`FIXME` comments may cite an issue ref, since they're temporary follow-up markers meant to be picked up later.
 - When saving a draft/note/write-up, name it `yyyy-mm-dd Title.md` (preserve acronym casing). If today's date isn't in context, run `date +%Y-%m-%d`.
-- After saving such a file, print its absolute path in your reply. The nex terminal only renders previews/click-to-open on full paths.
+- After saving such a file, print its absolute path in your reply. Previews and click-to-open only render on full paths.
 
 ## Shell / CLI Aliases
 

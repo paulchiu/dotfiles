@@ -172,5 +172,5 @@ When reporting back:
 - Summarise the naming rule you applied.
 - Say whether dates came from existing prefixes or created-at timestamps.
 - Keep the response short and concrete.
-- Print each renamed file as an **absolute path** (e.g. `/Users/paul/notes/2026-04-22 CAD team split response draft.md`), not a bare filename. The nex terminal only renders file previews and click-to-open on full paths.
+- Print each renamed file as an **absolute path** (e.g. `/Users/paul/notes/2026-04-22 CAD team split response draft.md`), not a bare filename. File previews and click-to-open only render on full paths.
 - Do not append line-number targets such as `:1` to dated document paths. Use plain absolute paths or clickable links that target only the file path.
