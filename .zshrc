@@ -193,6 +193,9 @@ fpath+=~/.zfunc; autoload -Uz compinit; compinit
 compdef _files yadm ya
 
 zstyle ':completion:*' menu select
+# Prefer clippy when typing cli - hide clipcopy/clippaste (not installed, ghost completions) and clippy-driver (Rust internal, rarely typed directly)
+# This makes `cli<tab>` expand uniquely to `clippy` instead of showing 4 matches
+zstyle ':completion:*:*:-command-:*:*' ignored-patterns 'clipcopy' 'clippaste' 'clippy-driver'
 # OPTIMIZED: Cache mryum export output (regenerate every 7 hours)
 _load_mryum() {
   local cache_file="/tmp/mryum_cache_${USER}"
