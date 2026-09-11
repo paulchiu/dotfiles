@@ -1,19 +1,19 @@
+Android Studio.app
 AppCleaner.app
 Audiobook Builder.app
-Bing Wallpaper.app
 Bitwarden.app
 Caffeine.app
 ChatGPT.app
+Claude Usage.app
 Claude.app
 ColorSlurp.app
-DaisyDisk.app
 DBeaver.app
+DaisyDisk.app
 Default Browser.app
 Discord.app
 Dropbox.app
 DuckDuckGo.app
 Easy Move+Resize.app
-features.cfg
 Firefox.app
 FluxMarkdown.app
 FocuSee.app
@@ -26,6 +26,7 @@ Google Drive.app
 Google Sheets.app
 Google Slides.app
 Granola.app
+Hammerspoon.app
 HandBrake.app
 Ice.app
 Insta360 Link Controller.app
@@ -36,9 +37,10 @@ Kagi for Safari.app
 Karabiner-Elements.app
 Karabiner-EventViewer.app
 KeyCastr.app
-lghub.app
 MacWhisper.app
 Microsoft Azure Storage Explorer.app
+Microsoft Bing Wallpaper.app
+Microsoft Bing for Safari.app
 Microsoft Excel.app
 Microsoft OneNote.app
 Microsoft Outlook.app
@@ -51,20 +53,18 @@ Nex.app
 Obsidian.app
 OneDrive.app
 OrbStack.app
-Orca.app
-PastePal.app
 PICO-8.app
+PastePal.app
 Pixelmator Pro.app
 Pop.app
 Postman.app
 ProtonVPN.app
-qbittorrent.app
 QSpace Pro.app
 Rectangle.app
 RemotePCSuite.app
 RustDesk.app
-Safari.app
 SF Symbols.app
+Safari.app
 Shottr.app
 Slack.app
 SoundAnchor.app
@@ -75,4 +75,7 @@ Vial.app
 Visual Studio Code.app
 Windows App.app
 Xcode.app
+features.cfg
+lghub.app
+qbittorrent.app
 zoom.us.app
