@@ -84,6 +84,8 @@ First pick the branch:
 - **Branch A, rename-only request** (the user asked only to rename files): do NOT modify file content. If a renamed document has no reproducibility front matter, mention that in your final report, but do not add it.
 - **Branch B, content work** (you are creating a new dated doc, rewriting sections, synthesising notes, or adding substantive decisions): ensure the document starts with this front matter. Typo fixes and renames alone do NOT count as content work.
 
+If the target repository defines its own front matter schema, that repository-local schema wins. Use it as written and do not merge in fields it omits.
+
 Front matter template for Branch B:
 
 ```yaml
@@ -91,10 +93,6 @@ Front matter template for Branch B:
 title: "Readable document title"
 date: "yyyy-mm-dd"
 generation:
-  summary_prompt: >-
-    Recreate this document by producing a dated note titled "Readable document title"
-    from the source context, preserving the main decisions, rationale, open questions,
-    and action items.
   source_context: >-
     Short description of the inputs used, such as a conversation, raw notes, linked
     files, meeting transcript, or issue URL.
@@ -108,7 +106,6 @@ Merge rule: if the file already has front matter, add only the missing fields ab
 
 Field rules:
 
-- `generation.summary_prompt`: write it as a concise task prompt that would let another person or agent regenerate a similar document without the original chat. Not a step-by-step history.
 - `generation.source_context`: 1-3 sentences, or a short YAML list of source references.
 - `generation.conversation_archive.status`: exactly one of these three values.
   - `not_applicable`: no conversation was used.
