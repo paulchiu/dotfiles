@@ -1,0 +1,32 @@
+{
+  "providers": {
+    "local-qwen": {
+      "baseUrl": "http://127.0.0.1:8080/v1",
+      "api": "openai-completions",
+      "apiKey": "local-only",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false,
+        "thinkingFormat": "qwen-chat-template"
+      },
+      "models": [
+        {
+          "id": "mlx-community/Qwen3.5-35B-A3B-4bit",
+          "name": "Qwen3.5 35B-A3B 4-bit (Local MLX)",
+          "reasoning": true,
+          "input": [
+            "text"
+          ],
+          "contextWindow": 32768,
+          "maxTokens": 4096,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          }
+        }
+      ]
+    }
+  }
+}
