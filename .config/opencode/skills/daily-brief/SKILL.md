@@ -24,6 +24,8 @@ NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 OUT=/Users/paul/meandu/Area/Journal/${TODAY}.md
 LOG_DIR=/Users/paul/meandu/Area/Journal/.brief-log
 LOG=${LOG_DIR}/${TODAY}.log
+TASKS=/Users/paul/meandu/Area/Tasks.md
+INBOX_SEEN=${LOG_DIR}/inbox-seen.md
 mkdir -p "$LOG_DIR"
 ```
 
@@ -166,6 +168,14 @@ Important: `<X> x me&u` (e.g. `Treetop Golf x me&u`) and `me&u _ <X>` are **cust
   - Lines beginning `- [ ]`
   - Lines beginning `Action item:` / `Action:` / `TODO:` / `Follow up:` (case-insensitive)
 - Cross-check `Tasks.md`: if the same item text (or substring ≥30 chars) is still `- [ ]` open, surface it as overdue with a wikilink to the Granola file.
+- Everything else, an action with no match in `Tasks.md`, is an **inbox candidate**. It is not owed yet; it has never been accepted. Hand it to Step 3c.
+
+**Resolve status before surfacing.** A Granola action carries no completion signal, so an unresolved one will resurface forever. Before calling any of them open:
+
+- Grep the journal notes dated after the 1:1 (`Area/Journal/*.md`, that date onward) for the action's distinctive words, 3 or 4 content words is enough.
+- Take the most recent line that matches and read the status off it: started, waiting on someone, blocked, done.
+- Report that status verbatim rather than asserting "not started". If the latest status reads as done, drop the item entirely, from the brief and from the To place line.
+- Found nothing? Say "no status recorded since <date>", which is honest, where "not started" is a guess.
 
 **2d. Action items tied to today's meeting attendees**
 
@@ -248,7 +258,9 @@ Render every bullet in this section as plain markdown (no surrounding backticks)
 
 ### Surfaced from recent 1:1s
 
-- [<person>, 1:1 on YYYY-MM-DD] <action item from Granola>, _still open in Tasks.md_. Link to `[[<Granola filename without .md>]]`.
+- [<person>, 1:1 on YYYY-MM-DD] <action item from Granola>, _still open in Tasks.md_, plus the latest recorded status per 2c. Link to `[[<Granola filename without .md>]]`.
+
+Actions with no match in Tasks.md do not belong in this section. They go to the inbox in Step 3c, and the brief names only the count: `<n> new 1:1 actions parked in the Tasks.md inbox for triage.`
 
 ## Suggested Linear Tickets to Create
 
@@ -329,13 +341,33 @@ Seed both lines bare when there is nothing to put on them.
 - Unplanned work is a new row typed anywhere in the block.
 - Plain bullets, never `- [ ]`: the vault-wide query in `Area/Tasks.md` would pull unfinished slots into the global task list.
 
+### Step 3c: Top up the Tasks inbox
+
+Granola actions Paul has never triaged go to a holding pen in `$TASKS`, so the decision to track them is his and the brief stops re-raising them.
+
+```
+## Inbox
+<!-- brief-inbox:start -->
+- [ ] <action> ➕ <date added> [[<source Granola note>]]
+<!-- brief-inbox:end -->
+```
+
+- Append one line per inbox candidate from 2c, inside the markers, newest last. Never reorder or rewrite lines already there.
+- **Propose each action once, ever.** Append every action's source note and text to `$INBOX_SEEN` when you propose it, and skip anything already listed there. Deleting a line is how Paul declines, so a re-proposal would undo his decision. The ledger, not the file, is the memory.
+- Skip anything whose text already matches an open or done task anywhere in `$TASKS` (substring ≥30 chars), accepted items have usually been reworded on the way out of the block.
+- Cap 5 per run. Carry the rest to tomorrow, an inbox of 30 gets deleted wholesale rather than read.
+- If the `## Inbox` section or its markers are missing, create them directly under the loose `# Manual` list, above `## Unplanned`.
+- Leave the rest of `$TASKS` untouched. This step only ever appends between the two markers.
+
+Items in the inbox are **not** owed: never put one on the To place line or under Action Items Owed until Paul has accepted it.
+
 ### Step 4: Write atomically
 
 1. Read existing `$OUT` (empty string if missing).
 2. Brief block: if the markers exist, replace their contents (between, not including, the markers). Else put a fresh block at the top of the file.
 3. Day-log block: if the markers exist and the block is touched (Step 3b), carry it over verbatim. Else write the freshly seeded block below the brief block, separated by a blank line.
 4. Preserve any other content the user has typed, in place.
-5. Use `Write` to overwrite the whole file.
+5. Use `Write` to overwrite the whole file. `$TASKS` is written separately in Step 3c, never rewritten wholesale.
 6. If `$LOG` ended up non-empty, the brief's status line will already point to it via the `[[…]]` wikilink.
 
 ### Step 5: Final output
@@ -349,6 +381,16 @@ Print **only** absolute paths to stdout, one per line: `$OUT` first, then any pr
 - **Vault path missing**: log to stderr and exit 1. This is a real config error.
 - **Permission denied on a Slack channel**: log just that channel; continue with the others.
 - **MCP tool name guess is wrong**: list available tools matching the prefix and pick the closest match by description. Don't silently skip the source.
+
+## Inbox triage (on request)
+
+Paul reviews the `## Inbox` block in his own time: he deletes lines he does not want, and leaves the rest. When he asks to categorise, triage or clear the inbox, run this instead of the daily workflow:
+
+1. Read the `## Inbox` block of `$TASKS`. Whatever survived is accepted, no further confirmation needed.
+2. Place each surviving item in the section that fits, using the file's own scheme: `## Urgent + Important`, `## Urgent`, `## Important`, `## Everything else`, `## On-going`, or `# Long term` / `## Tal recommendations` for things that will never have a due date. Loose items directly under `# Manual` are the default when nothing else fits.
+3. Carry the `➕` date across unchanged, it records when the action was raised, not when it was filed. Keep any `[[source note]]` link. Add a `#name` tag when the action is owed to or by a named person, that is what makes it show up in meeting prep.
+4. Reword only for brevity, never to change meaning. Say what you moved where, one line each, and ask about anything genuinely ambiguous rather than guessing.
+5. Empty the block, leaving the markers in place. Never touch `$INBOX_SEEN`, its job is to stop re-proposals, including of items Paul deleted.
 
 ## Test mode
 
@@ -381,6 +423,8 @@ Failure modes above cover the sources that break. This covers the brief itself. 
 - Every action item carries an owner and a due state (overdue, today, or upcoming).
 - The day log block exists, carrying every timed calendar event on its own row, or was carried over verbatim because Paul had typed in it.
 - Anything on the previous note's Tomorrow line has resurfaced, on the To place line and under Action Items Owed.
+- No 1:1 action was called open without checking later journal notes for its latest status.
+- New 1:1 actions are in the `## Inbox` block of `Tasks.md`, each recorded in `$INBOX_SEEN`, and none of them reached the To place line.
 - The brief is written atomically to the vault path and its absolute path is printed.
 
 A brief missing a source without saying so reads as complete and is not. Name the gap in the brief, not just the log.
