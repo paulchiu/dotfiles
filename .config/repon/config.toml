@@ -1,0 +1,264 @@
+# Repon configuration. Every key Repon reads appears below; the ones commented out
+# are showing their own default, so uncommenting one without editing it changes
+# nothing. Live values are the deviations.
+#
+# `repon config --example` prints the shipped annotated example.
+
+# theme = "default"            # names themes/<name>.toml
+# glyphs = "full"              # "ascii" on TERM=linux, "full" otherwise
+# show_worktrees = true        # Worktrees are rows too
+# show_submodules = false      # Submodules stay hidden
+# notice_timeout = "3s"        # "0s" turns the timer off, not Notices
+
+# Each names one declared [[action]]. All three resolve at fire time: the active
+# Set's own key first, then the top-level one here, then no hook.
+# on_refresh = "tidy"          # after `r` and `R`, never the background sweep
+# before_sync = "tidy"         # a failing step stops sync from being attempted
+# after_sync = "tidy"          # runs only once sync actually fast-forwards a row
+
+# The lifecycle: refresh looks at git state alone, always on; fetch reaches the
+# network to keep that state current, off by default; auto_update rides fetch's
+# cycle to fast-forward what it finds behind. The built-in `sync` action does
+# that same fast-forward on demand, on the same eligibility rule, whenever
+# asked rather than on fetch's own cycle; `sync` is also the name of the Cell
+# comparing an Entity against its upstream, a different thing from the action.
+# Full picture:
+# https://github.com/paulchiu/repon/blob/main/docs/spec/config.md#refresh-fetch-and-auto-update
+
+[refresh]
+# poll_interval = "2s"         # "0s" turns the sweep off
+# status_stale_after = "5m"
+# on_focus = true
+
+[fetch]
+enabled = true                 # off by default; needs a build with the fetch feature
+# interval = "5m"
+# concurrency = 4
+
+[auto_update]
+enabled = true                 # off by default; fast-forward only, rides the fetch cycle
+
+# The me&u 2.0 order-and-pay stack.
+# Each glob is a bare prefix so a Repo brings its own Worktrees, which are named
+# `<repo>-<suffix>` as siblings under the same root. A prefix that already covers a
+# name below it is the only entry needed: `loyalty*` is `loyalty-api*` too.
+[[set]]
+name = "2.0-stack"
+roots = ["~/dev"]
+include = [
+  "**/dev/bill-api*",
+  "**/dev/bill-db-schema*",
+  "**/dev/bill-worker*",
+  "**/dev/cloudflare-workers*",
+  "**/dev/crew*",
+  "**/dev/db-tasks*",
+  "**/dev/guest-gateway*",
+  "**/dev/integration-config*",
+  "**/dev/loyalty*",
+  "**/dev/manage*",
+  "**/dev/menu-api*",
+  "**/dev/menu-sync*",
+  "**/dev/mr-yum-db-schema*",
+  "**/dev/order-api*",
+  "**/dev/order-db-schema*",
+  "**/dev/order-worker*",
+  "**/dev/partner-db-schema*",
+  "**/dev/payment-api*",
+  "**/dev/payment-db-schema*",
+  "**/dev/payment-infra*",
+  "**/dev/payment-worker*",
+  "**/dev/payout-api*",
+  "**/dev/payout-db-schema*",
+  "**/dev/payout-infra*",
+  "**/dev/payout-worker*",
+  "**/dev/pos-integrations*",
+  "**/dev/serve-api*",
+  "**/dev/serve-frontend*",
+  "**/dev/venue-api*",
+]
+# The prefixes above have to be broad enough to catch Worktrees, which makes them
+# broad enough to catch a few Repos another Set owns. These carve those back out, so
+# `include` and `exclude` are not two ways of saying one thing here.
+exclude = [
+  "**/dev/manage-mcp*",
+  "**/dev/serve-frontend-old-invoice-helper*",
+]
+# Run the per-repo sync script once sync moves a row.
+after_sync = "reset"
+
+# Everything under ~/dev another Set does not already own, so a repo cloned here
+# tomorrow lands in this Set rather than in none.
+[[set]]
+name = "2.0-misc"
+roots = ["~/dev"]
+# The other Sets' own prefixes, verbatim. `exclude` beats `include` flat, with no
+# specificity rule, so this cannot carve anything back: the four repos 2.0-stack
+# excludes (loyalty-connector, manage-infra, manage-mcp,
+# serve-frontend-old-invoice-helper) fall out here too and live only in `dev`.
+exclude = [
+  "**/dev/bill-api*",
+  "**/dev/bill-db-schema*",
+  "**/dev/bill-worker*",
+  "**/dev/cloudflare-workers*",
+  "**/dev/crew*",
+  "**/dev/db-tasks*",
+  "**/dev/guest-gateway*",
+  "**/dev/integration-config*",
+  "**/dev/loyalty*",
+  "**/dev/manage*",
+  "**/dev/menu-api*",
+  "**/dev/menu-sync*",
+  "**/dev/mr-yum-db-schema*",
+  "**/dev/order-api*",
+  "**/dev/order-db-schema*",
+  "**/dev/order-worker*",
+  "**/dev/partner-db-schema*",
+  "**/dev/payment-api*",
+  "**/dev/payment-db-schema*",
+  "**/dev/payment-infra*",
+  "**/dev/payment-worker*",
+  "**/dev/payout-api*",
+  "**/dev/payout-db-schema*",
+  "**/dev/payout-infra*",
+  "**/dev/payout-worker*",
+  "**/dev/pos-integrations*",
+  "**/dev/serve-api*",
+  "**/dev/serve-frontend*",
+  "**/dev/venue-api*",
+  "**/dev/d3-color*",
+  "**/dev/messagemedia-messages-nodejs-sdk*",
+  "**/dev/baseweb*",
+  "**/dev/buildkite-pipelines*",
+  "**/dev/hospitality-api-docs*",
+  "**/dev/sisense-embedsdk-react*",
+]
+
+# Every me&u 2.0 repo under ~/dev in one Set, where 2.0-stack and 2.0-misc split the
+# same ground in two. Starting from everything and carving out the six repos rooted here
+# that are not me&u (owned by `paulchiu` and `vendor`) also picks up the handful neither
+# of the other two Sets covers, so nothing under ~/dev is left in no Set.
+[[set]]
+name = "2.0-all"
+roots = ["~/dev"]
+exclude = [
+  "**/dev/baseweb*",
+  "**/dev/buildkite-pipelines*",
+  "**/dev/d3-color*",
+  "**/dev/hospitality-api-docs*",
+  "**/dev/messagemedia-messages-nodejs-sdk*",
+  "**/dev/sisense-embedsdk-react*",
+]
+# Same per-repo sync script 2.0-stack runs; every row here is a me&u repo.
+after_sync = "reset"
+
+# My own repos, narrowed to what I am working on now rather than all of ~/dev-misc.
+# Each glob is a bare prefix so a Repo brings its own Worktrees, which are named
+# `<repo>-<suffix>` as siblings under the same root. A prefix that already covers a
+# name below it is the only entry needed: `obsidian-fitkit*` is its two Worktrees too.
+[[set]]
+name = "paulchiu"
+roots = ["~/dev", "~/dev-misc"]
+include = [
+  "**/dev/d3-color*",
+  "**/dev/messagemedia-messages-nodejs-sdk*",
+  "**/dev-misc/poe-editor*",
+  "**/dev-misc/fitkit*",
+  "**/dev-misc/obsidian-fitkit*",
+  "**/dev-misc/repon*",
+  "**/dev-misc/mrx*",
+]
+# `*` spans separators here, so the prefixes above reach into two scratch trees that
+# are not projects: mrx's fixture repos and poe-editor's prototypes.
+exclude = [
+  "**/dev-misc/mrx-test/**",
+  "**/dev-misc/poe-editor-pocs/**",
+]
+
+# Third-party clones: neither mine nor mr-yum's, kept for reference.
+# Each glob is a bare prefix so a Repo brings its own Worktrees, which are named
+# `<repo>-<suffix>` as siblings under the same root. A prefix that already covers a
+# name below it is the only entry needed: `loyalty*` is `loyalty-api*` too.
+[[set]]
+name = "vendor"
+roots = ["~/dev"]
+include = [
+  "**/dev/baseweb*",
+  "**/dev/buildkite-pipelines*",
+  "**/dev/hospitality-api-docs*",
+  "**/dev/sisense-embedsdk-react*",
+]
+
+# Occasional Azure repos.
+# Each glob is a bare prefix so a Repo brings its own Worktrees, which are named
+# `<repo>-<suffix>` as siblings under the same root. A prefix that already covers a
+# name below it is the only entry needed: `loyalty*` is `loyalty-api*` too.
+[[set]]
+name = "trex"
+roots = ["~/dev-trex"]
+include = [
+  "**/dev-trex/BulkPriceImport*",
+  "**/dev-trex/Cybertron*",
+  "**/dev-trex/OrderingPlatform*",
+]
+
+# Four Launchers ship as defaults: lazygit, tuicr, an editor via EDITOR, and a
+# shell. Declaring one with a shipped name replaces it in place. Examples:
+#
+# [[launcher]]
+# name = "editor"
+# from_env = "EDITOR"
+# env = {}                     # merged over the guaranteed environment contract
+# disabled = false             # true drops a shipped default
+#
+# [[launcher]]
+# name = "log"
+# args = ["git log --oneline -20 | less"]
+# shell = true                 # the pipe is why this one opts in
+#
+# [[launcher]]
+# name = "pane"
+# args = ['tmux split-window -c "$REPON_REPO_PATH" lazygit']
+# shell = true
+# takes_terminal = false       # returns at once, so Repon keeps its screen
+
+# Meant for the 2.0-stack Set's after_sync above, where a hook never gates anyway; every
+# declared Action is in the palette too, so `when` bounds it there.
+[[action]]
+name = "reset"
+description = "Fetch, reset, pull and reinstall dependencies"
+concurrency = 10
+when = "kind:repo"             # sync is Repo-only, but the palette is not: `;` over the
+                               # whole Set would otherwise run this on every Worktree too
+confirm = false                # fan out from `;` without asking; the hook path ignores this
+
+[[action.steps]]
+args = ["/Users/paul/bin/sync-meandu-repo.sh"]
+
+# ignored from Repon on 2026-09-05
+[[repo]]
+path = "~/dev/d3-color"
+exclude = true
+
+# ignored from Repon on 2026-09-05
+[[repo]]
+path = "~/dev-misc/repon-plans"
+exclude = true
+
+# ignored from Repon on 2026-09-05
+[[repo]]
+path = "~/dev-misc/fitkit-pocs"
+exclude = true
+
+# ignored from Repon on 2026-09-05
+[[repo]]
+path = "~/dev/messagemedia-messages-nodejs-sdk"
+exclude = true
+# shell = false                # true runs the string through $SHELL -c
+# env = {}                     # merged over the guaranteed environment contract
+
+# Only what changes. Everything else keeps the default map.
+# [keys.global]
+# refresh_all = "ctrl-l"       # a rebind moves the binding: plain r stops refreshing
+#
+# [keys.list]
+# anchor_range = ""            # unbind it entirely
