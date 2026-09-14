@@ -29,15 +29,19 @@ mkdir -p "$LOG_DIR"
 
 ## Output target
 
-The brief lives between markers inside `$OUT`:
+Two marker blocks live inside `$OUT`, in this order:
 
 ```
 <!-- daily-brief:start -->
-... brief content ...
+... brief content, regenerated every run ...
 <!-- daily-brief:end -->
+
+<!-- day-log:start -->
+... hourly planner, seeded once, then owned by Paul ...
+<!-- day-log:end -->
 ```
 
-On re-run the same day, replace **only** that block. Preserve any content the user has typed outside it. If `$OUT` doesn't exist yet, create it containing just the block.
+On re-run the same day, replace **only** the brief block, and reseed the day-log block only when Paul hasn't typed in it (Step 3b). Preserve any content outside both blocks. If `$OUT` doesn't exist yet, create it containing both blocks.
 
 ## Bug-report channels (cross-reference source)
 
@@ -73,7 +77,7 @@ Cap: at most **2 deep preps per run**. If more qualify, prioritise 1:1s over ret
 
 ### Step 1: Fetch sources (parallel, fail-soft)
 
-Run all five fetches in parallel. If any single source errors, append `<source>: <error>` to `$LOG` and continue. Never abort the whole brief because one source is down.
+Run all six fetches in parallel. If any single source errors, append `<source>: <error>` to `$LOG` and continue. Never abort the whole brief because one source is down.
 
 **1a. Slack: unread mentions + threads I'm in (last 24h)**
 
@@ -111,6 +115,16 @@ Run all five fetches in parallel. If any single source errors, append `<source>:
   - Slack permalink if present.
 - Bucket A: due date ≤ TODAY (overdue + due-today).
 - Bucket B (computed in Step 2d): items whose `#name` matches an attendee on today's calendar.
+
+**1f. Obsidian: the previous day's note**
+
+What Paul could not fit yesterday is the first thing that needs a slot today.
+
+- Find the most recent journal note before TODAY: walk back day by day from YESTERDAY up to 7 days and take the first `/Users/paul/meandu/Area/Journal/<date>.md` that exists. Friday's note is what Monday reads. If none exists inside 7 days, skip this step, it isn't an error.
+- Read only its `day-log` block. Pull out:
+  - The **Tomorrow** line: everything after the ` · `, split on `,`. These are explicit carry-overs and rank above every other owed item.
+  - Any row whose text is neither struck through (`~~…~~`) nor followed by an outcome (` → `), i.e. planned and silently dropped. Treat as weaker carry-over candidates.
+- Feed both into the To place line in Step 3b. If the previous note's Tomorrow line has content, also name it in the brief under Action Items Owed, as `Carried from [[<date>]]`, so it is visible before Paul opens the planner.
 
 ### Step 2: Cross-reference
 
@@ -278,13 +292,51 @@ _Only render if non-empty._
 <!-- daily-brief:end -->
 ```
 
+### Step 3b: Seed the day log
+
+The day log is Paul's hourly planner: he writes the plan in the morning and appends what actually happened. The skill seeds only the skeleton, the calendar rows he would otherwise retype by hand.
+
+**Reseed rule.** Parse the existing `day-log` block, if any. It counts as *untouched* when every line is the `# Day log` heading, an **All day** line, a bare time anchor, a 📅 event row, or an empty **Tomorrow** or **To place** line, with nothing typed after it. Reseed an untouched or missing block; leave a touched one exactly as it is. Paul's typing always wins, even when the calendar has since changed.
+
+**Rows.** The block opens with the `# Day log` heading, then one line per row, chronological:
+
+- All-day events first: `- **All day** · <title>`.
+- An hourly anchor `` - `HH:MM` `` for every hour 09:00 to 17:00, extended earlier or later to cover any timed event outside that range.
+- A row per timed event at its start: ``- `HH:MM-HH:MM` 📅 **<title>**``. Drop the bare hourly anchor when an event already starts on that hour.
+- Meeting classification is irrelevant here: every timed event gets a row, standups and Geoguessr included.
+
+**Formatting.** Three weights, so a line sorts itself at a glance:
+
+- Times always in backticks. Inline code renders as a fixed-width chip in Obsidian, so the times form a scannable left column instead of blurring into the activity text.
+- Calendar titles bold, behind the 📅. Bold plus emoji marks a row Paul did not choose: it came off the calendar and he has to work around it.
+- Anything Paul types (his own plans, his outcomes) stays plain, which keeps it visually secondary to the fixed commitments.
+- Label lines (**All day**, **Tomorrow**, **To place**) take a bold label and a ` · ` separator instead of a time chip, so they read as headers, not slots.
+
+**Tomorrow.** After the rows, `- **Tomorrow** ·` carrying whatever was pushed out of today, usually empty at seed time. This is where Paul parks work that would not fit, and Step 1f reads it back the next morning.
+
+**To place.** Last line, at most 3 things Paul owes today, most pressing first: anything carried in from the previous note's Tomorrow line (Step 1f) comes first, then Action Items Owed (overdue first, then items tied to today's meetings). Separate with ` · `, keep each under 40 chars, no links:
+
+```
+- **To place** · <item> · <item> · <item>
+```
+
+Seed both lines bare when there is nothing to put on them.
+
+**Conventions Paul writes in.** Recorded here so the seed stays compatible; the skill never writes these itself:
+
+- Plan after the time chip, outcome after ` → `, e.g. ``- `09:00` Lodge Brex outstanding → done, 20 min``.
+- `~~strikethrough~~` for what got dropped.
+- Unplanned work is a new row typed anywhere in the block.
+- Plain bullets, never `- [ ]`: the vault-wide query in `Area/Tasks.md` would pull unfinished slots into the global task list.
+
 ### Step 4: Write atomically
 
 1. Read existing `$OUT` (empty string if missing).
-2. If marker block exists: replace its contents with the new brief (between, not including, the markers).
-3. Else: create the file with the marker block first, then a blank line, then the existing content (if any).
-4. Use `Write` to overwrite the whole file.
-5. If `$LOG` ended up non-empty, the brief's status line will already point to it via the `[[…]]` wikilink.
+2. Brief block: if the markers exist, replace their contents (between, not including, the markers). Else put a fresh block at the top of the file.
+3. Day-log block: if the markers exist and the block is touched (Step 3b), carry it over verbatim. Else write the freshly seeded block below the brief block, separated by a blank line.
+4. Preserve any other content the user has typed, in place.
+5. Use `Write` to overwrite the whole file.
+6. If `$LOG` ended up non-empty, the brief's status line will already point to it via the `[[…]]` wikilink.
 
 ### Step 5: Final output
 
@@ -293,6 +345,7 @@ Print **only** absolute paths to stdout, one per line: `$OUT` first, then any pr
 ## Failure modes
 
 - **All sources failed** (cron auth dead, MCP offline): write a brief whose body is just `> All data sources failed. See [[${LOG}]]`. Exit 0 so cron doesn't retry-loop.
+- **Calendar source failed**: still seed the day log with bare hourly anchors and the To place line, and name the gap in the brief. A planner with no meetings beats no planner.
 - **Vault path missing**: log to stderr and exit 1. This is a real config error.
 - **Permission denied on a Slack channel**: log just that channel; continue with the others.
 - **MCP tool name guess is wrong**: list available tools matching the prefix and pick the closest match by description. Don't silently skip the source.
@@ -326,6 +379,8 @@ Failure modes above cover the sources that break. This covers the brief itself. 
 - Every source either contributed to the brief or is named in the log with its failure reason. Silent omission is the failure this rules out.
 - Every meeting in today's schedule is classified, and every one flagged for prep has a prep note.
 - Every action item carries an owner and a due state (overdue, today, or upcoming).
+- The day log block exists, carrying every timed calendar event on its own row, or was carried over verbatim because Paul had typed in it.
+- Anything on the previous note's Tomorrow line has resurfaced, on the To place line and under Action Items Owed.
 - The brief is written atomically to the vault path and its absolute path is printed.
 
 A brief missing a source without saying so reads as complete and is not. Name the gap in the brief, not just the log.
