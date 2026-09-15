@@ -82,7 +82,7 @@ Then apply these title rules, all of them, every time:
 First pick the branch:
 
 - **Branch A, rename-only request** (the user asked only to rename files): do NOT modify file content. If a renamed document has no reproducibility front matter, mention that in your final report, but do not add it.
-- **Branch B, content work** (you are creating a new dated doc, rewriting sections, synthesising notes, or adding substantive decisions): ensure the document starts with this front matter. Typo fixes and renames alone do NOT count as content work.
+- **Branch B, content work** (you are creating a new dated doc, rewriting sections, synthesising notes, or adding substantive decisions): ensure the document starts with this front matter. Typo fixes and renames alone do NOT count as content work. For Branch B also apply the **Obsidian Readability** rules below to the body you write.
 
 If the target repository defines its own front matter schema, that repository-local schema wins. Use it as written and do not merge in fields it omits.
 
@@ -153,6 +153,19 @@ After all renames and metadata updates:
 2. List every final filename.
 3. Call out any titles that were editorial judgments rather than direct conversions.
 4. State, for each file, whether reproducibility front matter was added, merged, skipped because the request was rename-only, or could not be added.
+
+## Obsidian Readability
+
+Dated docs are read in Obsidian, so write the body for Obsidian's renderer, not for an 80-column terminal.
+
+- **Never hard-wrap prose.** One paragraph is one line; one list item is one line, however long. Obsidian reflows text to the reader's pane width, so manual line breaks at ~80 or ~100 characters render ragged and fight the reader's own width setting. Wrapping is the editor's job, not the file's.
+- **Never wrap a list item onto an indented continuation line.** It is the same problem plus a real failure mode: the continuation can be parsed as a nested block and break the list.
+- **One table row per line.** A wrapped row stops being a table.
+- **Blank line above and below every block**: headings, tables, lists, code fences, and horizontal rules. Obsidian's reading view needs the separation.
+- **No trailing-double-space line breaks.** Use a real blank line for a paragraph break, or `<br>` in the rare case a hard break inside a paragraph is genuinely wanted.
+- Match the vault's link style: `[[Wiki Links]]` for notes inside the vault, standard `[text](url)` for anything external.
+
+If you are editing a doc that is already hard-wrapped, unwrap it as part of the edit rather than matching the existing style. Verify afterwards that word count, table row count, heading count and list item count are unchanged.
 
 ## Guardrails
 
