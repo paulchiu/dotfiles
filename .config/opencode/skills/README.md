@@ -52,7 +52,7 @@ here.
 | --- | --- |
 | [`writing-tone`](writing-tone/SKILL.md) | Writes, rewrites, and summarises Slack messages, email, and updates in Paul's voice. |
 | [`notion-doc-review`](notion-doc-review/SKILL.md) | Reviews a Notion page or other prose document. |
-| [`dated-doc-renamer`](dated-doc-renamer/SKILL.md) | Renames documents to the `yyyy-mm-dd Title.md` convention, preserving acronym casing. |
+| [`dated-doc`](dated-doc/SKILL.md) | Creates or renames dated docs and dated html: `yyyy-mm-dd Title.md` / `.html`, with reproducibility metadata. |
 | [`markitdown-convert`](markitdown-convert/SKILL.md) | Converts PDF, Word, PowerPoint, Excel, image, audio, HTML, CSV, JSON, XML, ZIP, and EPUB files to Markdown. |
 | [`html-edit-prompt`](html-edit-prompt/SKILL.md) | Adds an annotation and comment layer to an HTML file so it can be marked up. |
 | [`branded-deck-builder`](branded-deck-builder/SKILL.md) | Builds decks, bento slides, and Wrapped-style animations in the me&u engineering visual style. |

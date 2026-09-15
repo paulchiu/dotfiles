@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dated Doc"
+  short_description: "Create or rename a dated doc / dated html"
+  default_prompt: "Use $dated-doc to create or rename this as a dated doc (`yyyy-mm-dd Title.md`) or dated html (`yyyy-mm-dd Title.html`), with sentence-case titles, preserved acronyms, Obsidian-friendly formatting, and reproducibility metadata when content is generated or updated."
