@@ -1,6 +1,6 @@
 ---
 name: dated-doc
-description: "Create or rename a dated doc or dated html: `yyyy-mm-dd Title.md` / `.html`"
+description: "Create or rename a dated doc or dated html"
 ---
 
 # Dated Doc

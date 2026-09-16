@@ -145,7 +145,25 @@ When it is skipped, which is the normal case, round 2 output is final and the de
 no note about it. Only say "Round 3 skipped" if the user asked for it and something stopped it
 running.
 
-**If, and only if, the user opted in**, spawn a pane running `cxd` and hand it:
+**If, and only if, the user opted in**, run cxd in a herdr pane. `cxd` is an interactive TUI
+(`codex --dangerously-bypass-approvals-and-sandbox`), so it only works in a real pane with a TTY.
+
+**Never invoke codex any other way.** No `codex exec`, no `codex` from the Bash tool, no
+`run_in_background`, no piping a prompt into it, no writing its output to a file from the shell.
+Headless codex looks like it started and then produces nothing: the failure mode is a silent hang
+that eats the whole review, not an error you can catch. If you are typing the word `codex` into a
+Bash call, you are already doing it wrong.
+
+Spawn it exactly like this, substituting the worktree path:
+
+```bash
+pane=$(herdr pane split --current --direction right --cwd <WORKTREE> --no-focus | jq -r .result.pane.pane_id)
+herdr pane rename "$pane" cxd
+herdr pane run "$pane" cxd
+```
+
+Then hand it, via `herdr pane send-text "$pane" "<prompt>"` followed by
+`herdr pane send-keys "$pane" enter`:
 
 - The in-progress decision doc draft.
 - The diff and worktree path.
@@ -155,6 +173,12 @@ running.
 cxd's response often scrolls past the visible pane viewport. Ask cxd to write its full response
 (REV-N re-rank + missed findings) to a file, then read that file. Don't try to reconstruct it from
 a pane capture alone.
+
+**Give it a deadline and check it is alive.** Poll for the response file, and read the pane
+(`herdr pane read <pane> --lines 40`) on each poll to confirm codex is still producing output. If
+ten minutes pass with no response file and no new pane output, stop waiting: close the pane, note
+`Round 3 attempted but cxd did not respond` in the decision doc, and finish on rounds 1 and 2. A
+stalled outside view is worth a line in the doc, never an open-ended wait.
 
 Pull the response back in. Resolve disagreements:
 
