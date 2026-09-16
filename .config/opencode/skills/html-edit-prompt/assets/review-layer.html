@@ -143,7 +143,10 @@
   var SEL = 'header.doc h1, header.doc .subtitle, .intro p, section > h2, section p, section li, section tbody tr,'
     + 'header.hero h1, header.mast h1, header.mast .standfirst,'
     + 'main > p, main > h2.sec, main .note, main .bad-note, main .good-note,'
-    + 'main .card p, main .card li, main tbody tr';
+    + 'main .card p, main .card li, main tbody tr,'
+    + '.wrap > header h1, .wrap > header .sub, .wrap > h2, .wrap > p,'
+    + '.wrap > ol > li, .wrap > ul > li, .wrap .step h3, .wrap .step > p,'
+    + '.wrap .step li, .wrap .box > p, .wrap .box li, .wrap tbody tr';
   var els = [].slice.call(document.querySelectorAll(SEL));
   els.forEach(function(el,i){ el.setAttribute('data-rc-id', i); el.classList.add('rc-commentable'); });
 
@@ -344,7 +347,7 @@
       else { L.push('   Passage: "'+short(autoQuote(el),160)+'"'); }
       L.push('   Change: '+(rec.c||'').trim());
     });
-    L.push(''); L.push('When done, save the file so I can reload it in the Nex web pane. Leave my comments in place; I will clear them once the changes look right.');
+    L.push(''); L.push('When done, save the file so I can reload it in the browser. Leave my comments in place; I will clear them once the changes look right.');
     return L.join('\n');
   }
 
