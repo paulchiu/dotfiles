@@ -15,6 +15,16 @@ gh api repos/<owner>/<repo>/pulls/<pr>/comments \
 
 (For a top-level PR conversation comment, use `gh pr comment <pr> --body "..."`.)
 
+Anchor a comment to a whole file, rather than a line, with `subject_type=file`:
+
+```bash
+gh api repos/<owner>/<repo>/pulls/<pr>/comments \
+  -f body="<comment>" \
+  -f commit_id=<head sha> \
+  -f path=<path/to/file> \
+  -f subject_type=file
+```
+
 ## When you agree or it's a straight fix
 
 Terse. State the fix and the commit that carries it. No preamble, no thanks.
@@ -24,6 +34,25 @@ Terse. State the fix and the commit that carries it. No preamble, no thanks.
 
 Add one clause only if the fix isn't self-evident from the diff (what changed,
 or a scope note on what you deliberately left alone). Still one or two lines.
+
+## When you're pre-empting a question rather than answering one
+
+A note explaining a decision a reviewer will wonder about (why a file is long,
+why an obvious alternative was not taken) goes as a file-level comment on the
+file in question, not a conversation comment. Three short paragraphs is the
+ceiling: name the thing a reviewer would raise, give the constraint and what the
+alternative would concretely look like, then the catch that made it not worth
+taking.
+
+**Leave the evidence out.** Provider versions, probe results, the checks run to
+confirm the alternative was viable: that is how the conclusion was reached, not
+something the reviewer asked for. Including it turns the note into proof-of-work
+and buries the two things they need. State the conclusion and let it stand.
+Someone who wants to re-derive it will ask.
+
+Don't restate the decision as a verdict at the end; the opening acknowledgement
+and the closing catch already carry it. 'Unfortunately' is fine as the hinge into
+the catch.
 
 ## When you disagree
 
@@ -46,6 +75,13 @@ open, not winning the thread.
 - No validation openers ('Great catch', 'Good point', 'Fair point'); lead with
   the fix or the substance.
 - No review-round internals (persona lenses, agent names, adversarial passes).
+- Don't narrate your own verification ('I checked this against the 3.91.0
+  provider rather than assuming', 'verified rather than guessing'). It performs
+  rigour instead of reporting a finding. Give the finding.
+- Don't close on an evaluative restatement of a verdict the opening line already
+  made, and cut coined balance framings ('the split costs more than the length
+  does', 'bought with file length').
+- Cut intensifiers doing no work ('the only *real* option', 'a *real* change').
 - Don't re-approve or resolve threads on the author's behalf; a push that adds a
   fix commit re-gates the PR to `REVIEW_REQUIRED` and needs the reviewer's own
   re-approval.

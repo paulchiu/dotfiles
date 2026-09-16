@@ -133,7 +133,7 @@ Good (when a scope rollup is warranted):
 
 ### Replying to review comments
 
-When replying to a reviewer's comment (bot or human) rather than writing the PR body, read [references/replies.md](references/replies.md) for Paul's reply style: terse `Fixed in <sha>.` / `Agree, updated in <sha>.` for agreements and straight fixes; an evidence-based reply that names the observation, states a hedged lean, and invites the counter-argument when disagreeing.
+When commenting on a PR (replying to a bot or human reviewer, or pre-empting a question about a decision) rather than writing the PR body, read [references/replies.md](references/replies.md) for Paul's comment style: terse `Fixed in <sha>.` / `Agree, updated in <sha>.` for agreements and straight fixes; an evidence-based reply that names the observation, states a hedged lean, and invites the counter-argument when disagreeing; and a three-paragraph file-level note, with the supporting evidence left out, when explaining a decision nobody has questioned yet.
 
 ### Stacked PRs
 
