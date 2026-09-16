@@ -2,40 +2,6 @@
 
 Open this file only when a yadm command fails or reports impossible results. Follow the section that matches the symptom, then return to the workflow step you were on.
 
-## RTK rewrites yadm
-
-**Symptoms:**
-
-- `yadm status` reports a clean tree ("nothing to commit") for files in `~/.config/opencode/` or `~/.claude/` that you know were just changed.
-- `yadm add <path>` fails with "outside repository".
-- `yadm push` pushes to the wrong remote.
-
-**Cause:** The Claude Code hook routes `yadm` through `rtk` (Rust Token Killer). Up to rtk `0.42.0`, rtk rewrites `yadm <cmd>` to `rtk git <cmd>`, which runs against the CWD repo instead of yadm's `--git-dir`/`--work-tree`. Tracked upstream as [rtk-ai/rtk#2077](https://github.com/rtk-ai/rtk/issues/2077), fix in flight at [rtk-ai/rtk#2078](https://github.com/rtk-ai/rtk/pull/2078).
-
-**Fix procedure, in order:**
-
-1. Confirm the user's committed workaround is still present. The yadm exclusion lives in `~/Library/Application Support/rtk/config.toml` (macOS) or `~/.config/rtk/config.toml` (Linux):
-
-   ```bash
-   grep yadm "$HOME/Library/Application Support/rtk/config.toml"
-   ```
-
-   Expected line inside `[hooks]`:
-
-   ```toml
-   exclude_commands = ["^yadm(?:$| )"]
-   ```
-
-2. If the exclusion is present: run `yadm` normally, no wrapping needed. If commands still misbehave, use the fallbacks in step 3 and report to the user that rtk may have regressed.
-3. If the exclusion is missing (config wiped) or rtk has regressed, use one of these explicit forms for every yadm command in the workflow:
-
-   ```
-   rtk proxy yadm <cmd>                                               # bypass rtk's rewrite
-   git --git-dir=$(yadm introspect repo) --work-tree="$HOME" <cmd>    # bypass rtk entirely
-   ```
-
-Once rtk-ai/rtk#2078 ships, the `exclude_commands` entry and this section become unnecessary.
-
 ## Lock contention (`index.lock`)
 
 **Symptoms:** `yadm add` or `yadm commit` fails with `Unable to create '.../index.lock': File exists`, or EPERM in a delegated process such as codex.

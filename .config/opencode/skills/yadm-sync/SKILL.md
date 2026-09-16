@@ -23,14 +23,14 @@ Work only from the file path(s) the user named, or that you edited earlier in th
 1. Run `yadm status` (no flags; this is safe because it hides untracked files by default).
    - Expected: each tracked file you changed appears under "Changes not staged for commit".
    - New files, and files under gitignored directories (anything in `~/.claude/` or `~/.config/opencode/`), will NOT appear here. That is normal; continue.
-   - If the command errors, or reports clean for a tracked file you know you just changed, open [references/troubleshooting.md](references/troubleshooting.md) and follow the "RTK rewrites yadm" section.
+   - If the command errors, or reports clean for a tracked file you know you just changed, stop and report the exact output to the user.
 2. For each modified tracked file, run `yadm diff <path>`. For each new file, read the file directly. You need the change content to write the commit message.
 3. Run `yadm log -5 --oneline` and note the style: Conventional Commits, one scope per commit (see scope conventions below).
 4. Stage each file by its exact path:
    - Tracked and modified: `yadm add <path>`
    - New, or under a gitignored directory (`~/.claude/`, `~/.config/opencode/`): `yadm add -f <path>`
    - A "The following paths are ignored" hint on `-f` adds is expected for those directories. It is not an error.
-   - If `yadm add` fails with "outside repository": follow the "RTK rewrites yadm" section in [references/troubleshooting.md](references/troubleshooting.md).
+   - If `yadm add` fails with "outside repository": stop and report the exact error to the user.
    - If `yadm add` fails mentioning `index.lock`: follow the "Lock contention" section in [references/troubleshooting.md](references/troubleshooting.md).
 5. Decide the commit count:
    - If all staged files belong to one scope: one commit. Go to step 6.
