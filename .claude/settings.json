@@ -87,15 +87,6 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          }
-        ]
-      },
-      {
         "matcher": "Grep|Glob",
         "hooks": [
           {
@@ -182,7 +173,7 @@
       "### User-specific",
       "**Primary use of Claude Code**: software development (manage-frontend, back-of-house frontend for me&u)",
       "**Trusted repo**: /Users/paul/dev/manage-frontend (mr-yum/manage-frontend, private, origin remote) — confidential material OK here, but content ported from outside this repo is not its own work",
-      "**Org-specific CLIs**: nex, pane, herdr, bk (Buildkite CLI), rtk — frequently used non-standard CLIs in this project",
+      "**Org-specific CLIs**: nex, pane, herdr, bk (Buildkite CLI) — frequently used non-standard CLIs in this project",
       "routine under mr-yum/manage-frontend prefix: git and CI operations scoped to this repo and its main branch protections"
     ]
   },

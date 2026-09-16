@@ -51,5 +51,3 @@ My interactive shell (`~/.aliases`) redirects several common commands to modern 
 ## PR Workflow
 
 - When updating PR descriptions via the gh-pr skill, NEVER remove the template checkboxes. Edit content around them, not the structure.
-
-@RTK.md
