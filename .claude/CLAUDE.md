@@ -8,6 +8,28 @@
 - When saving a draft/note/write-up, name it `yyyy-mm-dd Title.md` (or `.html` for a rendered page; preserve acronym casing). If today's date isn't in context, run `date +%Y-%m-%d`. Save to `~/dev/sandbox` unless a location is specified.
 - After saving such a file, print its absolute path in your reply. Previews and click-to-open only render on full paths.
 
+## Key Locations
+
+Both archives below have two layers: a summary layer and a verbatim layer. **Always search the summary layer first.** Only fall back to verbatim or raw capture when the summaries don't yield what's needed; every summary's frontmatter points at the transcript it came from.
+
+### Meeting notes (Granola)
+
+- Summaries: `~/granola/yyyy-mm/yyyy-mm-dd Title.md` (AI notes; frontmatter carries `attendees`, `web_url`, and a `transcript:` pointer)
+- Verbatim: `~/granola/Transcripts/yyyy-mm/yyyy-mm-dd Title (transcript).md`
+- `~/granola` is a symlink into the Obsidian vault on Google Drive. Pre-2025 notes sit in bare `2024/` and `2025/` buckets.
+
+### Sandbox (drafts, write-ups, conversation archive)
+
+- `~/dev/sandbox` is the default save location for drafts, notes, and write-ups.
+- Summaries: `~/dev/sandbox/archive/yyyy-mm/yyyy-mm-dd/yyyy-mm-dd Title.md` (session index docs; frontmatter lists the source `transcripts:`)
+- Verbatim: `~/dev/sandbox/transcripts/yyyy-mm/yyyy-mm-dd/{claude,opencode}-HHMM-<id>.md`
+- Raw capture: `~/dev/sandbox/.conversation-capture/` (JSONL, last resort only)
+- `~/dev/sandbox/outputs/` is local working space for non-renderable files, not documentation.
+
+### Skills
+
+- `~/.config/opencode/skills`, with `~/.claude/skills` symlinked to it. Tracked by yadm from `~`, so it is not its own git repo.
+
 ## Shell / CLI Aliases
 
 My interactive shell (`~/.aliases`) redirects several common commands to modern replacements, and the Bash tool inherits them. Do NOT pass the old tool's flags to these; call the replacement with ITS own syntax.
