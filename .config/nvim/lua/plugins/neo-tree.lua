@@ -15,7 +15,9 @@ return {
     opts = {
       close_if_last_window = true,
       filesystem = {
-        follow_current_file = { enabled = true },
+        -- leave_dirs_open keeps reveal-expanded directories open; without it
+        -- every buffer switch collapses the tree back down.
+        follow_current_file = { enabled = true, leave_dirs_open = true },
         filtered_items = { hide_dotfiles = false, hide_gitignored = true },
       },
     },
