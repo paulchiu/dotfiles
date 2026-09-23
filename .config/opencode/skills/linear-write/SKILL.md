@@ -1,6 +1,6 @@
 ---
 name: linear-write
-description: "Create or rewrite Linear issues."
+description: "Create or rewrite Linear issues. Splits multi-repo work into a parent plus one blocking-linked sub-issue per repo by default."
 ---
 
 # Linear Write Skill
@@ -178,7 +178,13 @@ Applies to both creating and rewriting. Steps flagged **[rewrite]** only apply w
 4. **Draft the full issue** using the template, then run the cold-read test before presenting: fork a subagent given ONLY the card text (no conversation context) and ask it to state its implementation plan and list every assumption it had to make. Each assumption is a coin flip the card failed to pin; fix those gaps. Present the draft to the user and wait for approval before writing to Linear.
 5. **Create or update the issue** via `mcp__claude_ai_Linear__save_issue` (pass the existing id on a rewrite) or, as fallback, `linear issue create ...` / `linear issue update <ID> ...`.
 6. **Return the URL and identifier** (e.g. `CAD-1234`).
-7. **Create sub-issues** if requested. Each follows the same template, references the parent, and uses the same team/project/labels.
+7. **Create sub-issues.** Do this by default when the research shows more than one repo needs a PR, and also when the user asks. Each sub-issue follows the same template, references the parent and uses the same team, project and state. See 'Multi-repo work' below.
+
+## Multi-repo work
+
+When the change spans repos, don't write one card that tells an agent to edit five codebases. By default, write a parent card plus one sub-issue per repo. Add a design sub-issue when the change adds or alters UI that has no finalised design. Link the sub-issues with blocking relations in delivery order, and give the parent a `## Delivery sequence` section that lists the steps by bare issue code and marks which tracks can run in parallel.
+
+Read [references/multi-repo-breakdown.md](references/multi-repo-breakdown.md) before drafting. It has the parent template, the Delivery sequence format, how to sequence and label the cards, and the creation order that lets every card cite its siblings by code.
 
 ### [rewrite] Preserving original content
 
@@ -265,12 +271,12 @@ The verification list is load-bearing. Each bullet should be a check the reader 
 
 ## Issue Relationships
 
-| Relationship   | MCP                                | CLI                | How to set                           |
-| -------------- | ---------------------------------- | ------------------ | ------------------------------------ |
-| **Parent**     | Yes (`save_issue` with `parentId`) | Yes (`-p <ISSUE>`) | Set during creation, or update later |
-| **Sub-issue**  | Automatic                          | Automatic          | Create with parent set               |
-| **Blocked by** | Limited                            | Not supported      | Set manually in Linear web UI        |
-| **Depends on** | Limited                            | Not supported      | Set manually in Linear web UI        |
+| Relationship   | MCP                                              | CLI                | How to set                                   |
+| -------------- | ------------------------------------------------ | ------------------ | -------------------------------------------- |
+| **Parent**     | Yes (`save_issue` with `parentId`)               | Yes (`-p <ISSUE>`) | Set during creation, or update later         |
+| **Sub-issue**  | Automatic                                        | Automatic          | Create with parent set                       |
+| **Blocked by** | Yes (`save_issue` `blockedBy` / `blocks`)        | Not supported      | Append-only; remove with `removeBlockedBy`   |
+| **Related**    | Yes (`save_issue` `relatedTo`)                   | Not supported      | Append-only; remove with `removeRelatedTo`   |
 
 ## Tips and Gotchas
 
@@ -278,6 +284,7 @@ The verification list is load-bearing. Each bullet should be a check the reader 
 - **Team identifiers** are usually uppercase (CAD, ENG, PROD, CUSM).
 - **Numbered lists get truncated.** Multi-item `1.` `2.` `3.` lists saved via MCP often drop everything after the first item silently. Use bulleted lists unless order is semantically required, and verify with `get_issue` if you do use numbers.
 - **Bulleted lists can also collapse.** Bullets that share a line break without a blank line between them sometimes drop everything after the first item too, especially under headings like `### Out of scope` near a fenced code block. After saving, fetch the issue back with `get_issue` and check that every bullet survived; if a section was clipped, re-save with a blank line between bullets and the items will stick.
+- **Pass `state` on every update.** A `save_issue` update that changes `description` or uses `patch` without `state` can drop the issue back to the team's default status.
 - **More detail isn't always better.** A 500-word card with contradictory instructions is worse than a 100-word card with clear acceptance criteria.
 
 ## Guidelines
