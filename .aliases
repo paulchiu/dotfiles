@@ -56,6 +56,7 @@ alias zc="zellij --layout compact"
 alias no="nex open --here"
 alias h="herdr"
 alias t="tuicr"
+alias tpr="tuicr pr"
 ## Search and Navigation
 alias ftx="fzf_to_context"
 alias hs="atuin search -i"
