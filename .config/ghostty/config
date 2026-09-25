@@ -1,3 +1,5 @@
 # custom-shader = ./shaders/retro-terminal.glsl
 # custom-shader = ./shaders/bloom.glsl
 # custom-shader-animation = always
+
+keybind = super+shift+r=prompt_tab_title

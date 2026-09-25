@@ -4,7 +4,7 @@ Default behaviour whenever the research finds that the change needs PRs in more 
 
 ## Shape
 
-- **Parent card:** the feature or fix as a whole, written from the parent template below. It carries the decisions every sub-issue must agree on, the feature-level acceptance criteria and the delivery sequence. It has no implementation guidance, because that lives in the sub-issues.
+- **Parent card:** the feature or fix as a whole, written from the parent template below. It carries the decisions every sub-issue must agree on, the feature-level acceptance criteria and the delivery sequence. It has no implementation guidance or implementation sequence, because those live in the sub-issues.
 - **One sub-issue per repo that needs a PR**, each written from the standard agent-ready template, with `parentId` set to the parent. A repo that only needs a package bump or a schema mirror refresh still gets its own card if that change needs its own PR and deploy (e.g. a gateway schema refresh). Title each one for the change it makes, not for the repo, and name the repo in its Summary.
 - **Design sub-issue**, when the change adds or alters UI and there is no finalised design yet. It blocks every build card whose contract depends on a design decision, which is usually every UI card and the schema card too if the design can change a field's shape or length. In it, record the decisions the build cards are waiting on (copy, placement, limits, states) and suggest designers without assigning one.
 - **Labels:** the parent keeps its type label (`Feature`, `Bug`). Sub-issues get the team's sub-issue label (`subtask` on RR) plus `Design` on the design card. Sub-issues use the parent's team, project, milestone and state.

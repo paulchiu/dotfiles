@@ -146,5 +146,5 @@
     "**/.forgejo/workflows/*.yml",
     "**/.forgejo/workflows/*.yaml",
   ],
-  "saucer.linkSource": false,
+  "saucer.linkSource": false,"remote.SSH.remotePlatform": {"coder-vscode.coder.mryum.tech--paulchiu--Foo-1051.dev":"linux"},"remote.SSH.connectTimeout": 1800,"remote.SSH.serverShutdownTimeout": 28800,
 }

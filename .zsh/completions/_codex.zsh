@@ -45,6 +45,7 @@ never\:"Never ask for user approval Execution failures are immediately returned 
 '(-s --sandbox --dangerously-bypass-approvals-and-sandbox -a --ask-for-approval)--approve-for-me[Route approval requests through automatic review using the workspace-write sandbox]' \
 '--search[Enable live web search. When enabled, the native Responses \`web_search\` tool is available to the model (no per‑call approval)]' \
 '--no-alt-screen[Disable alternate screen mode]' \
+'--no-daemon[Run without the shared background server, even if it is already running]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '-V[Print version]' \
@@ -69,7 +70,25 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
+'--no-daemon[The agents overview requires a shared server; this option is rejected]' \
 '--no-alt-screen[Disable alternate screen mode]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(tcp-tunnel)
+_arguments "${_arguments_options[@]}" : \
+'--proxy-url=[HTTPS origin of the HTTP/3 proxy]:PROXY_URL:_default' \
+'--proxy-origins-file=[File containing one exact approved HTTPS proxy origin per line]:PROXY_ORIGINS_FILE:_files' \
+'--target=[CONNECT target authority, including a nonzero port]:TARGET:_default' \
+'--listen-addr=[]:LISTEN_ADDR:_default' \
+'*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
+'*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
+'--auth-token-stdin[Read the initial bearer from stdin]' \
+'--auth-token-updates-stdin[Read replacement bearers from stdin and stop when the controlling pipe closes]' \
+'--connect-headers-stdin[Read a JSON list of extension-header name/value pairs before the first bearer]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -590,6 +609,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
+'--no-browser[Print the authorization URL and accept the callback URL without opening a browser]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 ':name -- Name of the MCP server to authenticate with oauth:_default' \
@@ -907,6 +927,7 @@ _arguments "${_arguments_options[@]}" : \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
 '(--listen)--stdio[Use stdio as the transport (equivalent to \`--listen stdio\://\`)]' \
 '--remote-control[Enable remote control for this app-server process without changing persistence]' \
+'--managed-daemon[Save loaded threads during managed daemon shutdown]' \
 '--analytics-default-enabled[Controls whether analytics are enabled by default]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
@@ -969,6 +990,19 @@ _arguments "${_arguments_options[@]}" : \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
 ;;
+(update)
+_arguments "${_arguments_options[@]}" : \
+'*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
+'*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
+'*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
+'--from-cli[Copy and pin this CLI package]' \
+'-y[Confirm replacing the daemon package without an interactive prompt]' \
+'--yes[Confirm replacing the daemon package without an interactive prompt]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
 (enable-remote-control)
 _arguments "${_arguments_options[@]}" : \
 '*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
@@ -1011,10 +1045,12 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (pid-update-loop)
 _arguments "${_arguments_options[@]}" : \
+'--restore-release=[Authorize one production restoration of this selected release]:RESTORE_RELEASE:_default' \
 '*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
+'--check-package-ownership[Check support for daemon-owned packages without starting the updater]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 && ret=0
@@ -1040,6 +1076,10 @@ _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
 (restart)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(update)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
@@ -1159,6 +1199,10 @@ _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
 (restart)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(update)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
@@ -1337,6 +1381,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (doctor)
 _arguments "${_arguments_options[@]}" : \
+'--probe-filesystem-path=[Internal isolated filesystem probe; exits before loading configuration]:PROBE_FILESYSTEM_PATH:_files' \
 '*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--config=[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
@@ -1674,6 +1719,7 @@ never\:"Never ask for user approval Execution failures are immediately returned 
 '(-s --sandbox --dangerously-bypass-approvals-and-sandbox -a --ask-for-approval)--approve-for-me[Route approval requests through automatic review using the workspace-write sandbox]' \
 '--search[Enable live web search. When enabled, the native Responses \`web_search\` tool is available to the model (no per‑call approval)]' \
 '--no-alt-screen[Disable alternate screen mode]' \
+'--no-daemon[Run without the shared background server, even if it is already running]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '-V[Print version]' \
@@ -1857,6 +1903,7 @@ never\:"Never ask for user approval Execution failures are immediately returned 
 '(-s --sandbox --dangerously-bypass-approvals-and-sandbox -a --ask-for-approval)--approve-for-me[Route approval requests through automatic review using the workspace-write sandbox]' \
 '--search[Enable live web search. When enabled, the native Responses \`web_search\` tool is available to the model (no per‑call approval)]' \
 '--no-alt-screen[Disable alternate screen mode]' \
+'--no-daemon[Run without the shared background server, even if it is already running]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
 '-V[Print version]' \
@@ -2201,6 +2248,10 @@ _arguments "${_arguments_options[@]}" : \
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
+(tcp-tunnel)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
 (exec)
 _arguments "${_arguments_options[@]}" : \
 ":: :_codex__help__exec_commands" \
@@ -2390,6 +2441,10 @@ _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
 (restart)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(update)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
@@ -2698,6 +2753,7 @@ esac
 _codex_commands() {
     local commands; commands=(
 'agents:Browse all agent sessions on the shared local app-server daemon' \
+'tcp-tunnel:Internal\: forward a local TCP socket through an HTTP/3 CONNECT proxy' \
 'exec:Run Codex non-interactively' \
 'e:Run Codex non-interactively' \
 'review:Run a code review non-interactively' \
@@ -2760,6 +2816,7 @@ _codex__app-server__daemon_commands() {
 'bootstrap:Install durable local app-server management for SSH-driven use' \
 'start:Start the local app server daemon if it is not already running' \
 'restart:Restart the local app server daemon' \
+'update:Update the daemon package (may interrupt running work)' \
 'enable-remote-control:Enable remote control for future starts and a currently running managed daemon' \
 'disable-remote-control:Disable remote control for future starts and a currently running managed daemon' \
 'stop:Stop the local app server daemon' \
@@ -2790,6 +2847,7 @@ _codex__app-server__daemon__help_commands() {
 'bootstrap:Install durable local app-server management for SSH-driven use' \
 'start:Start the local app server daemon if it is not already running' \
 'restart:Restart the local app server daemon' \
+'update:Update the daemon package (may interrupt running work)' \
 'enable-remote-control:Enable remote control for future starts and a currently running managed daemon' \
 'disable-remote-control:Disable remote control for future starts and a currently running managed daemon' \
 'stop:Stop the local app server daemon' \
@@ -2839,6 +2897,11 @@ _codex__app-server__daemon__help__stop_commands() {
     local commands; commands=()
     _describe -t commands 'codex app-server daemon help stop commands' commands "$@"
 }
+(( $+functions[_codex__app-server__daemon__help__update_commands] )) ||
+_codex__app-server__daemon__help__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex app-server daemon help update commands' commands "$@"
+}
 (( $+functions[_codex__app-server__daemon__help__version_commands] )) ||
 _codex__app-server__daemon__help__version_commands() {
     local commands; commands=()
@@ -2863,6 +2926,11 @@ _codex__app-server__daemon__start_commands() {
 _codex__app-server__daemon__stop_commands() {
     local commands; commands=()
     _describe -t commands 'codex app-server daemon stop commands' commands "$@"
+}
+(( $+functions[_codex__app-server__daemon__update_commands] )) ||
+_codex__app-server__daemon__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex app-server daemon update commands' commands "$@"
 }
 (( $+functions[_codex__app-server__daemon__version_commands] )) ||
 _codex__app-server__daemon__version_commands() {
@@ -2902,6 +2970,7 @@ _codex__app-server__help__daemon_commands() {
 'bootstrap:Install durable local app-server management for SSH-driven use' \
 'start:Start the local app server daemon if it is not already running' \
 'restart:Restart the local app server daemon' \
+'update:Update the daemon package (may interrupt running work)' \
 'enable-remote-control:Enable remote control for future starts and a currently running managed daemon' \
 'disable-remote-control:Disable remote control for future starts and a currently running managed daemon' \
 'stop:Stop the local app server daemon' \
@@ -2944,6 +3013,11 @@ _codex__app-server__help__daemon__start_commands() {
 _codex__app-server__help__daemon__stop_commands() {
     local commands; commands=()
     _describe -t commands 'codex app-server help daemon stop commands' commands "$@"
+}
+(( $+functions[_codex__app-server__help__daemon__update_commands] )) ||
+_codex__app-server__help__daemon__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex app-server help daemon update commands' commands "$@"
 }
 (( $+functions[_codex__app-server__help__daemon__version_commands] )) ||
 _codex__app-server__help__daemon__version_commands() {
@@ -3377,6 +3451,7 @@ _codex__fork_commands() {
 _codex__help_commands() {
     local commands; commands=(
 'agents:Browse all agent sessions on the shared local app-server daemon' \
+'tcp-tunnel:Internal\: forward a local TCP socket through an HTTP/3 CONNECT proxy' \
 'exec:Run Codex non-interactively' \
 'review:Run a code review non-interactively' \
 'login:Manage login' \
@@ -3436,6 +3511,7 @@ _codex__help__app-server__daemon_commands() {
 'bootstrap:Install durable local app-server management for SSH-driven use' \
 'start:Start the local app server daemon if it is not already running' \
 'restart:Restart the local app server daemon' \
+'update:Update the daemon package (may interrupt running work)' \
 'enable-remote-control:Enable remote control for future starts and a currently running managed daemon' \
 'disable-remote-control:Disable remote control for future starts and a currently running managed daemon' \
 'stop:Stop the local app server daemon' \
@@ -3478,6 +3554,11 @@ _codex__help__app-server__daemon__start_commands() {
 _codex__help__app-server__daemon__stop_commands() {
     local commands; commands=()
     _describe -t commands 'codex help app-server daemon stop commands' commands "$@"
+}
+(( $+functions[_codex__help__app-server__daemon__update_commands] )) ||
+_codex__help__app-server__daemon__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex help app-server daemon update commands' commands "$@"
 }
 (( $+functions[_codex__help__app-server__daemon__version_commands] )) ||
 _codex__help__app-server__daemon__version_commands() {
@@ -3863,6 +3944,11 @@ _codex__help__stdio-to-uds_commands() {
     local commands; commands=()
     _describe -t commands 'codex help stdio-to-uds commands' commands "$@"
 }
+(( $+functions[_codex__help__tcp-tunnel_commands] )) ||
+_codex__help__tcp-tunnel_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex help tcp-tunnel commands' commands "$@"
+}
 (( $+functions[_codex__help__unarchive_commands] )) ||
 _codex__help__unarchive_commands() {
     local commands; commands=()
@@ -4243,6 +4329,11 @@ _codex__sandbox_commands() {
 _codex__stdio-to-uds_commands() {
     local commands; commands=()
     _describe -t commands 'codex stdio-to-uds commands' commands "$@"
+}
+(( $+functions[_codex__tcp-tunnel_commands] )) ||
+_codex__tcp-tunnel_commands() {
+    local commands; commands=()
+    _describe -t commands 'codex tcp-tunnel commands' commands "$@"
 }
 (( $+functions[_codex__unarchive_commands] )) ||
 _codex__unarchive_commands() {

@@ -87,6 +87,13 @@ Every issue you create or rewrite MUST follow this structure:
 - Constraints: [any binding context the agent must respect, e.g. 'do not introduce a new dependency', 'must run inside the existing transaction']
 - When uncertain: stop and explain the ambiguity, or propose a short plan rather than guessing
 
+## Implementation sequence
+
+- **Step 1:** [First change, and why it goes first, e.g. 'pin the new behaviour in `resolve-x.test.ts` so it fails']
+- **Step 2:** [Next change, e.g. 'change `resolveX`; the test from step 1 goes green']
+- **Step 3:** [Gate before the next step, e.g. 'create the Unleash flag, off; deploy']
+- **Step 4:** [Enable for the test venue only and run the manual check in Verification]
+
 ## Verification
 
 - [ ] `npm typecheck` passes with zero errors
@@ -118,6 +125,7 @@ Add the conditional gates that apply (see source): existing DB data checked agai
 - **Acceptance criteria** must be programmatically verifiable. If "done" requires a human judgment call, the card is not agent-ready. Replace "improve error handling" with "OAuth callback handler passes the three test cases in `tests/auth/oauth_callback.test.ts`".
 - **Out of scope** prevents agent wandering. Agents are eager to "improve" adjacent code. Name what must not be touched, even when it looks related.
 - **Implementation guidance** is the section that most often decides whether a card runs on the first pass. See the rules below.
+- **Implementation sequence** tells the agent the order to do the work in, and what has to be true before each next step. Guidance says where; sequence says when.
 
 ### Writing the implementation guidance section
 
@@ -141,6 +149,18 @@ Structure notes beyond the template:
 - One real code snippet outperforms three paragraphs of prose. If you find yourself writing a paragraph, link to an example file instead.
 - The heading is `## Implementation guidance` (sentence case, lowercase `g`).
 
+### Writing the implementation sequence section
+
+Every card that changes code or config gets one, directly after Implementation guidance. It is the single-card counterpart of the parent's `## Delivery sequence`: that one orders cards, this one orders the steps inside a card.
+
+- One bullet per step with a bold `**Step N:**` label. Don't use a numbered list, because Linear drops items from numbered lists.
+- Each step names one change or one gate, and says why it sits where it does only when that isn't obvious. Typical order: pin the behaviour in a failing test, make the change, create any flag off, deploy, enable for one test venue, run the manual check, then widen.
+- Put config and flag steps in the sequence with the system they happen in (Unleash project and environment, Manage venue settings), not only in prose elsewhere.
+- Mark the point of no return: the first step that changes behaviour for real venues, and what the rollback is from there.
+- Refer to Verification for the checks rather than restating them.
+- A one-line change with no ordering constraint can say `- **Step 1:** [the change], then Verification.` rather than inventing steps.
+- On a multi-repo parent, this section is replaced by `## Delivery sequence` (see Multi-repo work); each sub-issue carries its own Implementation sequence.
+
 ### Risk tier reference
 
 | Tier                | Examples                                     | Review expectation          |
@@ -156,6 +176,7 @@ The [change due diligence checklist](https://app.notion.com/p/meandu/Ctrl-alt-de
 
 - **The core gate (how is it used).** If you cannot confidently answer how the functionality is currently used (all the ways, how often, by whom), do not draft a direct-change card. Propose telemetry-first two-phase work (add telemetry and monitors, gather data, then patch) or a spike, and say so explicitly in the draft.
 - **Surface, don't bury.** If working the checklist turns up a risk or unknown (existing DB data that fails a new validation, a checkout-adjacent surface, a vendor-dependent behaviour), name it in the draft and fold the relevant gate into the Due diligence section rather than leaving it implicit.
+- **Bug or by design.** Before writing a Bug card, check that the behaviour was not chosen: search meeting notes, the parent project's issues and the code's own comments and commit messages for a decision covering it. If one exists, the card is a scope or product change, not a bug, and it cites that decision and who made it. Code that does exactly what it was written to do for a use case it was never meant to serve is not a defect in that code.
 - **Time pressure.** Don't quietly skip steps. Escalate to Shawn or Paul; whoever approves moving faster owns that risk. Note any skipped gate in the card rather than omitting it silently.
 
 ### The Complexity / Ambiguity matrix
