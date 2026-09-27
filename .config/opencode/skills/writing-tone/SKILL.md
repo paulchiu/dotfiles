@@ -14,10 +14,10 @@ Re-check the draft against these before outputting (the most-violated rules; ful
 - No em dashes. Use commas, semicolons, parentheses, or separate sentences.
 - Single quotes for scare quotes and emphasis, not italics.
 - Australian spelling and quote style.
-- Discussion and rhetorical questions end with a period, not a question mark.
+- Discussion and rhetorical questions end with a period; the question a post exists to ask keeps its '?'.
 - Lead with substance. No validation openers ('Fair point') or scene-setters ('quick one').
 - End at the last real point. No wrap-up, summary, or evaluative restatement.
-- Plain language over institutional terms. Cut intensifiers/filler (just, really, genuinely, actually) and generic difficulty markers (hard, tricky).
+- Plain language over institutional terms and over named principles from the brief ('Chesterton's fence'). Cut intensifiers/filler (just, really, genuinely, actually) and generic difficulty markers (hard, tricky).
 - Hedge verdicts, proposed causes, and predictions; state facts and existing precedents plainly.
 - Name who owns what; attribute group decisions to the group; never invent names or facts (use [brackets]).
 - Backticks only for real code tokens, not ticket IDs, PR numbers, or brand names.
@@ -33,7 +33,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 **Register & word choice**
 
 - Professional yet collaborative, medium formality (conversational but polished, not stiff). Direct but not absolute; use measured hedging ('is unlikely to be immediately observable' not 'doesn't hold in practice'). In team guidance/checklist/process docs, frame norms as shared 'should' rather than declared accomplished fact ('we should apply this to every issue' not 'this applies'; 'should be the exception' not 'is now the exception'; 'should pass code review' not 'would pass code review').
-- Plain language over institutional terms ('the arrangement' not 'the program design'; 'two-fold' not 'two-pronged'). For family/non-technical readers, go plainer still: short sentences, one idea per paragraph.
+- Plain language over institutional terms ('the arrangement' not 'the program design'; 'two-fold' not 'two-pronged'). Named mental models in Paul's brief ('per Chesterton's fence', 'first principles') are framing for the writer, not copy; write the plain question they imply ('could someone provide context as to why we do it this way, and if it's intentional for a reason?' not 'per Chesterton's fence I'd like to know why before we change it'). For family/non-technical readers, go plainer still: short sentences, one idea per paragraph.
 - Casual abbreviations (AFAIK, IMO) fit DMs, retro cards, and leads channels; use sparingly in broad-audience posts. Don't abbreviate everyday words ('dependency' not 'dep', 'configuration' not 'config').
 - Concrete, specific verbs and nouns ('once we've replaced TypeORM' not 'once we're through'; 'three recent events' not 'three of the recent moments'). 'Moments'/'things'/'moves' read as fluff.
 - Match verb register to stakes. Casual verbs (bounce, punt, chuck, kick out) suit small asides but read as flippant for scope/escalation decisions to peer-leaders; use neutral verbs there (redirect, defer, exclude, move out).
@@ -55,7 +55,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 **Hedging & certainty**
 
-- Hedge proposed causes for someone's behaviour or internal state ('a possible reason is', 'they may feel'), not 'My read is' or first-person certainty. Direct observation of what someone _did_ stays direct; the hedge fires on _why_. Flag an inference about what they knew or decided with an explicit marker ('once (I assume) you knew your Q3 direction'), and calibrate a mild critique's weight so it doesn't over-land ('in the scheme of things it's not a big deal, but').
+- Hedge proposed causes for someone's behaviour or internal state ('a possible reason is', 'they may feel'), not 'My read is' or first-person certainty. Offering your own guess to people who know the answer, own it and leave room ('a possible reason I could think of is X, but there may be others I'm not aware of'). Direct observation of what someone _did_ stays direct; the hedge fires on _why_. Flag an inference about what they knew or decided with an explicit marker ('once (I assume) you knew your Q3 direction'), and calibrate a mild critique's weight so it doesn't over-land ('in the scheme of things it's not a big deal, but').
 - Soften verdict-style closers with a conditional ('I would treat it as one signal, not proof' not 'I treat it as'). Soften assertive verbs in debrief contexts ('worth considering', 'I'd lean toward' not 'push him through', 'ship it').
 - But don't over-hedge: name an existing precedent as the model plainly ('Prophets' V2 migration is the operating model' not 'the model worth pointing at'), and be blunt when advice calls for it ('ultimately you need to stand for what you think is right'). Hedging is for verdicts/causes/predictions, not facts or precedents.
 - Acknowledge limits of your own expertise frankly ('I'm not really qualified to judge X'). Plain verbs for caveat lead-ins ('a few things to note' not 'to hold lightly'/'sit with'). Explaining a tool/option from research not first-hand use, hedge with everyday confidence ('seems legit and commonly used' not 'is legitimate and widely used').
@@ -88,7 +88,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - Neutral noting verbs for signal volume to peer-leaders ('skill atrophy was mentioned', 'came up', 'raised') not editorial superlatives ('the only concern that landed cold', 'the strongest signal'); frequency already weights it.
 - Avoid ranking/selection-judgement framings when the reality is assignment ('wanted in but were assigned to deadline work' not 'wanted in but weren't selected'); use the factual reason.
 - Lead with self-questioning when feedback diverges from your read ('I may have been a bit harsh and read X as Y') before re-asserting; steel-man the other reading.
-- Avoid rhetorical contrast framing ('didn't just X; they Y'; 'not only X, but also Y') and the diagnostic variant ('the gap wasn't the fix itself; the requirement never carried...' → just 'the requirement never carried...'). State it as a straight list. Drop intensifiers/filler ('herself', 'actually', 'really', 'just', 'genuinely', 'exactly'). Carve-out: observational adverbs with specific physical detail ('looked visibly more blank') add information.
+- Avoid rhetorical contrast framing ('didn't just X; they Y'; 'not only X, but also Y') and the diagnostic variant ('the gap wasn't the fix itself; the requirement never carried...' → just 'the requirement never carried...'). State it as a straight list. Drop intensifiers/filler ('herself', 'actually', 'really', 'just', 'genuinely', 'exactly'). Carve-out: observational adverbs with specific physical detail ('looked visibly more blank') add information, and 'actually' stays when it contrasts real content with a placeholder ('what's actually going out in it').
 - Praising how someone handled their own mistake, downplay the fallout and skip comparative flattery: 'when it turned out to be more complex, you stayed with it and wrote a checklist to pass on your learnings' beats spelling out the war room / rollback / SEV, and 'most people that new wouldn't have gone near the code' just inflates it. Reframe forward ('to pass on your learnings' not 'so the next person doesn't hit the same wall'), and don't quote the person's own self-deprecating line ('clean up on aisle X') back at them.
 
 **Sensitive & interpersonal**
@@ -139,6 +139,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - FYI shares from a private leadership thread: one-line opener naming source and why the team cares, then `Relevant <source> quotes` (attributed `@Name: "..."`, short, only authorised sources), then `LLM summary`. End at the last bullet; no 'for this team' closer unless asked.
 - Sentiment-share posts to peer leaders: the observations are the deliverable, so end at the last observation. No 'What I'm doing with it'/'Next steps', operational follow-ups, open-invitation closers, or bridging openers. (Distinct from incident writeups, where forward-looking advice IS the deliverable.) See example 11.
 - Meeting-outcome update to peers who shared the context: deliver the surfaced issue, action items, next steps as labelled blocks, in that order. Cut background/justification (they lived it). State the technical cause neutrally and fault-free. Close owning your own follow-through ('I'll action my parts in the coming weeks'), not 'we'll get moving'. See example 14.
+- Asking a team about a process they own before changing it: 'Hi team,' plus what you'd like to understand; your understanding with its source named and one concrete example, then a confirm ask; a direct question on whether it's intentional and why, with one hedged guess; the proposed change attributed to its proposer as a shared 'should'; close by asking whether anyone is opposed. Drop mechanics the owning team knows better than you (release timing, store limits). See example 15.
 - When the other person asks an open question ('what would the ideal X look like'), give numbered options with explicit tradeoffs, not vague suggestions.
 - Consolidate thread replies into one message with inline blockquotes, even when asked for 'replies' to multiple posts; exception is genuinely different audiences/threads. Truncate long quoted passages with `[...]` keeping bookend phrases; quote whole if under ~25 words. See examples 7, 10.
 - Announcing a linked doc/checklist to the team: the message points to it, it doesn't restate it. Name what it is, the review/adopt ask ('Please review and comment/modify if anything needs changing'), the few operational notes, then link. Don't reproduce the doc's rationale or summarise its sections in the post.
@@ -162,9 +163,9 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 ## Punctuation & formatting
 
 - No em dashes; join clauses with semicolons or prepositions ('Be a Player Coach from Grace Franklin' not '— Grace Franklin').
-- Single quotes for scare quotes and emphasis, not italics. Carve-out: self-quotes/coined refrains can take italics.
+- Single quotes for scare quotes and emphasis, not italics. Carve-outs: self-quotes/coined refrains can take italics; verbatim on-screen/UI labels take double quotes (the "What's new" text).
 - Australian spelling. Australian quote style (commas and periods outside quotation marks unless part of the quote). Commas before quoted speech in flowing text, not colons.
-- Discussion and rhetorical questions end with a period, not a question mark.
+- Discussion and rhetorical questions end with a period, not a question mark. Carve-out: the question a post exists to ask, when the reader must answer it (a context request to the team that owns a process, 'is anyone opposed to this process change?'), keeps its '?'; don't recast it as an 'I'd like to know why' statement. Declared-intent consent checks where you'll proceed anyway keep the period ('Any objections before I set it up.', example 8).
 - Ordinal dates in prose ('20th of April' not '20 April' or 'April 20').
 - Trailing periods on bullets that are full clauses/sentences, especially peer-leader/cross-team posts ('+338% issues completed, +45% estimated points.'); short fragment/label bullets stay unpunctuated.
 - Plain bullets (`-`) not Markdown checkboxes in Slack posts (Slack doesn't render them). Carve-out: checkboxes are fine in decision/triage docs in Markdown-rendering tools.
@@ -220,7 +221,7 @@ Machine-generated prose has a recognisable fingerprint; strip it. This list adap
 
 **Audience-scoping**
 
-- In cross-team/extended-leadership posts, name the team explicitly, not possessive 'our' ('AI-pril is doing to CAD delivery throughput'); reverse inside the team's own channel where 'our' is unambiguous.
+- In cross-team/extended-leadership posts, name the team explicitly, not possessive 'our' ('AI-pril is doing to CAD delivery throughput'); reverse inside the team's own channel where 'our' is unambiguous. Carve-out: asking another team about a shared product or process, 'our' keeps it collaborative rather than pointing at them ('our Crew release notes' not 'the Crew release notes').
 - Match project/service names to audience context: the repo-level name over team-internal subcomponent jargon for wide audiences (`platform` (API) not `platform-api`). Same for channel/forum names: generic descriptor ('in sprint planning and other forums') unless the audience is in the named channel.
 - Name the destination team for a colleague who moved, not a vague exit ('Victoria, who is embedded in Prophets' not 'who has since moved on'); reserve vague phrasing for genuine off-platform moves, and even then be specific ('started parental leave').
 - Don't generalise one person's diagnosis into a cohort-wide pattern in sentiment summaries; ground it in direct signal from that cohort or omit (don't reproduce a senior leader's framing as your own observation).
@@ -256,13 +257,14 @@ For longer-form posts, load `references/style-examples.md` and find the matching
 - **12.** Product-share / community-announce post (e.g. forum launch, plugin beta)
 - **13.** Delegation / agent-work debrief reply to a peer-leader (memo-style, multi-example with per-example lessons)
 - **14.** Peer-leader meeting-outcome update (memo-style: surfaced issue, action items, next steps)
+- **15.** Cross-team process question (why do we do X, is it intentional, anyone opposed to changing it)
 
 ## Workflow
 
 1. Before drafting, load the right reference for the post type:
    - **Technical posts** (code/file/symbol references: incident writeups with code citations, architecture proposals, PR commentary): read `references/technical-posts.md`.
    - **Niche post types** (voluntary-support offering / office hours, product or community launch): read `references/situational-patterns.md`.
-   - **Other longer-form posts** (broadcast, recognition, sentiment-share, blockquote DM reply, retro card, consolidated thread reply, meeting-outcome update): read `references/style-examples.md` and find the matching example.
+   - **Other longer-form posts** (broadcast, recognition, sentiment-share, blockquote DM reply, retro card, consolidated thread reply, meeting-outcome update, cross-team process question): read `references/style-examples.md` and find the matching example.
    - **Short messages** (FYI, brief reply, single-sentence ack): the anchors above are enough.
 2. If no context is provided, ask: "What would you like me to rewrite? Share a rough draft or ideas to develop."
 3. Review as a skeptic before delivering. Re-read the draft cold against the pre-flight checklist and 'Signs of AI writing to avoid'; the model's default voice is the failure mode, and it reads as normal from the inside. For high-stakes messages (sensitive 1:1s, broad announcements, exec-facing posts), fork a subagent given only the draft and the matching reference example, no conversation context, to flag voice mismatches and AI tells; revise once on what it finds.
@@ -279,5 +281,5 @@ For longer-form posts, load `references/style-examples.md` and find the matching
 ### references/
 
 - `technical-posts.md`: posts that cite specific code, argue for a technical investment, or summarise root causes at the code level. Diagnosis/proposal bullet pairs, precise absence quantifiers, ticket-mapped proposals, symbol-first bullets, arrow notation, backtick density, worked example.
-- `style-examples.md`: long-form worked examples (5-14): retro card, broadcast announcement, sensitive 1:1 blockquote reply, peer consent-check DM, channel recognition, consolidated thread reply, sentiment-share to peer leaders, product-share post, delegation debrief reply, peer-leader meeting-outcome update. Each has the message body and structural commentary.
+- `style-examples.md`: long-form worked examples (5-15): retro card, broadcast announcement, sensitive 1:1 blockquote reply, peer consent-check DM, channel recognition, consolidated thread reply, sentiment-share to peer leaders, product-share post, delegation debrief reply, peer-leader meeting-outcome update, cross-team process question. Each has the message body and structural commentary.
 - `situational-patterns.md`: niche post types loaded on demand: voluntary-support offerings (office hours, drop-in time, ad-hoc pairing) and product-share/community-announce posts (structure, AI disclosure, image captions).
