@@ -578,6 +578,7 @@ _arguments "${_arguments_options[@]}" : \
 '--url=[URL for a streamable HTTP MCP server]:URL:_default' \
 '--bearer-token-env-var=[Optional environment variable to read for a bearer token. Only valid with streamable HTTP servers]:ENV_VAR:_default' \
 '--oauth-client-id=[Optional OAuth client identifier to use for this MCP server]:CLIENT_ID:_default' \
+'--oauth-client-secret=[Optional OAuth client secret for the pre-registered client]:CLIENT_SECRET:_default' \
 '--oauth-client-registration=[OAuth client-registration strategy for the immediate login only]:AUTO|CIMD|DCR:(auto cimd dcr)' \
 '--oauth-resource=[Optional OAuth resource parameter to include during MCP login]:RESOURCE:_default' \
 '*-c+[Override a configuration value that would otherwise be loaded from \`~/.codex/config.toml\`. Use a dotted path (\`foo.bar.baz\`) to override nested values. The \`value\` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal]:key=value:_default' \
@@ -913,7 +914,7 @@ esac
 _arguments "${_arguments_options[@]}" : \
 '--code-mode-host=[Connect to a remote code-mode host instead of starting a local host]:URL:_default' \
 '--listen=[Transport endpoint URL. Supported values\: \`stdio\://\` (default), \`unix\://\`, \`unix\://PATH\`, \`ws\://IP\:PORT\`, \`off\`]:URL:_default' \
-'--ws-auth=[Websocket auth mode for non-loopback listeners]:MODE:(capability-token signed-bearer-token)' \
+'--ws-auth=[Authentication mode for incoming WebSocket connections]:MODE:(capability-token signed-bearer-token)' \
 '--ws-token-file=[Absolute path to the capability-token file]:PATH:_files' \
 '--ws-token-sha256=[Hex-encoded SHA-256 digest of the capability token]:HEX:_default' \
 '--ws-shared-secret-file=[Absolute path to the shared secret file for signed JWT bearer tokens]:PATH:_files' \
@@ -2067,8 +2068,16 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (exec-server)
 _arguments "${_arguments_options[@]}" : \
+'--linux-sandbox-pid-namespace=[Linux PID namespace\: isolate (default) or inherit. Inherit allows signals to other same-UID processes; enable only when provisioning a dedicated environment]:MODE:_default' \
 '--concurrent-requests=[Maximum number of requests to process concurrently on each connection]:COUNT:_default' \
 '(--remote)--listen=[Transport endpoint URL. Supported values\: \`ws\://IP\:PORT\` (default), \`stdio\`, \`stdio\://\`]:URL:_default' \
+'--ws-auth=[Authentication mode for incoming WebSocket connections]:MODE:(capability-token signed-bearer-token)' \
+'--ws-token-file=[Absolute path to the capability-token file]:PATH:_files' \
+'--ws-token-sha256=[Hex-encoded SHA-256 digest of the capability token]:HEX:_default' \
+'--ws-shared-secret-file=[Absolute path to the shared secret file for signed JWT bearer tokens]:PATH:_files' \
+'--ws-issuer=[Expected issuer for signed JWT bearer tokens]:ISSUER:_default' \
+'--ws-audience=[Expected audience for signed JWT bearer tokens]:AUDIENCE:_default' \
+'--ws-max-clock-skew-seconds=[Maximum clock skew when validating signed JWT bearer tokens]:SECONDS:_default' \
 '--remote=[Register this exec-server as a remote environment using the given base URL]:URL:_default' \
 '--remote-transport=[Transport used for the remote executor connection]:REMOTE_TRANSPORT:(noise direct)' \
 '--environment-id=[Environment id to attach to when registering remotely]:ID:_default' \
@@ -2081,6 +2090,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
+'--proxy-private-ips-via-upstream[Allow permitted private IP destinations to use the configured upstream proxy. If no valid upstream proxy applies to the request protocol, connect directly. Loopback stays local. This flag does not require upstream routing]' \
 '(--aws-sigv4)--use-agent-identity-auth[Use Agent Identity auth from CODEX_ACCESS_TOKEN for remote registration]' \
 '--aws-sigv4[Sign Direct registration and WebSocket handshake requests with AWS SigV4]' \
 '--exit-on-stdin-close[Exit when the parent-owned standard-input pipe closes]' \
@@ -2099,6 +2109,7 @@ _arguments "${_arguments_options[@]}" : \
             (forward)
 _arguments "${_arguments_options[@]}" : \
 '--connect=[Destination exec-server WebSocket URL]:URL:_default' \
+'--linux-sandbox-pid-namespace=[Linux PID namespace\: isolate (default) or inherit. Inherit allows signals to other same-UID processes; enable only when provisioning a dedicated environment]:MODE:_default' \
 '--remote=[Register this exec-server as a remote environment using the given base URL]:URL:_default' \
 '--remote-transport=[Transport used for the remote executor connection]:REMOTE_TRANSPORT:(noise direct)' \
 '--environment-id=[Environment id to attach to when registering remotely]:ID:_default' \
@@ -2111,6 +2122,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--enable=[Enable a feature (repeatable). Equivalent to \`-c features.<name>=true\`]:FEATURE:_default' \
 '*--disable=[Disable a feature (repeatable). Equivalent to \`-c features.<name>=false\`]:FEATURE:_default' \
 '--strict-config[Error out when config.toml contains fields that are not recognized by this version of Codex]' \
+'--proxy-private-ips-via-upstream[Allow permitted private IP destinations to use the configured upstream proxy. If no valid upstream proxy applies to the request protocol, connect directly. Loopback stays local. This flag does not require upstream routing]' \
 '(--aws-sigv4)--use-agent-identity-auth[Use Agent Identity auth from CODEX_ACCESS_TOKEN for remote registration]' \
 '--aws-sigv4[Sign Direct registration and WebSocket handshake requests with AWS SigV4]' \
 '--exit-on-stdin-close[Exit when the parent-owned standard-input pipe closes]' \
