@@ -16,7 +16,7 @@ Re-check the draft against these before outputting (the most-violated rules; ful
 - Australian spelling and quote style.
 - Discussion and rhetorical questions end with a period; the question a post exists to ask keeps its '?'.
 - Lead with substance. No validation openers ('Fair point') or scene-setters ('quick one').
-- End at the last real point. No wrap-up, summary, or evaluative restatement.
+- End at the last real point. No wrap-up, summary, or evaluative restatement. In a heads-up briefing the current state is the last point; no closing 'where I stand' paragraph.
 - Plain language over institutional terms and over named principles from the brief ('Chesterton's fence'). Cut intensifiers/filler (just, really, genuinely, actually) and generic difficulty markers (hard, tricky).
 - Hedge verdicts, proposed causes, and predictions; state facts and existing precedents plainly.
 - Name who owns what; attribute group decisions to the group; never invent names or facts (use [brackets]).
@@ -65,7 +65,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - Lead with information, not validation; skip 'Fair point', 'I hear you', and soft-framing variants ('Interesting divergence.', 'Good point.', 'Worth noting that...'). Replying to a specific message, lead with the blockquote.
 - Drop filler scene-setting openers ('quick one', 'got a sec', 'small thing'); open with the substance or 'FYI'. When the post follows a prior touchpoint, reference it plainly ('As mentioned in standup, I've written up...') rather than a vague warm-up ('Wanted to flag something coming your way. It's been raised with me that...'). Carve-out: a one-line framing opener on a broadcast post is welcome (see Structure).
 - Cut meta-commentary that performs an observation's value before making it ('What's interesting is...', 'the reason this is worth flagging is...'); state it directly.
-- 'FYI' over 'Heads up:'; 'Context:' over 'Background:' for the short 'why'.
+- 'FYI' over 'Heads up:'; 'Context:' over 'Background:' for the short 'why'. The rule targets the label; 'FYI and heads-up on something that came up while you were away' in prose is fine. Don't justify why the reader needs to know or predict where it will come up ('since it will likely come up in the catch-up with X'); the FYI carries it.
 
 **Closers & wrap-ups**
 
@@ -86,6 +86,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 - Place the team in the scene over detached assessment ('we were faced with a rather intimidating brief' not 'the scope looked daunting'), especially in recognition/retro contexts.
 - Neutral noting verbs for signal volume to peer-leaders ('skill atrophy was mentioned', 'came up', 'raised') not editorial superlatives ('the only concern that landed cold', 'the strongest signal'); frequency already weights it.
+- Don't cast the recipient's own involvement as the cause of a past problem ('so any discussion doesn't push the rest of the quarter out' not 'so a late redirect doesn't'). Naming how someone else received something is fine as a plain lead-in clause ('Unfortunately Bob didn't take it well and saw it as...' not a bare 'Bob saw it as...').
 - Avoid ranking/selection-judgement framings when the reality is assignment ('wanted in but were assigned to deadline work' not 'wanted in but weren't selected'); use the factual reason.
 - Lead with self-questioning when feedback diverges from your read ('I may have been a bit harsh and read X as Y') before re-asserting; steel-man the other reading.
 - Avoid rhetorical contrast framing ('didn't just X; they Y'; 'not only X, but also Y') and the diagnostic variant ('the gap wasn't the fix itself; the requirement never carried...' → just 'the requirement never carried...'). State it as a straight list. Drop intensifiers/filler ('herself', 'actually', 'really', 'just', 'genuinely', 'exactly'). Carve-out: observational adverbs with specific physical detail ('looked visibly more blank') add information, and 'actually' stays when it contrasts real content with a placeholder ('what's actually going out in it').
@@ -107,7 +108,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 **Caveats, clarity, self-positioning**
 
 - Surface caveats as inline parenthetical asides at the relevant point ('plain (well, Dataview supported) Markdown'), not a deferred caveats section that reads as overselling-then-retracting.
-- Add brief parenthetical context for ambiguous jargon ('`Spark` (their AI-optimised terminal emulator)').
+- Add brief parenthetical context for ambiguous jargon ('`Spark` (their AI-optimised terminal emulator)'). For internal initiative names, fold the domain word in instead ('multiple loyalty offer engines' not 'multiple offer engines').
 - Trim self-elevating role markers when the audience knows your role ('more active tech feedback' not 'more active tech lead feedback from me'; drop 'on my end', 'as the EM'). Carve-out: keep the marker in cross-team/external posts where it disambiguates.
 - Slashes for paired near-synonyms where neither word alone fits ('credible/confident'), sparingly. Avoid italics for emphasis ('it flips' carries on its own); carve-out: italics for paraphrased self-quotes/coined refrains ('it _feels like a 50% velocity bump_').
 
@@ -127,7 +128,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 **Greetings, openers, sign-offs**
 
-- Salutations are about cadence, not formality. In 1:1s/small threads, use 'Hey [Name],' only when reopening a cold thread; for ongoing conversations skip the greeting and open with 'FYI' or substance. Carve-out: 'Hi team,' is welcome on a broadcast post as an anchor.
+- Salutations are about cadence, not formality. In 1:1s/small threads, use 'Hey [Name],' only when reopening a cold thread; for ongoing conversations skip the greeting and open with 'FYI' or substance. Carve-outs: 'Hi team,' is welcome on a broadcast post as an anchor; the first DM to someone back from leave opens warm, without the name ('Hello, hope you had a good break, and welcome back :blobby-wave-2:' not 'Hey Tal, welcome back.').
 - For broadcast posts (incident writeup, retro share, lessons-learned), a one-line framing opener warms the room ('Just wanted to share some lessons from...'), then go straight to facts. Prefer first-person-plural for team-lived events ('two incidents we had yesterday').
 - For thread updates that fulfil a prior commitment or a leader's ask, a memo-style opener works: 'RE: <topic> results from <when>' on its own line, then a blank line. Use it for known follow-ups (even into a peer-leader channel); use the prose framing for unsolicited wider updates. See example 14.
 - Sign-offs should be functional with operational context ('with Focus Week we won't catch up until May, but I can book something sooner'). No effusive thanks, 'happy to jump on a call', or 'thank you for trusting me with this'.
@@ -140,6 +141,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - Sentiment-share posts to peer leaders: the observations are the deliverable, so end at the last observation. No 'What I'm doing with it'/'Next steps', operational follow-ups, open-invitation closers, or bridging openers. (Distinct from incident writeups, where forward-looking advice IS the deliverable.) See example 11.
 - Meeting-outcome update to peers who shared the context: deliver the surfaced issue, action items, next steps as labelled blocks, in that order. Cut background/justification (they lived it). State the technical cause neutrally and fault-free. Close owning your own follow-through ('I'll action my parts in the coming weeks'), not 'we'll get moving'. See example 14.
 - Asking a team about a process they own before changing it: 'Hi team,' plus what you'd like to understand; your understanding with its source named and one concrete example, then a confirm ask; a direct question on whether it's intentional and why, with one hedged guess; the proposed change attributed to its proposer as a shared 'should'; close by asking whether anyone is opposed. Drop mechanics the owning team knows better than you (release timing, store limits). See example 15.
+- Briefing a manager on something that brewed while they were away: warm welcome-back, a one-line FYI, what you tried (their guidance applied, concretely), how the other party reacted, a short bullet timeline of what followed with brief verbatim quotes, then the current state, and stop. Cut secondary concessions that dilute the thread ('and offered two estimates, one with and one without'), pre-emptive disclaimers ('you haven't reviewed that summary, so it may not match'), and a closing stance paragraph ('I'm not trying to take a side'). See example 16.
 - When the other person asks an open question ('what would the ideal X look like'), give numbered options with explicit tradeoffs, not vague suggestions.
 - Consolidate thread replies into one message with inline blockquotes, even when asked for 'replies' to multiple posts; exception is genuinely different audiences/threads. Truncate long quoted passages with `[...]` keeping bookend phrases; quote whole if under ~25 words. See examples 7, 10.
 - Announcing a linked doc/checklist to the team: the message points to it, it doesn't restate it. Name what it is, the review/adopt ask ('Please review and comment/modify if anything needs changing'), the few operational notes, then link. Don't reproduce the doc's rationale or summarise its sections in the post.
@@ -231,6 +233,7 @@ Machine-generated prose has a recognisable fingerprint; strip it. This list adap
 - Recall concrete observations over category labels in debriefs/retros/post-mortems ('he responded with a sort of change checklist of the normal things' not 'covered the standard scaling levers').
 - Name the forum/source where a finding emerged over vague investigative verbs ('post-mini-retro discussion, the requirement never carried an impact analysis' not 'digging in, ...').
 - Paraphrasing 'what the rest of the team was doing', reach for a specific dated landmark ('while the rest of us were still at Focus Week' not 'still mapping the scope').
+- For a reader returning from leave, use relative time anchors ('last week', 'that evening', 'yesterday' not 'on the 24th', 'about 5 hours after the meeting'); the sequence carries the timeline.
 - Strip numeric padding that doesn't drive the point (diff sizes, commit counts, synthesised cycle-time deltas); keep a number only where it changes meaning or anchors the timeline ('46 review events' when review volume is the point, 'merged about 10 hours after opening' when wall-clock is).
 - Anchor the closing lesson in a concrete local factor ('cycle time can blow out with our long build times') not an abstract restatement.
 - Answering 'is X worth pursuing' in a gated process, ground the recommendation in the next concrete gate ('worth seeing how his knowledge translates at the pair-programming stage') not speculative team-fit.
@@ -258,13 +261,14 @@ For longer-form posts, load `references/style-examples.md` and find the matching
 - **13.** Delegation / agent-work debrief reply to a peer-leader (memo-style, multi-example with per-example lessons)
 - **14.** Peer-leader meeting-outcome update (memo-style: surfaced issue, action items, next steps)
 - **15.** Cross-team process question (why do we do X, is it intentional, anyone opposed to changing it)
+- **16.** Heads-up DM to a manager back from leave (what I tried, how it escalated, where it stands)
 
 ## Workflow
 
 1. Before drafting, load the right reference for the post type:
    - **Technical posts** (code/file/symbol references: incident writeups with code citations, architecture proposals, PR commentary): read `references/technical-posts.md`.
    - **Niche post types** (voluntary-support offering / office hours, product or community launch): read `references/situational-patterns.md`.
-   - **Other longer-form posts** (broadcast, recognition, sentiment-share, blockquote DM reply, retro card, consolidated thread reply, meeting-outcome update, cross-team process question): read `references/style-examples.md` and find the matching example.
+   - **Other longer-form posts** (broadcast, recognition, sentiment-share, blockquote DM reply, retro card, consolidated thread reply, meeting-outcome update, cross-team process question, heads-up briefing to a manager back from leave): read `references/style-examples.md` and find the matching example.
    - **Short messages** (FYI, brief reply, single-sentence ack): the anchors above are enough.
 2. If no context is provided, ask: "What would you like me to rewrite? Share a rough draft or ideas to develop."
 3. Review as a skeptic before delivering. Re-read the draft cold against the pre-flight checklist and 'Signs of AI writing to avoid'; the model's default voice is the failure mode, and it reads as normal from the inside. For high-stakes messages (sensitive 1:1s, broad announcements, exec-facing posts), fork a subagent given only the draft and the matching reference example, no conversation context, to flag voice mismatches and AI tells; revise once on what it finds.
@@ -281,5 +285,5 @@ For longer-form posts, load `references/style-examples.md` and find the matching
 ### references/
 
 - `technical-posts.md`: posts that cite specific code, argue for a technical investment, or summarise root causes at the code level. Diagnosis/proposal bullet pairs, precise absence quantifiers, ticket-mapped proposals, symbol-first bullets, arrow notation, backtick density, worked example.
-- `style-examples.md`: long-form worked examples (5-15): retro card, broadcast announcement, sensitive 1:1 blockquote reply, peer consent-check DM, channel recognition, consolidated thread reply, sentiment-share to peer leaders, product-share post, delegation debrief reply, peer-leader meeting-outcome update, cross-team process question. Each has the message body and structural commentary.
+- `style-examples.md`: long-form worked examples (5-16): retro card, broadcast announcement, sensitive 1:1 blockquote reply, peer consent-check DM, channel recognition, consolidated thread reply, sentiment-share to peer leaders, product-share post, delegation debrief reply, peer-leader meeting-outcome update, cross-team process question, heads-up DM to a manager back from leave. Each has the message body and structural commentary.
 - `situational-patterns.md`: niche post types loaded on demand: voluntary-support offerings (office hours, drop-in time, ad-hoc pairing) and product-share/community-announce posts (structure, AI disclosure, image captions).

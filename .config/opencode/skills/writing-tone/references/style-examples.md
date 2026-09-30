@@ -274,3 +274,24 @@ If it is, could someone provide context as to why we do it this way, and if it's
 Bob has suggested that the team doing a release should be filling in the notes with what's actually going out in it. I'm wondering if anyone is opposed to this process change?
 
 **Demonstrates the structural pattern for asking a team about a process they own before changing it:** 'Hi team,' anchor plus a one-line statement of what you'd like to understand; the current understanding with its source named plainly ('Carol mentioned') and one concrete, dated example; a confirm ask; then the real question posed as a question with a '?', covering both 'why' and 'is it intentional'; one hedged guess owned in first person with room left for reasons you don't know; the proposed change attributed to its proposer as a shared 'should'; an objection check as the closer. **Specific patterns:** 'our Crew release notes' keeps the ask collaborative even though another team runs the process; the brief's framing ('per Chesterton's fence') is translated into the plain question it implies rather than name-dropped; the literal UI label takes double quotes. **NOT here:** 'per Chesterton's fence I'd like to know why before we change it' (named principle as copy, and a statement where a question belongs), 'One possible reason is' (unowned guess), 'the Crew release notes' (distancing), or a trailing logistics line the owning team already knows ('The notes are fixed once a release is published, so the next Crew release is the earliest we could try this').
+
+---
+
+## 16. Heads-up DM to a manager back from leave (what I tried, how it escalated, where it stands)
+
+Hello, hope you had a good break, and welcome back :blobby-wave-2:
+
+FYI and heads-up on something that came up while you were away.
+
+Going into Q4 prioritisation with Bob last week, I tried to apply your guidance (at least two options per problem, and mapping what doing it properly would take before defaulting to a shortcut). For a non-trivial item like multiple loyalty offer engines, I planned for up to 2 weeks of elapsed time (not full work time) to map options and run them past custodianships and you. I framed it as the worst case for planning purposes, so any discussion doesn't push the rest of the quarter out like it did in Q3.
+
+Unfortunately Bob didn't take it well and saw it as doing work for the sake of work (he compared it to team-nova planning 'by the hour'). He ended the meeting saying he would call Dave and flag it with Dave and Carol before we continue prioritisation. From there:
+
+- That evening, Carol messaged me asking about 'this 3 options minimum mandate, was this from [you]?'. I corrected it to at least 2 and shared an AI summary of your guidance.
+- Carol's view was that it's 'clearly not something Dave or Bob agree with so we will need alignment before we proceed', and that a one-team mandate feels uncomfortable to her.
+- About an hour later Bob asked if Carol had reached out, and said he had also asked Dave to talk to you about not adding unnecessary time for alternative solutions.
+- Yesterday Bob told me Carol is 'going to intervene and put an end to this endless and pointless battle / debate' about how much scrutiny our team needs.
+
+In the meantime Bob and I are still working through Q4 picks, with a follow-up on Friday. A few estimates are on hold until after your catch-up with Carol.
+
+**Demonstrates the structural pattern for briefing a manager on something that brewed while they were away:** a warm welcome-back with a custom wave emoji and no name (it's a DM), then a bare one-line 'FYI and heads-up' with no justification of why they need it; a 'what I tried' paragraph that ties the action to the recipient's own guidance, concretely; the other party's reaction introduced with a plain reception clause ('Unfortunately Bob didn't take it well and'); a relative-dated bullet timeline ('That evening', 'About an hour later', 'Yesterday') with short verbatim quotes in single quotes so the recipient sees the escalation in the other parties' words; a current-state paragraph as the closer. **Specific patterns:** the planning buffer is justified by the quarter's outcome ('so any discussion doesn't push the rest of the quarter out') rather than by the recipient's past redirects; the initiative name carries its domain ('multiple loyalty offer engines'). **NOT here:** 'Hey [Name], welcome back.', 'since it will likely come up in the catch-up Carol is booking', 'on the 24th' or 'about 5 hours after the meeting', 'and offered Bob two estimates, one with that step and one without' (a side concession that dilutes the thread), 'You haven't reviewed that summary, so it may not fully match what you meant' (pre-emptive disclaimer), 'so a late redirect doesn't push...' (casts the recipient as the cause), or a closing stance paragraph ('I'm not trying to take a side here... Mostly I'd like you, Dave and Bob aligned').
