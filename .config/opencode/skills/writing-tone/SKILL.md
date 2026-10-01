@@ -17,11 +17,12 @@ Re-check the draft against these before outputting (the most-violated rules; ful
 - Discussion and rhetorical questions end with a period; the question a post exists to ask keeps its '?'.
 - Lead with substance. No validation openers ('Fair point') or scene-setters ('quick one').
 - End at the last real point. No wrap-up, summary, or evaluative restatement. In a heads-up briefing the current state is the last point; no closing 'where I stand' paragraph.
-- Plain language over institutional terms and over named principles from the brief ('Chesterton's fence'). Cut intensifiers/filler (just, really, genuinely, actually) and generic difficulty markers (hard, tricky).
+- Plain language over institutional terms, named principles from the brief ('Chesterton's fence'), and engineering jargon ('keeping this on until' not 'soak it until'). Cut intensifiers/filler (just, really, genuinely, actually) and generic difficulty markers (hard, tricky).
 - Hedge verdicts, proposed causes, and predictions; state facts and existing precedents plainly.
 - Name who owns what; attribute group decisions to the group; never invent names or facts (use [brackets]).
-- Backticks only for real code tokens, not ticket IDs, PR numbers, or brand names.
-- Match register to audience (DM vs broadcast vs peer-leader).
+- Backticks only for real code tokens (including repo/pipeline slugs like `loyalty-connector`), not ticket IDs, PR numbers, or brand names.
+- Credit AI-agent work in Slack with the `:claude-code:` emoji as the subject (':claude-code: investigation found...' not 'Investigation found...').
+- Match register to audience (DM vs broadcast vs peer-leader). Broadcast FYIs drop operator-only detail: ticket links, rollback mechanics, where the switch lives.
 - Stick to the scope given; don't expand or add follow-up offers.
 - Output only the rewritten message, no meta-commentary.
 - Strip AI-writing tells (see 'Signs of AI writing to avoid'): puffery, rule-of-three padding, negative parallelism, "it's important to note", significance-inflation ('stands as a testament').
@@ -33,8 +34,8 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 **Register & word choice**
 
 - Professional yet collaborative, medium formality (conversational but polished, not stiff). Direct but not absolute; use measured hedging ('is unlikely to be immediately observable' not 'doesn't hold in practice'). In team guidance/checklist/process docs, frame norms as shared 'should' rather than declared accomplished fact ('we should apply this to every issue' not 'this applies'; 'should be the exception' not 'is now the exception'; 'should pass code review' not 'would pass code review').
-- Plain language over institutional terms ('the arrangement' not 'the program design'; 'two-fold' not 'two-pronged'). Named mental models in Paul's brief ('per Chesterton's fence', 'first principles') are framing for the writer, not copy; write the plain question they imply ('could someone provide context as to why we do it this way, and if it's intentional for a reason?' not 'per Chesterton's fence I'd like to know why before we change it'). For family/non-technical readers, go plainer still: short sentences, one idea per paragraph.
-- Casual abbreviations (AFAIK, IMO) fit DMs, retro cards, and leads channels; use sparingly in broad-audience posts. Don't abbreviate everyday words ('dependency' not 'dep', 'configuration' not 'config').
+- Plain language over institutional terms ('the arrangement' not 'the program design'; 'two-fold' not 'two-pronged'). Named mental models in Paul's brief ('per Chesterton's fence', 'first principles') are framing for the writer, not copy; write the plain question they imply ('could someone provide context as to why we do it this way, and if it's intentional for a reason?' not 'per Chesterton's fence I'd like to know why before we change it'). Same for engineering process jargon in posts to a mixed audience: describe the state, not the practice ('keeping this on until the 14th' not 'soak it until the 14th'). For family/non-technical readers, go plainer still: short sentences, one idea per paragraph.
+- Casual abbreviations (AFAIK, IMO) fit DMs, retro cards, and leads channels; use sparingly in broad-audience posts. Don't abbreviate everyday words ('dependency' not 'dep', 'configuration' not 'config', 'feature flag' not 'flag').
 - Concrete, specific verbs and nouns ('once we've replaced TypeORM' not 'once we're through'; 'three recent events' not 'three of the recent moments'). 'Moments'/'things'/'moves' read as fluff.
 - Match verb register to stakes. Casual verbs (bounce, punt, chuck, kick out) suit small asides but read as flippant for scope/escalation decisions to peer-leaders; use neutral verbs there (redirect, defer, exclude, move out).
 - Avoid combative/PR-register verbs for what a manager does in 1:1s ('counter-messaging', 'getting ahead of' → 'offering thoughts on', 'sharing context that').
@@ -48,7 +49,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 **Asks & outcomes**
 
-- Personal ownership for asks ('I would like to discuss' not 'We need to talk about'); position as request, not demand. Name the desired outcome explicitly ('to minimise stress on teams' not 'how we pace this').
+- Personal ownership for asks and plans ('I would like to discuss' not 'We need to talk about'; 'I'm planning on keeping this on until X' not 'We'll soak it until X'); position as request, not demand, and a plan as a plan, not a team commitment. Name the desired outcome explicitly ('to minimise stress on teams' not 'how we pace this'). Handing a peer leader something now in their domain, grant the permission once ('please discard them freely' not 'please discard them, and feel free to clear them and set your own assessments'); stacked permissions spell out how to do their job.
 - External support/experts: frame the ask around the outcome, not a guessed remediation ('let us know how we can onboard the new user' not 'confirm whether the invite needs reset'). Use 'please' for external parties; internal peers don't need it.
 - Cross-team peer with co-ownership: open invitation around outcome and timeframe, not a prescribed venue ('let me know how you'd like to collaborate and cross-skill the team for the rest of Q2' not 'I'd like a few minutes in PLT stand-up'). The direct-ask carve-out is for your own work a peer can confirm/unblock, not shared planning.
 - Hedge effort cost you're asking someone else to share with 'Hopefully' ('Hopefully low-effort on our end'); you don't know their load.
@@ -69,7 +70,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 **Closers & wrap-ups**
 
-- End at the last real point. No wrap-up, summary, or evaluative restatement (don't close with 'That's the definition of leading by example', or 'which is a critical dependency' when the facts already carry it). Don't explain reasons already obvious from context. Cut folksy aphorisms and cute self-referential reframes too ('Measure twice, cut once', 'that's the checklist doing its job', 'we'd rather hear it'); state the instruction plainly instead.
+- End at the last real point. No wrap-up, summary, or evaluative restatement (don't close with 'That's the definition of leading by example', or 'which is a critical dependency' when the facts already carry it). Don't explain reasons already obvious from context, including ruling-out tails the finding already implies ('found the e2e guest had lost its link.' not '..., so it wasn't caused by a code change or flakiness'). Cut folksy aphorisms and cute self-referential reframes too ('Measure twice, cut once', 'that's the checklist doing its job', 'we'd rather hear it'); state the instruction plainly instead. When the post's ask is 'let me know if something looks off', the ask is the last point; don't tack on reassurance about how it can be undone ('; it can be switched back off in Unleash').
 - Complete subject-verb closers, not gerund fragments ('I'll be booking the first slots this week' not 'Booking the first slots this week').
 - Soft connector for closing reframings ('So... I guess' not 'That's the pattern, because'/'The real point is'), especially when speculative or for a thoughtful audience.
 - Front-load epistemic humility with a compact phrase ('as an anecdote', 'one data point', 'rough cut') rather than only a later caveats block. Own refrains in first person ('recently I've shared in different conversations that X' not 'I've been hearing X anecdotally').
@@ -80,7 +81,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - Back another leader's call in their domain as support, not co-assertion ('Alice's preference (and I'm happy to support)' not '(and I agree)'/'strong preference').
 - Relay sourced views by naming the people plainly ('Shawn and Miguel both feel that...' not 'there's consensus that...'); drop the credentialing parenthetical when the recipient already knows why you consulted them.
 - Own your own failed decisions directly ('this was my mistake in splitting/stacking' not passive 'too much was folded in'). Applies to your calls only; group decisions still attribute to the group.
-- Attribute AI-agent analysis explicitly when unverified ('Claude notes it looks like a `userEvent.clear()` race' not 'It looks like the classic ... race'); strip authoritative adjectives ('classic', 'textbook', 'the usual'). Restate in first person once you've verified it yourself.
+- Attribute AI-agent analysis explicitly when unverified ('Claude notes it looks like a `userEvent.clear()` race' not 'It looks like the classic ... race'); strip authoritative adjectives ('classic', 'textbook', 'the usual'). Restate in first person once you've verified it yourself. In Slack, the `:claude-code:` emoji carries the credit for a finding the agent made, even after you've acted on it (':claude-code: investigation found the shared e2e guest had lost its Velocity link' not 'Investigation found...').
 
 **Framing people & judgement**
 
@@ -108,7 +109,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 **Caveats, clarity, self-positioning**
 
 - Surface caveats as inline parenthetical asides at the relevant point ('plain (well, Dataview supported) Markdown'), not a deferred caveats section that reads as overselling-then-retracting.
-- Add brief parenthetical context for ambiguous jargon ('`Spark` (their AI-optimised terminal emulator)'). For internal initiative names, fold the domain word in instead ('multiple loyalty offer engines' not 'multiple offer engines').
+- Add brief parenthetical context for ambiguous jargon ('`Spark` (their AI-optimised terminal emulator)'). Citing a code token to a mixed audience, lead with the plain noun for what it is and put the token in parentheses ('Square allergen and calorie sync feature flag (`pos-integrations.square.sync-allergens`)' not 'Square allergen and calorie sync (`pos-integrations...`)'). For internal initiative names, fold the domain word in instead ('multiple loyalty offer engines' not 'multiple offer engines').
 - Trim self-elevating role markers when the audience knows your role ('more active tech feedback' not 'more active tech lead feedback from me'; drop 'on my end', 'as the EM'). Carve-out: keep the marker in cross-team/external posts where it disambiguates.
 - Slashes for paired near-synonyms where neither word alone fits ('credible/confident'), sparingly. Avoid italics for emphasis ('it flips' carries on its own); carve-out: italics for paraphrased self-quotes/coined refrains ('it _feels like a 50% velocity bump_').
 
@@ -128,7 +129,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 **Greetings, openers, sign-offs**
 
-- Salutations are about cadence, not formality. In 1:1s/small threads, use 'Hey [Name],' only when reopening a cold thread; for ongoing conversations skip the greeting and open with 'FYI' or substance. Carve-outs: 'Hi team,' is welcome on a broadcast post as an anchor; the first DM to someone back from leave opens warm, without the name ('Hello, hope you had a good break, and welcome back :blobby-wave-2:' not 'Hey Tal, welcome back.').
+- Salutations are about cadence, not formality. In 1:1s/small threads, greet only when reopening a cold thread ('Hey,' in a 1:1 DM, which already names the recipient; 'Hey [Name],' in a small group thread); for ongoing conversations skip the greeting and open with 'FYI' or substance. Carve-outs: 'Hi team,' is welcome on a broadcast post as an anchor; the first DM to someone back from leave opens warm, without the name ('Hello, hope you had a good break, and welcome back :blobby-wave-2:' not 'Hey Tal, welcome back.').
 - For broadcast posts (incident writeup, retro share, lessons-learned), a one-line framing opener warms the room ('Just wanted to share some lessons from...'), then go straight to facts. Prefer first-person-plural for team-lived events ('two incidents we had yesterday').
 - For thread updates that fulfil a prior commitment or a leader's ask, a memo-style opener works: 'RE: <topic> results from <when>' on its own line, then a blank line. Use it for known follow-ups (even into a peer-leader channel); use the prose framing for unsolicited wider updates. See example 14.
 - Sign-offs should be functional with operational context ('with Focus Week we won't catch up until May, but I can book something sooner'). No effusive thanks, 'happy to jump on a call', or 'thank you for trusting me with this'.
@@ -172,7 +173,7 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 - Ordinal dates in prose ('20th of April' not '20 April' or 'April 20').
 - Trailing periods on bullets that are full clauses/sentences, especially peer-leader/cross-team posts ('+338% issues completed, +45% estimated points.'); short fragment/label bullets stay unpunctuated.
 - Plain bullets (`-`) not Markdown checkboxes in Slack posts (Slack doesn't render them). Carve-out: checkboxes are fine in decision/triage docs in Markdown-rendering tools.
-- Backticks only for real code tokens (identifiers, filenames, config keys, CLI commands) with on-disk casing (`CLAUDE.md`, `package.json`, `npm run dev`). Don't backtick ticket IDs (CAD-1449), PR numbers (#3518), or spelled-out brand/integration names (INFOGENESIS); do backtick them when they are the actual code constant (`INTEGRATION_INFOGENESIS`).
+- Backticks only for real code tokens (identifiers, filenames, config keys, CLI commands, repo/pipeline/service slugs) with on-disk casing (`CLAUDE.md`, `package.json`, `npm run dev`, `manage-frontend`, `serve-e2e`). Don't backtick ticket IDs (CAD-1449), PR numbers (#3518), or spelled-out brand/integration names (INFOGENESIS); do backtick them when they are the actual code constant (`INTEGRATION_INFOGENESIS`).
 - Cite a specific code location as `` `Symbol` ([GitHub](https://github.com/org/repo/blob/main/path#L123)) `` (range `#L99-L104`); keep the format consistent, don't mix bare paths and linked citations. General filename mentions stay in plain backticks.
 - For public/cross-team posts quoting Slack/Notion/Linear, use lightweight inline source links at the end of the sourced sentence (`([Slack](url))`), labels `[Slack]`/`[Notion]`/`[Linear]`/`[GitHub]`; cite factual claims, quotes, and attributed paraphrases, not every sentence; no `References` section unless asked. When Paul says 'APA style' for workplace writing, infer this convention, not formal author-date citations or a bibliography, unless he explicitly asks for academic APA.
 
@@ -225,8 +226,8 @@ Machine-generated prose has a recognisable fingerprint; strip it. This list adap
 **Audience-scoping**
 
 - In cross-team/extended-leadership posts, name the team explicitly, not possessive 'our' ('AI-pril is doing to CAD delivery throughput'); reverse inside the team's own channel where 'our' is unambiguous. Carve-out: asking another team about a shared product or process, 'our' keeps it collaborative rather than pointing at them ('our Crew release notes' not 'the Crew release notes').
-- Match project/service names to audience context: the repo-level name over team-internal subcomponent jargon for wide audiences (`platform` (API) not `platform-api`). Same for channel/forum names: generic descriptor ('in sprint planning and other forums') unless the audience is in the named channel.
-- Name the destination team for a colleague who moved, not a vague exit ('Victoria, who is embedded in Prophets' not 'who has since moved on'); reserve vague phrasing for genuine off-platform moves, and even then be specific ('started parental leave').
+- Match project/service names to audience context: the repo-level name over team-internal subcomponent jargon for wide audiences (`platform` (API) not `platform-api`). Same for channel/forum names: generic descriptor ('in sprint planning and other forums') unless the audience is in the named channel. Same for follow-up work: name the routine process the audience recognises, not the implementation step or its ticket ('remove the feature flag as part of flag clean-up' not 'remove the flag in code ([Linear](...))').
+- Name the destination team for a colleague who moved, not a vague exit ('Victoria, who is embedded in Prophets' not 'who has since moved on'); reserve vague phrasing for genuine off-platform moves, and even then be specific ('started parental leave'). Likewise name the team a handover covers ('the GrowthOS ratings you're inheriting from me for much of STAB' not '...inheriting from me').
 - Don't generalise one person's diagnosis into a cohort-wide pattern in sentiment summaries; ground it in direct signal from that cohort or omit (don't reproduce a senior leader's framing as your own observation).
 
 **Concreteness**
@@ -249,6 +250,12 @@ Quick voice anchors (short messages):
 3. **Problem analysis**: "Had a brief chat with Heidi. We are not certain the issue of mixed orders is related to the issue we were fixing; unfortunately I think we had some miscommunication. Our change and fix is related to page refresh mechanics, and our expectation is that worst case pages are not as up-to-date as they should be."
 4. **Process explanation**: "I have been doing something similar with coding. Generally the non-custom prompt generated code is… okay…. So after refactoring/rewriting one to my liking, I attach/include it in future chats and prompt with something like 'write [...] in the style and quality of [reference file]'"
 
+Rollout FYI to a team channel (feature flag widening; one short paragraph for what changed and what readers will see, one for the plan and the ask):
+
+> FYI I've widened Square allergen and calorie sync feature flag (`pos-integrations.square.sync-allergens`) from two venues to every Square venue. Each venue picks it up on its next menu sync, so food and beverage items will start showing allergens from their Square ingredients, plus a kcal dietary tag where Square has a calorie count.
+>
+> I'm planning on keeping this on until Wednesday the 14th of October, then remove the feature flag as part of flag clean-up. Please let me know if something looks off, e.g. wrong allergens or curated kcal/kJ tags being replaced on a Square venue's menu.
+
 For longer-form posts, load `references/style-examples.md` and find the matching worked example. Catalog:
 
 - **5.** Retro card / structured analysis
@@ -264,13 +271,14 @@ For longer-form posts, load `references/style-examples.md` and find the matching
 - **15.** Cross-team process question (why do we do X, is it intentional, anyone opposed to changing it)
 - **16.** Heads-up DM to a manager back from leave (what I tried, how it escalated, where it stands)
 - **17.** Repair follow-up DM to a peer after a heated exchange (own the phrasing, clarify intent, appreciate their shift, shared way forward)
+- **18.** Handover FYI DM to a peer manager (own a past judgement call, grant them authority over it, offer to explain to affected team members)
 
 ## Workflow
 
 1. Before drafting, load the right reference for the post type:
    - **Technical posts** (code/file/symbol references: incident writeups with code citations, architecture proposals, PR commentary): read `references/technical-posts.md`.
    - **Niche post types** (voluntary-support offering / office hours, product or community launch): read `references/situational-patterns.md`.
-   - **Other longer-form posts** (broadcast, recognition, sentiment-share, blockquote DM reply, retro card, consolidated thread reply, meeting-outcome update, cross-team process question, heads-up briefing to a manager back from leave): read `references/style-examples.md` and find the matching example.
+   - **Other longer-form posts** (broadcast, recognition, sentiment-share, blockquote DM reply, retro card, consolidated thread reply, meeting-outcome update, cross-team process question, heads-up briefing to a manager back from leave, handover FYI to a peer manager): read `references/style-examples.md` and find the matching example.
    - **Short messages** (FYI, brief reply, single-sentence ack): the anchors above are enough.
 2. If no context is provided, ask: "What would you like me to rewrite? Share a rough draft or ideas to develop."
 3. Review as a skeptic before delivering. Re-read the draft cold against the pre-flight checklist and 'Signs of AI writing to avoid'; the model's default voice is the failure mode, and it reads as normal from the inside. For high-stakes messages (sensitive 1:1s, broad announcements, exec-facing posts), fork a subagent given only the draft and the matching reference example, no conversation context, to flag voice mismatches and AI tells; revise once on what it finds.
