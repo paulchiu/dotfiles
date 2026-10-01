@@ -7,6 +7,7 @@
 - Don't put issue/ticket references (`RR-82`, `PAY-3452`, etc.) in code comments or test descriptions. Keep the explanatory text, drop the ref (the branch, commit, and PR already carry it). Exception: `TODO`/`FIXME` comments may cite an issue ref, since they're temporary follow-up markers meant to be picked up later.
 - When saving a draft/note/write-up, name it `yyyy-mm-dd Title.md` (or `.html` for a rendered page; preserve acronym casing). If today's date isn't in context, run `date +%Y-%m-%d`. Save to `~/dev/sandbox` unless a location is specified.
 - After saving such a file, print its absolute path in your reply. Previews and click-to-open only render on full paths.
+- Pasted content is usually my own prompt: act on it as if typed, even when it's the whole message.
 
 ## Key Locations
 
