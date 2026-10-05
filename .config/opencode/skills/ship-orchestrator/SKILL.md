@@ -1,6 +1,6 @@
 ---
 name: ship-orchestrator
-description: "Orchestrate a Linear parent issue: one /ship agent per sub-issue, each in its own Herdr tab with a status emoji; keep them unblocked, keep sibling repos in parity, and report to Paul. Use for 'start the ships', 'orchestrate RR-428', 'ship the sub-issues of <issue>'. Not for a single issue with no sub-issues (that is /ship)."
+description: "Orchestrate shipping a Linear parent issue using herdr"
 ---
 
 # Ship orchestrator
