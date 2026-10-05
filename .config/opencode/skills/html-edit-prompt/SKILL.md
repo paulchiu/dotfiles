@@ -41,7 +41,7 @@ The layer intercepts clicks on the document, so it needs to get out of the way w
 - **On**: the dock lights up yellow, passages highlight on hover, clicking one opens the popover, and in-passage links are suppressed so a click means "comment", not "navigate".
 - **Off**: the page is entirely itself again. No popover, links navigate, text selects and copies freely. Commented passages drop their yellow fill and keep only a thin margin bar, so the marks stay visible as a record without recolouring the document. The Review panel still opens, so you can read, **Copy prompt**, or **Clear all** with the mode off.
 
-The state persists per document in `localStorage` and defaults to on for a document you have never opened.
+The state persists per document in `localStorage` and defaults to off, so a freshly opened page reads normally until you press the power button or <kbd>⌥R</kbd>.
 
 ## How anchoring works
 

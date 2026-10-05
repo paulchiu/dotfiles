@@ -22,8 +22,10 @@
   }
   .rc-commentable { transition: background .08s; }
   /* Reserve a left gutter so the bar/highlight never touches the text. The
-     negative margin cancels the padding, so at-rest layout does not shift. */
-  p.rc-commentable, li.rc-commentable { padding-left: 16px; margin-left: -16px; }
+     negative margin cancels the padding, so at-rest layout does not shift.
+     List items are excluded: an outside marker follows the border box, so the
+     gutter would push bullets and numbers 16px away from their text. */
+  p.rc-commentable { padding-left: 16px; margin-left: -16px; }
   body.rc-on .rc-commentable { cursor: pointer; }
   body.rc-on .rc-commentable:hover { background: var(--rc-hover); color: var(--rc-accent-ink); box-shadow: inset 4px 0 0 0 var(--rc-ink); }
   body.rc-on tr.rc-commentable:hover td { background: var(--rc-hover); color: var(--rc-accent-ink); }
@@ -109,13 +111,13 @@
   @media print { #rc-dock,#rc-panel,#rc-editor { display: none !important; } .rc-has-comment { box-shadow: none; background: transparent; color: inherit; } }
 </style>
 <div id="rc-dock">
-  <button id="rc-power" type="button" aria-pressed="true" title="Comment mode">&#9211;</button>
+  <button id="rc-power" type="button" aria-pressed="false" title="Comment mode">&#9211;</button>
   <button id="rc-fab" type="button">Review <span class="rc-count">0</span></button>
 </div>
 <aside id="rc-panel">
   <header><h3>Document Review</h3><button id="rc-close" type="button">&times;</button></header>
   <div class="rc-body">
-    <label class="rc-toggle"><input type="checkbox" id="rc-mode" checked> Comment mode (&#8997;R)</label>
+    <label class="rc-toggle"><input type="checkbox" id="rc-mode"> Comment mode (&#8997;R)</label>
     <span id="rc-genlabel">General note (whole document)</span>
     <textarea id="rc-gen" rows="3" placeholder="Optional overall instruction&hellip;"></textarea>
     <ul id="rc-list"></ul>
@@ -139,7 +141,7 @@
 (function(){
   var DOC_PATH = __RC_DOC_PATH__;
   var TITLE = document.title || 'doc';
-  var K = 'rc:v1:'+TITLE, KG = 'rc:v1:gen:'+TITLE, KM = 'rc:v1:mode:'+TITLE;
+  var K = 'rc:v1:'+TITLE, KG = 'rc:v1:gen:'+TITLE, KM = 'rc:v2:mode:'+TITLE;
   var SEL = 'header.doc h1, header.doc .subtitle, .intro p, section > h2, section p, section li, section tbody tr,'
     + 'header.hero h1, header.mast h1, header.mast .standfirst,'
     + 'main > p, main > h2.sec, main .note, main .bad-note, main .good-note,'
@@ -304,7 +306,7 @@
   }
   modeEl.addEventListener('change', function(){ setMode(modeEl.checked); });
   powerEl.addEventListener('click', function(){ setMode(!document.body.classList.contains('rc-on')); });
-  setMode(ls(KM)==null ? true : ls(KM)==='1');
+  setMode(ls(KM)==='1');
 
   function refresh(){
     var store = load(); var n=0;

@@ -327,3 +327,40 @@ Looking back, a lot of the higher ratings I gave in the last check-in came from 
 If any team members feel the 'downgrade' of a capability is unfair, they're welcome to reach out to me. I'm happy to explain my reasoning for revising their assessments.
 
 **Demonstrates the structural pattern for handing a peer manager something you got wrong before they took it over:** 'Hey,' with no name (a cold 1:1 DM), then 'FYI on' naming the thing and the team it covers ('for much of STAB'); the new approach as one plain sentence; a 'Looking back' paragraph that owns the old call in first person and names the gap concretely (superficial read, little evidence), then the practical consequence for the recipient ('They'll carry forward into this cycle') and a single grant of authority ('please discard them freely'); a closer that offers the affected team members a route back to the writer, with 'downgrade' in single quotes because it is their likely framing. **NOT here:** 'Hey Michael,' (the DM already names him), '...inheriting from me.' with no team named, 'please discard them, and feel free to clear them and set your own assessments' (stacked permissions spelling out how to do his job), 'I'd be more than happy to explain my reasoning and justification' (intensifier plus a near-synonym pair).
+
+---
+
+## 19. Peer-guild proposal share asking for early direction (problem, session credit, AI;DR, emoji vote, PS/PPS, cc)
+
+Hello brain trust,
+
+I have something I would like to get an early direction on from the group.
+
+The problem #stream-responsive-roadmap are trying to solve is letting an organisation run Toggle gift cards alongside a separate loyalty offers provider (e.g. Hall & Woodhouse want Zonal Vouchers for offers).
+
+Last Friday I had a brainstorming session with @Alice, @Bob and @Carol.
+
+:claude-code: has written up the sessions ideas on how we could support a separate offers provider and gift card provider per organisation.
+
+_AI;DR_
+
+Toggle currently (controversially) leverages the loyalty promo code path to support its gift cards, so it takes the organisation's only loyalty slot. To add support for an offer provider alongside, we have...
+
+- Option A, add a new composite loyalty provider behind one loyalty program: no schema change, but the gift card stays lumped into the loyalty line and is applied before fees. This is the fastest method, but is pretty hacky.
+- Option B, enable setting a type on each loyalty program (`LOYALTY` or `GIFT_CARD`): an 'Add gift card' row in the guest app, and the gift card applied last on the remaining total. This is the recommendation from our Friday session.
+
+The attached HTML has the agreed (between RR and LOY) model, current limitations, and side-by-side flow and schema diagrams for each option.
+
+Are people happy with option B directionally? Feel free to react or add thoughts in :thread:
+
+:one: Happy with B
+:two: I have alternative ideas or preferences
+:three: Needs more discussion in a sync session
+
+PS I've attached HTML rather than a Notion page as I find it's easier to compare the flow charts and DB changes, but happy to move it to Notion if people would like to leave more detailed comments.
+
+PPS We know there's an outstanding issue with gift cards being applied as discounts, and with where service charges sit in that ordering. We (RR) plan to address this separately to keep discussions focused.
+
+cc @Dave @Erin
+
+**Demonstrates the peer-guild proposal share:** a warm group greeting, then a one-line statement of what kind of input is wanted before any detail; the problem in one sentence, owned by the team's channel link rather than an ambiguous 'we'; the session attendees @mentioned inline so they don't need a cc; `:claude-code:` as the subject of the write-up because the agent drafted it; an italic `_AI;DR_` whose first sentence sets today's state (with a candid aside, 'controversially') and trails into the options with 'we have...'; option bullets that open with the action ('add a new...', 'enable setting a type...'), say what changes and the trade-off, and end on a candid verdict or whose recommendation it is (the session's, not the author's); a one-line pointer to the attachment that names the teams behind the agreed model; the direct question kept as a real question, with numbered reaction choices; a PS that owns the format choice in first person; a PPS that scopes out an adjacent known issue, says which team plans to handle it and why; cc reserved for stakeholders who weren't in the session. **NOT here** (all cut from the agent's draft): a generic 'Hey folks', 'I've written up' when the agent wrote it, a bold `*AI;DR*`, 'This is my recommendation', the migration and schema sentence, a shared-prerequisite bullet ('Both options need a Zonal Vouchers adapter'), a secondary clause in the problem statement ('while me&u discount codes keep working'), and a cc line repeating people already @mentioned.
