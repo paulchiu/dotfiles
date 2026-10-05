@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship orchestrator"
+  short_description: "Run one /ship agent per sub-issue in its own Herdr tab"
+  default_prompt: "Use $ship-orchestrator to ship the sub-issues of this Linear issue."

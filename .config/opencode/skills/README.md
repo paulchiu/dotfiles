@@ -9,7 +9,7 @@ Each skill is a directory holding a `SKILL.md`, an `agents/openai.yaml` for the
 Codex picker, and optionally `references/` (material loaded on demand) or
 `nested/` (sub-skills behind a router).
 
-25 skills. `.system/` holds vendor skills shipped with Codex and is not listed
+26 skills. `.system/` holds vendor skills shipped with Codex and is not listed
 here.
 
 ## Ship code
@@ -18,6 +18,7 @@ here.
 | --- | --- |
 | [`dispatch`](dispatch/SKILL.md) | Orchestrates a codex implementation run with a separate adversarial Claude review, a watchdog loop, and a push/CI stage. |
 | [`ship`](ship/SKILL.md) | Takes a Linear issue from ticket to merged, with an autonomous mode and a decision log. |
+| [`ship-orchestrator`](ship-orchestrator/SKILL.md) | Runs one `/ship` agent per sub-issue of a Linear parent, each in its own Herdr tab, and keeps sibling repos in parity. |
 | [`review-code`](review-code/SKILL.md) | Multi-round PR or branch review (principal-engineer, adversarial, optional persona and Codex rounds) producing a decision doc. |
 | [`tuicr`](tuicr/SKILL.md) | Opens a PR or a local branch diff in the tuicr review TUI, and drives a review session as an agent. |
 | [`gh-pr`](gh-pr/SKILL.md) | Writes a PR description from the current branch and opens the draft PR. |
