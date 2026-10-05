@@ -45,6 +45,8 @@ Fill the brackets; drop a bracketed line that doesn't apply.
 
 [domain extras, e.g. run /pos-pre-push before push]
 
+[round 2 and later, from rounds.md: blocker context, a deploy-order note, or stacked-branch instructions]
+
 before handing the PR to me for review, do separate [personas] persona reviews of the diff: read ~/.claude/skills/review-code/references/persona-lens.md, apply steps A and B only. no review rounds, no decision doc, just address what they'd flag.
 
 [if a requester was found] also do a separate [requester] persona review the same way, since they requested this change in [comment link].

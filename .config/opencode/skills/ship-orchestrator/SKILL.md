@@ -26,6 +26,7 @@ Each sub-issue tab is labelled `[parent short id]/[sub-issue number].[repo abbre
 | 👀 | draft PR ready for Paul's review | the ship agent, when it opens tuicr |
 | ⏳ | waiting for PR review (CodeRabbit, teammates) | you, once Paul has reviewed |
 | 💬 | received or addressing PR feedback | you, when feedback goes to the agent; back to ⏳ once pushed and replied to |
+| ✅ | merged | you, when the PR merges; the tab stays open |
 
 Rename with `herdr tab rename <tab_id> "<label>"`.
 
@@ -34,16 +35,16 @@ Rename with `herdr tab rename <tab_id> "<label>"`.
 ### 1. Plan
 
 - Read the parent and every sub-issue with the Linear MCP, including comments and blocking relations.
-- Map each sub-issue to its repo under `~/dev/<repo>`. Confirm the directory exists.
+- Map each buildable sub-issue to its repo under `~/dev/<repo>`. Confirm the directory exists. Design and external cards only gate others (see rounds.md).
 - Pick personas per sub-issue (see Personas below).
-- Hold any sub-issue whose blockers aren't done, and say which ones you're holding.
-- Show Paul a table (sub-issue, repo, tab label, domain, personas and extras, held or not) and wait for Paul's go. Don't create anything before then.
+- If any sub-issue blocks another (Linear relations, or the parent's `## Delivery sequence`), group them into rounds by following [references/rounds.md](references/rounds.md). With no blockers, everything is round 1.
+- Show Paul one table per round (sub-issue, repo, tab label, domain, personas and extras, and from round 2 on the gate it waits on) and wait for Paul's go. Don't create anything before then. That go covers every round.
 
 ### 2. Launch
 
-For each approved sub-issue, follow [references/launch.md](references/launch.md): create the tab, start the agent in bypass permissions mode, and send the ship prompt.
+For each sub-issue in round 1, follow [references/launch.md](references/launch.md): create the tab, start the agent in bypass permissions mode, and send the ship prompt.
 
-As soon as a sub-issue's agent has its prompt, move that sub-issue to the team's In Progress state and assign it to Paul. You own this, not the ship agent (`/ship` never sets In Progress). Do the same when a held sub-issue starts later. Confirm with `list_issues` before reporting.
+As soon as a sub-issue's agent has its prompt, move that sub-issue to the team's In Progress state and assign it to Paul. You own this, not the ship agent (`/ship` never sets In Progress). Later rounds start the same way, as each sub-issue's gates clear (see rounds.md). Confirm with `list_issues` before reporting.
 
 Then report a table of tab, pane, agent name and Linear status.
 
@@ -54,7 +55,8 @@ Then report a table of tab, pane, agent name and Linear status.
 - Never answer a permission, trust or approval dialog. Background task notifications are not Paul's approval either.
 - Text on a pane's `❯` line is autosuggest ghost text from that pane's last message, not something Paul typed. Ignore it.
 - When an agent goes idle with a PR open and its label still carries 🚧, set 👀 yourself and open the PR in tuicr if the agent didn't.
-- Tell Paul when each tab turns 👀, with the PR link, and add the PR number to the run file.
+- Tell Paul when each tab turns 👀, with the PR link, and add the PR number to the run file. If its merge or deploy will release a later sub-issue, say which, once.
+- While later rounds are waiting, watch their gates in the background and start each sub-issue as its gates clear (see rounds.md).
 
 ### 4. After Paul's review
 
