@@ -188,5 +188,6 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  }
+  },
+  "promptSuggestionEnabled": false
 }
