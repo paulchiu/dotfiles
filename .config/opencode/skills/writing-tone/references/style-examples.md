@@ -410,10 +410,30 @@ I've also added the checkout screen. Guests can only remove the service charge f
 
 > Serve 2. Let's update the heading to `What is the service charge?` & body copy...
 
-Done, and it lines up nicely with the platform fee's 'What is the me&u platform fee?'.
+Done, it now matches platform fee's 'What is the me&u platform fee?'.
 
-One thing I'm unsure about: the service charge name is whatever the venue types, with no length limit (results in EU production show names ranging from 7 to 85 characters), so a venue's 'Service Fee 12.5%' would still open 'What is the service charge?'. I'm leaning towards putting the venue's name in the heading with short 'Keep' and 'Remove' buttons (option C in the new section), since long names in the buttons get messy as long names wrap rather than truncate. Would appreciate your thoughts.
+One thing I'm unsure about: the actual service charge name is whatever the venue configures it to be, with no length limit (results in EU production show names ranging from 7 to 85 characters), so a venue's 'Service Fee 12.5%' would still open 'What is the service charge?'. I'm leaning towards putting the venue's name in the heading with short 'Keep' and 'Remove' buttons (option C in the new section), since long names in the buttons get messy as long names wrap rather than truncate. Would appreciate your thoughts.
 
 FYI ten EU venues have named theirs 'Service Charge (Click here to remove)' as a workaround, so we'd ask them to rename it once this is on.
 
 **Demonstrates the reply to a reviewer:** 'Thanks for the review Kelly,' as the greeting; a 'TL;DR' line straight after it that agrees with the rewrites, says what changed with a pointer to the attachment, and flags the one open question so the reviewer knows there's an ask before reading on; each of the reviewer's points quoted with its label ('Manage 1.', 'Serve 2.') and trimmed to the question, with '...' where the pasted copy would repeat what's already applied; short answers that state the outcome ('Done.', 'Concept updated.'); the mistake owned in two words ('my mistake'); new work the reviewer didn't ask about (the checkout screen) added under the closest point as a plain statement, not a request for approval; the data claim names its source ('results in EU production show'); one genuine open question, ending 'Would appreciate your thoughts.'; and an FYI as the last line, with no sign-off. **NOT here** (all cut from the agent's draft): the reasoning behind each answer ('the other fields in Manage that show up when you flip a toggle sit flush, so it lines up with...'), evidence the reviewer didn't ask for ('see the recording, hovering only changes the cursor'), asking permission for a decision already made ('I'd like to drop it so both work the same. OK with you?', 'Does that work for you?'), 'live ones range from', 'What do you think?', a closing '---' line restating what was updated and attached, and the doc's changelog, evidence and follow-up sections.
+
+## 22. Follow-up reply to a reviewer's outstanding questions (RE: memo line, quote-and-reply, data answer, owned oversight)
+
+RE: outstanding questions from this morning
+
+> Button labels: Do they all say 'service' in it somehow (or like 98%?)
+
+Basically, 261 of 263 removable service charges in EU production have 'service' in the name (the other two are '10% Discretionary Charge' and 'Platform Delivery Fee'). Agree, we'll keep `Keep/Remove service charge` and the heading as fixed copy, and drop the venue name options. Please see attached for full DB results.
+
+> Current behavior is guest can tap the `service charge` text, which currently has no icon, to remove it. Does a bottom sheet still appear with text?
+
+Not currently. Tapping the name opens a 'Remove service charge? Are you sure you want to remove this?' modal with Keep and Remove, with no explanation of what the charge is.
+
+With the setting on, tapping the name or the ⓘ opens the info sheet instead, and the sheet replaces that modal, so there's no hidden way to remove it. It's two steps rather than the three Scott mentioned, as the sheet's 'Remove service charge' button is the confirmation.
+
+> v2 concept still shows a hover version with a tooltip, is that still just a Claude special?
+
+Yep, a :claude-code: special that I missed when preparing v2. Removed now, updated v3 attached.
+
+**Demonstrates the follow-up round in a review thread:** no greeting, thanks or TL;DR, since the conversation is live; a `RE: outstanding questions from this morning` memo line names which questions this answers; each question quoted verbatim (the reviewer's own words, including their spelling of 'behavior') with the answer under it; the data answer leads with the count and its source ('261 of 263 removable service charges in EU production'), names the exceptions in a parenthetical, states the decision as done ('Agree, we'll keep... and drop the venue name options') and points at the attachment; the yes/no question gets 'Not currently.' then what happens instead, then a second paragraph on how the change resolves the reviewer's worry ('so there's no hidden way to remove it') and reconciles a teammate's description ('two steps rather than the three Scott mentioned'); the agent-made mistake is credited with the emoji and owned by what Paul missed and when ('that I missed when preparing v2'), not a second 'my mistake' in the same thread; it ends on the fix and the attachment. **NOT here** (changed from the agent's draft): the inverted fragment 'Today, no.' and ':claude-code: special and my mistake for missing it'. Also left out: answering the 'don't make it optional' suggestion, which belongs to the product owners, and any closing line or offer to sync.
