@@ -385,3 +385,35 @@ Long version...
 cc [stakeholders]
 
 **Demonstrates the cautionary PSA to a cross-functional audience:** 'Hi folks,' on its own line, then an opener that ties the post to the posts above and names which ones ('Given 👆 PRs related to `fix(loyalty)`') and states the general point with 'our' so the product choice is shared, not pinned on the readers; a plain 'TL;DR on impact:' line with both the scope and the elapsed time (Paul's own summary, so 'TL;DR' not 'AI;DR'); 'Long version...' as the bridge into the bullets. **Specific patterns:** an everyday example in a parenthetical that says why promo codes were never sensitive ('are effectively public'); the oversight owned as 'we' with a plain 'unfortunately' turn; a conversational lead-in naming the bullet's job ('As to why this is a problem...'); facts kept plain but not inflated ('card numbers (possibly with balances)'); the counterfactual hedged with hindsight and a hope, and the better practice stated as what we would do ('PCI compliance posture', not 'requirements'); lowercase 'cc' (the names are filled in at posting time). The 'what's still left' bullet (old log lines, analytics events, stored copies) was cut from this post only to keep its scope tight; include one by default. Effort is stated as the work and the elapsed time ('took a spike to investigate, then 12 sub-issues and 12 PRs [...], over about a week from start to finish'), not the spike's own estimate ('a 2 day spike'). **NOT here** (all cut from the agent's draft): 'Hi folks,' run into the opener, a bold '*Impact: ...*' line, 'our services logged and tracked them as-is', 'every card number [...] was stored in full', 'Masking them took 12 unplanned sub-issues' (repeats the opener's 'unplanned'), 'a 2 day spike to find the problem', 'most of this wouldn't have been necessary', 'the general practice is to isolate and tokenise', and 'CC'.
+
+---
+
+## 21. Reply to a reviewer's questions (thanks, TL;DR, quote-and-reply per point, one open ask)
+
+Thanks for the review Kelly,
+
+TL;DR Agree with rewrites, I've updated the concept (please see v2 attached) and added a checkout screen, with a question about whether we should use the venue's own service charge name in the heading.
+
+> Manage 1. I assume the dashed line isn't on the UI? Is it also indented?
+
+Yep, it was only there to show what's new, removed now and made to look more like what the implementation will be.
+
+> Manage 2. Can we update the copy?
+
+Done.
+
+> Serve 1. There's not really a hover state, right? So how do guests actually view it?
+
+Correct, there is no hover, my mistake. The intent is it works the same as the platform fee ⓘ today, so shown on tap. Concept updated.
+
+I've also added the checkout screen. Guests can only remove the service charge from their cart, so on checkout the ⓘ opens the same sheet with just a 'Got it' button and one extra line: 'You can remove it from your cart.'
+
+> Serve 2. Let's update the heading to `What is the service charge?` & body copy...
+
+Done, and it lines up nicely with the platform fee's 'What is the me&u platform fee?'.
+
+One thing I'm unsure about: the service charge name is whatever the venue types, with no length limit (results in EU production show names ranging from 7 to 85 characters), so a venue's 'Service Fee 12.5%' would still open 'What is the service charge?'. I'm leaning towards putting the venue's name in the heading with short 'Keep' and 'Remove' buttons (option C in the new section), since long names in the buttons get messy as long names wrap rather than truncate. Would appreciate your thoughts.
+
+FYI ten EU venues have named theirs 'Service Charge (Click here to remove)' as a workaround, so we'd ask them to rename it once this is on.
+
+**Demonstrates the reply to a reviewer:** 'Thanks for the review Kelly,' as the greeting; a 'TL;DR' line straight after it that agrees with the rewrites, says what changed with a pointer to the attachment, and flags the one open question so the reviewer knows there's an ask before reading on; each of the reviewer's points quoted with its label ('Manage 1.', 'Serve 2.') and trimmed to the question, with '...' where the pasted copy would repeat what's already applied; short answers that state the outcome ('Done.', 'Concept updated.'); the mistake owned in two words ('my mistake'); new work the reviewer didn't ask about (the checkout screen) added under the closest point as a plain statement, not a request for approval; the data claim names its source ('results in EU production show'); one genuine open question, ending 'Would appreciate your thoughts.'; and an FYI as the last line, with no sign-off. **NOT here** (all cut from the agent's draft): the reasoning behind each answer ('the other fields in Manage that show up when you flip a toggle sit flush, so it lines up with...'), evidence the reviewer didn't ask for ('see the recording, hovering only changes the cursor'), asking permission for a decision already made ('I'd like to drop it so both work the same. OK with you?', 'Does that work for you?'), 'live ones range from', 'What do you think?', a closing '---' line restating what was updated and attached, and the doc's changelog, evidence and follow-up sections.
