@@ -153,6 +153,7 @@ _arguments "${_arguments_options[@]}" : \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
 '--find-good[Find the first good revision instead]' \
+'--trust-endpoints[Skip the pre-bisection checks]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
 '--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
@@ -1893,6 +1894,52 @@ x\:"Make a path executable (alias\: executable)"))' \
 '*::paths -- Paths to change the executable bit for:_files' \
 && ret=0
 ;;
+(delete)
+_arguments "${_arguments_options[@]}" : \
+'-r+[The revision to delete the files in]:REVSET:_default' \
+'--revision=[The revision to delete the files in]:REVSET:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--restore-descendants[Preserve the content (not the diff) when rebasing descendants]' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::paths -- Files or directories to delete (filesets are accepted):_files' \
+&& ret=0
+;;
+(edit)
+_arguments "${_arguments_options[@]}" : \
+'-r+[The revision to edit the file in]:REVSET:_default' \
+'--revision=[The revision to edit the file in]:REVSET:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--restore-descendants[Preserve the content (not the diff) when rebasing descendants]' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':path -- The file to edit:_files' \
+&& ret=0
+;;
 (list)
 _arguments "${_arguments_options[@]}" : \
 '-r+[The revision to list files in]:REVSET:_default' \
@@ -2343,8 +2390,8 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
-'(--git-repo)--colocate[Colocate the Jujutsu repo with the git repo]' \
-'(--colocate)--no-colocate[Disable colocation of the Jujutsu repo with the git repo]' \
+'(--git-repo)--colocate[Colocate the workspace of the Jujutsu repo with the Git repo]' \
+'(--colocate)--no-colocate[Disable colocation for the workspace of the Jujutsu repo with the Git repo]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
 '--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
@@ -2358,7 +2405,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (push)
 _arguments "${_arguments_options[@]}" : \
-'--remote=[The remote to push to (only named remotes are supported)]:REMOTE:_default' \
+'*--remote=[The remote(s) to push to (can be repeated)]:REMOTE:_default' \
 '*-b+[Push only this bookmark, or bookmarks matching a pattern (can be repeated)]:BOOKMARK:_default' \
 '*--bookmark=[Push only this bookmark, or bookmarks matching a pattern (can be repeated)]:BOOKMARK:_default' \
 '*-t+[Push only this tag, or tags matching a pattern (can be repeated)]:TAG:_default' \
@@ -3319,6 +3366,7 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--allow-cross-workspace[Allow redoing an undo-operation that was performed in another workspace]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
 '--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
@@ -3443,6 +3491,9 @@ _arguments "${_arguments_options[@]}" : \
 '*--revision=[The revisions to change]:REVSETS:_default' \
 '-j+[How many processes should run in parallel]:JOBS:_default' \
 '--jobs=[How many processes should run in parallel]:JOBS:_default' \
+'--sparse-patterns=[How to handle sparse patterns when running the command. This is controlled per \`jj run\` invocation]:SPARSE_PATTERNS:((copy\:"Copy all sparse patterns from the current workspace"
+full\:"Include all files in the new workspace"
+empty\:"Clear all files from the workspace (it will be empty)"))' \
 '-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
 '--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
@@ -4003,6 +4054,7 @@ _arguments "${_arguments_options[@]}" : \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--allow-cross-workspace[Allow undoing an operation that was performed in another workspace]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
 '--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
@@ -4148,6 +4200,40 @@ _arguments "${_arguments_options[@]}" : \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(diff)
+_arguments "${_arguments_options[@]}" : \
+'--tool=[Generate diff by external command]:TOOL:_default' \
+'--context=[Number of lines of context to show]:CONTEXT:_default' \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--git[Show a Git-format diff]' \
+'--color-words[Show a word-level diff with changes indicated only by color]' \
+'-s[For each path, show only whether it was modified, added, or deleted]' \
+'--summary[For each path, show only whether it was modified, added, or deleted]' \
+'--stat[Show a histogram of the changes]' \
+'--types[For each path, show only its type before and after]' \
+'--name-only[For each path, show only its path]' \
+'-w[Ignore whitespace when comparing lines]' \
+'--ignore-all-space[Ignore whitespace when comparing lines]' \
+'(-w --ignore-all-space)-b[Ignore changes in amount of whitespace when comparing lines]' \
+'(-w --ignore-all-space)--ignore-space-change[Ignore changes in amount of whitespace when comparing lines]' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':path1 -- First path to compare:_files' \
+':path2 -- Second path to compare:_files' \
 && ret=0
 ;;
 (exec)
@@ -4316,6 +4402,8 @@ empty\:"Clear all files from the workspace (it will be empty)"))' \
 '--color=[When to colorize output]:WHEN:(always never debug auto)' \
 '*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
 '*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'(--no-colocate)--colocate[Create a corresponding Git worktree for this workspace]' \
+'(--colocate)--no-colocate[Do not create a Git worktree for this workspace]' \
 '--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
 '--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
 '--ignore-immutable[Allow rewriting immutable commits]' \
@@ -4366,6 +4454,26 @@ _arguments "${_arguments_options[@]}" : \
 '--no-pager[Disable the pager]' \
 '-h[Print help (see more with '\''--help'\'')]' \
 '--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(remove)
+_arguments "${_arguments_options[@]}" : \
+'-R+[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--repository=[Path to repository to operate on]:REPOSITORY:_files -/' \
+'--at-operation=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--at-op=[Operation to load the repo at]:AT_OPERATION:_default' \
+'--color=[When to colorize output]:WHEN:(always never debug auto)' \
+'*--config=[Additional configuration options (can be repeated)]:NAME=VALUE:_default' \
+'*--config-file=[Additional configuration files (can be repeated)]:PATH:_files' \
+'--ignore-working-copy[Don'\''t snapshot the working copy, and don'\''t update it]' \
+'--no-integrate-operation[Run the command as usual but don'\''t integrate any operations]' \
+'--ignore-immutable[Allow rewriting immutable commits]' \
+'--debug[Enable debug logging]' \
+'--quiet[Silence non-primary command output]' \
+'--no-pager[Disable the pager]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::workspaces -- Names of the workspaces to remove:_default' \
 && ret=0
 ;;
 (rename)
@@ -4851,6 +4959,8 @@ _jj__subcmd__file_commands() {
     local commands; commands=(
 'annotate:Show the source change for each line of the target file' \
 'chmod:Sets or removes the executable bit for paths in the repo' \
+'delete:Delete files from the given revision' \
+'edit:Edit the contents of a file in a revision' \
 'list:List files in a revision' \
 'search:Search for content in files' \
 'show:Print contents of files in a revision' \
@@ -4868,6 +4978,16 @@ _jj__subcmd__file__subcmd__annotate_commands() {
 _jj__subcmd__file__subcmd__chmod_commands() {
     local commands; commands=()
     _describe -t commands 'jj file chmod commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__file__subcmd__delete_commands] )) ||
+_jj__subcmd__file__subcmd__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj file delete commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__file__subcmd__edit_commands] )) ||
+_jj__subcmd__file__subcmd__edit_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj file edit commands' commands "$@"
 }
 (( $+functions[_jj__subcmd__file__subcmd__list_commands] )) ||
 _jj__subcmd__file__subcmd__list_commands() {
@@ -5259,6 +5379,7 @@ _jj__subcmd__util_commands() {
 'backend:Commands relating to the backend used in the current repo' \
 'completion:Print a command-line-completion script' \
 'config-schema:Print the JSON schema for the jj TOML config format' \
+'diff:Compare two files on disk' \
 'exec:Execute an external command via jj' \
 'gc:Run backend-dependent garbage collection' \
 'install-man-pages:Install Jujutsu'\''s manpages to the provided path' \
@@ -5288,6 +5409,11 @@ _jj__subcmd__util__subcmd__completion_commands() {
 _jj__subcmd__util__subcmd__config-schema_commands() {
     local commands; commands=()
     _describe -t commands 'jj util config-schema commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__util__subcmd__diff_commands] )) ||
+_jj__subcmd__util__subcmd__diff_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj util diff commands' commands "$@"
 }
 (( $+functions[_jj__subcmd__util__subcmd__exec_commands] )) ||
 _jj__subcmd__util__subcmd__exec_commands() {
@@ -5325,6 +5451,7 @@ _jj__subcmd__workspace_commands() {
 'add:Add a workspace' \
 'forget:Stop tracking a workspace'\''s working-copy commit in the repo' \
 'list:List workspaces' \
+'remove:Remove a workspace and its working-copy files from disk' \
 'rename:Renames the current workspace' \
 'root:Show the workspace root directory' \
 'update-stale:Update a workspace that has become stale' \
@@ -5345,6 +5472,11 @@ _jj__subcmd__workspace__subcmd__forget_commands() {
 _jj__subcmd__workspace__subcmd__list_commands() {
     local commands; commands=()
     _describe -t commands 'jj workspace list commands' commands "$@"
+}
+(( $+functions[_jj__subcmd__workspace__subcmd__remove_commands] )) ||
+_jj__subcmd__workspace__subcmd__remove_commands() {
+    local commands; commands=()
+    _describe -t commands 'jj workspace remove commands' commands "$@"
 }
 (( $+functions[_jj__subcmd__workspace__subcmd__rename_commands] )) ||
 _jj__subcmd__workspace__subcmd__rename_commands() {
