@@ -1,33 +1,21 @@
 ---
 model: sonnet
 name: prepare-dad-money-report
-description: "Prepare monthly family money report email for his dad."
+description: "Prepare the monthly family money report for Paul's dad as phone-sized images to send over LINE."
 ---
 
 # Prepare Dad Money Report
 
-Prepare the monthly family finance report, workbook, screenshots, and Gmail draft. Treat this as sensitive personal finance work: read current values from local private sources, avoid committing raw outputs, and never send the email.
+Prepare the monthly family finance report as phone-width PNG images that Paul sends to his dad in a LINE chat. Dad no longer reads email on a computer, so there is no Gmail draft, workbook, or email body by default. Treat this as sensitive personal finance work: read current values from local private sources, keep outputs out of git, and never send anything on Paul's behalf.
 
-## Stable Email Context
+## Output
 
-Recipients are not stored in this skill. When you need them, look up the most recent prior `Family finances for <Month>, <Year>` thread in Gmail and reuse its To/Cc list verbatim. Do not hardcode or echo the addresses back to Paul in chat.
+Three or more 1080px-wide light-mode PNGs, rendered by `scripts/build_line_images.py`:
 
-- Subject: `Family finances for <Month>, <Year>`
-- Sender style: short, plain, direct, ending with `Kind regards,` and `Paul.`
+- `1-summary.png`: credit card bill, savings left, deposits, spend breakdown bars (Home/Mom/Nicole), transactions over $100
+- `2-all-transactions.png`, `3-all-transactions.png`, ...: every transaction, 20 per image, largest first, with the total and any exclusion note on the last image
 
-Creating a saved Gmail draft is allowed only when Paul explicitly asks. Never send the email.
-
-## Access Boundary
-
-Generate the report artifacts with CLI tools by default. Do not use desktop/browser access for transaction conversion, row filtering, categorisation, workbook creation, chart rendering, or screenshot generation.
-
-Use:
-
-- shell commands for file discovery, `paul-tools`, CSV inspection, and reconciliation
-- the Spreadsheets skill plus bundled workspace dependencies for `.xlsx` creation and rendered PNG screenshots
-- `email-draft.md` as a complete local draft when Gmail access is unavailable or not yet confirmed
-
-Gmail or Firefox access is only for creating the saved draft, placing screenshots inline through the Gmail UI, or inspecting a prior thread. Prefer the Gmail connector for creating a saved draft when it can attach the workbook/screenshots. Use Firefox/Computer Use only when connector support is insufficient for the desired draft formatting, especially inline image placement.
+Each transaction shows the merchant, amount, a coloured Home/Mom/Nicole tag, the date, and whose card it was. Paul attaches the images to LINE himself.
 
 ## Sources
 
@@ -38,100 +26,87 @@ Gmail or Firefox access is only for creating the saved draft, placing screenshot
 cd /Users/paul/dev-misc/paul-tools && npm start -- anz:csv /Users/paul/Downloads/anz.txt <output.csv>
 ```
 
-- Previous report workbook: latest relevant `~/Downloads/anz-*.xlsx`; use it for sheet shape and visual expectations, not for current values.
 - Current balances and monthly notes: `/Users/paul/Library/Mobile Documents/iCloud~md~obsidian/Documents/Quartz/Area/Journal/YYYY-MM-DD.md`.
-- Working outputs: `/Users/paul/dev/sandbox/outputs/dad-money-report-YYYY-MM/`.
+- Previous months' configs: `/Users/paul/dev/sandbox/outputs/archive/*/*/dad-money-report-*/report.json` (also older `build_report.mjs` files), for categorisation precedent.
+- Working outputs: `/Users/paul/dev/sandbox/outputs/dad-money-report-YYYY-MM/` (gitignored).
 
-Do not hardcode bank account numbers, balances, or current-month deposit details in this skill. Read balances and monthly notes from the journal each month. Do not include bank account numbers or BSB details in the email draft; Dad already knows them.
+Do not hardcode bank account numbers, balances, or current-month deposit details in this skill. Read balances and monthly notes from the journal each month. Never put bank account numbers or BSB details in the images.
 
 ## Workflow
 
 ### 1. Gather current files
 
-Inspect `~/Downloads` for the current ANZ text export and last month's Excel report. Read today's journal note for:
+Inspect `~/Downloads` for the current ANZ text export. Read today's journal note for:
 
 - credit card closing balance
-- cash balance
-- ANZ Access Advantage cash balance
-- deposit notes or other monthly commentary
+- savings balance (shown as "Savings left")
+- deposit notes (who deposited how much this month)
 
 Create a fresh output directory: `/Users/paul/dev/sandbox/outputs/dad-money-report-YYYY-MM/`.
 
 ### 2. Convert and clean transactions
 
-Run the `paul-tools` converter into the output directory. Inspect the CSV and remove the credit card payment line, usually `AUTOREPAYMENT - THANK YOU`, before calculating report totals.
+Run the `paul-tools` converter into the output directory as `anz.csv`. The credit card payment line, usually `AUTOREPAYMENT - THANK YOU`, must be excluded from report totals.
 
-Watch for mis-signed refund/credit rows. The converter reads every amount as a positive debit, but the raw ANZ export puts refunds and credits in a separate (second) amount column. A row whose amount sits in that credit column is a refund, not spend, and must be excluded (or netted) before totalling. A reconciliation that is off by exactly one transaction amount (for example a round `$44.00`) is the usual tell. Confirm by checking the raw export column position for that row before deciding.
+Watch for mis-signed refund/credit rows. The converter reads every amount as a positive debit, but the raw ANZ export puts refunds and credits in a separate (second) amount column. A row whose amount sits in that credit column is a refund, not spend, and must be excluded before totalling. A reconciliation that is off by exactly one transaction amount (for example a round `$44.00`) is the usual tell. Confirm by checking the raw export column position for that row before deciding.
 
-Keep statement-period rows from the export unless Paul explicitly asks for strict calendar-month filtering. The prior report has used the statement period, not only the named month.
+Keep statement-period rows from the export unless Paul explicitly asks for strict calendar-month filtering. The report uses the statement period, not only the named month.
 
-Reconcile the cleaned transaction total against the journal credit card closing balance. Stop and investigate if the totals do not match.
+### 3. Categorise
 
-### 3. Build the workbook, table, and screenshot
-
-Use the Spreadsheets skill and bundled workspace dependencies for workbook creation/editing. Preserve the prior workbook's two-sheet shape unless Paul asks for a redesign:
-
-- `Statement`: date, description, card, card holder, for/category, amount
-- `Spend On`: Home/Mom/Nicole breakdown with a visible grand total and chart
-
-Use the prior report's categorisation pattern. Known recurring defaults:
-
-- card `1864` is Mom
-- card `7703` is Nicole
-- otherwise, use the card holder as the spend category
+Each row is spent on `Home`, `Mom`, or `Nicole`. The script maps card `1864` to Mom and `7703` to Nicole, and uses the card holder unless a `home` rule matches.
 
 Home-use heuristics:
 
 - classify council bills, water, and electricity/energy as `Home`
 - match utilities on specific retailer/biller names (Origin Energy, AGL, Alinta, Unitywater, Seqwater, Allconnex, Urban Utilities, City Council), not on bare substrings like `WATER`. Gold Coast suburb names such as Biggera Waters, Helensvale, and Pacific Pines appear in ordinary merchant lines and will false-match a loose `WATER`/utility keyword, wrongly pulling chemist and grocery spend into `Home`
 - classify home insurance as `Home`
-- RACQ can be either home insurance or car insurance; use judgement rather than classifying all RACQ as Home
-- home insurance tends to be steadier and monthly, while car insurance or motoring costs may vary more; use amount, regularity, card, and prior reports to guess when the merchant text is ambiguous
-- if unsure after checking prior reports, choose the most likely category and keep the workbook easy to edit
+- RACQ can be either home insurance or car insurance; use judgement rather than classifying all RACQ as Home. Home insurance tends to be steadier and monthly, while car insurance or motoring costs vary more; use amount, regularity, card, and prior configs to decide, and pin the decision with `card` and `amount` on the rule
+- if unsure after checking prior configs, choose the most likely category and mention it to Paul
 
-Sort statement rows by amount descending. For the email body, render transactions over $100 as a markdown table, not as a screenshot. Produce:
+### 4. Write the config and render
 
-- `anz-<month>-<year>.xlsx`
-- `spend-breakdown.png`
-- `email-draft.md`, containing the markdown table of transactions over $100
+Write `report.json` in the output directory:
 
-### 4. Draft the email
-
-Keep the draft close to this template:
-
-```text
-Hi Dad,
-
-This month the credit card bill is $X. We still have $Y remaining in cash.
-
-The over $100 transactions this month have been:
-
-| Date | Description | Card | Card Holder | For | Amount |
-| --- | --- | --- | --- | --- | ---: |
-| ... | ... | ... | ... | ... | $... |
-
-The spend breakdown is:
-
-[insert spend-breakdown.png]
-
-Kind regards,
-
-Paul.
+```json
+{
+  "month": "September 2026",
+  "period": "31 Aug to 28 Sep 2026",
+  "closing_balance": 4860.45,
+  "savings": 402.46,
+  "deposits": [{"who": "Nicole", "amount": 200}, {"who": "Paul", "amount": 100}],
+  "exclude": [{"match": "AUTOREPAYMENT", "label": "The automatic repayment of last month's bill"}],
+  "home": [
+    {"match": "GOLD COAST CITY COUN"},
+    {"match": "AGL "},
+    {"match": "RACQ", "card": "1864", "amount": 337.55}
+  ]
+}
 ```
 
-Add deposit notes only when the journal or Paul indicates they are needed for this month.
+- `period`: the earliest to latest transaction date in the export, unless the statement says otherwise
+- `deposits`: omit or leave empty when the journal has no deposit notes; the summary then shows savings only
+- `exclude` and `home` rules match on a description substring, optionally narrowed by exact `card` and `amount`; give each `exclude` rule a plain-English `label` (for example "A refund from Coles") because it is printed in the report
 
-If creating a Gmail draft, attach the workbook and include the screenshots inline or as attachments according to what the Gmail tooling supports. If using Computer Use to type/upload sensitive financial data into Gmail, pause at the action-time confirmation required by the Computer Use policy.
+Render:
+
+```bash
+python3 -I ~/.config/opencode/skills/personal/nested/prepare-dad-money-report/scripts/build_line_images.py \
+  <out_dir>/anz.csv <out_dir>/report.json <out_dir>
+```
+
+The script prints the excluded rows and the per-category totals, and exits non-zero if the cleaned total does not match `closing_balance`. Stop and investigate a mismatch rather than adjusting the config to force it.
 
 ### 5. Verify and report
 
-Before finishing, verify:
+Before finishing:
 
-- CSV conversion succeeded and the payment row was excluded
-- cleaned total equals the journal credit card closing balance
-- workbook opens/exports successfully
-- workbook formula-error scan is clean
-- screenshot images render legibly
-- Gmail draft was created, or the task is explicitly paused awaiting confirmation
+- confirm the payment row (and any refunds) appear in the script's `excluded:` line
+- confirm the total matched the journal closing balance (the script exits 0)
+- Read each PNG and check it is legible, nothing is cut off, and every transaction is present
 
-In the final response, link only the useful output files and state whether a Gmail draft exists. Do not paste bank account numbers, recipient addresses, or full email body unless Paul asks.
+In the final response, give the absolute path of the output directory and list the images, with the headline numbers (bill, savings, spend breakdown) and any categorisation judgement calls. Do not paste bank account numbers.
+
+## Optional formats
+
+Only when Paul asks: an A4 PDF of the same report, an Excel workbook (`Statement` and `Spend On` sheets, built with the Spreadsheets skill), or an email draft (subject `Family finances for <Month>, <Year>`, recipients copied from the most recent prior thread of that name in Gmail; never send it).

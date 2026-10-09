@@ -9,7 +9,7 @@ Progressive-disclosure router for personal-life tasks and tools. The actual inst
 
 ## Dispatch table
 
-- **Prepare Dad's monthly family money report** from ANZ credit card exports, the prior Excel format, and the current Obsidian journal account details; also "family finances", "ANZ report", "credit card bill email", the recurring Gmail draft for Dad/Mom/Nicole → Read `nested/prepare-dad-money-report/SKILL.md`.
+- **Prepare Dad's monthly family money report** from ANZ credit card exports and the current Obsidian journal account details, as phone-sized images for LINE; also "family finances", "ANZ report", "credit card bill", "money report for dad" → Read `nested/prepare-dad-money-report/SKILL.md`.
 - **PocketSmith API work**: pull or categorise transactions, category rules, splits and labels, budget vs actual reporting, savings rate, spending by category or payee, uncategorised transactions, or setting budgets via scenario events → Read `nested/pocketsmith/SKILL.md`.
 - **Archive monthly Obsidian vault items** from `Area/` and `Projects/` to `Archive/` with year-level grouping (handling drawing attachments and journal files) → Read `nested/archive-obsidian-vault/SKILL.md`.
 - **Translate to Taiwan Traditional Chinese** for a non-technical 70-year-old parent / "for my mum/dad" / 繁體中文 / 正體中文 → Read `nested/translate-to-taiwan-chinese/SKILL.md`.
