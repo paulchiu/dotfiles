@@ -17,6 +17,7 @@ Easy Move+Resize.app
 Firefox.app
 FluxMarkdown.app
 FocuSee.app
+GameHub.app
 Garmin Express.app
 GeForceNOW.app
 Ghostty.app
@@ -50,6 +51,7 @@ Microsoft Word.app
 Neovide.app
 Neru.app
 Nex.app
+NightCity Console.app
 Obsidian.app
 OneDrive.app
 OrbStack.app
@@ -68,6 +70,7 @@ Safari.app
 Shottr.app
 Slack.app
 SoundAnchor.app
+Steam.app
 Tailscale.app
 The Unarchiver.app
 Utilities

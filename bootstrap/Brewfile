@@ -2,9 +2,11 @@ tap "buildkite/buildkite", trusted: true
 tap "datadog-labs/pack", trusted: true
 tap "facebook/fb", trusted: true
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
+tap "franzenzenhofer/tap"
 tap "hamed-elfayome/claude-usage"
 tap "hashicorp/tap", trusted: true
 tap "homebrew-ffmpeg/ffmpeg", trusted: true
+tap "mobai-app/tap"
 tap "nikitabobko/tap", trusted: true
 tap "openclaw/tap", trusted: true
 tap "osx-cross/arm", trusted: true
@@ -36,6 +38,8 @@ brew "atuin"
 brew "aws-iam-authenticator"
 # Official Amazon AWS command-line interface
 brew "awscli"
+# Microsoft Azure CLI 2.0
+brew "azure-cli"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Bash Automated Testing System
@@ -121,7 +125,7 @@ brew "helm@3"
 # Deploy Kubernetes Helm Charts
 brew "helmfile", link: false
 # Agent multiplexer that lives in your terminal
-brew "herdr", restart_service: :changed
+brew "herdr"
 # Improved top (interactive process viewer)
 brew "htop"
 # Run and Test HTTP Requests with plain text and curl
@@ -230,8 +234,6 @@ brew "redis"
 brew "repomix"
 # Fast command-line bittorrent client and server
 brew "rqbit"
-# CLI proxy to minimize LLM token consumption
-brew "rtk"
 # Intuitive find & replace CLI
 brew "sd"
 # Static analysis and lint tool, for (ba)sh scripts
@@ -287,9 +289,9 @@ brew "yt-dlp"
 # Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "zellij"
 # Programming language designed for robustness, optimality, and clarity
-brew "zig", link: false
+brew "zig"
 # Programming language designed for robustness, optimality, and clarity
-brew "zig@0.15", link: true
+brew "zig@0.15"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Geo-scale, next-generation sharing platform built on top of OpenZiti
@@ -304,17 +306,23 @@ brew "datadog-labs/pack/pup"
 brew "facebook/fb/idb-companion", trusted: true
 # A window border system for macOS
 brew "felixkratz/formulae/borders"
+# Point at things on the macOS screen with a big arrow and a sign, for AI agents
+brew "franzenzenhofer/tap/bigarrow", trusted: true
 # Terraform
 brew "hashicorp/tap/terraform"
+# Run more iOS, tvOS, watchOS, and visionOS simulators on one Mac by disabling unneeded background daemons
+brew "mobai-app/tap/simslim", trusted: true
 # Google CLI for Gmail, Calendar, Drive, Docs, Sheets, and more
 brew "openclaw/tap/gogcli"
+# Lightning-fast macOS screenshots & AI vision analysis
+brew "openclaw/tap/peekaboo", trusted: true
 # Bluetooth battery monitor for macOS: one-shot CLI readings, JSON output and a live TUI
 brew "paulchiu/tap/blubat", trusted: true
 # A terminal UI for the outer loop: seeing many git repos at once and acting on many in one gesture
 brew "paulchiu/tap/repon", trusted: true
 # Quantum Mechanical Keyboard (QMK) Firmware
 brew "qmk/qmk/qmk"
-# CLI tool for linear.app that uses git branch names and directory names to open issues and team pages
+# Work with Linear issues, projects and teams from the command line
 brew "schpet/tap/linear"
 # Stripe CLI utility
 brew "stripe/stripe-cli/stripe", trusted: true
@@ -346,8 +354,6 @@ cask "dockdoor"
 cask "dropbox"
 # Utility to support moving and resizing using a modifier key and mouse drag
 cask "easy-move+resize"
-# Markdown previews in Finder QuickLook with diagrams and math
-cask "xykong/tap/flux-markdown"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Desktop automation application
@@ -368,7 +374,7 @@ cask "maccy"
 cask "meetingbar"
 # Neovim Client
 cask "neovide-app"
-# Keyboard driven navigation for macOS
+# Keyboard driven navigation
 cask "y3owk1n/tap/neru"
 # Replacement for Docker Desktop
 cask "orbstack"
@@ -407,6 +413,7 @@ vscode "bradlc.vscode-tailwindcss"
 vscode "chouzz.vscode-better-align"
 vscode "christian-kohler.npm-intellisense"
 vscode "christian-kohler.path-intellisense"
+vscode "coder.coder-remote"
 vscode "connor4312.esbuild-problem-matchers"
 vscode "csstools.postcss"
 vscode "darkriszty.markdown-table-prettify"
@@ -442,11 +449,15 @@ vscode "ms-python.debugpy"
 vscode "ms-python.python"
 vscode "ms-python.vscode-pylance"
 vscode "ms-python.vscode-python-envs"
+vscode "ms-vscode-remote.remote-ssh"
+vscode "ms-vscode-remote.remote-ssh-edit"
 vscode "ms-vscode.extension-test-runner"
+vscode "ms-vscode.remote-explorer"
 vscode "ms-vscode.test-adapter-converter"
 vscode "ms-vscode.vscode-speech"
 vscode "ms-vsliveshare.vsliveshare"
 vscode "openai.chatgpt"
+vscode "openai.codex-audio"
 vscode "orta.vscode-jest"
 vscode "paulchiu.saucer"
 vscode "pflannery.vscode-versionlens"
@@ -470,6 +481,7 @@ go "honnef.co/go/tools/cmd/staticcheck"
 cargo "cargo-edit"
 cargo "mrx"
 npm "@angular-devkit/schematics-cli"
+npm "@earendil-works/pi-coding-agent"
 npm "@mr-yum/schematics"
 npm "@playwright/test"
 npm "azure-functions-core-tools"
