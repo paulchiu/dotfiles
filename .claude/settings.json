@@ -115,7 +115,8 @@
   },
   "enabledPlugins": {
     "codex@openai-codex": true,
-    "release-reporter@meandu-plugins": true
+    "release-reporter@meandu-plugins": true,
+    "session-titler@claude-session-titler": true
   },
   "extraKnownMarketplaces": {
     "meandu-plugins": {
@@ -129,6 +130,12 @@
         "source": "github",
         "repo": "openai/codex-plugin-cc"
       }
+    },
+    "claude-session-titler": {
+      "source": {
+        "source": "github",
+        "repo": "paulchiu/claude-session-titler"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
@@ -138,6 +145,7 @@
       "effortLevel": "high"
     }
   },
+  "promptSuggestionEnabled": false,
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
@@ -189,5 +197,11 @@
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
   },
-  "promptSuggestionEnabled": false
+  "pluginConfigs": {
+    "session-titler@claude-session-titler": {
+      "options": {
+        "model": "haiku"
+      }
+    }
+  }
 }

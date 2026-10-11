@@ -8,10 +8,14 @@
 #   nf-fa-folder      U+F07B
 #   nf-dev-git_branch U+E725
 #   nf-fa-code_fork   U+F126  (marks a linked worktree)
+#   nf-fa-hourglass_half U+F252  (prompt cache warm)
+#   nf-fa-snowflake   U+F2DC  (prompt cache cold)
 ICON_MODEL=$(printf '\xef\x8b\x9b')
 ICON_DIR=$(printf '\xef\x81\xbb')
 ICON_GIT=$(printf '\xee\x9c\xa5')
 ICON_WT=$(printf '\xef\x84\xa6')
+ICON_CACHE=$(printf '\xef\x89\x92')
+ICON_COLD=$(printf '\xef\x8b\x9c')
 
 input=$(cat)
 
@@ -54,6 +58,31 @@ fi
 RESET=$'\033[0m'
 DIM=$'\033[2m'
 
+# Prompt cache countdown to prompt_cache.expires_at, yellow in the last fifth of the
+# TTL. Once cold, shows the tokens the next request will re-cache.
+CACHE_EXP=$(echo "$input" | jq -r '.prompt_cache.expires_at // empty' | cut -d. -f1)
+CACHE_TTL=$(echo "$input" | jq -r '.prompt_cache.ttl // "5m"')
+RECACHE=$(echo "$input" | jq -r '.prompt_cache.recache_tokens_if_cold // empty')
+CACHE_TXT=""
+CACHE_SEG=""
+if [ -n "$CACHE_EXP" ]; then
+  LEFT=$((CACHE_EXP - $(date +%s)))
+  if [ "$CACHE_TTL" = "1h" ]; then TTL_S=3600; else TTL_S=300; fi
+  if [ "$LEFT" -le 0 ]; then
+    CACHE_TXT="cold"
+    [ -n "$RECACHE" ] && CACHE_TXT="cold $(fmt_k "$RECACHE")"
+    CACHE_SEG=" "$'\033[36m'"${ICON_COLD} ${CACHE_TXT}${RESET}"
+  else
+    if [ "$LEFT" -ge 600 ]; then
+      CACHE_TXT="$((LEFT / 60))m"
+    else
+      CACHE_TXT=$(printf '%d:%02d' $((LEFT / 60)) $((LEFT % 60)))
+    fi
+    if [ $((LEFT * 5)) -lt "$TTL_S" ]; then CACHE_COLOR=$'\033[33m'; else CACHE_COLOR=$DIM; fi
+    CACHE_SEG=" ${CACHE_COLOR}${ICON_CACHE} ${CACHE_TXT}${RESET}"
+  fi
+fi
+
 # Worktree name. workspace.git_worktree covers any linked worktree; worktree.name
 # only appears in --worktree sessions, so fall back to it.
 WT=$(echo "$input" | jq -r '.workspace.git_worktree // .worktree.name // empty')
@@ -77,6 +106,7 @@ SHADOW_BAR=$(printf '%*s' "$SEGMENTS" '')
 SHADOW="X ${MODEL} X "
 [ -n "$BRANCH" ] && SHADOW="${SHADOW} X "   # git glyph and its spaces, branch aside
 SHADOW="${SHADOW} ${SHADOW_BAR} ${PCT}% (${USED_H}/${SIZE_H})"
+[ -n "$CACHE_TXT" ] && SHADOW="${SHADOW} X ${CACHE_TXT}"
 BUDGET=$((COLS - ${#SHADOW} - MARGIN))      # columns left for directory and branch
 
 # The branch gives way first, since the directory is the shorter, steadier label.
@@ -105,7 +135,7 @@ if [ -n "$BRANCH" ]; then
   fi
 fi
 
-printf '%s%s %s %s %s%s%s %s%s%s %s%% %s(%s/%s)%s\n' \
+printf '%s%s %s %s %s%s%s %s%s%s %s%% %s(%s/%s)%s%s\n' \
   "$DIM" "$ICON_MODEL" "$MODEL" "$ICON_DIR" "$DIRNAME" "$GIT_SEG" "$RESET" \
   "$COLOR" "$BAR" "$RESET" "$PCT" \
-  "$DIM" "$USED_H" "$SIZE_H" "$RESET"
+  "$DIM" "$USED_H" "$SIZE_H" "$RESET" "$CACHE_SEG"

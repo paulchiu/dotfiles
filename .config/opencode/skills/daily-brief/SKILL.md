@@ -24,7 +24,7 @@ NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 OUT=/Users/paul/meandu/Area/Journal/${TODAY}.md
 LOG_DIR=/Users/paul/meandu/Area/Journal/.brief-log
 LOG=${LOG_DIR}/${TODAY}.log
-TASKS=/Users/paul/meandu/Area/Tasks.md
+TASKS_DIR=/Users/paul/meandu/Area/TaskNotes/Tasks
 INBOX_SEEN=${LOG_DIR}/inbox-seen.md
 mkdir -p "$LOG_DIR"
 ```
@@ -109,14 +109,21 @@ Run all six fetches in parallel. If any single source errors, append `<source>: 
 
 **1e. Obsidian: open action items**
 
-- Read `/Users/paul/meandu/Area/Tasks.md` directly with `Read`.
-- Parse every line starting `- [ ]`. Extract:
-  - `📅 YYYY-MM-DD` → due date
-  - `➕ YYYY-MM-DD` → created date
-  - `#name` (lowercase) → person tags
-  - Slack permalink if present.
-- Bucket A: due date ≤ TODAY (overdue + due-today).
-- Bucket B (computed in Step 2d): items whose `#name` matches an attendee on today's calendar.
+Tasks are TaskNotes notes in `$TASKS_DIR`, one per task, with YAML frontmatter. Dump the frontmatter of every unfinished task in one call:
+
+```bash
+grep -lE '^status: (open|in-progress|waiting|triage)$' "$TASKS_DIR"/*.md | while IFS= read -r f; do
+  echo "== ${f##*/}"; awk 'NR==1{next} /^---$/{exit} {print}' "$f"
+done
+```
+
+- `title` → task text. Link to a task as `[[<filename without .md>]]`.
+- `status`: `open`, `in-progress` and `waiting` are **owed**. `triage` is the untriaged queue from Step 3c and is never owed.
+- `due` → due date. `dateCreated` → created date (date only or a full timestamp; may be absent, never guess one).
+- `requested_by` → who asked. `tags` (lowercase first names) → people involved.
+- `source` → Slack permalink or `[[Granola note]]`.
+- Bucket A: owed tasks with due date ≤ TODAY (overdue + due-today).
+- Bucket B (computed in Step 2d): owed tasks whose `tags` or `requested_by` match an attendee on today's calendar.
 
 **1f. Obsidian: the previous day's note**
 
@@ -146,7 +153,7 @@ For each channel ID in the bug-report list above:
 For each LIGHT-PREP 1:1 on today's calendar (skip ROUTINE events and non-1:1 meetings entirely):
 
 - Find the most recent Granola note matching the person (1:1 detection rule in 2c) and summarise its open commitments.
-- Do **not** run per-attendee Linear searches for LIGHT-PREP events; tag-matched Tasks.md items (2d) are enough.
+- Do **not** run per-attendee Linear searches for LIGHT-PREP events; tag-matched task notes (2d) are enough.
 
 DEEP-PREP events are handled in step 2e instead.
 
@@ -167,8 +174,8 @@ Important: `<X> x me&u` (e.g. `Treetop Golf x me&u`) and `me&u _ <X>` are **cust
 - For each file that qualifies, read it and extract:
   - Lines beginning `- [ ]`
   - Lines beginning `Action item:` / `Action:` / `TODO:` / `Follow up:` (case-insensitive)
-- Cross-check `Tasks.md`: if the same item text (or substring ≥30 chars) is still `- [ ]` open, surface it as overdue with a wikilink to the Granola file.
-- Everything else, an action with no match in `Tasks.md`, is an **inbox candidate**. It is not owed yet; it has never been accepted. Hand it to Step 3c.
+- Cross-check the task notes (all titles: `grep -H -m1 '^title:' "$TASKS_DIR"/*.md`): if a task's `title` matches the item (same text or a shared substring ≥30 chars, case-insensitive) and it is still owed, surface it as overdue with a wikilink to the Granola file.
+- Everything else, an action with no matching task note in any status, is an **inbox candidate**. It is not owed yet; it has never been accepted. Hand it to Step 3c.
 
 **Resolve status before surfacing.** A Granola action carries no completion signal, so an unresolved one will resurface forever. Before calling any of them open:
 
@@ -182,7 +189,7 @@ Important: `<X> x me&u` (e.g. `Treetop Golf x me&u`) and `me&u _ <X>` are **cust
 For each unique attendee on today's calendar:
 
 - Map name → first-name lowercase tag (e.g. "Dom Smith" → `#dom`).
-- Filter Tasks.md open items with that tag.
+- Filter owed task notes whose `tags` include that name or whose `requested_by` is that person.
 - These feed the Meeting Prep section, not the general Action Items list.
 
 **2e. Deep prep for retros and long-gap 1:1s**
@@ -197,7 +204,7 @@ Sanitise `/` in the event title to `_` for the filename (match the Granola conve
 
 **Retro prep** (e.g. `CAD Sprint Retro`, `Product Leadership Retro/WIP`). Goal: walk in remembering what actually happened this sprint/period, not just the last three days.
 
-1. **Last retro's note**: read the most recent Granola note matching the retro title. Extract action items; cross-check Tasks.md and the team's Linear for whether each got done. Carried-over items are top talking points.
+1. **Last retro's note**: read the most recent Granola note matching the retro title. Extract action items; cross-check the task notes and the team's Linear for whether each got done. Carried-over items are top talking points.
 2. **Linear, shipped and slipped**: for `CAD Sprint Retro`, the team is Ctrl-alt-delight, id `75cf5d1a-0014-4f84-a3a2-782fb5e0f7dc`. For other retros, infer team/project scope from attendees and event description. Pull issues completed in the window, issues created-and-still-open, and anything In Progress with no update for >7 days (stalled). Bucket: shipped / carried over / stalled.
 3. **Incidents and pain**: Slack search `incident after:${SINCE}` scoped to `#incident-*` channels (severity lives in Slack, never Linear). Also scan the bug-report channels list for threads in the window with heavy activity (≥5 replies). Cap 15 results total.
 4. **Paul's own observations**: grep the window's journal notes (`Area/Journal/YYYY-MM-DD.md`) for content Paul typed **outside** the daily-brief markers; anything mentioning the team or its people is retro fuel.
@@ -210,7 +217,7 @@ Sanitise `/` in the event title to `_` for the filename (match the Granola conve
 
 **Long-gap 1:1 prep** (Kim, Tal, Adrian, and any 1:1 with a ≥21-day gap). Goal: reconstruct the month so Paul isn't relying on memory for "what's happened since we last spoke".
 
-1. **Last 1:1's note**: most recent Granola note for the person. Extract commitments both ways; mark each done/open (cross-check Tasks.md `#name` tags and Slack). Granola quirk: transcripts render "Tal" as "tau"/"tao"; treat those as Tal when scanning content.
+1. **Last 1:1's note**: most recent Granola note for the person. Extract commitments both ways; mark each done/open (cross-check task notes tagged with their name, and Slack). Granola quirk: transcripts render "Tal" as "tau"/"tao"; treat those as Tal when scanning content.
 2. **Interactions in the window**: Slack search for DMs/threads between Paul and the person (`from:<@THEIR_ID> after:${SINCE}` and `from:<@PAUL_ID>` mentioning them), cap 15. Other Granola notes in the window where both were present (scan filenames plus attendee lines).
 3. **Paul's headline activity**: Linear issues Paul completed or drove in the window (assignee me, completed, cap 20) plus decisions visible in journal notes outside the brief markers. This is the "what I've been doing" half of the conversation, useful for a manager 1:1 (Kim/Tal) or peer sync (Adrian).
 4. **Their world**: Linear issues/projects in the window where the person is assignee or heavily active, cap 10, only if a workspace user match exists for them.
@@ -250,17 +257,17 @@ Render every bullet in this section as plain markdown (no surrounding backticks)
 
 ### Overdue / due today
 
-- [YYYY-MM-DD] <verbatim task text from Tasks.md> _(link to source)_
+- [YYYY-MM-DD] [[<task note filename>|<task title>]] _(link to source)_
 
 ### Tied to today's meetings
 
-- [#name] <task text> _(link to source)_, for each open task tagged with a person on today's calendar.
+- [#name] [[<task note filename>|<task title>]] _(link to source)_, for each owed task tied to a person on today's calendar.
 
 ### Surfaced from recent 1:1s
 
-- [<person>, 1:1 on YYYY-MM-DD] <action item from Granola>, _still open in Tasks.md_, plus the latest recorded status per 2c. Link to `[[<Granola filename without .md>]]`.
+- [<person>, 1:1 on YYYY-MM-DD] <action item from Granola>, _still open as [[<task note filename>]]_, plus the latest recorded status per 2c. Link to `[[<Granola filename without .md>]]`.
 
-Actions with no match in Tasks.md do not belong in this section. They go to the inbox in Step 3c, and the brief names only the count: `<n> new 1:1 actions parked in the Tasks.md inbox for triage.`
+Actions with no matching task note do not belong in this section. They go to Triage in Step 3c, and the brief names only the count: `<n> new 1:1 actions parked in Triage.`
 
 ## Suggested Linear Tickets to Create
 
@@ -339,27 +346,40 @@ Seed both lines bare when there is nothing to put on them.
 - Plan after the time chip, outcome after ` → `, e.g. ``- `09:00` Lodge Brex outstanding → done, 20 min``.
 - `~~strikethrough~~` for what got dropped.
 - Unplanned work is a new row typed anywhere in the block.
-- Plain bullets, never `- [ ]`: the vault-wide query in `Area/Tasks.md` would pull unfinished slots into the global task list.
+- Plain bullets, never `- [ ]`: planner rows are not tasks.
 
-### Step 3c: Top up the Tasks inbox
+### Step 3c: Top up Triage
 
-Granola actions Paul has never triaged go to a holding pen in `$TASKS`, so the decision to track them is his and the brief stops re-raising them.
+Granola actions Paul has never triaged become task notes with `status: triage`, so the decision to track them is his and the brief stops re-raising them. They show in the Triage view of `Area/TaskNotes/Task dashboard.base`. Clicking a task's status circle accepts it (it becomes `open`); deleting the note declines it.
 
+Create one note per inbox candidate from 2c at `$TASKS_DIR/<DATE> <title>.md`:
+
+```markdown
+---
+title: "<action>"
+type: task
+status: triage
+priority: normal
+dateCreated: <DATE>
+requested_by: "<Name>"
+source: "[[<source Granola note>]]"
+tags:
+  - <name>
+---
+
+Raised in [[<source Granola note>]].
 ```
-## Inbox
-<!-- brief-inbox:start -->
-- [ ] <action> ➕ <date added> [[<source Granola note>]]
-<!-- brief-inbox:end -->
-```
 
-- Append one line per inbox candidate from 2c, inside the markers, newest last. Never reorder or rewrite lines already there.
-- **Propose each action once, ever.** Append every action's source note and text to `$INBOX_SEEN` when you propose it, and skip anything already listed there. Deleting a line is how Paul declines, so a re-proposal would undo his decision. The ledger, not the file, is the memory.
-- Skip anything whose text already matches an open or done task anywhere in `$TASKS` (substring ≥30 chars), accepted items have usually been reworded on the way out of the block.
-- Cap 5 per run. Carry the rest to tomorrow, an inbox of 30 gets deleted wholesale rather than read.
-- If the `## Inbox` section or its markers are missing, create them directly under the loose `# Manual` list, above `## Unplanned`.
-- Leave the rest of `$TASKS` untouched. This step only ever appends between the two markers.
+- `<DATE>` is the source Granola note's date prefix: when the action was raised, not when it was filed. Date only, never an invented time.
+- `title` is the action on one line, double-quoted with `"` and `\` escaped. In the filename, replace `/` and `:` with `-` and drop `\ * ? " < > | # ^ [ ]`; cap it at 90 characters and append ` (2)` if the file exists.
+- `requested_by` only when a named person asked for the action. Otherwise omit the line; never guess.
+- `tags` holds the lowercase first name of each person the action is owed to or by; that is what surfaces it in meeting prep and on People notes. Omit `tags` when there is nobody.
+- **Propose each action once, ever.** Append every action's source note and text to `$INBOX_SEEN` when you propose it, and skip anything already listed there. Deleting a note is how Paul declines, so a re-proposal would undo his decision. The ledger, not the folder, is the memory.
+- Skip anything whose text already matches the `title` of a task note in any status (substring ≥30 chars, case-insensitive): accepted items have usually been reworded.
+- Cap 5 per run. Carry the rest to tomorrow, a triage queue of 30 gets deleted wholesale rather than read.
+- This step only ever creates notes. Never edit or delete an existing task note.
 
-Items in the inbox are **not** owed: never put one on the To place line or under Action Items Owed until Paul has accepted it.
+Triage items are **not** owed: never put one on the To place line or under Action Items Owed until Paul has accepted it.
 
 ### Step 4: Write atomically
 
@@ -367,7 +387,7 @@ Items in the inbox are **not** owed: never put one on the To place line or under
 2. Brief block: if the markers exist, replace their contents (between, not including, the markers). Else put a fresh block at the top of the file.
 3. Day-log block: if the markers exist and the block is touched (Step 3b), carry it over verbatim. Else write the freshly seeded block below the brief block, separated by a blank line.
 4. Preserve any other content the user has typed, in place.
-5. Use `Write` to overwrite the whole file. `$TASKS` is written separately in Step 3c, never rewritten wholesale.
+5. Use `Write` to overwrite the whole file. Task notes are created separately in Step 3c.
 6. If `$LOG` ended up non-empty, the brief's status line will already point to it via the `[[…]]` wikilink.
 
 ### Step 5: Final output
@@ -382,15 +402,15 @@ Print **only** absolute paths to stdout, one per line: `$OUT` first, then any pr
 - **Permission denied on a Slack channel**: log just that channel; continue with the others.
 - **MCP tool name guess is wrong**: list available tools matching the prefix and pick the closest match by description. Don't silently skip the source.
 
-## Inbox triage (on request)
+## Triage (on request)
 
-Paul reviews the `## Inbox` block in his own time: he deletes lines he does not want, and leaves the rest. When he asks to categorise, triage or clear the inbox, run this instead of the daily workflow:
+Paul reviews the Triage view in his own time: he deletes notes he does not want, and leaves the rest. When he asks to categorise, triage or clear the inbox, run this instead of the daily workflow:
 
-1. Read the `## Inbox` block of `$TASKS`. Whatever survived is accepted, no further confirmation needed.
-2. Place each surviving item in the section that fits, using the file's own scheme: `## Urgent + Important`, `## Urgent`, `## Important`, `## Everything else`, `## On-going`, or `# Long term` / `## Tal recommendations` for things that will never have a due date. Loose items directly under `# Manual` are the default when nothing else fits.
-3. Carry the `➕` date across unchanged, it records when the action was raised, not when it was filed. Keep any `[[source note]]` link. Add a `#name` tag when the action is owed to or by a named person, that is what makes it show up in meeting prep.
-4. Reword only for brevity, never to change meaning. Say what you moved where, one line each, and ask about anything genuinely ambiguous rather than guessing.
-5. Empty the block, leaving the markers in place. Never touch `$INBOX_SEEN`, its job is to stop re-proposals, including of items Paul deleted.
+1. List the task notes with `status: triage`. Whatever survived is accepted, no further confirmation needed.
+2. Set each one's `status: open`. Set `priority: high` for urgent and important items and `priority: low` for long-term or someday items, otherwise leave `normal`. Add `due: YYYY-MM-DD` only when the action or its source states a deadline.
+3. Keep `dateCreated` and `source` unchanged, they record when and where the action was raised. Add a lowercase first-name tag for each person the action is owed to or by, and `requested_by` when someone asked for it.
+4. Reword `title` only for brevity, never to change meaning; leave the filename alone. Say what you changed, one line each, and ask about anything genuinely ambiguous rather than guessing.
+5. Never touch `$INBOX_SEEN`, its job is to stop re-proposals, including of items Paul deleted.
 
 ## Test mode
 
@@ -398,6 +418,7 @@ If invoked with the literal string `--dry-run` in the prompt:
 
 - Write to `/Users/paul/meandu/Area/Journal/.brief-test/${TODAY}.md` instead of the real journal.
 - Write prep notes to `.brief-test/` too (same filename convention).
+- Create triage task notes in `.brief-test/Tasks/` instead of `$TASKS_DIR`, and don't append to `$INBOX_SEEN`.
 - Otherwise identical behaviour.
 
 To force a deep prep regardless of today's calendar (for testing or ad-hoc use), invoke with e.g. `deep prep for Paul / Kim` or `deep prep for CAD Sprint Retro`; run only step 2e for that event, using the most recent past occurrence as `SINCE` and the next upcoming occurrence as the meeting date.
@@ -424,7 +445,7 @@ Failure modes above cover the sources that break. This covers the brief itself. 
 - The day log block exists, carrying every timed calendar event on its own row, or was carried over verbatim because Paul had typed in it.
 - Anything on the previous note's Tomorrow line has resurfaced, on the To place line and under Action Items Owed.
 - No 1:1 action was called open without checking later journal notes for its latest status.
-- New 1:1 actions are in the `## Inbox` block of `Tasks.md`, each recorded in `$INBOX_SEEN`, and none of them reached the To place line.
+- New 1:1 actions are task notes with `status: triage`, each recorded in `$INBOX_SEEN`, and none of them reached the To place line.
 - The brief is written atomically to the vault path and its absolute path is printed.
 
 A brief missing a source without saying so reads as complete and is not. Name the gap in the brief, not just the log.
