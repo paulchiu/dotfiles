@@ -10,12 +10,16 @@
 #   nf-fa-code_fork   U+F126  (marks a linked worktree)
 #   nf-fa-hourglass_half U+F252  (prompt cache warm)
 #   nf-fa-snowflake   U+F2DC  (prompt cache cold)
+#   nf-fa-comments    U+F086  (prompts sent)
+#   nf-oct-fold       U+F48C  (compact before N more prompts)
 ICON_MODEL=$(printf '\xef\x8b\x9b')
 ICON_DIR=$(printf '\xef\x81\xbb')
 ICON_GIT=$(printf '\xee\x9c\xa5')
 ICON_WT=$(printf '\xef\x84\xa6')
 ICON_CACHE=$(printf '\xef\x89\x92')
 ICON_COLD=$(printf '\xef\x8b\x9c')
+ICON_TURNS=$(printf '\xef\x82\x86')
+ICON_FOLD=$(printf '\xef\x92\x8c')
 
 input=$(cat)
 
@@ -83,6 +87,57 @@ if [ -n "$CACHE_EXP" ]; then
   fi
 fi
 
+# Prompts sent: plain-text user rows, less meta rows, compaction summaries and
+# slash-command echoes.
+TRANSCRIPT=$(echo "$input" | jq -r '.transcript_path // empty')
+TURNS=0
+[ -f "$TRANSCRIPT" ] && TURNS=$(grep '"type":"user"' "$TRANSCRIPT" | grep -v '"tool_result"' | jq -s '
+  map(select(.isMeta != true and .isCompactSummary != true
+    and (.message.content | type) == "string"
+    and (.message.content | test("^(<|/)") | not))) | length')
+
+# Compaction advice: fold glyph and ">N" once compacting now beats continuing on a warm cache
+# within N more prompts. Assumes a 15K summary plus effort-scaled thinking, 20K
+# re-attached files, 7K context growth per request.
+ADVICE_TXT=""
+CTX=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
+if [ "${CACHE_TXT%% *}" = "cold" ]; then
+  [ "$CTX" -ge 100000 ] && ADVICE_TXT="/clear"
+else
+  ADVICE_TXT=$(awk -v m="$(echo "$input" | jq -r '.model.id // ""')" -v c="$CTX" \
+    -v e="$(echo "$input" | jq -r '.effort.level // "high"')" -v ttl="$CACHE_TTL" \
+    -v req="$(echo "$input" | jq -r '.prompt_cache.requests // 0')" -v t="$TURNS" '
+    function px(p,  b, o, r) {
+      if (m ~ /fable|mythos/) { b = 10; o = 50; r = 0.025 }
+      else if (m ~ /opus-5-5/) { b = 4; o = 20; r = 0.05 }
+      else if (m ~ /opus/) { b = 5; o = 25; r = 0.1 }
+      else if (m ~ /sonnet-5/) { b = 2; o = 10; r = 0.1 }
+      else if (m ~ /sonnet/) { b = 3; o = 15; r = 0.1 }
+      else if (m ~ /haiku-5-5/) { b = p <= 100000 ? 0.1 : 0.5; o = b * 5; r = 0.1 }
+      else if (m ~ /haiku/) { b = 1; o = 5; r = 0.1 }
+      else return 0
+      R = b * r; W = b * (ttl == "1h" ? 2 : 1.25); O = o; return 1
+    }
+    function run(n, compact,  cost, s, i) {
+      s = c
+      if (compact) {
+        px(c); cost = c * R + (15000 + think) * O
+        s = 65000; px(s); cost += 35000 * W + 30000 * R
+      }
+      for (i = 0; i < n; i++) { px(s + 7000); cost += s * R + 7000 * W + 2000 * O; s += 7000 }
+      return cost
+    }
+    BEGIN {
+      if (c <= 65000 || !px(c)) exit
+      split("low 2000 medium 5000 high 10000 xhigh 15000 max 20000", a, " ")
+      think = 10000; for (i = 1; i < 10; i += 2) if (a[i] == e) think = a[i + 1]
+      perPrompt = (t > 0 && req > 0) ? req / t : 1
+      for (n = 1; n <= 400; n++) if (run(n, 1) <= run(n, 0)) {
+        p = int((n + perPrompt - 1) / perPrompt); if (p <= 50) printf ">%d", p; exit
+      }
+    }')
+fi
+
 # Worktree name. workspace.git_worktree covers any linked worktree; worktree.name
 # only appears in --worktree sessions, so fall back to it.
 WT=$(echo "$input" | jq -r '.workspace.git_worktree // .worktree.name // empty')
@@ -107,6 +162,8 @@ SHADOW="X ${MODEL} X "
 [ -n "$BRANCH" ] && SHADOW="${SHADOW} X "   # git glyph and its spaces, branch aside
 SHADOW="${SHADOW} ${SHADOW_BAR} ${PCT}% (${USED_H}/${SIZE_H})"
 [ -n "$CACHE_TXT" ] && SHADOW="${SHADOW} X ${CACHE_TXT}"
+SHADOW="${SHADOW} X ${TURNS}"
+[ -n "$ADVICE_TXT" ] && SHADOW="${SHADOW} X ${ADVICE_TXT}"
 BUDGET=$((COLS - ${#SHADOW} - MARGIN))      # columns left for directory and branch
 
 # The branch gives way first, since the directory is the shorter, steadier label.
@@ -135,7 +192,11 @@ if [ -n "$BRANCH" ]; then
   fi
 fi
 
-printf '%s%s %s %s %s%s%s %s%s%s %s%% %s(%s/%s)%s%s\n' \
+TURN_SEG=" ${DIM}${ICON_TURNS} ${TURNS}${RESET}"
+[ "${ADVICE_TXT#>}" != "$ADVICE_TXT" ] && ADVICE_TXT="${ICON_FOLD} ${ADVICE_TXT}"
+[ -n "$ADVICE_TXT" ] && TURN_SEG="${TURN_SEG} "$'\033[33m'"${ADVICE_TXT}${RESET}"
+
+printf '%s%s %s %s %s%s%s %s%s%s %s%% %s(%s/%s)%s%s%s\n' \
   "$DIM" "$ICON_MODEL" "$MODEL" "$ICON_DIR" "$DIRNAME" "$GIT_SEG" "$RESET" \
   "$COLOR" "$BAR" "$RESET" "$PCT" \
-  "$DIM" "$USED_H" "$SIZE_H" "$RESET" "$CACHE_SEG"
+  "$DIM" "$USED_H" "$SIZE_H" "$RESET" "$CACHE_SEG" "$TURN_SEG"
