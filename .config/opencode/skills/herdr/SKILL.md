@@ -1,6 +1,6 @@
 ---
 name: herdr
-description: Herdr CLI for managing panes workspaces and tabs
+description: Herdr CLI for managing panes workspaces and tabs, and restarting herdr servers or sessions
 ---
 
 # Herdr
@@ -53,8 +53,9 @@ when this skill and the binary disagree.
   (split, move, resize, close, run a test watcher, tail a server, read output):
   read `references/panes.md`.
 - Task is **server lifecycle, named sessions, remote attach, config, or
-  install** (start the service, detach, `--remote`, keybindings, upgrade,
-  troubleshooting): read `references/sessions.md`.
+  install** (start or restart servers, detach, `--remote`, keybindings, upgrade,
+  troubleshooting): read `references/sessions.md`. For a restart, follow its
+  "Restarting servers" procedure exactly.
 
 Do not read a reference the task does not need.
 

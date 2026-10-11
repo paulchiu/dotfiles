@@ -8,7 +8,6 @@ mutates a running session is not.
 Herdr needs a background server to hold terminals open.
 
 ```bash
-brew services start herdr                    # persistent, restarts at login
 /opt/homebrew/opt/herdr/bin/herdr server     # foreground, one-off
 herdr status                                 # client and server status
 herdr server reload-config                   # re-read config.toml, no restart
@@ -27,6 +26,50 @@ herdr server stop      # ends the session AND stops its pane processes
 Never run that from inside an active session unless the user explicitly wants
 every pane killed. After a full stop, the next start restores the saved session
 shape.
+
+## Restarting servers (Paul's procedure)
+
+Use this when a server has to pick up something new: a TCC grant, or a binary
+upgrade where `herdr status` reports `server_binary_stale`. Paul runs three
+sessions: `default`, `meandu`, and `autopilot`.
+
+**Never use `brew services` for herdr.** The 0.9.3 formula ships no service.
+`brew services restart herdr` stops the server, deletes the leftover
+`homebrew.mxcl.herdr.plist`, then fails, so no server is under launchd.
+
+1. **Inventory and confirm.** Run `herdr session list --json`, then
+   `HERDR_SOCKET_PATH=<socket> herdr agent list` for each running session.
+   Report the agent counts and statuses, then ask before stopping anything.
+   Restarting kills every pane process. Agents come back with their
+   conversations when the session is restored.
+2. **Back up** each `session.json` (`~/.config/herdr/` and
+   `~/.config/herdr/sessions/<name>/`) to the scratchpad.
+3. **Stop** each one with `herdr session stop <name> --json`. `default` is a
+   valid name here.
+4. **Start** each one from `~`, under a clean environment so that
+   `CLAUDE_CODE_*` variables don't leak into the panes. Leave out
+   `HERDR_SESSION` for `default`:
+
+   ```bash
+   (cd ~ && env -i HOME=$HOME USER=$USER LOGNAME=$LOGNAME SHELL=/bin/zsh \
+     PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$HOME/.local/bin:$HOME/.local/share/mise/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
+     SSH_AUTH_SOCK="$SSH_AUTH_SOCK" TMPDIR="$TMPDIR" HERDR_MACOS_SERVER_CONTEXT=user \
+     HERDR_SESSION=<name> nohup /opt/homebrew/opt/herdr/bin/herdr server >/dev/null 2>&1 &)
+   ```
+
+5. **Verify:** `pgrep -fl "herdr server"` shows ppid 1 for each, and the
+   agent counts match step 1.
+6. **Reattach Paul's clients.** One Ghostty window holds three tabs:
+   `pers` (⌘1) runs `h session attach default`, `mnu` (⌘2) runs
+   `h session attach meandu`, and `revs` (⌘3) runs `h session attach autopilot`.
+   Reattach them with the peekaboo skill:
+   - Inactive tabs have no AX element, so `window focus` fails on them. Focus
+     the visible tab's window ID, then switch tabs with
+     `press cmd+N --foreground`.
+   - Background typing is refused. Use `type ... --foreground`. It can report
+     failure even when the text landed, so check with `see` before pressing
+     `Return`.
+   - Confirm with `pgrep -fl "session attach"`.
 
 ## Named sessions
 

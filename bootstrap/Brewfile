@@ -5,20 +5,16 @@ tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", tr
 tap "franzenzenhofer/tap"
 tap "hamed-elfayome/claude-usage"
 tap "hashicorp/tap", trusted: true
-tap "homebrew-ffmpeg/ffmpeg", trusted: true
 tap "mobai-app/tap"
-tap "nikitabobko/tap", trusted: true
 tap "openclaw/tap", trusted: true
 tap "osx-cross/arm", trusted: true
 tap "osx-cross/avr", trusted: true
 tap "paulchiu/tap"
 tap "qmk/qmk", trusted: true
 tap "schpet/tap", trusted: true
-tap "steipete/tap", trusted: true
 tap "stripe/stripe-cli", trusted: true
 tap "tilt-dev/tap", trusted: true
 tap "wix-incubator/brew", "https://github.com/wix-incubator/homebrew-brew.git", trusted: true
-tap "xykong/tap", trusted: true
 tap "y3owk1n/tap", trusted: true
 # Asciicast to GIF converter
 brew "agg"
@@ -70,8 +66,6 @@ brew "node"
 brew "devcontainer"
 # Pack, ship and run any application as a lightweight container
 brew "docker"
-# Text processing system for reStructuredText
-brew "docutils"
 # Convert text between DOS, UNIX, and Mac formats
 brew "dos2unix"
 # Disk Usage/Free Utility - a better 'df' alternative
@@ -82,8 +76,6 @@ brew "dust"
 brew "libevent"
 # Maintain consistent coding style between multiple editors
 brew "editorconfig"
-# Speech synthesizer that supports more than hundred languages and accents
-brew "espeak-ng"
 # Work with ID3 metadata in .mp3 files
 brew "eye-d3"
 # Modern, maintained replacement for ls
@@ -92,8 +84,6 @@ brew "eza"
 brew "fd"
 # Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
-# Terminal JSON viewer
-brew "fx"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # Easily access your Google Calendar(s) from a command-line
@@ -114,8 +104,6 @@ brew "p11-kit"
 brew "gnutls"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
-# Make JSON greppable
-brew "gron"
 # Like cURL, but for gRPC
 brew "grpcurl"
 # Kubernetes package manager
@@ -160,10 +148,6 @@ brew "lazydocker"
 brew "lazygit"
 # Library for complex text layout
 brew "libraqm"
-# Curses-based tool for viewing and analyzing log files
-brew "lnav"
-# Tool to convert MDF (Alcohol 120% images) images to ISO images
-brew "mdf2iso"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # Simple tool to make locally trusted development certificates
@@ -176,8 +160,6 @@ brew "mosh"
 brew "mp4v2"
 # Update multiple repositories in with one command
 brew "multi-gitter"
-# Fast, highly customisable system info script
-brew "neofetch"
 # Incremental parsing library
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
@@ -196,8 +178,6 @@ brew "openssl@1.1"
 brew "osv-scanner"
 # Multithreaded PNG optimizer written in Rust
 brew "oxipng"
-# 7-Zip (high compression file archiver) implementation
-brew "p7zip"
 # CLI for Postgres with auto-completion and syntax highlighting
 brew "pgcli"
 # Friendly PIL fork (Python Imaging Library)
@@ -354,6 +334,7 @@ cask "dockdoor"
 cask "dropbox"
 # Utility to support moving and resizing using a modifier key and mouse drag
 cask "easy-move+resize"
+cask "flux-markdown"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Desktop automation application
