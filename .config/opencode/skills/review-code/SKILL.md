@@ -24,6 +24,7 @@ Unified review workflow. Triggered by a PR URL, number, or (no arg) the current 
 Parse the user's prompt for optional flags:
 
 - **Persona**: phrases like "review as <name>", "persona-based review by <name>", "hostile <name> review" → trigger Round 2.5 with that persona.
+- **Decision profile**: "decide as <name>" or "apply <name>'s decision profile", sent against a finished decision doc → load `references/decision-profiles/<name>.md` and follow its "How to apply". It ticks boxes in `## Possible actions` only and posts nothing. If no profile file exists for that name, say so and stop.
 - **Skip rounds**: phrases like "skip adversarial", "branch-review only" → run round 1 only.
 - **Round 3 opt-in**: "include cxd outside view", "do all three rounds", "full review with codex" → run Step 5. Without one of these, Step 5 does not run and is not offered.
 

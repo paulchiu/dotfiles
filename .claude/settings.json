@@ -146,6 +146,13 @@
     }
   },
   "promptSuggestionEnabled": false,
+  "pluginConfigs": {
+    "session-titler@claude-session-titler": {
+      "options": {
+        "model": "haiku"
+      }
+    }
+  },
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
@@ -196,12 +203,5 @@
   ],
   "feedbackSurveyState": {
     "lastShownTime": 1754073116717
-  },
-  "pluginConfigs": {
-    "session-titler@claude-session-titler": {
-      "options": {
-        "model": "haiku"
-      }
-    }
   }
 }
