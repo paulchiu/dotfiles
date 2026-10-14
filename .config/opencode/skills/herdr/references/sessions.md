@@ -30,8 +30,9 @@ shape.
 ## Restarting servers (Paul's procedure)
 
 Use this when a server has to pick up something new: a TCC grant, or a binary
-upgrade where `herdr status` reports `server_binary_stale`. Paul runs three
-sessions: `default`, `meandu`, and `autopilot`.
+upgrade where `herdr status` reports `server_binary_stale`. Restart whatever
+`herdr session list --json` returns; as of 0.9.4 that is `default` and
+`meandu` (the autopilot review panes live in `meandu`).
 
 **Never use `brew services` for herdr.** The 0.9.3 formula ships no service.
 `brew services restart herdr` stops the server, deletes the leftover
@@ -41,11 +42,17 @@ sessions: `default`, `meandu`, and `autopilot`.
    `HERDR_SOCKET_PATH=<socket> herdr agent list` for each running session.
    Report the agent counts and statuses, then ask before stopping anything.
    Restarting kills every pane process. Agents come back with their
-   conversations when the session is restored.
+   conversations when the session is restored; plain shell panes come back
+   empty, so name any non-agent pane that looks busy. Also check
+   `ps -o pid,ppid,command -p $(pgrep -d, -f "herdr server")`: a server whose
+   ppid is a `session attach` client takes that client down when it stops.
 2. **Back up** each `session.json` (`~/.config/herdr/` and
    `~/.config/herdr/sessions/<name>/`) to the scratchpad.
 3. **Stop** each one with `herdr session stop <name> --json`. `default` is a
-   valid name here.
+   valid name here. A large session (~40 panes) can return
+   `session_stop_failed` after 15s while still shutting down. Do not re-run the
+   stop; wait ~10s and confirm with `session list` (`"running": false`) and
+   `pgrep -fl "herdr server"`.
 4. **Start** each one from `~`, under a clean environment so that
    `CLAUDE_CODE_*` variables don't leak into the panes. Leave out
    `HERDR_SESSION` for `default`:
@@ -57,18 +64,21 @@ sessions: `default`, `meandu`, and `autopilot`.
      HERDR_SESSION=<name> nohup /opt/homebrew/opt/herdr/bin/herdr server >/dev/null 2>&1 &)
    ```
 
-5. **Verify:** `pgrep -fl "herdr server"` shows ppid 1 for each, and the
-   agent counts match step 1.
-6. **Reattach Paul's clients.** One Ghostty window holds three tabs:
-   `pers` (⌘1) runs `h session attach default`, `mnu` (⌘2) runs
-   `h session attach meandu`, and `revs` (⌘3) runs `h session attach autopilot`.
-   Reattach them with the peekaboo skill:
-   - Inactive tabs have no AX element, so `window focus` fails on them. Focus
-     the visible tab's window ID, then switch tabs with
-     `press cmd+N --foreground`.
-   - Background typing is refused. Use `type ... --foreground`. It can report
-     failure even when the text landed, so check with `see` before pressing
-     `Return`.
+5. **Verify:** `ps -o pid,ppid,command -p $(pgrep -d, -f "herdr server")`
+   shows ppid 1 for each, `herdr status` shows `server_binary_stale: no`, and
+   the agent and pane counts match step 1. Agents restore as `idle`.
+6. **Reattach Paul's clients.** One Ghostty window holds one tab per session:
+   `pers` (⌘1) runs `h session attach default` and `mnu` (⌘2) runs
+   `h session attach meandu`. Reattach them with the peekaboo skill (v4 CLI):
+   - Find window IDs with `peekaboo window list --app Ghostty --json`. Each tab
+     is its own window ID; inactive tabs show `is_on_screen: false` and cannot
+     be focused. Focus the visible one with `window focus --window-id <id>`,
+     then switch with `press cmd+N --window-id <id> --foreground`.
+   - Screenshot with `see --no-elements --window-id <id> --path <png>` (not
+     `image`, removed in v4) and confirm the tab is at a shell prompt.
+   - Type with `type "<cmd>" --window-id <id> --foreground --accept-dispatched`.
+     Without `--window-id` the text may not land at all. Check with `see` that
+     it appears exactly once, then `press return --window-id <id> --foreground`.
    - Confirm with `pgrep -fl "session attach"`.
 
 ## Named sessions
