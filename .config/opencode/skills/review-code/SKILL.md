@@ -1,6 +1,6 @@
 ---
 name: review-code
-description: "End-to-end PR/branch review: principal-engineer pass, hostile adversarial second pass, optional persona lens and Codex outside-view round, decision doc."
+description: "End-to-end PR/branch review: principal-engineer pass, hostile adversarial second pass, optional persona lens, solution-fit (should-we) round and Codex outside-view round, decision doc."
 ---
 
 # Code Review Skill
@@ -11,6 +11,7 @@ Unified review workflow. Triggered by a PR URL, number, or (no arg) the current 
 2. **Round 1**: principal-engineer branch review.
 3. **Round 2**: hostile adversarial second pass (once).
 4. **Round 2.5 (optional)**: persona focus-lens re-rank.
+4b. **Solution-fit round (optional)**: "should we?" check of the approach itself, alternatives, and ticket/Linear scope.
 5. **Round 3 (off by default)**: Codex outside view via a `cxd` pane. Opt-in only.
 6. Write decision doc to `~/dev/sandbox/`.
 7. Offer action checklist inline. Only post to GitHub when user explicitly ticks actions in the current turn.
@@ -26,6 +27,7 @@ Parse the user's prompt for optional flags:
 - **Persona**: phrases like "review as <name>", "persona-based review by <name>", "hostile <name> review" → trigger Round 2.5 with that persona.
 - **Decision profile**: "decide as <name>" or "apply <name>'s decision profile", sent against a finished decision doc → load `references/decision-profiles/<name>.md` and follow its "How to apply". It ticks boxes in `## Possible actions` only and posts nothing. If no profile file exists for that name, say so and stop.
 - **Skip rounds**: phrases like "skip adversarial", "branch-review only" → run round 1 only.
+- **Solution fit**: "solution-fit round", "solution fit", "should-we check", "is this the right fix", "what else could we have done", "check alternatives" → run Step 4b. It works in the original prompt (run after round 2) or later against a finished decision doc (run on its own and update the doc). Never offer it unprompted.
 - **Round 3 opt-in**: "include cxd outside view", "do all three rounds", "full review with codex" → run Step 5. Without one of these, Step 5 does not run and is not offered.
 
 Resolve PR data at the start:
@@ -126,6 +128,14 @@ Load `references/persona-lens.md` and apply:
 
 The persona is **lens, not voice**. Posted comments are always drafted in the user's voice using the wrapper in `references/posting.md`. See `persona-lens.md` for the full rule, push-back behavior, and self-check.
 
+## Step 4b: Solution-fit round (optional)
+
+Only on a solution-fit opt-in phrase. Load `references/solution-fit.md` and follow it. In short: compare the ticket with the PR, find where the defect really originates, look for the same bug class in sibling types, surfaces and channels, check git history and Linear for earlier point fixes and untracked scoped-out work, and weigh the cost against the severity. Three research subagents fan out across repos (codebase-memory first). The Linear check runs in the main thread. Load-bearing claims are spot-checked against code before anything goes into the doc.
+
+The output is a `## Solution fit: should we?` section with an options table and a recommendation. New `REV-N` findings continue the numbering. A design-level ask is one design comment, not a spread of line nits. The verdict is revisited. If a decision profile was applied, it is re-applied, and the profile's own contested ticks are unticked with a reason. It posts nothing.
+
+If the doc is already written when this is asked for (the common case), edit that doc in place rather than writing a new one.
+
 ## Step 5: Round 3 (Codex outside view, off by default)
 
 **Round 3 is off. Do not run it, and do not ask.** Rounds 1 and 2 (plus 2.5 if a persona was
@@ -195,7 +205,7 @@ Before writing, re-verify every `blocking` finding against the worktree code (op
 
 Default location: `~/dev/sandbox/`. Filename: `yyyy-mm-dd PR <num> <short title>.md` (preserve acronym casing; run `date +%Y-%m-%d` if today's date isn't in context).
 
-**Mandatory sections, and the doc is incomplete without all of these, in this order:** `Verdict` → `Risk Assessment` → **`## Possible actions`** → (optional persona/AC/user-notes sections) → `Findings` → `Open questions` → `Notes`. When the user has supplied their own findings, Step 8 adds a `## Where your notes and mine agreed` section between `## Possible actions` and `## Findings`. The `## Possible actions` checklist is the decision section: it is what the user ticks, and it is REQUIRED in **every** decision doc, even for a clean Approve with zero findings (it still carries the `Approve the PR` / `No action` boxes). It is not a chat-only artifact: Step 7 mirrors it into chat, it does not replace it. The single most common defect in past docs is this section being dropped; do not let the length of the template below cause you to skip it.
+**Mandatory sections, and the doc is incomplete without all of these, in this order:** `Verdict` → `Risk Assessment` → **`## Possible actions`** → (optional persona/solution-fit/AC/user-notes sections) → `Findings` → `Open questions` → `Notes`. When the user has supplied their own findings, Step 8 adds a `## Where your notes and mine agreed` section between `## Possible actions` and `## Findings`. The `## Possible actions` checklist is the decision section: it is what the user ticks, and it is REQUIRED in **every** decision doc, even for a clean Approve with zero findings (it still carries the `Approve the PR` / `No action` boxes). It is not a chat-only artifact: Step 7 mirrors it into chat, it does not replace it. The single most common defect in past docs is this section being dropped; do not let the length of the template below cause you to skip it.
 
 **Never hard-wrap prose.** One paragraph is one line, however long. Obsidian renders a single newline as a visible break, so a paragraph wrapped at some column arrives broken mid-sentence for the reader. This applies to every prose line in the doc: `Verdict`, `Risk Assessment`, finding bodies, `Notes`, and the `- Rounds run:` metadata bullet. Wrap only where markdown needs a real break: between list items, table rows, and headings. Do not reflow to 80, 100, or 120 columns, and do not indent continuation text under a bullet.
 
@@ -242,6 +252,10 @@ Known exceptions: ...
 | Finding | Pre-persona | Post-persona | Why |
 | ------- | ----------- | ------------ | --- |
 | REV-1   | suggestion  | blocking     | ... |
+
+## Solution fit: should we? (omit section unless Step 4b ran)
+
+<short answer; options table `| Option | What it covers | Rough cost | Verdict |` including the PR as is; one Recommendation line. See `references/solution-fit.md`.>
 
 ## ACs not met (omit section if no ACs found or all met)
 
@@ -378,6 +392,7 @@ A review is finished only when every line holds:
 - Every file in the diff has been read, including the ones that produced no finding. Coverage is the claim the verdict rests on.
 - Every finding carries a severity, a `path:line`, and a concrete failure scenario. A finding you cannot state a failure for is a preference; move it or drop it.
 - Every round-2 finding is either confirmed against the code or dropped with the reason recorded.
+- If Step 4b ran: every row of the options table has a verdict, including the PR as is, and every claim behind the recommendation was checked against code.
 - The decision doc has a Verdict, a Risk Assessment, and a Possible actions section, and every unmet AC is listed or the section is explicitly omitted as not applicable.
 - The doc's absolute path is printed.
 
