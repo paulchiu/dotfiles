@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Reminders"
+  short_description: "Read, add, edit, complete and delete Apple Reminders via the remindctl CLI"
+  default_prompt: "Use $apple-reminders to manage my Apple Reminders."
