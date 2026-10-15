@@ -9,7 +9,7 @@ Each skill is a directory holding a `SKILL.md`, an `agents/openai.yaml` for the
 Codex picker, and optionally `references/` (material loaded on demand) or
 `nested/` (sub-skills behind a router).
 
-26 skills. `.system/` holds vendor skills shipped with Codex and is not listed
+27 skills. `.system/` holds vendor skills shipped with Codex and is not listed
 here.
 
 ## Ship code
@@ -32,6 +32,7 @@ here.
 | --- | --- |
 | [`codebase-memory`](codebase-memory/SKILL.md) | Queries the codebase knowledge graph for callers, call chains, dependencies, dead code, and impact. |
 | [`ast-grep`](ast-grep/SKILL.md) | Structural (AST) code search and rewrite, for when regex is the wrong tool. |
+| [`architecture-report`](architecture-report/SKILL.md) | Researches a repo's current architecture into a dated HTML page and .md: dependency chart, tree measurements, longest functions, verified deep call chains, hotspots, optional refactor plan. |
 
 ## Build on platforms
 

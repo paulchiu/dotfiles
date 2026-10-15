@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architecture Report"
+  short_description: "Research a repo's architecture into a dated HTML + md report"
+  default_prompt: "Use $architecture-report to research this repo's current architecture read-only: layers, flows, a dependency chart, tree measurements, verified deep call chains and hotspots, written as a dated HTML page and companion .md."
