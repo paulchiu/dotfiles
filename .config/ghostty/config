@@ -4,3 +4,6 @@
 
 keybind = super+shift+r=prompt_tab_title
 keybind = super+k=text:\x1b[107;7u
+
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
+quick-terminal-size = 50%
