@@ -73,7 +73,9 @@ RETURN f.qualified_name, f.file_path, f.start_line, f.end_line, f.cognitive, f.c
 
 On a large repo, add `AND f.file_path IN [...]` with the files from the 200+ line list instead of pulling every node. Compute `lines = end_line - start_line + 1`, sort descending, and check the top entries in the source (spans can be off where a declaration has decorators or JSDoc above it).
 
-On the page, split source from tests and show the top 10 to 15 source functions over 50 lines, flagging 100+: `file:name`, lines, cognitive and cyclomatic complexity, whether it has a test, and the call chains it sits on. Then notes:
+**Do not use the graph's `cognitive` and `complexity` values.** They skip ternaries and `&&`/`||`/`??`, so expression-heavy functions score near zero. Measure complexity from the source with the language's own parser (for TypeScript, a short read-only script in the scratchpad using the repo's installed `typescript` package), and say on the page how it was measured.
+
+On the page, split source from tests and show the top 10 to 15 source functions over 50 lines, flagging 100+ (if fewer pass 50, show them plus the next few in line and say how many top-level functions are 20 lines or fewer): `file:name`, lines, cognitive and cyclomatic complexity, whether it has a test, and the call chains it sits on. Then notes:
 
 - **Containers:** a factory, closure or class body's span includes its inner functions (for example a `createX()` returning an object of closures). Mark these and give the largest inner function instead of counting them as one long function.
 - **Inline callbacks:** long arrow functions passed to a framework (event handlers, `onChange`, lifecycle registrations) are often not graph nodes. Their lines count toward the enclosing function, so say when a long entry point is mostly registrations.
