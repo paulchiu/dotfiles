@@ -103,6 +103,22 @@ herdr pane move "$pane" --new-workspace --label review --no-focus
 moved process's own inherited `HERDR_PANE_ID`, so `--current` keeps working
 inside it. Do not use the old ID as a general target.
 
+## Reordering tabs
+
+`herdr tab` has no `move` verb (requested in
+https://github.com/herdrdev/herdr/discussions/771), and `pane move --new-tab`
+always appends at the end. The socket API does have `tab.move`, so send it raw:
+
+```bash
+printf '%s\n' '{"id":"cli:tab:move","method":"tab.move","params":{"tab_id":"<tab_id>","insert_index":<n>}}' \
+  | nc -U -w 3 "$HERDR_SOCKET_PATH"
+```
+
+`insert_index` is 0-based and counted before the tab leaves the list, so
+`index(anchor) + 1` puts it just right of the anchor from either side. Tab and
+pane IDs do not change. The reply is the workspace's new `tab_list`. If the
+installed binary gains `herdr tab move`, use that instead.
+
 ## Right-click passthrough
 
 Herdr owns right-click by default. For a pane running a mouse-reporting TUI:

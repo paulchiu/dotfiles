@@ -50,7 +50,8 @@ when this skill and the binary disagree.
   (delegate a review, spawn a worker, "ask the codex pane", "wait until it is
   blocked"): read `references/delegation.md` and follow its numbered flow.
 - Task is **pane or layout** mechanics, or running an **ordinary command**
-  (split, move, resize, close, run a test watcher, tail a server, read output):
+  (split, move, resize, close, reorder tabs, run a test watcher, tail a server,
+  read output):
   read `references/panes.md`.
 - Task is **server lifecycle, named sessions, remote attach, config, or
   install** (start or restart servers, detach, `--remote`, keybindings, upgrade,
