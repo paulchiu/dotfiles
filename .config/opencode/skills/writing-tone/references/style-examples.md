@@ -460,3 +460,27 @@ I would recommend checking a couple of things before you go ahead:
 - `data-infra` replicates the whole table to Snowflake with no column list ([GitHub](https://github.com/...)), so `venue_uuid` appears at step 1 and `venue_id` disappears at step 7. Worth getting #ask-data to confirm CDC handling as well as the remap, as Daryll's runbook flagged for the type change.
 
 **Demonstrates the reply to a sign-off request:** 'Thanks for writing this up Edgie,' as the greeting; a 'TL;DR' that agrees with what's fine (the sequence, the backfill) and names the one concern, framed around the requester's next step ('before you action it') rather than Paul's approval, with the reason left to the body; the context the plan departs from (the earlier plan with its evidence, the owner's comment, the policy) in short paragraphs, one source each, each with an inline link; one direct question that keeps its '?', followed by the conditional both ways, crediting the proposal as 'your method' and naming the cost of the alternative as a concrete count of steps and releases; each item the requester asked sign-off on (column name, backfill) answered in its own 'On the X,' paragraph, with a precedent cited for the backfill and a conditional acceptance for the name ('I'm OK with `venue_uuid` as long as we're choosing it knowingly'); 'I would recommend checking a couple of things before you go ahead:' owning the recommendation; symbol-first bullets with SHA-pinned GitHub links; the owning team named by its channel (#ask-data); and no closer, since the direct question is already the ask. **NOT here** (changed from the agent's draft): 'looks sound' (now 'looks fine'), 'before signing off on `venue_uuid` [...], since that choice decides the column name' (approval-gate framing plus a trailing justification clause), one long paragraph holding both the prior plan and the owner's comment (split into two), 'a good reason for expand/contract and I'm happy to support it' (jargon label plus a support promise), 'the one-step: one migration plus a consumer redeploy, rather than seven steps' (restated the earlier paragraph), 'A couple of things to check if we go ahead:' (unowned label), 'Worth getting Data to confirm', and a closing 'Would appreciate your thoughts.'.
+
+---
+
+## 24. Advice ask to another team's channel (warm team greeting, today's state and goal, options with agent credit split, one open preference question)
+
+Hello Fast Forwarders,
+
+I'd like some advice on automating our `stable-api` production releases.
+
+Today the stable-api custodian (95% of the time just me :melting_face:) unblocks the production gate on `stable-api` and `stable-api-docs` by hand most weekdays, and the releases are almost always renovate or dependabot bumps. I'd like both to release automatically inside an 08:00 to 11:00 Melbourne weekday window, without touching `@mr-yum/service-pipeline` (six other services share its `setBlockProductionDeploy` gate).
+
+The current idea is a scheduled job that unblocks the newest passing parked build on `main` via the Buildkite REST API, only when the changes are all renovate/dependabot, and does nothing outside the window. My current thinking of possible solutions is…
+
+- A scheduled Buildkite pipeline whose only job is to unblock the other two.
+
+:claude-code: suggested other options like a job in `mr-yum/monitoring` or…
+
+- A new small repo.
+
+What would your preference/recommendation be? Or maybe there's an existing pattern I've missed?
+
+More detail in [Linear](https://linear.app/mr-yum/issue/RR-522/...).
+
+**Demonstrates the advice ask to another team's channel:** a warm greeting that names the team ('Hello Fast Forwarders,'); one line naming the ask; today's state with the author owning their part through a light self-deprecating aside rather than hiding behind the role name; the goal and its main constraint as a parenthetical; the current idea, then an ellipsis lead-in to the options, with the agent credited for the options it suggested; one open question asking for their preference, plus a casual second question leaving room for a pattern the author doesn't know; a pointer to the card for detail. **NOT here** (all cut from the agent's draft): 'Hi folks,', 'My lean is...' (it steers the people being asked for advice), a second specific ask ('and how its write-scoped Buildkite token should be held'), and options all presented as the author's own.
