@@ -57,6 +57,7 @@ Then report a table of tab, pane, agent name and Linear status.
 - When an agent goes idle with a PR open and its label still carries 🚧, set 👀 yourself and open the PR in tuicr if the agent didn't.
 - Tell Paul when each tab turns 👀, with the PR link, and add the PR number to the run file. If its merge or deploy will release a later sub-issue, say which, once.
 - While later rounds are waiting, watch their gates in the background and start each sub-issue as its gates clear (see rounds.md).
+- When no agent is left `working` (every tab is in review or waiting on Paul), end with one roll-up table, one row per sub-issue: tab label, PR (noting what it's stacked on), and a short status ('ready for review', 'needs: <the open decision>'). Then say whether any waits are armed and what will wake you next.
 
 ### 4. After Paul's review
 
