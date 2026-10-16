@@ -9,7 +9,7 @@ Each skill is a directory holding a `SKILL.md`, an `agents/openai.yaml` for the
 Codex picker, and optionally `references/` (material loaded on demand) or
 `nested/` (sub-skills behind a router).
 
-27 skills. `.system/` holds vendor skills shipped with Codex and is not listed
+28 skills. `.system/` holds vendor skills shipped with Codex and is not listed
 here.
 
 ## Ship code
@@ -47,6 +47,7 @@ here.
 | Skill | What it does |
 | --- | --- |
 | [`herdr`](herdr/SKILL.md) | Manages Herdr panes, workspaces, and tabs, and delegates work to live agent panes. |
+| [`pi`](pi/SKILL.md) | Delegates tasks to the pi coding agent as a subprocess, singly or as parallel workers. |
 
 ## Write and convert
 

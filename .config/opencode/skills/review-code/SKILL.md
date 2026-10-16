@@ -150,7 +150,7 @@ disagreeing, or from a blocking finding you are unsure about; re-verify against 
 
 Phrases like "skip round 3", "no cxd", "branch-review only" and "rounds 1-2 only" are therefore
 redundant, but they are still honoured and still worth recognising, because callers (the
-review-autopilot kickoff among them) send them defensively.
+review-copilot kickoff among them) send them defensively.
 
 When it is skipped, which is the normal case, round 2 output is final and the decision doc needs
 no note about it. Only say "Round 3 skipped" if the user asked for it and something stopped it

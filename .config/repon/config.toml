@@ -154,12 +154,13 @@ exclude = [
 # name below it is the only entry needed: `loyalty*` is `loyalty-api*` too.
 [[set]]
 name = "vendor"
-roots = ["~/dev"]
+roots = ["~/dev", "~/dev-misc"]
 include = [
   "**/dev/baseweb*",
   "**/dev/buildkite-pipelines*",
   "**/dev/hospitality-api-docs*",
   "**/dev/sisense-embedsdk-react*",
+  "**/dev-misc/hyperframes*",
 ]
 
 # Occasional Azure repos.
