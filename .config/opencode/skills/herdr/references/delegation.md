@@ -51,8 +51,8 @@ considers it ready for input. Startup defaults to 30s; `--timeout` accepts
 
 If it returns `agent_not_ready`, the agent came up **blocked** (a trust prompt,
 a login, a model picker). The name still works for `agent read` and
-`agent send-keys`. Read the pane, clear the dialog, and wait for idle before
-prompting.
+`agent send-keys`. Read the pane and apply only an explicitly authorised choice; otherwise
+ask Paul. Wait for idle before prompting.
 
 ## Step 3: Prompt it
 
@@ -65,7 +65,7 @@ herdr agent prompt reviewer "Review the current diff. Report only actionable fin
 bracketed-paste mode.
 
 - If the agent is **already blocked**, it returns `agent_blocked` and sends
-  **nothing**. Inspect the dialog and ask the user before answering it.
+  **nothing**. Inspect the dialog; apply an already authorised choice or ask the user.
 - `--wait` alone waits for the first settled state: `idle`, `done`, or
   `blocked`. Do not restate those with `--until`.
 - An accepted prompt must produce an observed lifecycle change within 5s, or
@@ -115,7 +115,9 @@ herdr agent send-keys reviewer esc
 `ctrl+c`). Herdr validates every key before writing any bytes. Use it for UI
 interaction; use `agent prompt` for text work.
 
-Do not answer an approval dialog on the user's behalf. Read it, report it, ask.
+Read the actual dialog. Answer only a choice the user has explicitly authorised
+for this task; otherwise report it and ask. Do not treat a generic `blocked`
+state as evidence of which choice is pending.
 
 ## Lifecycle states
 

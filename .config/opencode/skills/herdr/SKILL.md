@@ -1,6 +1,6 @@
 ---
 name: herdr
-description: Herdr CLI for managing panes workspaces and tabs, and restarting herdr servers or sessions
+description: Manage Herdr panes, tabs, workspaces, agents and sessions, including acting as Paul's Herdr orchestrator. Use when Herdr is requested.
 ---
 
 # Herdr
@@ -11,7 +11,7 @@ workspace > tab > pane, recognises the coding agent inside each pane, and
 classifies its lifecycle state.
 
 Source of truth for CLI syntax is the installed binary, not this skill. This
-skill was written against Herdr `0.8.2` (Homebrew, `/opt/homebrew/bin/herdr`).
+skill was written against Herdr `0.9.5` (Homebrew, `/opt/homebrew/bin/herdr`).
 
 ## Step 1: Check availability
 
@@ -44,7 +44,7 @@ Discover syntax by running a command **group** with no subcommand:
 `herdr --skill` prints the upstream agent skill shipped with the binary; read it
 when this skill and the binary disagree.
 
-## Step 2: Read exactly one reference for the task
+## Step 2: Read the reference for the task
 
 - Task is **orchestrating the session** as Paul's herdr orchestrator (he hands
   you a job to run through other agents, or asks you to organise tabs, panes,
@@ -58,6 +58,9 @@ when this skill and the binary disagree.
   (split, move, resize, close, reorder tabs, run a test watcher, tail a server,
   read output):
   read `references/panes.md`.
+- Task is **restarting a Claude Code agent to apply an update**: read
+  `references/restarting-agents.md`. This preserves the conversation while
+  leaving the Herdr server running.
 - Task is **server lifecycle, named sessions, remote attach, config, or
   install** (start or restart servers, detach, `--remote`, keybindings, upgrade,
   troubleshooting): read `references/sessions.md`. For a restart, follow its
@@ -82,8 +85,11 @@ Do not read a reference the task does not need.
   switch context. Stealing focus mid-task is disruptive.
 - **Preserve cwd** on every split: `--cwd "$PWD"`. Splits do not inherit it.
 - **Stay in the current tab.** Do not create a workspace, tab, or worktree
-  unless the user explicitly asked for that topology.
-- **Do not close what you did not create.** Workspaces, tabs, panes, sessions.
+  unless the user explicitly asked for that topology. The orchestrator role
+  includes standing permission for new task tabs in its own workspace; see
+  `references/orchestrator.md`.
+- **Do not close what you did not create** unless Paul explicitly asks. This
+  covers workspaces, tabs, panes and sessions.
 - **Never run `herdr server stop`** from an active session unless the user
   explicitly intends to kill every pane process. Never kill the main Herdr
   process. Use a named test session for experiments.
