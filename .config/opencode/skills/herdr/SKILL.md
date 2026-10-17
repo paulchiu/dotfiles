@@ -46,6 +46,11 @@ when this skill and the binary disagree.
 
 ## Step 2: Read exactly one reference for the task
 
+- Task is **orchestrating the session** as Paul's herdr orchestrator (he hands
+  you a job to run through other agents, or asks you to organise tabs, panes,
+  and workspaces at his direction): read `references/orchestrator.md` for the
+  role, policy, and standing constraints. It is an entry point: it will name the
+  mechanics reference to read next.
 - Task is starting, prompting, waiting on, or answering another **agent**
   (delegate a review, spawn a worker, "ask the codex pane", "wait until it is
   blocked"): read `references/delegation.md` and follow its numbered flow.
