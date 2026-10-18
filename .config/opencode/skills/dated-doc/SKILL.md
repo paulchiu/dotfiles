@@ -54,7 +54,8 @@ Wherever the user pointed, else the directory holding the material it came from,
 2. Write the body. For markdown, follow **Obsidian Readability** below.
 3. Add the reproducibility front matter from **Reproducibility Metadata**.
 4. Check the target name is free before writing: `[ -e "<name>" ] && echo "EXISTS"`. On `EXISTS`, ask before overwriting.
-5. Report the **absolute path**.
+5. Run `open "<absolute path>"` yourself so the doc opens for the user. This is the local macOS `open` command, not the Artifact tool's `open` action.
+6. Report the **absolute path**.
 
 ## Creating A Dated HTML
 
@@ -76,7 +77,7 @@ Same naming rule, `.html` extension, plus:
    ```
 
 3. Set `<title>` to the same readable title.
-4. Report the absolute path, and give the `open "<absolute path>"` command so it is one click away.
+4. Run `open "<absolute path>"` yourself (local macOS `open`, never an Artifact publish), then report the absolute path.
 5. If the point of the HTML is to be marked up and fed back, offer the `html-edit-prompt` skill's annotation layer rather than hand-rolling one.
 
 ## Renaming Existing Files
