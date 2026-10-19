@@ -31,3 +31,9 @@ key = "prefix+shift+b"
 type = "shell"
 command = '"$HERDR_BIN_PATH" pane move "$HERDR_ACTIVE_PANE_ID" --new-tab --focus'
 description = "break pane into tab"
+
+[[keys.command]]
+key = "prefix+d"
+type = "shell"
+command = '"$HOME/dev/sandbox/.agents/skills/review-copilot/scripts/present-doc" --tab "$HERDR_ACTIVE_TAB_ID"'
+description = "open this review's decision doc in Obsidian"
