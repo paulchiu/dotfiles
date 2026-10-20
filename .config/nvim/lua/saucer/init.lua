@@ -10,10 +10,10 @@ local M = {}
 
 local config = {
   --- Attach a git permalink to the copied reference. Off by default because
-  --- resolving one costs three git calls; <leader>sl forces it per call.
+  --- resolving one costs three git calls; <leader>sl and the ! bang force it.
   link = false,
-  --- Format name to use without prompting; nil shows the picker.
-  default = nil,
+  --- Format <leader>ss copies without prompting; nil shows the picker.
+  default = "Reference",
   --- Remote to build permalinks from.
   remote = "origin",
 }
@@ -47,24 +47,36 @@ local function parse_remote(url)
 end
 
 --- Per-forge line-anchor URL builders, keyed off the remote's own host so
---- self-hosted instances work.
+--- self-hosted instances work. `name` is the link text in rendered references.
 local ROUTERS = {
-  github = function(host, repo, sha, file, s, e)
-    local anchor = s == e and ("#L%d"):format(s) or ("#L%d-L%d"):format(s, e)
-    return ("https://%s/%s/blob/%s/%s%s"):format(host, repo, sha, file, anchor)
-  end,
-  gitlab = function(host, repo, sha, file, s, e)
-    local anchor = s == e and ("#L%d"):format(s) or ("#L%d-%d"):format(s, e)
-    return ("https://%s/%s/-/blob/%s/%s%s"):format(host, repo, sha, file, anchor)
-  end,
-  bitbucket = function(host, repo, sha, file, s, e)
-    local anchor = s == e and ("#lines-%d"):format(s) or ("#lines-%d:%d"):format(s, e)
-    return ("https://%s/%s/src/%s/%s%s"):format(host, repo, sha, file, anchor)
-  end,
-  azure = function(host, repo, sha, file, s, e)
-    return ("https://%s/%s?path=/%s&version=GC%s&line=%d&lineEnd=%d&lineStartColumn=1&lineEndColumn=1")
-      :format(host, repo, file, sha, s, e)
-  end,
+  github = {
+    name = "GitHub",
+    url = function(host, repo, sha, file, s, e)
+      local anchor = s == e and ("#L%d"):format(s) or ("#L%d-L%d"):format(s, e)
+      return ("https://%s/%s/blob/%s/%s%s"):format(host, repo, sha, file, anchor)
+    end,
+  },
+  gitlab = {
+    name = "GitLab",
+    url = function(host, repo, sha, file, s, e)
+      local anchor = s == e and ("#L%d"):format(s) or ("#L%d-%d"):format(s, e)
+      return ("https://%s/%s/-/blob/%s/%s%s"):format(host, repo, sha, file, anchor)
+    end,
+  },
+  bitbucket = {
+    name = "Bitbucket",
+    url = function(host, repo, sha, file, s, e)
+      local anchor = s == e and ("#lines-%d"):format(s) or ("#lines-%d:%d"):format(s, e)
+      return ("https://%s/%s/src/%s/%s%s"):format(host, repo, sha, file, anchor)
+    end,
+  },
+  azure = {
+    name = "Azure DevOps",
+    url = function(host, repo, sha, file, s, e)
+      return ("https://%s/%s?path=/%s&version=GC%s&line=%d&lineEnd=%d&lineStartColumn=1&lineEndColumn=1")
+        :format(host, repo, file, sha, s, e)
+    end,
+  },
 }
 
 --- Substring matched, so gitlab.acme.com routes like gitlab. Anything unknown
@@ -82,7 +94,8 @@ local function router_for(host)
   return ROUTERS.github
 end
 
---- Permalink for `file` (repo-relative) at lines s..e, or nil outside a repo.
+--- Permalink for `file` (repo-relative) at lines s..e plus the forge name,
+--- or nil outside a repo.
 local function permalink(root, file, s, e)
   local url = git(root, "remote", "get-url", config.remote)
   local sha = git(root, "rev-parse", "HEAD")
@@ -95,39 +108,31 @@ local function permalink(root, file, s, e)
     return nil
   end
 
-  return router_for(host)(host, repo, sha, file, s, e)
+  local router = router_for(host)
+  return router.url(host, repo, sha, file, s, e), router.name
 end
 
---- True when `pos` falls inside an LSP range.
-local function contains(range, pos)
-  local from, to = range.start, range["end"]
-  if pos.line < from.line or pos.line > to.line then
-    return false
-  end
-  if pos.line == from.line and pos.character < from.character then
-    return false
-  end
-  if pos.line == to.line and pos.character > to.character then
-    return false
-  end
-  return true
+--- True when an LSP range covers every line of `span` (0-based, inclusive).
+local function covers(range, span)
+  return range.start.line <= span.first and range["end"].line >= span.last
 end
 
---- Walks the symbol tree, collecting the names of every symbol containing `pos`.
-local function descend(symbols, pos, acc)
+--- Walks the symbol tree, collecting the names of every symbol covering `span`.
+local function descend(symbols, span, acc)
   for _, sym in ipairs(symbols or {}) do
     local range = sym.range or (sym.location and sym.location.range)
-    if range and contains(range, pos) then
+    if range and covers(range, span) then
       acc[#acc + 1] = sym.name
-      return descend(sym.children, pos, acc)
+      return descend(sym.children, span, acc)
     end
   end
   return acc
 end
 
---- Dotted path of the innermost symbol at the cursor, e.g. "Greeter.greet".
---- Nil when no server answers or the cursor sits outside every symbol.
-local function symbol_path(bufnr, pos)
+--- Dotted path of the innermost symbol covering the whole span, e.g.
+--- "Greeter.greet", so a selection across two methods names their class.
+--- Nil when no server answers or the span sits outside every symbol.
+local function symbol_path(bufnr, span)
   local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
   local ok, responses = pcall(vim.lsp.buf_request_sync, bufnr, "textDocument/documentSymbol", params, 2000)
   if not ok or not responses then
@@ -135,7 +140,7 @@ local function symbol_path(bufnr, pos)
   end
 
   for _, response in pairs(responses) do
-    local path = descend(response.result, pos, {})
+    local path = descend(response.result, span, {})
     if #path > 0 then
       return table.concat(path, ".")
     end
@@ -150,15 +155,19 @@ local function gather(line1, line2, link)
   local absolute = vim.api.nvim_buf_get_name(bufnr)
   local root = git(vim.fs.dirname(absolute), "rev-parse", "--show-toplevel")
   local relative = root and absolute:sub(#root + 2) or vim.fn.fnamemodify(absolute, ":t")
-  local cursor = vim.api.nvim_win_get_cursor(0)
+  local url, forge
+  if link and root then
+    url, forge = permalink(root, relative, line1, line2)
+  end
 
   return {
     filename = vim.fn.fnamemodify(absolute, ":t"),
     relative = relative,
     first = line1,
     last = line2,
-    symbol = symbol_path(bufnr, { line = cursor[1] - 1, character = cursor[2] }),
-    url = link and root and permalink(root, relative, line1, line2) or nil,
+    symbol = symbol_path(bufnr, { first = line1 - 1, last = line2 - 1 }),
+    url = url,
+    forge = forge,
   }
 end
 
@@ -167,28 +176,32 @@ local function lines(ctx)
   return ctx.first == ctx.last and tostring(ctx.first) or ("%d-%d"):format(ctx.first, ctx.last)
 end
 
---- A nil `label` means the format is unavailable here; `bare` emits the raw URL.
+--- A nil `text` means the format is unavailable here; `bare` emits the raw URL.
 local FORMATS = {
-  { name = "Symbol", label = function(ctx) return ctx.symbol end },
-  { name = "File and line", label = function(ctx) return ("%s:%s"):format(ctx.filename, lines(ctx)) end },
-  { name = "Path and line", label = function(ctx) return ("%s:%s"):format(ctx.relative, lines(ctx)) end },
+  {
+    name = "Reference",
+    text = function(ctx)
+      local ref = ("%s:%s"):format(ctx.relative, lines(ctx))
+      return ctx.symbol and ("%s (%s)"):format(ref, ctx.symbol) or ref
+    end,
+  },
+  { name = "Symbol", text = function(ctx) return ctx.symbol and ("`%s`"):format(ctx.symbol) end },
+  { name = "File and line", text = function(ctx) return ("`%s:%s`"):format(ctx.filename, lines(ctx)) end },
+  { name = "Path and line", text = function(ctx) return ("`%s:%s`"):format(ctx.relative, lines(ctx)) end },
   { name = "Link only", bare = true },
 }
 
---- Wraps the format's label as inline code, linked when a permalink resolved.
+--- Renders a format, followed by a "(GitHub)" style link when a permalink resolved.
 local function render(format, ctx)
   if format.bare then
     return ctx.url
   end
 
-  local label = format.label(ctx)
-  if not label then
-    return nil
+  local text = format.text(ctx)
+  if not text or not ctx.url then
+    return text
   end
-  if not ctx.url then
-    return ("`%s`"):format(label)
-  end
-  return ("[`%s`](%s)"):format(label, ctx.url)
+  return ("%s ([%s](%s))"):format(text, ctx.forge, ctx.url)
 end
 
 local function put(text)
@@ -215,15 +228,16 @@ local function choices_for(ctx)
 end
 
 --- Copies a reference for lines line1..line2 (defaulting to the cursor line).
---- `link` overrides config.link for this one call.
-function M.copy(line1, line2, link)
+--- `link` overrides config.link for this one call; `pick` prompts even when
+--- config.default is set.
+function M.copy(line1, line2, link, pick)
   if link == nil then
     link = config.link
   end
   local ctx = gather(line1 or vim.fn.line("."), line2 or vim.fn.line("."), link)
   local choices = choices_for(ctx)
 
-  if config.default then
+  if config.default and not pick then
     for _, choice in ipairs(choices) do
       if choice.name == config.default then
         return put(choice.text)
@@ -249,13 +263,18 @@ function M.setup(opts)
   -- The bang forces a permalink on, whatever config.link says.
   vim.api.nvim_create_user_command("SaucerCopy", function(args)
     M.copy(args.line1, args.line2, args.bang or nil)
-  end, { range = true, bang = true, desc = "Copy a markdown code reference" })
+  end, { range = true, bang = true, desc = "Copy a code reference" })
+  vim.api.nvim_create_user_command("SaucerPick", function(args)
+    M.copy(args.line1, args.line2, args.bang or nil, true)
+  end, { range = true, bang = true, desc = "Choose a code reference format to copy" })
 
   local keymap = { silent = true }
   vim.keymap.set({ "n", "x" }, "<leader>ss", ":SaucerCopy<CR>",
     vim.tbl_extend("force", keymap, { desc = "Copy code reference" }))
-  vim.keymap.set({ "n", "x" }, "<leader>sl", ":SaucerCopy!<CR>",
-    vim.tbl_extend("force", keymap, { desc = "Copy code reference with permalink" }))
+  vim.keymap.set({ "n", "x" }, "<leader>sl", ":SaucerPick!<CR>",
+    vim.tbl_extend("force", keymap, { desc = "Choose code reference format, with permalink" }))
+  vim.keymap.set({ "n", "x" }, "<leader>sp", ":SaucerPick<CR>",
+    vim.tbl_extend("force", keymap, { desc = "Choose code reference format" }))
 end
 
 return M
