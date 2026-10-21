@@ -140,6 +140,8 @@ include = [
   "**/dev-misc/obsidian-fitkit*",
   "**/dev-misc/repon*",
   "**/dev-misc/mrx*",
+  "**/dev-misc/obsidian-choreday*",
+  "**/dev-misc/claude-session-titler*",
 ]
 # `*` spans separators here, so the prefixes above reach into two scratch trees that
 # are not projects: mrx's fixture repos and poe-editor's prototypes.
@@ -161,6 +163,7 @@ include = [
   "**/dev/hospitality-api-docs*",
   "**/dev/sisense-embedsdk-react*",
   "**/dev-misc/hyperframes*",
+  "**/dev-misc/Peekaboo*",
 ]
 
 # Occasional Azure repos.
