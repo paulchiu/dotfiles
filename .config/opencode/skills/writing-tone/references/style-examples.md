@@ -507,3 +507,19 @@ What would your preference/recommendation be? Or maybe there's an existing patte
 More detail in [Linear](https://linear.app/mr-yum/issue/RR-522/...).
 
 **Demonstrates the advice ask to another team's channel:** a warm greeting that names the team ('Hello Fast Forwarders,'); one line naming the ask; today's state with the author owning their part through a light self-deprecating aside rather than hiding behind the role name; the goal and its main constraint as a parenthetical; the current idea, then an ellipsis lead-in to the options, with the agent credited for the options it suggested; one open question asking for their preference, plus a casual second question leaving room for a pattern the author doesn't know; a pointer to the card for detail. **NOT here** (all cut from the agent's draft): 'Hi folks,', 'My lean is...' (it steers the people being asked for advice), a second specific ask ('and how its write-scoped Buildkite token should be held'), and options all presented as the author's own.
+
+---
+
+## 25. Confirm ask to another team's channel (warm role greeting, plan in one line, polite question, agent-credited finding, accommodating close, cc)
+
+Hello custodians :blobby-wave-2:
+
+I'm planning phase 6 of 'gift card and discount compatibility' (a #stream-responsive-roadmap production), where automatic discounts from Manage, Voucherify and the loyalty connector apply together ([Notion](https://app.notion.com/p/3f33c671994681e58839d3a7fe76b9b9)).
+
+Could you folks please help me confirm a question… when first-party offers/engine applies a discount automatically (no code entered), will it come back from `loyalty-connector` as a reward with type `Deal`, similar to Como and PubPlus deals?
+
+:claude-code: research reports that at present, the connector only marks a reward `AUTO_APPLY` when its type is `Deal`, and `manage` will use that to tell automatic discounts from codes (see [RR-568](https://linear.app/mr-yum/issue/RR-568) for findings). If first-party automatic discounts will be flagged some other way, we would like to accommodate it too.
+
+cc @Alex Puertas Roman
+
+**Demonstrates the confirm ask to another team's channel:** a warm greeting by the channel's role with a channel-native emoji ('Hello custodians :blobby-wave-2:'); one line on what's being planned, with the project name in single quotes, the owning stream credited by its channel link and the design doc linked; the question as a polite request with an ellipsis lead-in ('Could you folks please help me confirm a question…'), keeping its '?'; the product named as the audience names it ('first-party offers/engine'); a hedged comparison ('similar to Como and PubPlus deals'); the finding the question rests on credited to the agent and hedged in time ('at present'), with the card labelled for what it holds ('see RR-568 for findings'); a close that offers to fit around their answer; lowercase cc for the colleague sharing the work. **NOT here** (changed from the agent's draft): 'Hi LOY2 team,' (posted in #custodianship-loyalty, so it greets the custodians), 'One assumption I'd like to check:' (a statement of intent rather than a request), 'the first-party engine' (the plan's shorthand), 'the same as', 'Today the connector only marks...' (the agent's code research stated as Paul's own fact), 'we'd need a second signal in the connector, so it would help to know before that card starts' (implementation detail and timing pressure on the people being asked), and no cc.
