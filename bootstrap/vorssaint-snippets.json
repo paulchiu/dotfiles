@@ -141,5 +141,16 @@
     "expansion": "afterDelimiter",
     "trigger": "xck",
     "id": "F8973DCF-275B-41CD-834E-4FD31ABB2B49"
+  },
+  {
+    "name": "Action decision doc",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "action my decisions in the decision doc. @cc notes are for you.\n\nbefore posting, re-read references/posting.md and apply it to inline comments and the review body.",
+    "expansion": "afterDelimiter",
+    "trigger": "xact",
+    "id": "26ED9F8D-87C2-4BE3-8AA0-39E3A558AD82"
   }
 ]
