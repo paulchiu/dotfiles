@@ -20,6 +20,7 @@ Input: a Linear issue URL or identifier (e.g. `https://linear.app/mr-yum/issue/C
 
 1. Fetch the issue via `mcp__claude_ai_Linear__get_issue` (preferred) or `linear issue view <ID>`. Read the description, acceptance criteria, implementation guidance, and comments. In an unfamiliar repo, hand the breadth pass (entry points, conventions, test layout) to an Explore subagent in parallel with the ticket read, and carry forward only its conclusions.
 2. **Capture the git branch name returned by the Linear API** (e.g. `feature/cusm-642-remove-db-schema-compat-matrix`). That is the branch name for Phase 3. If the API returned none, fall back to `feature/<issue-id-lowercase>-short-description` or `fix/...`.
+3. **Claim the issue**, in both modes: `mcp__claude_ai_Linear__save_issue` with `id`, `state: "In Progress"` and `assignee: "me"`. Skip it if the issue is already In Progress and assigned to Paul. If it is assigned to someone else, ask before reassigning.
 
 ### Phase 2: Ask questions
 
