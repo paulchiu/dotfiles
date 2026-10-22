@@ -79,9 +79,9 @@ after_sync = "reset"
 name = "2.0-misc"
 roots = ["~/dev"]
 # The other Sets' own prefixes, verbatim. `exclude` beats `include` flat, with no
-# specificity rule, so this cannot carve anything back: the four repos 2.0-stack
-# excludes (loyalty-connector, manage-infra, manage-mcp,
-# serve-frontend-old-invoice-helper) fall out here too and live only in `dev`.
+# specificity rule, so this cannot carve anything back: the two repos 2.0-stack
+# excludes (manage-mcp, serve-frontend-old-invoice-helper) fall out here too and
+# live only in `2.0-all`.
 exclude = [
   "**/dev/bill*",
   "**/dev/cloudflare-workers*",
