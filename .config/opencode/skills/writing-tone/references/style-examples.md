@@ -12,6 +12,29 @@ I understand the theoretical argument: AI-enablement 'in theory' doubles velocit
 
 Question for the group: how do we set expectations and pace for teams coming off a heavy Q1 into a shortened Q2.
 
+### Board card (title + body)
+
+Title: As we move towards AI speed, are we trusting teams to make calls, accepting that some will be wrong and get corrected; what would we each need to let go of?
+
+> Why: Work is increasingly pulled rather than pushed, teams self-select work and plans are democratising, but allegedly leadership behaviours haven't fully adjusted.
+>
+> For example, an engineer in Spots picked up performance work unprompted, and Spots' productivity rose when its SLT sponsor moved to commercial and strategic framing and trusted the team (directionally right, with some regressions).
+>
+> Question for the group: How do we enable 'aligned autonomy' and empower everyone from top-to-bottom?
+
+Title: Measuring and collecting AI capability evidence for performance check-ins
+
+> Why: The 20 Oct calibration session parked this topic for Tal to clarify offline, as an ongoing conversation. Ratings are being finalised in alignment sessions this week, so a written answer before they close would keep ratings consistent across managers.
+>
+> Ask: Can the clarifications be written down before alignments finish, and can the AI capability examples name an observable artefact (e.g. self-brought usage data, a linked PR or plan) as acceptable evidence?
+
+What to absorb (Paul's rewrites of agent drafts, 22 Oct 2026):
+
+- Title names the topic or frames a shared direction; the draft's one-sentence problem statement ('Calibration surfaced several different evaluation practices [...]') moved out of the title.
+- Plain 'Why:' label, the example split into its own paragraph, one closing ask with a single label. The draft's 'Ask: Question for the group: [...]' double label was cut.
+- The ask about leadership became enabling ('enable aligned autonomy', 'empower everyone') instead of corrective ('educate leadership from the top'); the claim about leadership behaviour gained 'allegedly', and 'Leader roles may be the least adapted to the shift' was dropped.
+- No names from the private discussion the card came from; the SLT sponsor stays unnamed.
+
 ---
 
 ## 6. Broad-audience announcement / update (e.g. #broad-announce)

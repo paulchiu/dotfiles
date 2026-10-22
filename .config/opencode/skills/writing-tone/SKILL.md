@@ -125,6 +125,8 @@ Rules are grouped into clusters; each is `directive ('X' beats 'Y') + carve-out`
 
 - In discussion contexts (retros, leads channels), pose the question to the audience ('Question for the group: how do we...') not a prescribed solution. In broader announcements, give a concrete next step ('I would encourage you to raise it with your manager' not 'I'd love to hear your thoughts').
 - Open a retro card / structured analysis with the incident or substance directly, not a 'Context:' label (the opening description IS the context). 'Context:' still belongs at the tail of a DM.
+- Retro/topics board cards (e.g. PLT Retro/WIP board): the title names the topic, not the whole argument ('2027 strategy, direction, and decisions with key SLT owners', 'Measuring and collecting AI capability evidence for performance check-ins' not a one-sentence problem statement). A title phrased as a question leads with the shared direction ('As we move towards AI speed, are we trusting teams to make calls [...]?'). The body carries the detail: a plain 'Why:' line (no bold), any example in its own short paragraph, then one closing ask labelled 'Question for the group:' or 'Ask:' (never both), ending with '?' since it's the question the card exists to ask. See example 5.
+- Asks to peer leaders about senior-leader behaviour stay aspirational and enabling, not corrective ('How do we enable 'aligned autonomy' and empower everyone from top-to-bottom?' not 'how do we educate leadership from the top to let go'). Hedge a second-hand claim about leadership ('allegedly leadership behaviours haven't fully adjusted'), drop speculative generalisations about leader roles, and spell out what an observation implies ('which may be a factor in helping them avoid such processes' not a bare 'which may be a factor').
 - Frame section headers in incident/lessons-learned posts as forward-looking ('Advice for future changes', 'For the next migration') not backward self-assessment ('What we'd do differently', 'Mistakes we made'). The body can still describe what happened.
 
 **Greetings, openers, sign-offs**
@@ -264,7 +266,7 @@ Rollout FYI to a team channel (feature flag widening; one short paragraph for wh
 
 For longer-form posts, load `references/style-examples.md` and find the matching worked example. Catalog:
 
-- **5.** Retro card / structured analysis
+- **5.** Retro card / structured analysis (plus a board card's title + body)
 - **6.** Broad-audience announcement / update (e.g. #broad-announce)
 - **7.** Inline blockquote reply to a sensitive 1:1 message (DM, point-by-point)
 - **8.** Quick consent-check DM to a peer (ask before context)
