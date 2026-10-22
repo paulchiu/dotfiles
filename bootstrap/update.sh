@@ -41,3 +41,11 @@ cat "$EXCLUDE" >> "$BREWFILE"
 
 # 5. Refresh the installed-apps inventory.
 ls /Applications > mac-apps.txt
+
+# 6. Back up Vorssaint text snippets (restore with restore-vorssaint-snippets.sh).
+if defaults read com.vorssaint.utils textSnippets >/dev/null 2>&1; then
+  defaults export com.vorssaint.utils - \
+    | plutil -extract textSnippets raw -o - - \
+    | base64 -d \
+    | python3 -I -m json.tool --no-ensure-ascii --indent 2 > vorssaint-snippets.json
+fi

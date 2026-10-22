@@ -1,0 +1,145 @@
+[
+  {
+    "name": "Merge PR feedback prompt",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "merge my notes below into the decision doc. @cc notes are for you: answer them from the code.\n\nre-apply eyes emoji when ready for review.\n\n---\n",
+    "expansion": "afterDelimiter",
+    "trigger": "xmer",
+    "id": "D04C5209-B196-4E9D-A25D-FCEDDDB7F502"
+  },
+  {
+    "name": "CodeRabbit review",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "@coderabbitai full review",
+    "expansion": "afterDelimiter",
+    "trigger": "xcrr",
+    "id": "B463A8A0-A971-4989-80C4-B9BB1E546098"
+  },
+  {
+    "name": "GitHub callout",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "> [!NOTE|TIP|IMPORTANT|WARNING|CAUTION]\n> ",
+    "expansion": "afterDelimiter",
+    "trigger": "xgc",
+    "id": "C859FE45-D81F-461D-885E-DD4F34D9DAC4"
+  },
+  {
+    "name": "Details block",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "<details>\n  <summary></summary>\n  \n\n</details>",
+    "expansion": "afterDelimiter",
+    "trigger": "xght",
+    "id": "52A89AAF-40DC-4026-80C3-C64EB6AC70C6"
+  },
+  {
+    "name": "Markdown link",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "[]()",
+    "expansion": "afterDelimiter",
+    "trigger": "xlk",
+    "id": "421EE7A6-637D-4147-8BCE-DBAE95E0B1CC"
+  },
+  {
+    "name": "Superscript tag",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "<sup></sup>",
+    "expansion": "afterDelimiter",
+    "trigger": "xsup",
+    "id": "3003A4E3-5C00-49CD-95C9-B370B274771A"
+  },
+  {
+    "name": "Slack format prompt",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "Convert the following markdown to Slack-compatible formatting. Apply only these changes:\nReplace **bold** with *bold*\nReplace *italic* or _italic_ with _italic_\nReplace `code` with `code`\nReplace ~~strikethrough~~ with ~strikethrough~\nFix any user mentions to use <@USER_ID> format and channel mentions to use <#CHANNEL_ID> format\nUse * for unordered list items (not -)\nOutput the result as plain rendered text (no code block) so it's easy to copy and paste\nPreserve all blank lines between paragraphs and list blocks exactly as-is\nPreserve all other formatting, punctuation, spacing, and wording exactly as-is\nSplit long paragraphs at natural sentence boundaries. Each sentence or closely related pair of sentences should be its own paragraph, separated by a blank line. Prefer shorter paragraphs over longer ones.\nAlways insert a blank line before and after section headings (italic lines that act as titles).\nDo not add, remove, or change anything else - no extra punctuation, no emojis, no em dashes, no rewording.\nHere is the markdown:",
+    "expansion": "afterDelimiter",
+    "trigger": "xsf",
+    "id": "6A778957-81D0-4D07-BD0F-284B9B21CBD4"
+  },
+  {
+    "name": "CodeRabbit",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "CodeRabbit",
+    "expansion": "afterDelimiter",
+    "trigger": "xcr",
+    "id": "7E9F50F7-6AE4-4D0D-984A-17B1A8E904B8"
+  },
+  {
+    "name": "Datadog citation",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "(DataDog)",
+    "expansion": "afterDelimiter",
+    "trigger": "xdr",
+    "id": "ED2F1A3C-5523-4D49-869D-7B423D59726C"
+  },
+  {
+    "name": "Kubernetes",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "Kubernetes",
+    "expansion": "afterDelimiter",
+    "trigger": "xks",
+    "id": "9DC834B5-8A75-4860-8166-E5F50B0181AC"
+  },
+  {
+    "name": "Ephemeral environments",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "ephemeral environments",
+    "expansion": "afterDelimiter",
+    "trigger": "xee",
+    "id": "B103591C-7C9D-4EA3-BD71-D8528263AB84"
+  },
+  {
+    "name": "ctrl-alt-delight",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "ctrl-alt-delight",
+    "expansion": "afterDelimiter",
+    "trigger": "xcad",
+    "id": "44BE1E25-F72C-4D1A-82B5-D3754375DB62"
+  },
+  {
+    "name": "Clean Kitchen",
+    "enabled": true,
+    "folder": "",
+    "showsInLibrary": true,
+    "ignoresCase": false,
+    "replacement": "Clean Kitchen",
+    "expansion": "afterDelimiter",
+    "trigger": "xck",
+    "id": "F8973DCF-275B-41CD-834E-4FD31ABB2B49"
+  }
+]
