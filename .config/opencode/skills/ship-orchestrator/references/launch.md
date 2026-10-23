@@ -5,6 +5,7 @@ How to start one ship agent per sub-issue. Check syntax against the installed bi
 ## Names
 
 - Agent name: the sub-issue code in lowercase without the dash, e.g. `rr442`. Agent names must be unique in the session.
+- Coder workspace (cards built with `/serve-delegate`): not the agent name. Name it in the ship prompt as `<issue-id-lowercase>-<short-slug>`, e.g. `rr-568-deals-and-codes-split`, following the `/serve-delegate` local note, or leave it out so `/serve-delegate` picks it.
 - Tab label: `[parent short id]/[sub-issue number].[repo abbreviation]🚧`. Parent short id is the team key lowercased plus the number, shortened only when unambiguous (`r428`). Repo abbreviation is short and stable across the run (`sap` serve-api, `lcon` loyalty-connector, `lint` loyalty-integrations); pick one per repo and keep it.
 
 ## Per sub-issue
@@ -44,6 +45,8 @@ Fill the brackets; drop a bracketed line that doesn't apply.
 /ship using worktree [sub-issue URL]
 
 [domain extras, e.g. run /pos-pre-push before push]
+
+[if the card uses /serve-delegate] use Coder workspace [issue-id-lowercase]-[short-slug].
 
 [round 2 and later, from rounds.md: blocker context, a deploy-order note, or stacked-branch instructions]
 
