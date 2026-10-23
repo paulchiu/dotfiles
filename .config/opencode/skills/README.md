@@ -9,7 +9,7 @@ Each skill is a directory holding a `SKILL.md`, an `agents/openai.yaml` for the
 Codex picker, and optionally `references/` (material loaded on demand) or
 `nested/` (sub-skills behind a router).
 
-28 skills. `.system/` holds vendor skills shipped with Codex and is not listed
+29 skills. `.system/` holds vendor skills shipped with Codex and is not listed
 here.
 
 ## Ship code
@@ -65,6 +65,7 @@ here.
 | Skill | What it does |
 | --- | --- |
 | [`daily-brief`](daily-brief/SKILL.md) | Generates the work daily brief from calendar, Slack, Linear, Gmail, and Drive. |
+| [`feedback-friday`](feedback-friday/SKILL.md) | Prepares the weekly Feedback Friday doc: who to give, request or place feedback for, from the past week. Command only, read-only. |
 | [`reviewing-candidates`](reviewing-candidates/SKILL.md) | Reviews candidate resumes and interview transcripts, and drafts hiring feedback. |
 | [`yadm-sync`](yadm-sync/SKILL.md) | Commits and pushes dotfile changes under `~/.claude` and `~/.config` with yadm. |
 

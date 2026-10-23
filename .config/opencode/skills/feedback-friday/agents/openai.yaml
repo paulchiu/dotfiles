@@ -1,0 +1,6 @@
+interface:
+  display_name: "Feedback Friday"
+  short_description: "Weekly feedback suggestions from the past week"
+  default_prompt: "Use $feedback-friday to prepare this week's feedback suggestions."
+policy:
+  allow_implicit_invocation: false
